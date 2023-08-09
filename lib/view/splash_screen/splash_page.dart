@@ -12,7 +12,10 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      body: background(context),
+      body: SingleChildScrollView(
+        physics: const NeverScrollableScrollPhysics(),
+        child: background(context),
+      ),
     ));
   }
 
@@ -32,7 +35,7 @@ class SplashScreen extends StatelessWidget {
           width: 400.w,
           child: Stack(
             alignment: Alignment.topCenter,
-            children: [logoAndText(), greenContaner(), roadWidget()],
+            children: <Widget>[logoAndText(), greenContaner(), roadWidget()],
           ),
         )
       ],
