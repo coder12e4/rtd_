@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rtd_project/core/color/colors.dart';
 
 class TextFormFieldWidget extends StatelessWidget {
   const TextFormFieldWidget({
@@ -13,10 +14,9 @@ class TextFormFieldWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 50.h,
-      width: 330.w,
+      width: 290.w,
       decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 235, 209, 209).withOpacity(0.4),
-          borderRadius: BorderRadius.circular(20)),
+          color: textFormBase, borderRadius: BorderRadius.circular(20)),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(

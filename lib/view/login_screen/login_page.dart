@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rtd_project/core/color/colors.dart';
+import 'package:rtd_project/core/common_widget/commen_botten.dart';
 
 import '../../core/common_widget/textformfield_widget.dart';
 
@@ -25,31 +26,81 @@ class LOginPage extends StatelessWidget {
               height: 400.h,
               width: 390.w,
               decoration: const BoxDecoration(
-                  color: whiteColor,
-                  borderRadius: BorderRadiusDirectional.only(
-                      topEnd: Radius.circular(50),
-                      topStart: Radius.circular(50),),),
+                color: whiteColor,
+                borderRadius: BorderRadiusDirectional.only(
+                  topEnd: Radius.circular(50),
+                  topStart: Radius.circular(50),
+                ),
+              ),
               child: Column(
                 children: [
                   SizedBox(
-                    height: 30.h,
+                    height: 40.h,
                   ),
                   TextFormFieldWidget(
-                      controller: emailController, hitText: 'Email'),
+                      controller: emailController, hitText: 'Username'),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  TextFormFieldWidget(
+                      controller: passwordController, hitText: 'Password'),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  ButtonWidget(
+                    borderAvalable: false,
+                    buttonText: 'Login',
+                    buttonBackgroundColor: buttenBlue,
+                    buttonForegroundColor: whiteColor,
+                  ),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  forgotButton(),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  notAmembertext(),
+                  SizedBox(
+                    height: 15.h,
+                  ),
+                  ButtonWidget(
+                    borderAvalable: true,
+                    buttonText: 'Register',
+                    buttonBackgroundColor: whiteColor,
+                    buttonForegroundColor: buttenBlue,
+                  ),
                 ],
               ),
             ),
-            
-            ButtonWidget(
-              borderAvalable: true,
-              buttonText: 'Login',
-              buttonBackgroundColor: buttenBlue,
-              buttonForegroundColor: Colors.white,
-            )
           ],
         ),
       ),
     ));
+  }
+
+  Text notAmembertext() {
+    return const Text(
+      'Not a Member?',
+      style: TextStyle(
+          color: Colors.black, fontSize: 16, fontWeight: FontWeight.w900),
+    );
+  }
+
+  TextButton forgotButton() {
+    return TextButton(
+      onPressed: () {},
+      style: const ButtonStyle(),
+      child: const Text(
+        'Forgot Password?',
+        style: TextStyle(
+          color: buttenBlue,
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+          decoration: TextDecoration.underline,
+        ),
+      ),
+    );
   }
 
   Container nochBarAboveLoginContainer() {
@@ -80,36 +131,3 @@ class LOginPage extends StatelessWidget {
 
 final TextEditingController emailController = TextEditingController();
 final TextEditingController passwordController = TextEditingController();
-class ButtonWidget extends StatelessWidget {
-  ButtonWidget({
-    super.key,
-    required this.buttonBackgroundColor,
-    required this.buttonForegroundColor,
-    required this.buttonText,
-    required this.borderAvalable,
-  });
-
-  final buttonBackgroundColor;
-  final buttonForegroundColor;
-  final buttonText;
-  bool borderAvalable = false;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        height: 32.h,
-        width: 260.w,
-        
-        child: ElevatedButton(
-            style: borderAvalable? ButtonStyle(
-                foregroundColor:
-                    MaterialStatePropertyAll(buttonForegroundColor),
-                backgroundColor:
-                    MaterialStatePropertyAll(buttonBackgroundColor)): ButtonStyle(
-                foregroundColor:
-                    MaterialStatePropertyAll(buttonForegroundColor),
-                backgroundColor:
-                    MaterialStatePropertyAll(buttonBackgroundColor)),
-            onPressed: () {},
-            child: Text(buttonText)));
-  }
-}
