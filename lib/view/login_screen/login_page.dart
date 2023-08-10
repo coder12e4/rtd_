@@ -25,10 +25,12 @@ class LOginPage extends StatelessWidget {
               height: 400.h,
               width: 390.w,
               decoration: const BoxDecoration(
-                  color: whiteColor,
-                  borderRadius: BorderRadiusDirectional.only(
-                      topEnd: Radius.circular(50),
-                      topStart: Radius.circular(50),),),
+                color: whiteColor,
+                borderRadius: BorderRadiusDirectional.only(
+                  topEnd: Radius.circular(50),
+                  topStart: Radius.circular(50),
+                ),
+              ),
               child: Column(
                 children: [
                   SizedBox(
@@ -39,7 +41,6 @@ class LOginPage extends StatelessWidget {
                 ],
               ),
             ),
-            
             ButtonWidget(
               borderAvalable: true,
               buttonText: 'Login',
@@ -80,6 +81,8 @@ class LOginPage extends StatelessWidget {
 
 final TextEditingController emailController = TextEditingController();
 final TextEditingController passwordController = TextEditingController();
+
+// ignore: must_be_immutable
 class ButtonWidget extends StatelessWidget {
   ButtonWidget({
     super.key,
@@ -89,26 +92,27 @@ class ButtonWidget extends StatelessWidget {
     required this.borderAvalable,
   });
 
-  final buttonBackgroundColor;
-  final buttonForegroundColor;
-  final buttonText;
+  final Color buttonBackgroundColor;
+  final Color buttonForegroundColor;
+  final String buttonText;
   bool borderAvalable = false;
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
         height: 32.h,
         width: 260.w,
-        
         child: ElevatedButton(
-            style: borderAvalable? ButtonStyle(
-                foregroundColor:
-                    MaterialStatePropertyAll(buttonForegroundColor),
-                backgroundColor:
-                    MaterialStatePropertyAll(buttonBackgroundColor)): ButtonStyle(
-                foregroundColor:
-                    MaterialStatePropertyAll(buttonForegroundColor),
-                backgroundColor:
-                    MaterialStatePropertyAll(buttonBackgroundColor)),
+            style: borderAvalable
+                ? ButtonStyle(
+                    foregroundColor:
+                        MaterialStatePropertyAll(buttonForegroundColor),
+                    backgroundColor:
+                        MaterialStatePropertyAll(buttonBackgroundColor))
+                : ButtonStyle(
+                    foregroundColor:
+                        MaterialStatePropertyAll(buttonForegroundColor),
+                    backgroundColor:
+                        MaterialStatePropertyAll(buttonBackgroundColor)),
             onPressed: () {},
             child: Text(buttonText)));
   }
