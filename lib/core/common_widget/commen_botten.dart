@@ -9,14 +9,14 @@ class ButtonWidget extends StatelessWidget {
     required this.buttonForegroundColor,
     required this.buttonText,
     required this.borderAvalable,
-    required this.onpressed,
+    required this.press,
   });
 
   final Color buttonBackgroundColor;
   final Color buttonForegroundColor;
   final String buttonText;
   bool borderAvalable = false;
-  final Function onpressed;
+  final Function() press;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -31,9 +31,7 @@ class ButtonWidget extends StatelessWidget {
                     MaterialStatePropertyAll(buttonForegroundColor),
                 backgroundColor:
                     MaterialStatePropertyAll(buttonBackgroundColor)),
-            onPressed: () {
-              onpressed();
-            },
+            onPressed: press,
             child: Text(buttonText)));
   }
 }
