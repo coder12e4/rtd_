@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rtd_project/core/color/colors.dart';
 
+import '../../core/common_widget/textformfield_widget.dart';
+
 class LOginPage extends StatelessWidget {
   const LOginPage({super.key});
 
@@ -21,11 +23,22 @@ class LOginPage extends StatelessWidget {
             ),
             Container(
               height: 400.h,
+              width: 390.w,
               decoration: const BoxDecoration(
                   color: whiteColor,
                   borderRadius: BorderRadiusDirectional.only(
                       topEnd: Radius.circular(50),
-                      topStart: Radius.circular(50))),
+                      topStart: Radius.circular(50)
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  TextFormFieldWidget(
+                      controller: emailController, hitText: 'Email'),
+                ],
+              ),
+            ),
             ),
             ButtonWidget(
               borderAvalable: true,
@@ -65,6 +78,8 @@ class LOginPage extends StatelessWidget {
   }
 }
 
+final TextEditingController emailController = TextEditingController();
+final TextEditingController passwordController = TextEditingController();
 class ButtonWidget extends StatelessWidget {
   ButtonWidget({
     super.key,
