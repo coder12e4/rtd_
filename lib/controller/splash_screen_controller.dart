@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:rtd_project/view/login_screen/login_page.dart';
 import 'package:rtd_project/view/register_screen/register_screen.dart';
 
 class SplashScreenController extends GetxController {
@@ -12,6 +13,6 @@ class SplashScreenController extends GetxController {
 
   Future splashDelay() async {
     Future.delayed(const Duration(seconds: 3))
-        .then((value) => Get.to(const RegisterScreen()));
+        .then((value) => Get.to(const LOginPage()));
   }
 }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:rtd_project/core/color/colors.dart';
-import 'package:rtd_project/core/common_widget/commen_botten.dart';
+import 'package:rtd_project/view/register_screen/register_screen.dart';
 
 import '../../core/common_widget/textformfield_widget.dart';
 
@@ -23,7 +24,7 @@ class LOginPage extends StatelessWidget {
               height: 5.h,
             ),
             Container(
-              height: 400.h,
+              height: 390.h,
               width: 390.w,
               decoration: const BoxDecoration(
                 color: whiteColor,
@@ -48,6 +49,7 @@ class LOginPage extends StatelessWidget {
                     height: 20.h,
                   ),
                   ButtonWidget(
+                    press: () {},
                     borderAvalable: false,
                     buttonText: 'Login',
                     buttonBackgroundColor: buttenBlue,
@@ -65,6 +67,9 @@ class LOginPage extends StatelessWidget {
                     height: 15.h,
                   ),
                   ButtonWidget(
+                    press: () {
+                      Get.to(RegisterScreen(), transition: Transition.downToUp);
+                    },
                     borderAvalable: true,
                     buttonText: 'Register',
                     buttonBackgroundColor: whiteColor,
@@ -73,14 +78,6 @@ class LOginPage extends StatelessWidget {
                 ],
               ),
             ),
-
-            ButtonWidget(
-              borderAvalable: true,
-              buttonText: 'Login',
-              buttonBackgroundColor: buttenBlue,
-              buttonForegroundColor: Colors.white,
-            )
-
           ],
         ),
       ),
@@ -140,7 +137,6 @@ class LOginPage extends StatelessWidget {
 final TextEditingController emailController = TextEditingController();
 final TextEditingController passwordController = TextEditingController();
 
-
 // ignore: must_be_immutable
 class ButtonWidget extends StatelessWidget {
   ButtonWidget({
@@ -149,12 +145,14 @@ class ButtonWidget extends StatelessWidget {
     required this.buttonForegroundColor,
     required this.buttonText,
     required this.borderAvalable,
+    required this.press,
   });
 
   final Color buttonBackgroundColor;
   final Color buttonForegroundColor;
   final String buttonText;
   bool borderAvalable = false;
+  final Function() press;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -172,8 +170,7 @@ class ButtonWidget extends StatelessWidget {
                         MaterialStatePropertyAll(buttonForegroundColor),
                     backgroundColor:
                         MaterialStatePropertyAll(buttonBackgroundColor)),
-            onPressed: () {},
+            onPressed: press,
             child: Text(buttonText)));
   }
 }
-
