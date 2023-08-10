@@ -25,7 +25,8 @@ class TextFormFieldWidget extends StatelessWidget {
               border: InputBorder.none, // Removes the underline
               hintText: hitText,
               hintStyle: const TextStyle(
-                  color: Colors.grey, fontWeight: FontWeight.bold)),
+                  color: Color.fromARGB(255, 112, 111, 111),
+                  fontWeight: FontWeight.bold)),
           textAlign: TextAlign.center, // Centers the text inside the field
         ),
       ),
