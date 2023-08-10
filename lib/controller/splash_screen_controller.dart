@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:rtd_project/view/login_screen/login_page.dart';
 import 'package:rtd_project/view/register_screen/register_screen.dart';
 
 class SplashScreenController extends GetxController {
