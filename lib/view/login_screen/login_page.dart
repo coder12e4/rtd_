@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
+import 'package:rtd_project/view/login_screen/widgets/login_complete.dart';
+import 'package:rtd_project/view/register_screen/register_screen.dart';
 
 import '../../core/common_widget/textformfield_widget.dart';
 
@@ -48,6 +50,12 @@ class LOginPage extends StatelessWidget {
                     height: 20.h,
                   ),
                   ButtonWidget(
+                    onpressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) => LoginComplited(),
+                      );
+                    },
                     borderAvalable: false,
                     buttonText: 'Login',
                     buttonBackgroundColor: buttenBlue,
@@ -65,6 +73,11 @@ class LOginPage extends StatelessWidget {
                     height: 15.h,
                   ),
                   ButtonWidget(
+                    onpressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => RegisterScreen(),
+                      ));
+                    },
                     borderAvalable: true,
                     buttonText: 'Register',
                     buttonBackgroundColor: whiteColor,
@@ -73,14 +86,6 @@ class LOginPage extends StatelessWidget {
                 ],
               ),
             ),
-
-            ButtonWidget(
-              borderAvalable: true,
-              buttonText: 'Login',
-              buttonBackgroundColor: buttenBlue,
-              buttonForegroundColor: Colors.white,
-            )
-
           ],
         ),
       ),
@@ -140,40 +145,5 @@ class LOginPage extends StatelessWidget {
 final TextEditingController emailController = TextEditingController();
 final TextEditingController passwordController = TextEditingController();
 
-
 // ignore: must_be_immutable
-class ButtonWidget extends StatelessWidget {
-  ButtonWidget({
-    super.key,
-    required this.buttonBackgroundColor,
-    required this.buttonForegroundColor,
-    required this.buttonText,
-    required this.borderAvalable,
-  });
-
-  final Color buttonBackgroundColor;
-  final Color buttonForegroundColor;
-  final String buttonText;
-  bool borderAvalable = false;
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-        height: 32.h,
-        width: 260.w,
-        child: ElevatedButton(
-            style: borderAvalable
-                ? ButtonStyle(
-                    foregroundColor:
-                        MaterialStatePropertyAll(buttonForegroundColor),
-                    backgroundColor:
-                        MaterialStatePropertyAll(buttonBackgroundColor))
-                : ButtonStyle(
-                    foregroundColor:
-                        MaterialStatePropertyAll(buttonForegroundColor),
-                    backgroundColor:
-                        MaterialStatePropertyAll(buttonBackgroundColor)),
-            onPressed: () {},
-            child: Text(buttonText)));
-  }
-}
 

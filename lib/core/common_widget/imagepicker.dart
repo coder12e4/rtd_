@@ -94,6 +94,7 @@ class Imagepiker extends StatelessWidget {
             height: 20.h,
           ),
           ButtonWidget(
+            onpressed: (){},
               buttonBackgroundColor: buttenBlue,
               buttonForegroundColor: whiteColor,
               buttonText: 'Upload',

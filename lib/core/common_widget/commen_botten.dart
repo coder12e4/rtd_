@@ -9,17 +9,19 @@ class ButtonWidget extends StatelessWidget {
     required this.buttonForegroundColor,
     required this.buttonText,
     required this.borderAvalable,
+    required this.onpressed,
   });
 
-  final buttonBackgroundColor;
-  final buttonForegroundColor;
-  final buttonText;
-  final bool borderAvalable;
+  final Color buttonBackgroundColor;
+  final Color buttonForegroundColor;
+  final String buttonText;
+  bool borderAvalable = false;
+  final Function onpressed;
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
         height: 32.h,
-        width: 290.w,
+        width: 260.w,
         child: ElevatedButton(
             style: ButtonStyle(
                 side: borderAvalable
@@ -29,7 +31,9 @@ class ButtonWidget extends StatelessWidget {
                     MaterialStatePropertyAll(buttonForegroundColor),
                 backgroundColor:
                     MaterialStatePropertyAll(buttonBackgroundColor)),
-            onPressed: () {},
+            onPressed: () {
+              onpressed();
+            },
             child: Text(buttonText)));
   }
 }

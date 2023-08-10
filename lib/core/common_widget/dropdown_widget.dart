@@ -37,7 +37,6 @@ class _DropedownWidgetState extends State<DropedownWidget> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: DropdownButton<String>(
-          value: _selectedBloodGroup,
           onChanged: (String? newValue) {
             setState(() {
               _selectedBloodGroup = newValue!;
