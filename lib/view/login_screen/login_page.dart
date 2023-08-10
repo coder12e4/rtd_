@@ -28,7 +28,7 @@ class LOginPage extends StatelessWidget {
                   color: whiteColor,
                   borderRadius: BorderRadiusDirectional.only(
                       topEnd: Radius.circular(50),
-                      topStart: Radius.circular(50))),
+                      topStart: Radius.circular(50)
               child: Column(
                 children: [
                   SizedBox(
@@ -39,6 +39,13 @@ class LOginPage extends StatelessWidget {
                 ],
               ),
             ),
+            ),
+            ButtonWidget(
+              borderAvalable: true,
+              buttonText: 'Login',
+              buttonBackgroundColor: buttenBlue,
+              buttonForegroundColor: Colors.white,
+            )
           ],
         ),
       ),
@@ -73,3 +80,36 @@ class LOginPage extends StatelessWidget {
 
 final TextEditingController emailController = TextEditingController();
 final TextEditingController passwordController = TextEditingController();
+class ButtonWidget extends StatelessWidget {
+  ButtonWidget({
+    super.key,
+    required this.buttonBackgroundColor,
+    required this.buttonForegroundColor,
+    required this.buttonText,
+    required this.borderAvalable,
+  });
+
+  final buttonBackgroundColor;
+  final buttonForegroundColor;
+  final buttonText;
+  bool borderAvalable = false;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        height: 32.h,
+        width: 260.w,
+        
+        child: ElevatedButton(
+            style: borderAvalable? ButtonStyle(
+                foregroundColor:
+                    MaterialStatePropertyAll(buttonForegroundColor),
+                backgroundColor:
+                    MaterialStatePropertyAll(buttonBackgroundColor)): ButtonStyle(
+                foregroundColor:
+                    MaterialStatePropertyAll(buttonForegroundColor),
+                backgroundColor:
+                    MaterialStatePropertyAll(buttonBackgroundColor)),
+            onPressed: () {},
+            child: Text(buttonText)));
+  }
+}
