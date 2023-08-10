@@ -28,7 +28,7 @@ class LOginPage extends StatelessWidget {
                   color: whiteColor,
                   borderRadius: BorderRadiusDirectional.only(
                       topEnd: Radius.circular(50),
-                      topStart: Radius.circular(50)
+                      topStart: Radius.circular(50),),),
               child: Column(
                 children: [
                   SizedBox(
@@ -39,7 +39,7 @@ class LOginPage extends StatelessWidget {
                 ],
               ),
             ),
-            ),
+            
             ButtonWidget(
               borderAvalable: true,
               buttonText: 'Login',
