@@ -26,6 +26,12 @@ class LOginPage extends StatelessWidget {
                   borderRadius: BorderRadiusDirectional.only(
                       topEnd: Radius.circular(50),
                       topStart: Radius.circular(50))),
+            ),
+            ButtonWidget(
+              borderAvalable: true,
+              buttonText: 'Login',
+              buttonBackgroundColor: buttenBlue,
+              buttonForegroundColor: Colors.white,
             )
           ],
         ),
@@ -35,12 +41,12 @@ class LOginPage extends StatelessWidget {
 
   Container nochBarAboveLoginContainer() {
     return Container(
-            height: 5.h,
-            width: 100.w,
-            decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.7),
-                borderRadius: BorderRadius.circular(20)),
-          );
+      height: 5.h,
+      width: 100.w,
+      decoration: BoxDecoration(
+          color: Colors.grey.withOpacity(0.7),
+          borderRadius: BorderRadius.circular(20)),
+    );
   }
 
   Center welcomeWidget(BuildContext context) {
@@ -56,5 +62,39 @@ class LOginPage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class ButtonWidget extends StatelessWidget {
+  ButtonWidget({
+    super.key,
+    required this.buttonBackgroundColor,
+    required this.buttonForegroundColor,
+    required this.buttonText,
+    required this.borderAvalable,
+  });
+
+  final buttonBackgroundColor;
+  final buttonForegroundColor;
+  final buttonText;
+  bool borderAvalable = false;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        height: 32.h,
+        width: 260.w,
+        
+        child: ElevatedButton(
+            style: borderAvalable? ButtonStyle(
+                foregroundColor:
+                    MaterialStatePropertyAll(buttonForegroundColor),
+                backgroundColor:
+                    MaterialStatePropertyAll(buttonBackgroundColor)): ButtonStyle(
+                foregroundColor:
+                    MaterialStatePropertyAll(buttonForegroundColor),
+                backgroundColor:
+                    MaterialStatePropertyAll(buttonBackgroundColor)),
+            onPressed: () {},
+            child: Text(buttonText)));
   }
 }
