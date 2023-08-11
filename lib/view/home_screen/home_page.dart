@@ -16,21 +16,26 @@ class _HomePageState extends State<HomePage> {
       body: Stack(
         children: [
           Align(
-            alignment: Alignment(0.0, 1.0),
+            alignment: const Alignment(0.0, 1.0),
             child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(30)),
+              borderRadius: const BorderRadius.all(Radius.circular(30)),
               child: BottomNavigationBar(
                   selectedItemColor: whiteColor,
                   unselectedItemColor: Colors.grey,
                   showSelectedLabels: true,
                   showUnselectedLabels: false,
                   backgroundColor: Colors.black,
-                  items: [
-                    BottomNavigationBarItem(icon: Icon(Icons.home),label: 'home'),
-                     BottomNavigationBarItem(icon: Icon(Icons.home),label: 'home'),
-                      BottomNavigationBarItem(icon: Icon(Icons.home),label: 'home'),
-                       BottomNavigationBarItem(icon: Icon(Icons.home),label: 'home'),
-                        BottomNavigationBarItem(icon: Icon(Icons.home),label: 'home'),
+                  items: const [
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.home), label: 'home'),
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.home), label: 'home'),
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.home), label: 'home'),
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.home), label: 'home'),
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.home), label: 'home'),
                   ]),
             ),
           )
