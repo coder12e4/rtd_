@@ -29,8 +29,7 @@ class _NavigationBarpageState extends State<NavigationBarpage> {
         child: Scaffold(
       body: Stack(
         children: [
-          
-
+          _tablist.elementAt(_pageindex),
           Padding(
             padding: const EdgeInsets.all(30.0),
             child: Align(
