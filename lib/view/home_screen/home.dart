@@ -7,7 +7,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(child: Scaffold(
       body: Center(
-        child: Text('Wall page'),
+        child: Text('Home page'),
       ),
     ));
   }

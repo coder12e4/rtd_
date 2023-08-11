@@ -54,12 +54,16 @@ class _NavigationBarpageState extends State<NavigationBarpage> {
                           icon: Icon(Icons.home),
                           label: 'home'),
                       BottomNavigationBarItem(
+                        backgroundColor: Colors.black,
                           icon: Icon(Icons.home), label: 'home'),
                       BottomNavigationBarItem(
+                        backgroundColor: Colors.black,
                           icon: Icon(Icons.home), label: 'home'),
                       BottomNavigationBarItem(
+                        backgroundColor: Colors.black,
                           icon: Icon(Icons.home), label: 'home'),
                       BottomNavigationBarItem(
+                        backgroundColor: Colors.black,
                           icon: Icon(Icons.home), label: 'home'),
                     ]),
               ),
