@@ -41,46 +41,58 @@ class HomePage extends StatelessWidget {
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Padding(
-                                        padding: const EdgeInsets.all(68.0),
-                                        child: AnimatedCircularChart(
-                                          holeRadius: 70.r,
-                                          key: _chartKey,
-                                          size: Size(350.w, 100.h),
-                                          initialChartData: const <CircularStackEntry>[
-                                            CircularStackEntry(
-                                              <CircularSegmentEntry>[
-                                                CircularSegmentEntry(
-                                                  66.67,
-                                                  Color.fromARGB(
-                                                    255,
-                                                    139,
-                                                    63,
-                                                    111,
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 68.h, vertical: 68.w),
+                                      child: Stack(
+                                        children: [
+                                          Positioned(
+                                            child: Container(
+                                              child: AnimatedCircularChart(
+                                                holeRadius: 70.r,
+                                                key: _chartKey,
+                                                size: Size(350.w, 100.h),
+                                                initialChartData: const <CircularStackEntry>[
+                                                  CircularStackEntry(
+                                                    <CircularSegmentEntry>[
+                                                      CircularSegmentEntry(
+                                                        66.67,
+                                                        Color.fromARGB(
+                                                            255, 147, 8, 96),
+                                                        rankKey: 'remaining',
+                                                      ),
+                                                      CircularSegmentEntry(
+                                                        33.33,
+                                                        Color.fromARGB(
+                                                            255, 207, 200, 200),
+                                                        rankKey: 'completed',
+                                                      ),
+                                                    ],
+                                                    rankKey: 'progress',
                                                   ),
-                                                  rankKey: 'completed',
+                                                ],
+                                                chartType:
+                                                    CircularChartType.Radial,
+                                                percentageValues: true,
+                                                // holeLabel: 'Total Collection',
+                                                labelStyle: const TextStyle(
+                                                  color: baseColor,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 24.0,
                                                 ),
-                                                CircularSegmentEntry(
-                                                  33.33,
-                                                  Color.fromARGB(
-                                                      255, 221, 217, 217),
-                                                  rankKey: 'remaining',
-                                                ),
-                                              ],
-                                              rankKey: 'progress',
+                                                edgeStyle:
+                                                    SegmentEdgeStyle.round,
+                                                startAngle: BorderSide
+                                                    .strokeAlignOutside,
+                                              ),
                                             ),
-                                          ],
-                                          chartType: CircularChartType.Radial,
-                                          percentageValues: true,
-                                          holeLabel: '1/3',
-                                          labelStyle: TextStyle(
-                                            color: Colors.blueGrey[600],
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 24.0,
                                           ),
-                                          edgeStyle: SegmentEdgeStyle.round,
-                                          startAngle:
-                                              BorderSide.strokeAlignInside,
-                                        )),
+                                          Positioned(
+                                            left: 20.w,
+                                            child: graphCenterText(context),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                   incomBreakdown(),
                                 ],
@@ -93,6 +105,38 @@ class HomePage extends StatelessWidget {
                 ],
               ),
             )));
+  }
+
+  graphCenterText(context) {
+    return Column(
+      children: [
+        const Text(
+          'Total Collection',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+        ),
+        Text(
+          '1000SR',
+          style: Theme.of(context)
+              .textTheme
+              .displayLarge!
+              .copyWith(fontWeight: FontWeight.bold, fontSize: 25),
+        ),
+        SizedBox(
+          height: 10.h,
+        ),
+        const Text(
+          'Balance',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+        ),
+        Text(
+          '800SR',
+          style: Theme.of(context)
+              .textTheme
+              .displayLarge!
+              .copyWith(fontWeight: FontWeight.bold, fontSize: 25),
+        ),
+      ],
+    );
   }
 
   Container activeLoan() {
