@@ -6,7 +6,6 @@ import 'package:rtd_project/core/common_widget/dropdown_widget.dart';
 import 'package:rtd_project/core/common_widget/imagepicker.dart';
 import 'package:rtd_project/core/common_widget/textformfield_widget.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
-import 'package:rtd_project/view/login_screen/login_page.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
