@@ -19,8 +19,8 @@ class _NavigationBarpageState extends State<NavigationBarpage> {
   final List<Widget> _tablist = [
     const HomePage(),
     const WallPage(),
-    const BookPage(),
     const LoanPage(),
+    const BookPage(),
     const ProfilePage(),
   ];
   @override
