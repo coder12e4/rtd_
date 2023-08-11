@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
 import 'package:rtd_project/core/common_widget/dropdown_widget.dart';
 import 'package:rtd_project/core/common_widget/imagepicker.dart';
 import 'package:rtd_project/core/common_widget/textformfield_widget.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
+import 'package:rtd_project/view/home_screen/home_page.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
@@ -278,7 +280,11 @@ class RegisterScreen extends StatelessWidget {
                 buttonForegroundColor: whiteColor,
                 buttonText: 'Submit',
                 borderAvalable: false,
-                press: () {}),
+                press: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => HomePage(),
+                  ));
+                }),
             textFieldHeight,
           ],
         ));
