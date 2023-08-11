@@ -30,7 +30,7 @@ class _NavigationBarpageState extends State<NavigationBarpage> {
       body: Stack(
         children: [
           
-
+          
           Padding(
             padding: const EdgeInsets.all(30.0),
             child: Align(
