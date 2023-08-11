@@ -18,6 +18,10 @@ class HomePage extends StatelessWidget {
                   homeTextWidget(context),
                   Container(
                     height: 610.h,
+
+                    // height: 1050.h,
+                    //hallo
+
                     decoration: const BoxDecoration(
                       color: whiteColor,
                       borderRadius: BorderRadiusDirectional.only(
