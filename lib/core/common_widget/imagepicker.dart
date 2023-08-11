@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
 
@@ -94,6 +95,9 @@ class Imagepiker extends StatelessWidget {
             height: 20.h,
           ),
           ButtonWidget(
+              press: () {
+                Navigator.pop(context);
+              },
               buttonBackgroundColor: buttenBlue,
               buttonForegroundColor: whiteColor,
               buttonText: 'Upload',

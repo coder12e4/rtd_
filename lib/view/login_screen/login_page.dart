@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rtd_project/core/color/colors.dart';
+import 'package:rtd_project/core/common_widget/commen_botten.dart';
+import 'package:rtd_project/view/login_screen/widgets/login_complete.dart';
 import 'package:rtd_project/view/register_screen/register_screen.dart';
 
 import '../../core/common_widget/textformfield_widget.dart';
@@ -49,7 +51,11 @@ class LOginPage extends StatelessWidget {
                     height: 20.h,
                   ),
                   ButtonWidget(
-                    press: () {},
+                    press: () {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (context) => LoginComplited());
+                    },
                     borderAvalable: false,
                     buttonText: 'Login',
                     buttonBackgroundColor: buttenBlue,
@@ -138,39 +144,5 @@ final TextEditingController emailController = TextEditingController();
 final TextEditingController passwordController = TextEditingController();
 
 // ignore: must_be_immutable
-class ButtonWidget extends StatelessWidget {
-  ButtonWidget({
-    super.key,
-    required this.buttonBackgroundColor,
-    required this.buttonForegroundColor,
-    required this.buttonText,
-    required this.borderAvalable,
-    required this.press,
-  });
 
-  final Color buttonBackgroundColor;
-  final Color buttonForegroundColor;
-  final String buttonText;
-  bool borderAvalable = false;
-  final Function() press;
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-        height: 32.h,
-        width: 260.w,
-        child: ElevatedButton(
-            style: borderAvalable
-                ? ButtonStyle(
-                    foregroundColor:
-                        MaterialStatePropertyAll(buttonForegroundColor),
-                    backgroundColor:
-                        MaterialStatePropertyAll(buttonBackgroundColor))
-                : ButtonStyle(
-                    foregroundColor:
-                        MaterialStatePropertyAll(buttonForegroundColor),
-                    backgroundColor:
-                        MaterialStatePropertyAll(buttonBackgroundColor)),
-            onPressed: press,
-            child: Text(buttonText)));
-  }
-}
+

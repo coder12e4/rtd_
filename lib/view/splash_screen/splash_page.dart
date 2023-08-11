@@ -31,7 +31,7 @@ class SplashScreen extends StatelessWidget {
                   image: AssetImage(
                     'assets/images/rectangle2.jpg',
                   ))),
-          height: 659.h,
+          height: 660.h,
           width: 400.w,
           child: Stack(
             alignment: Alignment.topCenter,

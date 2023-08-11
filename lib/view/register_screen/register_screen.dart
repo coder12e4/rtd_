@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rtd_project/core/color/colors.dart';
+import 'package:rtd_project/core/common_widget/commen_botten.dart';
 import 'package:rtd_project/core/common_widget/dropdown_widget.dart';
+import 'package:rtd_project/core/common_widget/imagepicker.dart';
 import 'package:rtd_project/core/common_widget/textformfield_widget.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/view/login_screen/login_page.dart';
@@ -20,13 +22,24 @@ class RegisterScreen extends StatelessWidget {
           SizedBox(
             height: 5.h,
           ),
-          textFieldContainer(),
+          textFieldContainer(context),
         ]),
       ),
     );
   }
 
-  Container textFieldContainer() {
+  Container textFieldContainer(BuildContext context) {
+    List<String> _bloodGroups = [
+      'A+',
+      'A-',
+      'B+',
+      'B-',
+      'AB+',
+      'AB-',
+      'O+',
+      'O-',
+    ];
+
     return Container(
         height: 3690.h,
         width: 390.w,
@@ -41,35 +54,41 @@ class RegisterScreen extends StatelessWidget {
           padding: const EdgeInsets.all(45),
           physics: const NeverScrollableScrollPhysics(),
           children: [
-            TextFormFieldWidget(controller: nameregController, hitText: 'Name'),
+            TextFormFieldWidget(controller: nameRegController, hitText: 'Name'),
             textFieldHeight,
-            TextFormFieldWidget(controller: nameregController, hitText: 'DOB'),
+            TextFormFieldWidget(controller: nameRegController, hitText: 'DOB'),
             textFieldHeight,
-            const DropedownWidget(hintText: 'Blood Group'),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: nameregController, hitText: 'Indian Mobile Number'),
+            DropedownWidget(
+                hintText: 'Blood Group', dropDownlist: _bloodGroups),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: nameregController, hitText: 'KSA Mobile Number'),
+                controller: mobileNumRegController,
+                hitText: 'Indian Mobile Number'),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: nameregController, hitText: 'Whatsapp Number'),
+                controller: ksaMobileNumRegController,
+                hitText: 'KSA Mobile Number'),
+            textFieldHeight,
+            TextFormFieldWidget(
+                controller: watsappNumRegController,
+                hitText: 'Whatsapp Number'),
             textFieldHeight,
             //////////////////////////End first Section?///////////////////////////////////////////////////////////
             dividerAndHeadingWidget(
-                heading: 'Residence Address in KSA', width: 116.w),
+                heading: 'Residence Address in KSA', width: 80.w),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: nameregController, hitText: 'Address Line 1'),
+                controller: resAddressLine1Controller,
+                hitText: 'Address Line 1'),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: nameregController, hitText: 'Address Line 2'),
+                controller: resAddressLine2Controller,
+                hitText: 'Address Line 2'),
             textFieldHeight,
-            const DropedownWidget(hintText: 'State'),
+            DropedownWidget(hintText: 'State', dropDownlist: []),
 
             textFieldHeight,
-            const DropedownWidget(hintText: 'Pin'),
+            const DropedownWidget(hintText: 'Pin', dropDownlist: []),
 
             textFieldHeight,
             const Center(
@@ -79,53 +98,57 @@ class RegisterScreen extends StatelessWidget {
               ),
             ),
             textFieldHeight,
-            Container(
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.blue),
-                  borderRadius: BorderRadius.circular(20)),
-              child: ButtonWidget(
-                  press: () {},
-                  buttonBackgroundColor: whiteColor,
-                  buttonForegroundColor: Colors.blue,
-                  buttonText: 'Attach Address Proof',
-                  borderAvalable: false),
-            ),
+            ButtonWidget(
+                press: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) => Imagepiker(),
+                  );
+                },
+                buttonBackgroundColor: whiteColor,
+                buttonForegroundColor: Colors.blue,
+                buttonText: 'Attach Address Proof',
+                borderAvalable: true),
+
             //////////////////////////End Of Second Section?///////////////////////////////////////////////////////////
             textFieldHeight,
             dividerAndHeadingWidget(
-                heading: ' Emergency Contact 1 (KSA)', width: 105.0.w),
+                heading: ' Emergency Contact 1 (KSA)', width: 70.w),
             textFieldHeight,
-            TextFormFieldWidget(controller: nameregController, hitText: 'Name'),
+            TextFormFieldWidget(controller: emName1Controller, hitText: 'Name'),
             textFieldHeight,
-            const DropedownWidget(hintText: 'Relationship'),
+            const DropedownWidget(hintText: 'Relationship', dropDownlist: []),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: nameregController, hitText: 'Mobile Number'),
+                controller: emMobileNum1Controller, hitText: 'Mobile Number'),
             //////////////////////////End of third Section?///////////////////////////////////////////////////////////
             textFieldHeight,
             dividerAndHeadingWidget(
-                heading: ' Emergency Contact 2 (KSA)', width: 104.0.w),
-            textFieldHeight,
-            TextFormFieldWidget(controller: nameregController, hitText: 'Name'),
-            textFieldHeight,
-            const DropedownWidget(hintText: 'Relationship'),
+                heading: ' Emergency Contact 2 (KSA)', width: 60.w),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: nameregController, hitText: 'Mobile Number'),
+                controller: emIndiaName2Controller, hitText: 'Name'),
+            textFieldHeight,
+            const DropedownWidget(hintText: 'Relationship', dropDownlist: []),
+            textFieldHeight,
+            TextFormFieldWidget(
+                controller: emIndiaName2Controller, hitText: 'Mobile Number'),
             //////////////////////////End of Fourth Section?///////////////////////////////////////////////////////////
             textFieldHeight,
-            dividerAndHeadingWidget(heading: 'Indian Address', width: 180.w),
+            dividerAndHeadingWidget(heading: 'Indian Address', width: 140.w),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: nameregController, hitText: 'Address Line 1'),
+                controller: indianAddressLine1Controller,
+                hitText: 'Address Line 1'),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: nameregController, hitText: 'Address Line 2'),
+                controller: indianAddressLine2Controller,
+                hitText: 'Address Line 2'),
             textFieldHeight,
-            const DropedownWidget(hintText: 'State'),
+            const DropedownWidget(hintText: 'State', dropDownlist: []),
 
             textFieldHeight,
-            const DropedownWidget(hintText: 'Pin'),
+            const DropedownWidget(hintText: 'Pin', dropDownlist: []),
 
             textFieldHeight,
             const Center(
@@ -140,7 +163,12 @@ class RegisterScreen extends StatelessWidget {
                   border: Border.all(color: Colors.blue),
                   borderRadius: BorderRadius.circular(20)),
               child: ButtonWidget(
-                  press: () {},
+                  press: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) => Imagepiker(),
+                    );
+                  },
                   buttonBackgroundColor: whiteColor,
                   buttonForegroundColor: Colors.blue,
                   buttonText: 'Attach Address Proof',
@@ -149,97 +177,100 @@ class RegisterScreen extends StatelessWidget {
             textFieldHeight,
             /////////////////////End of Fiveth Section////////////////////
             dividerAndHeadingWidget(
-                heading: 'Emergency Contact 1: (india)', width: 100.w),
-            textFieldHeight,
-            TextFormFieldWidget(controller: nameregController, hitText: 'Name'),
-            textFieldHeight,
-            const DropedownWidget(hintText: 'Relationship'),
+                heading: 'Emergency Contact 1: (india)', width: 60.w),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: nameregController, hitText: 'Mobile Number'),
+                controller: emIndiaName1Controller, hitText: 'Name'),
+            textFieldHeight,
+            const DropedownWidget(hintText: 'Relationship', dropDownlist: []),
+            textFieldHeight,
+            TextFormFieldWidget(
+                controller: emIndiaMobile1Controller, hitText: 'Mobile Number'),
             /////////////////////End of Sixth Section////////////////////
             textFieldHeight,
             dividerAndHeadingWidget(
-                heading: 'Emergency Contact 2: (india)', width: 100.w),
-            textFieldHeight,
-            TextFormFieldWidget(controller: nameregController, hitText: 'Name'),
-            textFieldHeight,
-            const DropedownWidget(hintText: 'Relationship'),
+                heading: 'Emergency Contact 2: (india)', width: 60.w),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: nameregController, hitText: 'Mobile Number'),
+                controller: emIndiaName2Controller, hitText: 'Name'),
+            textFieldHeight,
+            const DropedownWidget(hintText: 'Relationship', dropDownlist: []),
+            textFieldHeight,
+            TextFormFieldWidget(
+                controller: emIndiaMobile2Controller, hitText: 'Mobile Number'),
             textFieldHeight,
             /////////////////End Of Seventh section///////////////////
             const Divider(),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: nameregController, hitText: 'Iqama Number'),
+                controller: iqamaNumController, hitText: 'Iqama Number'),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: nameregController, hitText: 'Expiry Date'),
+                controller: iqamaexperyDateController, hitText: 'Expiry Date'),
             textFieldHeight,
             ////////////////////////End Of Eight Section//////////////////////////
             const Divider(),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: nameregController, hitText: 'Passport Number'),
+                controller: passNumController, hitText: 'Passport Number'),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: nameregController, hitText: 'Expiry Date'),
+                controller: passExperyNumController, hitText: 'Expiry Date'),
             textFieldHeight,
             ////////////////////////////End of Nine Section//////////////////
             const Divider(),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: nameregController, hitText: 'Martial Status'),
+                controller: maritalStatusController, hitText: 'Martial Status'),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: nameregController, hitText: 'Number of Children'),
+                controller: numOfChildrenController,
+                hitText: 'Number of Children'),
             textFieldHeight,
             ////////////////////////End of Tenth Section/////////////////////
             const Divider(),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: nameregController, hitText: 'Nominee'),
+                controller: nomineController, hitText: 'Nominee'),
             textFieldHeight,
-            const DropedownWidget(hintText: 'Relationship'),
+            const DropedownWidget(hintText: 'Relationship', dropDownlist: []),
             textFieldHeight,
             //////////////////////////End of 11T Section////////////////////////////
             const Divider(),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: nameregController, hitText: 'Sponsor Name'),
+                controller: sponserNameController, hitText: 'Sponsor Name'),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: nameregController, hitText: 'Location'),
+                controller: locationController, hitText: 'Location'),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: nameregController, hitText: 'Establishment Name'),
+                controller: estNmaeController, hitText: 'Establishment Name'),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: nameregController, hitText: 'Telephone Number'),
+                controller: teleNumController, hitText: 'Telephone Number'),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: nameregController, hitText: 'Mobile Number'),
+                controller: lastMobileNumController, hitText: 'Mobile Number'),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: nameregController,
+                controller: sprMobileNumController,
                 hitText: 'Sponsor Related Mobile Number'),
             textFieldHeight,
             ///////////////////////End of 12TH Section//////////////////
             const Divider(),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: nameregController,
+                controller: resVehichleNumController,
                 hitText: 'Responsible Vehicle Number'),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: nameregController, hitText: 'Model'),
+                controller: vehMoedelController, hitText: 'Model'),
             textFieldHeight,
-            TextFormFieldWidget(controller: nameregController, hitText: 'Type'),
+            TextFormFieldWidget(controller: vehTypeController, hitText: 'Type'),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: nameregController, hitText: 'Company'),
+                controller: vehCompanyController, hitText: 'Company'),
             textFieldHeight,
             const RadioButtonWidget(),
             textFieldHeight,
@@ -356,4 +387,45 @@ class _RadioButtonWidgetState extends State<RadioButtonWidget> {
   }
 }
 
-final TextEditingController nameregController = TextEditingController();
+final TextEditingController nameRegController = TextEditingController();
+final TextEditingController mobileNumRegController = TextEditingController();
+final TextEditingController ksaMobileNumRegController = TextEditingController();
+final TextEditingController watsappNumRegController = TextEditingController();
+/////resisidants adress in ksa/////////
+final TextEditingController resAddressLine1Controller = TextEditingController();
+final TextEditingController resAddressLine2Controller = TextEditingController();
+/////////////////////////emargency contact 1 ksa////////////////////////
+final TextEditingController emName1Controller = TextEditingController();
+final TextEditingController emMobileNum1Controller = TextEditingController();
+/////////////////////////emargency contact 2 ksa////////////////////////
+final TextEditingController emName2Controller = TextEditingController();
+final TextEditingController emMObilenum2Controller = TextEditingController();
+/////////////////////////indian adress////////////////////////
+final TextEditingController indianAddressLine1Controller =
+    TextEditingController();
+final TextEditingController indianAddressLine2Controller =
+    TextEditingController();
+///////////////////////emarangcy contact india1//////////////////////////////////
+final TextEditingController emIndiaName1Controller = TextEditingController();
+final TextEditingController emIndiaMobile1Controller = TextEditingController();
+///////////////////////emarangcy contact india2//////////////////////////////////
+final TextEditingController emIndiaName2Controller = TextEditingController();
+final TextEditingController emIndiaMobile2Controller = TextEditingController();
+///////////////////////last section//////////////////////////////////
+final TextEditingController iqamaNumController = TextEditingController();
+final TextEditingController iqamaexperyDateController = TextEditingController();
+final TextEditingController passNumController = TextEditingController();
+final TextEditingController passExperyNumController = TextEditingController();
+final TextEditingController maritalStatusController = TextEditingController();
+final TextEditingController numOfChildrenController = TextEditingController();
+final TextEditingController nomineController = TextEditingController();
+final TextEditingController sponserNameController = TextEditingController();
+final TextEditingController locationController = TextEditingController();
+final TextEditingController estNmaeController = TextEditingController();
+final TextEditingController teleNumController = TextEditingController();
+final TextEditingController lastMobileNumController = TextEditingController();
+final TextEditingController sprMobileNumController = TextEditingController();
+final TextEditingController resVehichleNumController = TextEditingController();
+final TextEditingController vehMoedelController = TextEditingController();
+final TextEditingController vehTypeController = TextEditingController();
+final TextEditingController vehCompanyController = TextEditingController();
