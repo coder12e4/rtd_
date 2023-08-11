@@ -42,7 +42,7 @@ class HomePage extends StatelessWidget {
                                     child: Padding(
                                         padding: const EdgeInsets.all(68.0),
                                         child: AnimatedCircularChart(
-                                          // holeRadius: 0.1,
+                                          holeRadius: 0.1,
                                           key: _chartKey,
                                           size: Size(200.w, 100.h),
                                           initialChartData: const <CircularStackEntry>[
@@ -68,13 +68,13 @@ class HomePage extends StatelessWidget {
                                           percentageValues: true,
                                           holeLabel: '1/3',
                                           labelStyle: TextStyle(
-                                            color: Colors.blueGrey[600],
+                                            color: baseColor,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 24.0,
                                           ),
                                           edgeStyle: SegmentEdgeStyle.round,
                                           startAngle:
-                                              BorderSide.strokeAlignInside,
+                                              BorderSide.strokeAlignOutside,
                                         )),
                                   )
                                 ],
