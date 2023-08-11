@@ -17,11 +17,11 @@ class NavigationBarpage extends StatefulWidget {
 class _NavigationBarpageState extends State<NavigationBarpage> {
   int _pageindex = 0;
   final List<Widget> _tablist = [
-    HomePage(),
-    WallPage(),
-    BookPage(),
-    LoanPage(),
-    ProfilePage(),
+    const HomePage(),
+    const WallPage(),
+    const BookPage(),
+    const LoanPage(),
+    const ProfilePage(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -29,20 +29,19 @@ class _NavigationBarpageState extends State<NavigationBarpage> {
         child: Scaffold(
       body: Stack(
         children: [
-          
-          
+          _tablist.elementAt(_pageindex),
           Padding(
             padding: const EdgeInsets.all(30.0),
             child: Align(
-              alignment: Alignment(0.0, 1.0),
+              alignment: const Alignment(0.0, 1.0),
               child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(30)),
+                borderRadius: const BorderRadius.all(Radius.circular(30)),
                 child: BottomNavigationBar(
                     selectedItemColor: whiteColor,
                     unselectedItemColor: Colors.grey,
                     showSelectedLabels: true,
-                    showUnselectedLabels: false,
-                    backgroundColor: Colors.amber,
+                    showUnselectedLabels: true,
+                    // backgroundColor: Colors.amber,
                     currentIndex: _pageindex,
                     onTap: (int index) {
                       setState(() {
@@ -53,15 +52,23 @@ class _NavigationBarpageState extends State<NavigationBarpage> {
                       BottomNavigationBarItem(
                           backgroundColor: Colors.black,
                           icon: Icon(Icons.home),
-                          label: 'home'),
+                          label: 'Home'),
                       BottomNavigationBarItem(
-                          icon: Icon(Icons.home), label: 'home'),
+                          backgroundColor: Colors.black,
+                          icon: Icon(Icons.repeat),
+                          label: 'Wall'),
                       BottomNavigationBarItem(
-                          icon: Icon(Icons.home), label: 'home'),
+                          backgroundColor: Colors.black,
+                          icon: Icon(Icons.add_box_outlined),
+                          label: 'Loan'),
                       BottomNavigationBarItem(
-                          icon: Icon(Icons.home), label: 'home'),
+                          backgroundColor: Colors.black,
+                          icon: Icon(Icons.book_outlined),
+                          label: 'Book'),
                       BottomNavigationBarItem(
-                          icon: Icon(Icons.home), label: 'home'),
+                          backgroundColor: Colors.black,
+                          icon: Icon(Icons.person_2_outlined),
+                          label: 'Profile'),
                     ]),
               ),
             ),
