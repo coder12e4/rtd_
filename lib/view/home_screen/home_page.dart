@@ -1,16 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:rtd_project/core/color/colors.dart';
+import 'package:rtd_project/view/book_screen/book_page.dart';
+import 'package:rtd_project/view/home_screen/home.dart';
+import 'package:rtd_project/view/loan_screen/loan_page.dart';
+import 'package:rtd_project/view/wall_screen/wall_page.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+import '../profile_screen/profile_page.dart';
+
+class NavigationBarpage extends StatefulWidget {
+  const NavigationBarpage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<NavigationBarpage> createState() => _NavigationBarpageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _NavigationBarpageState extends State<NavigationBarpage> {
   int _pageindex = 0;
-  final List<Widget> _tablist = [];
+  final List<Widget> _tablist = [
+    HomePage(),
+    WallPage(),
+    BookPage(),
+    LoanPage(),
+    ProfilePage(),
+  ];
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -31,7 +43,12 @@ class _HomePageState extends State<HomePage> {
                     showSelectedLabels: true,
                     showUnselectedLabels: false,
                     backgroundColor: Colors.amber,
-                    onTap: (int index) {},
+                    currentIndex: _pageindex,
+                    onTap: (int index) {
+                      setState(() {
+                        _pageindex = index;
+                      });
+                    },
                     items: const [
                       BottomNavigationBarItem(
                           backgroundColor: Colors.black,

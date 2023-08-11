@@ -282,7 +282,7 @@ class RegisterScreen extends StatelessWidget {
                 borderAvalable: false,
                 press: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => HomePage(),
+                    builder: (context) => NavigationBarpage(),
                   ));
                 }),
             textFieldHeight,
