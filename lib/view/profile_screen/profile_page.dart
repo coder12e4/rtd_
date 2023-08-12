@@ -245,7 +245,7 @@ class ProfilePage extends StatelessWidget {
                     size: 30,
                   )),
               SizedBox(
-                width: 110.w,
+                width: 90.w,
               ),
               Text(
                 'Profile',
@@ -255,7 +255,7 @@ class ProfilePage extends StatelessWidget {
                     fontSize: 24),
               ),
               SizedBox(
-                width: 50.w,
+                width: 30.w,
               ),
               IconButton(
                 onPressed: () {},
@@ -269,7 +269,7 @@ class ProfilePage extends StatelessWidget {
                   icon: const Icon(
                     Icons.notifications_none,
                     color: whiteColor,
-                    size: 40,
+                    size: 35,
                   ))
             ],
           ),
