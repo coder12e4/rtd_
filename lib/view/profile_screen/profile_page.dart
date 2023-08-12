@@ -235,7 +235,7 @@ class ProfilePage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Row(
-            // mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
                   onPressed: () {},
@@ -245,7 +245,7 @@ class ProfilePage extends StatelessWidget {
                     size: 30,
                   )),
               SizedBox(
-                width: 106.w,
+                width: 110.w,
               ),
               Text(
                 'Profile',

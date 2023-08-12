@@ -280,7 +280,7 @@ class RegisterScreen extends StatelessWidget {
                 buttonText: 'Submit',
                 borderAvalable: false,
                 press: () {
-                  Navigator.of(context).push(MaterialPageRoute(
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => NavigationBarpage(),
                   ));
                 }),
