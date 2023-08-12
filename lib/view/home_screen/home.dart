@@ -104,7 +104,9 @@ class HomePage extends StatelessWidget {
                   ),
                 ],
               ),
-            )));
+            ))
+            
+            );
   }
 
   graphCenterText(context) {
