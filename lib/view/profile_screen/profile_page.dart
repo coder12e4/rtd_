@@ -235,7 +235,7 @@ class ProfilePage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Row(
-            // mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
                   onPressed: () {},
@@ -244,9 +244,7 @@ class ProfilePage extends StatelessWidget {
                     color: whiteColor,
                     size: 30,
                   )),
-              SizedBox(
-                width: 106.w,
-              ),
+              
               Text(
                 'Profile',
                 style: Theme.of(context).textTheme.displaySmall!.copyWith(
