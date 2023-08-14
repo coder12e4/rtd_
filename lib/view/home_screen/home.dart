@@ -2,6 +2,7 @@ import 'package:awesome_circular_chart/awesome_circular_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rtd_project/core/color/colors.dart';
+import 'package:rtd_project/view/notification/notification.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -104,9 +105,7 @@ class HomePage extends StatelessWidget {
                   ),
                 ],
               ),
-            ))
-            
-            );
+            )));
   }
 
   graphCenterText(context) {
@@ -151,14 +150,14 @@ class HomePage extends StatelessWidget {
           children: [
             Padding(
               padding: EdgeInsets.only(left: 20.w, bottom: 10.h),
-              child: Text(
+              child: const Text(
                 'Active Loan',
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
               ),
             ),
             ListView.builder(
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: 3,
               itemBuilder: (context, index) => activeLoanData(),
             )
@@ -201,7 +200,7 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'Income Breakdown',
               style: TextStyle(fontWeight: FontWeight.w600),
             ),
@@ -214,7 +213,7 @@ class HomePage extends StatelessWidget {
             SizedBox(
               height: 30.h,
             ),
-            Text(
+            const Text(
               'Total Loan',
               style: TextStyle(fontWeight: FontWeight.w600),
             ),
@@ -230,10 +229,10 @@ class HomePage extends StatelessWidget {
     ));
   }
 
-  Container Divider() {
+  Container divider() {
     return Container(
       width: 270.w,
-      child: Text(
+      child: const Text(
         '-------------------',
         style: TextStyle(fontSize: 30),
       ),
@@ -246,11 +245,11 @@ class HomePage extends StatelessWidget {
       children: [
         Text(
           title!,
-          style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
+          style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
         ),
         Text(
           price!,
-          style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
+          style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
         )
       ],
     );
@@ -264,11 +263,11 @@ class HomePage extends StatelessWidget {
         children: [
           Text(
             title!,
-            style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+            style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
           ),
           Text(
             date!,
-            style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+            style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
           )
         ],
       ),
@@ -295,7 +294,11 @@ class HomePage extends StatelessWidget {
             width: 90.w,
           ),
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => NotificationScreen(),
+                ));
+              },
               icon: const Icon(
                 Icons.notifications_none,
                 color: whiteColor,
