@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rtd_project/core/color/colors.dart';
 
 class DropedownWidget extends StatefulWidget {
-  const DropedownWidget({Key? key, required this.hintText, required this.dropDownlist});
+  const DropedownWidget({super.key, required this.hintText, required this.dropDownlist});
   final String hintText;
  final List<String> dropDownlist;
   @override

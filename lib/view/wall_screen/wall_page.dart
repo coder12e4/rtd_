@@ -56,7 +56,7 @@ class WallPage extends StatelessWidget {
           feedDate('19/10/2023'),
           ListView.builder(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: 2,
             itemBuilder: (context, index) => VoteData(true, '07'),
           ),
@@ -65,7 +65,7 @@ class WallPage extends StatelessWidget {
           ),
           ListView.builder(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: 1,
             itemBuilder: (context, index) => VoteData(false, "08"),
           ),
@@ -90,7 +90,7 @@ class WallPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: whiteColor,
                         borderRadius: BorderRadius.all(Radius.circular(30))),
                     height: 40.h,
@@ -99,7 +99,7 @@ class WallPage extends StatelessWidget {
                       child: Text(
                         'Pole Number:${filenumber}',
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -111,11 +111,11 @@ class WallPage extends StatelessWidget {
                       child: Text(
                         isActive == true ? 'Active' : 'Closed',
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: whiteColor,
                         borderRadius: BorderRadius.all(Radius.circular(30))),
                   )
@@ -124,7 +124,7 @@ class WallPage extends StatelessWidget {
               SizedBox(
                 height: 10.h,
               ),
-              Text("വോട്ടിന്റെ വിഷയം ഇവിടെ എഴുതുക",
+              const Text("വോട്ടിന്റെ വിഷയം ഇവിടെ എഴുതുക",
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.w500,
@@ -186,7 +186,7 @@ class WallPage extends StatelessWidget {
             onPressed: press,
             child: Text(
               borderAvalable == true ? 'Submit' : "submited",
-              style: TextStyle(fontWeight: FontWeight.w700),
+              style: const TextStyle(fontWeight: FontWeight.w700),
             )));
   }
 
@@ -202,7 +202,7 @@ class WallPage extends StatelessWidget {
         child: ElevatedButton(
             style: ButtonStyle(
                 side: borderAvalable == false
-                    ? MaterialStatePropertyAll(BorderSide(color: Colors.black))
+                    ? const MaterialStatePropertyAll(BorderSide(color: Colors.black))
                     : null,
                 foregroundColor: MaterialStatePropertyAll(borderAvalable == true
                     ? buttonForegroundColor
@@ -213,7 +213,7 @@ class WallPage extends StatelessWidget {
             onPressed: press,
             child: Text(
               buttonText!,
-              style: TextStyle(fontWeight: FontWeight.w700),
+              style: const TextStyle(fontWeight: FontWeight.w700),
             )));
   }
 
@@ -227,14 +227,14 @@ class WallPage extends StatelessWidget {
           feedDate('19/10/2023'),
           ListView.builder(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: 2,
             itemBuilder: (context, index) => feedActiveData(true, '418'),
           ),
           feedDate('19/10/2023'),
           ListView.builder(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: 1,
             itemBuilder: (context, index) => feedActiveData(false, "481"),
           ),
@@ -245,7 +245,7 @@ class WallPage extends StatelessWidget {
     return Container(
       height: 30.h,
       width: 120.w,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(30)),
           color: textFormBase),
       child: Center(
@@ -271,7 +271,7 @@ class WallPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: whiteColor,
                         borderRadius: BorderRadius.all(Radius.circular(30))),
                     height: 40.h,
@@ -280,7 +280,7 @@ class WallPage extends StatelessWidget {
                       child: Text(
                         'File Number:${filenumber}',
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -292,7 +292,7 @@ class WallPage extends StatelessWidget {
                       child: Text(
                         isActive == true ? 'FB:Active' : 'FB:Closed',
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: whiteColor, fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -300,7 +300,7 @@ class WallPage extends StatelessWidget {
                         color: isActive == true
                             ? const Color.fromARGB(255, 91, 207, 95)
                             : Colors.red,
-                        borderRadius: BorderRadius.all(Radius.circular(30))),
+                        borderRadius: const BorderRadius.all(Radius.circular(30))),
                   )
                 ],
               ),
@@ -314,11 +314,11 @@ class WallPage extends StatelessWidget {
                         'assets/images/pexels-pixabay-220453 1.png',
                         height: 40.h,
                       ),
-                      borderRadius: BorderRadius.all(Radius.circular(60))),
+                      borderRadius: const BorderRadius.all(Radius.circular(60))),
                   SizedBox(
                     width: 8.w,
                   ),
-                  Text('ഷഫീഖ് കൊല്ലം (M.107)',
+                  const Text('ഷഫീഖ് കൊല്ലം (M.107)',
                       style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.w500,
@@ -346,16 +346,16 @@ class WallPage extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(Icons.money),
+              const Icon(Icons.money),
               Text(
                 title!,
-                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+                style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
               ),
             ],
           ),
           Text(
             price!,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           )
         ],
       ),
@@ -370,16 +370,16 @@ class WallPage extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(Icons.date_range),
+              const Icon(Icons.date_range),
               Text(
                 title!,
-                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+                style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
               ),
             ],
           ),
           Text(
             date!,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           )
         ],
       ),
@@ -389,7 +389,7 @@ class WallPage extends StatelessWidget {
   Container Divider() {
     return Container(
       width: 270.w,
-      child: Text(
+      child: const Text(
         '-------------------',
         style: TextStyle(fontSize: 30),
       ),
@@ -397,8 +397,8 @@ class WallPage extends StatelessWidget {
   }
 
   Padding tabBar() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 80),
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 80),
       child: TabBar(
           unselectedLabelColor: Colors.grey,
           labelColor: Colors.white,

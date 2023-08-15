@@ -3,9 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
 import 'package:rtd_project/core/common_widget/textformfield_widget.dart';
-import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/view/notification/notificatoin_view/radio_button.dart';
-import 'package:rtd_project/view/register_screen/register_screen.dart';
+
 
 class NotificationViewScreen extends StatelessWidget {
   const NotificationViewScreen({super.key});

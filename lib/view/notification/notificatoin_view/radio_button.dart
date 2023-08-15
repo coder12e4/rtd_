@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:rtd_project/core/color/colors.dart';
+
 
 class RadioButtonWidgetNotification extends StatefulWidget {
-  const RadioButtonWidgetNotification({Key? key, required this.text});
+  const RadioButtonWidgetNotification({super.key,  required this.text});
   final String text;
   @override
   State<RadioButtonWidgetNotification> createState() =>
