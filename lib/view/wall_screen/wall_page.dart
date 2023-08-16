@@ -97,7 +97,7 @@ class WallPage extends StatelessWidget {
                     width: 160.w,
                     child: Center(
                       child: Text(
-                        'Pole Number:${filenumber}',
+                        'Pole Number:$filenumber',
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold),
@@ -107,6 +107,9 @@ class WallPage extends StatelessWidget {
                   Container(
                     height: 40.h,
                     width: 100.w,
+                    decoration: const BoxDecoration(
+                        color: whiteColor,
+                        borderRadius: BorderRadius.all(Radius.circular(30))),
                     child: Center(
                       child: Text(
                         isActive == true ? 'Active' : 'Closed',
@@ -115,9 +118,11 @@ class WallPage extends StatelessWidget {
                             color: Colors.black, fontWeight: FontWeight.bold),
                       ),
                     ),
+
                     decoration: const BoxDecoration(
                         color: whiteColor,
                         borderRadius: BorderRadius.all(Radius.circular(30))),
+
                   )
                 ],
               ),
@@ -197,6 +202,7 @@ class WallPage extends StatelessWidget {
       Function()? press,
       String? buttonText}) {
     return SizedBox(
+
         height: 40.h,
         // width: 260.w,
         child: ElevatedButton(
@@ -215,6 +221,27 @@ class WallPage extends StatelessWidget {
               buttonText!,
               style: const TextStyle(fontWeight: FontWeight.w700),
             )));
+      height: 40.h,
+      // width: 260.w,
+      child: ElevatedButton(
+        style: ButtonStyle(
+            side: borderAvalable == false
+                ? const MaterialStatePropertyAll(BorderSide(color: Colors.black))
+                : null,
+            foregroundColor: MaterialStatePropertyAll(borderAvalable == true
+                ? buttonForegroundColor
+                : buttonbackgroundColor),
+            backgroundColor: MaterialStatePropertyAll(borderAvalable == true
+                ? buttonbackgroundColor
+                : buttonForegroundColor)),
+        onPressed: press,
+        child: Text(
+          buttonText!,
+          style: const TextStyle(fontWeight: FontWeight.w700),
+        ),
+      ),
+    );
+
   }
 
   Column feedView() {
@@ -230,6 +257,9 @@ class WallPage extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: 2,
             itemBuilder: (context, index) => feedActiveData(true, '418'),
+          ),
+          SizedBox(
+            height: 10.h,
           ),
           feedDate('19/10/2023'),
           ListView.builder(
