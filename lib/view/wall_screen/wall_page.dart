@@ -118,6 +118,11 @@ class WallPage extends StatelessWidget {
                             color: Colors.black, fontWeight: FontWeight.bold),
                       ),
                     ),
+
+                    decoration: const BoxDecoration(
+                        color: whiteColor,
+                        borderRadius: BorderRadius.all(Radius.circular(30))),
+
                   )
                 ],
               ),
@@ -197,6 +202,25 @@ class WallPage extends StatelessWidget {
       Function()? press,
       String? buttonText}) {
     return SizedBox(
+
+        height: 40.h,
+        // width: 260.w,
+        child: ElevatedButton(
+            style: ButtonStyle(
+                side: borderAvalable == false
+                    ? const MaterialStatePropertyAll(BorderSide(color: Colors.black))
+                    : null,
+                foregroundColor: MaterialStatePropertyAll(borderAvalable == true
+                    ? buttonForegroundColor
+                    : buttonbackgroundColor),
+                backgroundColor: MaterialStatePropertyAll(borderAvalable == true
+                    ? buttonbackgroundColor
+                    : buttonForegroundColor)),
+            onPressed: press,
+            child: Text(
+              buttonText!,
+              style: const TextStyle(fontWeight: FontWeight.w700),
+            )));
       height: 40.h,
       // width: 260.w,
       child: ElevatedButton(
@@ -217,6 +241,7 @@ class WallPage extends StatelessWidget {
         ),
       ),
     );
+
   }
 
   Column feedView() {

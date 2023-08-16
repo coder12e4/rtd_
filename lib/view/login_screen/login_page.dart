@@ -74,7 +74,7 @@ class LOginPage extends StatelessWidget {
                   ),
                   ButtonWidget(
                     press: () {
-                      Get.to(RegisterScreen(), transition: Transition.downToUp);
+                      Get.to(()=>RegisterScreen(), transition: Transition.downToUp);
                     },
                     borderAvalable: true,
                     buttonText: 'Register',

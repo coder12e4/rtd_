@@ -20,7 +20,7 @@ class _NavigationBarpageState extends State<NavigationBarpage> {
     const HomePage(),
     const WallPage(),
     const LoanPage(),
-    const BookPage(),
+     BookPage(),
     const ProfilePage(),
   ];
   @override

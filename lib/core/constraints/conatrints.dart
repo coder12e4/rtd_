@@ -7,3 +7,7 @@ const textFieldHeight = SizedBox(
 const kSizedBoxH = SizedBox(
   height: 10,
 );
+
+const kSizedBoxH20 = SizedBox(
+  height: 20,
+);

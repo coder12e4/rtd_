@@ -280,7 +280,7 @@ class RegisterScreen extends StatelessWidget {
                 buttonText: 'Submit',
                 borderAvalable: false,
                 press: () {
-                  Navigator.of(context).push(MaterialPageRoute(
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => NavigationBarpage(),
                   ));
                 }),
@@ -336,7 +336,9 @@ class RegisterScreen extends StatelessWidget {
 }
 
 class RadioButtonWidget extends StatefulWidget {
-  const RadioButtonWidget({Key? key});
+  const RadioButtonWidget({
+    Key? key,
+  });
 
   @override
   State<RadioButtonWidget> createState() => _RadioButtonWidgetState();
@@ -367,7 +369,7 @@ class _RadioButtonWidgetState extends State<RadioButtonWidget> {
               });
             },
           ),
-          const SizedBox(width: 5),
+          SizedBox(width: 2.w),
           const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -377,11 +379,6 @@ class _RadioButtonWidgetState extends State<RadioButtonWidget> {
                   fontWeight: FontWeight.bold,
                 ),
                 // Adjust the text styling as needed
-              ),
-              Text(
-                'Terms and Conditions',
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, color: buttenBlue),
               ),
             ],
           ),

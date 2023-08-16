@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+class BookEditPage extends StatelessWidget {
+  const BookEditPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +16,7 @@ class ProfilePage extends StatelessWidget {
           children: [
             appbar(context),
             Container(
-              height: 1200.h,
+              height: 700.h,
               decoration: const BoxDecoration(
                   color: whiteColor,
                   borderRadius: BorderRadiusDirectional.only(
@@ -55,40 +54,40 @@ class ProfilePage extends StatelessWidget {
                   kSizedBoxH,
                   detailsText('Blood Group', 'B+'),
                   kSizedBoxH,
-                  dividerWidget(),
-                  kSizedBoxH,
-                  detailsText('Indian Address',
-                      'Address Line 1, Line 2 and Line 3 will be shown here. Pin code and state etc. will follow.'),
-                  kSizedBoxH,
-                  dividerWidget(),
-                  kSizedBoxH,
-                  detailsText('Saudi Arabia Address',
-                      'Address Line 1, Line 2 and Line 3 will be shown here. Pin code and state etc. will follow.'),
-                  dividerWidget(),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 45.0.w, right: 8.0.w),
-                        child: const Text(
-                          'Documents',
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 97, 95, 95),
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 4,
-                      ),
-                      documentContainer(),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      documentContainer(),
-                      kSizedBoxH,
-                      dividerWidget(),
-                    ],
-                  ),
+                  // dividerWidget(),
+                  // kSizedBoxH,
+                  // detailsText('Indian Address',
+                  //     'Address Line 1, Line 2 and Line 3 will be shown here. Pin code and state etc. will follow.'),
+                  // kSizedBoxH,
+                  // dividerWidget(),
+                  // kSizedBoxH,
+                  // detailsText('Saudi Arabia Address',
+                  //     'Address Line 1, Line 2 and Line 3 will be shown here. Pin code and state etc. will follow.'),
+                  // dividerWidget(),
+                  // Column(
+                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //   children: [
+                  //     Padding(
+                  //       padding: EdgeInsets.only(left: 45.0.w, right: 8.0.w),
+                  //       child: const Text(
+                  //         'Documents',
+                  //         style: TextStyle(
+                  //             color: Color.fromARGB(255, 97, 95, 95),
+                  //             fontWeight: FontWeight.bold),
+                  //       ),
+                  //     ),
+                  //     const SizedBox(
+                  //       height: 4,
+                  //     ),
+                  //     documentContainer(),
+                  //     const SizedBox(
+                  //       height: 15,
+                  //     ),
+                  //     documentContainer(),
+                  //     kSizedBoxH,
+                  //     dividerWidget(),
+                  //   ],
+                  // ),
                 ],
               ),
             )
@@ -148,16 +147,16 @@ class ProfilePage extends StatelessWidget {
                 minimumSize: MaterialStateProperty.resolveWith(
                     (states) => const Size(60, 50)),
                 backgroundColor:
-                    MaterialStateColor.resolveWith((states) => baseColor)),
+                    MaterialStateColor.resolveWith((states) => Colors.green)),
             onPressed: () {},
             child: const Padding(
               padding:
                   EdgeInsets.only(left: 18.0, right: 18, top: 8, bottom: 8),
               child: Row(
                 children: [
-                  Icon(Icons.edit_outlined, color: whiteColor),
+                  Icon(Icons.call, color: whiteColor),
                   Text(
-                    'Edit Profile',
+                    'Call',
                     style: TextStyle(color: whiteColor, fontSize: 16),
                   ),
                 ],
@@ -173,15 +172,17 @@ class ProfilePage extends StatelessWidget {
                 backgroundColor:
                     MaterialStateColor.resolveWith((states) => baseColor)),
             onPressed: () {},
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  left: 18.0, right: 18, top: 5, bottom: 5),
+            child: const Padding(
+              padding:
+                  EdgeInsets.only(left: 18.0, right: 18, top: 5, bottom: 5),
               child: Row(
                 children: [
-                  SvgPicture.asset(
-                      'assets/fonts/icons/database-data-base-svgrepo-com.svg'),
-                  const Text(
-                    'Loan',
+                  Icon(
+                    Icons.location_on_outlined,
+                    color: whiteColor,
+                  ),
+                  Text(
+                    'Location',
                     style: TextStyle(color: whiteColor, fontSize: 16),
                   ),
                 ],
@@ -237,7 +238,9 @@ class ProfilePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pop(context);
+                  },
                   icon: const Icon(
                     Icons.arrow_back,
                     color: whiteColor,
@@ -247,20 +250,18 @@ class ProfilePage extends StatelessWidget {
                 width: 90.w,
               ),
               Text(
-                'Profile',
+                'Member Book',
                 style: Theme.of(context).textTheme.displaySmall!.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: 24),
+                    fontSize: 18),
               ),
               SizedBox(
                 width: 30.w,
               ),
               IconButton(
                 onPressed: () {},
-                icon: SvgPicture.asset(
-                  'assets/fonts/icons/three-dots-svgrepo-com (1).svg',
-                ),
+                icon: const Icon(Icons.people_alt),
                 color: whiteColor,
               ),
               IconButton(
@@ -268,23 +269,10 @@ class ProfilePage extends StatelessWidget {
                   icon: const Icon(
                     Icons.notifications_none,
                     color: whiteColor,
-                    size: 35,
+                    size: 28,
                   ))
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 38.0),
-            child: TextButton(
-              style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateColor.resolveWith((states) => whiteColor)),
-              onPressed: () {},
-              child: const Text(
-                'Log Out',
-                style: TextStyle(color: baseColor),
-              ),
-            ),
-          )
         ],
       ),
     );

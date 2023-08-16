@@ -12,6 +12,6 @@ class SplashScreenController extends GetxController {
 
   Future splashDelay() async {
     Future.delayed(const Duration(seconds: 3))
-        .then((value) => Get.to(const LOginPage()));
+        .then((value) => Get.to(()=>const LOginPage()));
   }
 }
