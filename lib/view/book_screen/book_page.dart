@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/dropdown_widget.dart';
 import 'package:rtd_project/view/book_screen/book_edit_screen/book_edit_screen.dart';
+import 'package:rtd_project/view/book_screen/elected_member_screen/elected_member_screen.dart';
 import 'package:rtd_project/view/book_screen/widgets/membrlisttile_widgetr.dart';
 
 class BookPage extends StatelessWidget {
@@ -105,7 +106,11 @@ class BookPage extends StatelessWidget {
                 width: 30.w,
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ElectedMemberScreen(),
+                  ));
+                },
                 icon: Icon(
                   Icons.people_alt_rounded,
                 ),
