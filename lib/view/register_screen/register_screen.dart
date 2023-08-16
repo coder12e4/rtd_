@@ -380,6 +380,12 @@ class _RadioButtonWidgetState extends State<RadioButtonWidget> {
                 ),
                 // Adjust the text styling as needed
               ),
+              Text(
+                'Terms and Conditions.',
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: buttenBlue),
+                // Adjust the text styling as needed
+              ),
             ],
           ),
         ],
