@@ -78,8 +78,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         text3: 'Purpose : Loan Purpose',
                       )
                     ]),
-              )
-            ],
+              ), 
+            ], 
           ),
         ),
       ),
