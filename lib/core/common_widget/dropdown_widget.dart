@@ -12,16 +12,16 @@ class DropedownWidget extends StatefulWidget {
 
 class _DropedownWidgetState extends State<DropedownWidget> {
   String _selectedBloodGroup = 'Select a blood group'; // Initial hint text
-   List<String> _bloodGroups = [
-    'A+',
-    'A-',
-    'B+',
-    'B-',
-    'AB+',
-    'AB-',
-    'O+',
-    'O-',
-  ];
+  //  List<String> _bloodGroups = [
+  //   'A+',
+  //   'A-',
+  //   'B+',
+  //   'B-',
+  //   'AB+',
+  //   'AB-',
+  //   'O+',
+  //   'O-',
+  // ];
  
 
   @override
