@@ -24,14 +24,14 @@ class PorposeWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
+            const Text(
               "Upload Documents",
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
               ),
             ),
-            Text(
+            const Text(
                 "Small description about what kind of documents are needed can be shown here.",
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -45,7 +45,7 @@ class PorposeWidget extends StatelessWidget {
                   minRadius: 35.r,
                   backgroundColor: textFormBase,
                   backgroundImage:
-                      AssetImage('assets/images/pexels-pixabay-220453 1.png'),
+                      const AssetImage('assets/images/pexels-pixabay-220453 1.png'),
                 ),
                 CircleAvatar(
                   minRadius: 35.r,
@@ -54,10 +54,10 @@ class PorposeWidget extends StatelessWidget {
                       onPressed: () {
                         showModalBottomSheet(
                           context: context,
-                          builder: (context) => Imagepiker(),
+                          builder: (context) => const Imagepiker(),
                         );
                       },
-                      icon: Icon(Icons.add)),
+                      icon: const Icon(Icons.add)),
                 ),
                 CircleAvatar(
                   minRadius: 35.r,
@@ -66,10 +66,10 @@ class PorposeWidget extends StatelessWidget {
                       onPressed: () {
                         showModalBottomSheet(
                           context: context,
-                          builder: (context) => Imagepiker(),
+                          builder: (context) => const Imagepiker(),
                         );
                       },
-                      icon: Icon(Icons.add)),
+                      icon: const Icon(Icons.add)),
                 ),
               ],
             ),

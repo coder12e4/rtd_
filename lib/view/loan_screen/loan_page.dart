@@ -5,6 +5,7 @@ import 'package:rtd_project/core/common_widget/commen_botten.dart';
 import 'package:rtd_project/core/common_widget/dropdown_widget.dart';
 import 'package:rtd_project/core/common_widget/textformfield_widget.dart';
 import 'package:rtd_project/view/loan_screen/widgets/attach_bottem_sheet.dart';
+import 'package:rtd_project/view/loan_screen/widgets/cancel_popup.dart';
 import 'package:rtd_project/view/loan_screen/widgets/porpose.dart';
 
 class LoanPage extends StatelessWidget {
@@ -33,9 +34,22 @@ class LoanPage extends StatelessWidget {
             )));
   }
 
+  Container requestDate(String date) {
+    return Container(
+      height: 30.h,
+      width: 120.w,
+      decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(30)),
+          color: textFormBase),
+      child: Center(
+        child: Text(date, textAlign: TextAlign.center),
+      ),
+    );
+  }
+
   Container tabBarView(BuildContext context) {
     return Container(
-      height: 500.h,
+      height: 850.h,
       //hallo
       decoration: const BoxDecoration(
         color: whiteColor,
@@ -44,18 +58,208 @@ class LoanPage extends StatelessWidget {
           topStart: Radius.circular(40),
         ),
       ),
-      child: TabBarView(children: [
+      child:
+          TabBarView(physics: const NeverScrollableScrollPhysics(), children: [
         NewRequestView(context),
-        RequestView(),
+        RequestView(context),
       ]),
     );
   }
 
-  Column RequestView() {
-    return Column(
-        // physics: const NeverScrollableScrollPhysics(),
+  ListView RequestView(BuildContext context) {
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: 2,
+      itemBuilder: (context, index) => Column(children: [
+        SizedBox(
+          height: 10.h,
+        ),
+        requestDate('19/10/2023'),
+        SizedBox(
+          height: 10.h,
+        ),
+        requestData(index == 0 ? true : false, context)
+      ]),
+    );
+  }
 
-        children: []);
+  Padding requestData(bool prossesing, BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      child: Container(
+        height: prossesing == true ? 300.h : 360.h,
+        width: 500.w,
+        decoration: BoxDecoration(
+            color: textFormBase,
+            borderRadius: BorderRadius.all(Radius.circular(30.r))),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                        color: whiteColor,
+                        borderRadius: BorderRadius.all(Radius.circular(30))),
+                    height: 40.h,
+                    width: 140.w,
+                    child: Center(
+                      child: Text(
+                        prossesing == true
+                            ? 'Status:Prossesing'
+                            : 'Status:Rejected',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 40.h,
+                    width: 110.w,
+                    child: const Center(
+                      child: Text(
+                        'Edit Request',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: whiteColor, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    decoration: const BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.all(Radius.circular(30))),
+                  )
+                ],
+              ),
+              Divider(),
+              loanAmount(price: '200SR', title: 'ആവശ്യപ്പെട്ടത്:'),
+              Divider(),
+              imageRow(prossesing!),
+              SizedBox(
+                height: 8.h,
+              ),
+              prossesing == true
+                  ? ButtonWidget(
+                      buttonBackgroundColor: whiteColor,
+                      buttonForegroundColor: buttenBlue,
+                      buttonText: 'Cancel Request',
+                      borderAvalable: true,
+                      press: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) => CancelPopup(),
+                        );
+                      })
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Reasons for rejection:',
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        SizedBox(
+                          height: 8.h,
+                        ),
+                        const Text(
+                          'Here reasons for the rejection can be shown',
+                          style: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.w600),
+                        ),
+                        const Text(
+                          ' \. First reason for rejection',
+                          style: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.w600),
+                        ),
+                        const Text(
+                          ' \. Second reason for rejection',
+                          style: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.w600),
+                        ),
+                        const Text(
+                          ' \. Third reason for rejection',
+                          style: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.w600),
+                        )
+                      ],
+                    )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Row imageRow(bool prossesing) {
+    return Row(
+      children: [
+        Chechmarkimage(true, true),
+        Chechmarkimage(true, true),
+        Chechmarkimage(false, prossesing == false ? true : false),
+        Chechmarkimage(false, prossesing == false ? true : false)
+      ],
+    );
+  }
+
+  Stack Chechmarkimage(bool checkmark, bool markAvalable) {
+    return Stack(
+      children: [
+        Positioned(
+          child: CircleAvatar(
+            minRadius: 30.r,
+            backgroundImage:
+                const AssetImage('assets/images/pexels-pixabay-220453 1.png'),
+          ),
+        ),
+        Positioned(
+            bottom: 0,
+            right: 0,
+            child: markAvalable == true
+                ? Container(
+                    width: 20.w,
+                    height: 18.h,
+                    decoration: BoxDecoration(
+                        color: checkmark == true ? Colors.green : Colors.red,
+                        borderRadius: BorderRadius.all(Radius.circular(50.r))),
+                    child: Icon(
+                      checkmark == true ? Icons.check : Icons.close,
+                      color: Colors.white,
+                      size: 16,
+                    ),
+                  )
+                : Container())
+      ],
+    );
+  }
+
+  Padding loanAmount({String? title, String? price}) {
+    return Padding(
+      padding: EdgeInsets.only(top: 5.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.money),
+              Text(
+                title!,
+                style:
+                    const TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+              ),
+            ],
+          ),
+          Text(
+            price!,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          )
+        ],
+      ),
+    );
   }
 
   SizedBox optionButton(
@@ -99,7 +303,7 @@ class LoanPage extends StatelessWidget {
         SizedBox(
           height: 10.h,
         ),
-        Text('Choose Sureties', textAlign: TextAlign.start),
+        const Text('Choose Sureties', textAlign: TextAlign.start),
         SizedBox(
           height: 10.h,
         ),
@@ -110,17 +314,17 @@ class LoanPage extends StatelessWidget {
               minRadius: 35.r,
               backgroundColor: textFormBase,
               backgroundImage:
-                  AssetImage('assets/images/pexels-pixabay-220453 1.png'),
+                  const AssetImage('assets/images/pexels-pixabay-220453 1.png'),
             ),
             CircleAvatar(
               minRadius: 35.r,
               backgroundColor: textFormBase,
-              child: IconButton(onPressed: () {}, icon: Icon(Icons.add)),
+              child: IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
             ),
             CircleAvatar(
               minRadius: 35.r,
               backgroundColor: textFormBase,
-              child: IconButton(onPressed: () {}, icon: Icon(Icons.add)),
+              child: IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
             ),
           ],
         ),
@@ -134,7 +338,7 @@ class LoanPage extends StatelessWidget {
         GestureDetector(
           onTap: () => showModalBottomSheet(
             context: context,
-            builder: (context) => PorposeWidget(),
+            builder: (context) => const PorposeWidget(),
           ),
           child: Container(
             height: 50.h,
@@ -143,7 +347,7 @@ class LoanPage extends StatelessWidget {
               color: textFormBase,
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Center(child: Text('purpose')),
+            child: const Center(child: Text('purpose')),
           ),
         ),
         SizedBox(
@@ -157,7 +361,7 @@ class LoanPage extends StatelessWidget {
             press: () {
               showModalBottomSheet(
                 context: context,
-                builder: (context) => AttachBottemSheet(),
+                builder: (context) => const AttachBottemSheet(),
               );
             }),
         SizedBox(
@@ -186,147 +390,15 @@ class LoanPage extends StatelessWidget {
     );
   }
 
-  Padding feedActiveData(bool isActive, String filenumber) {
-    return Padding(
-      padding: EdgeInsets.only(top: 10.h, left: 18.w, right: 18.w),
-      child: Container(
-        height: 230.h,
-        width: 500.w,
-        decoration: BoxDecoration(
-            color: textFormBase,
-            borderRadius: BorderRadius.all(Radius.circular(30.r))),
-        child: Padding(
-          padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 20.h),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                        color: whiteColor,
-                        borderRadius: BorderRadius.all(Radius.circular(30))),
-                    height: 40.h,
-                    width: 160.w,
-                    child: Center(
-                      child: Text(
-                        'File Number:${filenumber}',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    height: 40.h,
-                    width: 100.w,
-                    child: Center(
-                      child: Text(
-                        isActive == true ? 'FB:Active' : 'FB:Closed',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            color: whiteColor, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    decoration: BoxDecoration(
-                        color: isActive == true
-                            ? const Color.fromARGB(255, 91, 207, 95)
-                            : Colors.red,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(30))),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 10.h,
-              ),
-              Row(
-                children: [
-                  ClipRRect(
-                      child: Image.asset(
-                        'assets/images/pexels-pixabay-220453 1.png',
-                        height: 40.h,
-                      ),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(60))),
-                  SizedBox(
-                    width: 8.w,
-                  ),
-                  const Text('ഷഫീഖ് കൊല്ലം (M.107)',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16))
-                ],
-              ),
-              Divider(),
-              loanAmount(title: 'കൊടുത്തത്:', price: '200SR'),
-              SizedBox(
-                height: 10.h,
-              ),
-              reternDate(title: 'തിരിച്ചടവ്:', date: "26.05.2023")
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Padding loanAmount({String? title, String? price}) {
-    return Padding(
-      padding: EdgeInsets.only(top: 5.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              const Icon(Icons.money),
-              Text(
-                title!,
-                style:
-                    const TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
-              ),
-            ],
-          ),
-          Text(
-            price!,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          )
-        ],
-      ),
-    );
-  }
-
-  Padding reternDate({String? title, String? date}) {
-    return Padding(
-      padding: EdgeInsets.only(top: 5.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              const Icon(Icons.date_range),
-              Text(
-                title!,
-                style:
-                    const TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
-              ),
-            ],
-          ),
-          Text(
-            date!,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          )
-        ],
-      ),
-    );
-  }
+  //
 
   Container Divider() {
     return Container(
-      width: 270.w,
+      width: 280.w,
       child: const Text(
-        '-------------------',
+        overflow: TextOverflow.fade,
+        maxLines: 1,
+        '---------------------------',
         style: TextStyle(fontSize: 30),
       ),
     );
