@@ -32,6 +32,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
+  flutter_rounded_progress_bar: ^0.2.0
   flutter_screenutil: ^5.8.4
   flutter_svg: ^2.0.7
   get: ^4.6.5

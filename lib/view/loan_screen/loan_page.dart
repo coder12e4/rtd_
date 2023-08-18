@@ -61,12 +61,12 @@ class LoanPage extends StatelessWidget {
       child:
           TabBarView(physics: const NeverScrollableScrollPhysics(), children: [
         NewRequestView(context),
-        RequestView(context),
+        requestView(context),
       ]),
     );
   }
 
-  ListView RequestView(BuildContext context) {
+  ListView requestView(BuildContext context) {
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
@@ -121,6 +121,9 @@ class LoanPage extends StatelessWidget {
                   Container(
                     height: 40.h,
                     width: 110.w,
+                    decoration: const BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.all(Radius.circular(30))),
                     child: const Center(
                       child: Text(
                         'Edit Request',
@@ -129,16 +132,13 @@ class LoanPage extends StatelessWidget {
                             color: whiteColor, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    decoration: const BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.all(Radius.circular(30))),
                   )
                 ],
               ),
               Divider(),
               loanAmount(price: '200SR', title: 'ആവശ്യപ്പെട്ടത്:'),
               Divider(),
-              imageRow(prossesing!),
+              imageRow(prossesing),
               SizedBox(
                 height: 8.h,
               ),
@@ -172,7 +172,7 @@ class LoanPage extends StatelessWidget {
                               color: Colors.black, fontWeight: FontWeight.w600),
                         ),
                         const Text(
-                          ' \. First reason for rejection',
+                          ' \ . First reason for rejection',
                           style: TextStyle(
                               color: Colors.black, fontWeight: FontWeight.w600),
                         ),

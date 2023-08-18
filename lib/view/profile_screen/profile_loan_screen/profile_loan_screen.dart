@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rtd_project/core/color/colors.dart';
+import 'package:rtd_project/view/profile_screen/loan_detailes_screen/activelone_details_screen.dart';
+import 'package:rtd_project/view/profile_screen/loan_detailes_screen/rejected_loan.dart';
 
 class ProfileLoanScreen extends StatelessWidget {
   const ProfileLoanScreen({super.key});
@@ -58,7 +60,13 @@ class ProfileLoanScreen extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: 2,
-            itemBuilder: (context, index) => activeAndClosedLoans(false, '418'),
+            itemBuilder: (context, index) => GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => RejectedLoanScreen(),
+                  ));
+                },
+                child: activeAndClosedLoans(false, '418')),
           ),
           SizedBox(
             height: 10.h,
@@ -224,7 +232,13 @@ class ProfileLoanScreen extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: 2,
-            itemBuilder: (context, index) => activeAndClosedLoans(true, '418'),
+            itemBuilder: (context, index) => GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ActiveLoanDetailsScreen(),
+                  ));
+                },
+                child: activeAndClosedLoans(true, '418')),
           ),
           SizedBox(
             height: 10.h,
