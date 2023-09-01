@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
-import 'package:flutter_rounded_progress_bar/flutter_rounded_progress_bar.dart';
-import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
+// import 'package:flutter_rounded_progress_bar/flutter_rounded_progress_bar.dart';
+// import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
 
 class ActiveLoanDetailsScreen extends StatelessWidget {
   const ActiveLoanDetailsScreen({super.key});
@@ -90,31 +90,31 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
                     malayalamTextWidget(
                         'തുടങ്ങിയത് :', Icons.calendar_month, '26.05.2023'),
                     kSizedBoxH,
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: RoundedProgressBar(
-                          childCenter: const Text(
-                            'Due in 31 days',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          milliseconds: 1000,
-                          percent: 50,
-                          height: 25,
-                          theme: RoundedProgressBarTheme.purple,
-                          style: RoundedProgressBarStyle(
-                              colorBackgroundIcon:
-                                  const Color.fromARGB(255, 190, 185, 185),
-                              widthShadow: 1,
-                              backgroundProgress:
-                                  const Color.fromARGB(255, 190, 185, 185),
-                              colorProgress:
-                                  const Color.fromARGB(255, 190, 185, 185),
-                              colorBorder: whiteColor,
-                              borderWidth: 2,
-                              colorProgressDark:
-                                  const Color.fromARGB(255, 186, 39, 110)),
-                          borderRadius: BorderRadius.circular(24)),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    //   child: RoundedProgressBar(
+                    //       childCenter: const Text(
+                    //         'Due in 31 days',
+                    //         style: TextStyle(fontWeight: FontWeight.bold),
+                    //       ),
+                    //       milliseconds: 1000,
+                    //       percent: 50,
+                    //       height: 25,
+                    //       theme: RoundedProgressBarTheme.purple,
+                    //       style: RoundedProgressBarStyle(
+                    //           colorBackgroundIcon:
+                    //               const Color.fromARGB(255, 190, 185, 185),
+                    //           widthShadow: 1,
+                    //           backgroundProgress:
+                    //               const Color.fromARGB(255, 190, 185, 185),
+                    //           colorProgress:
+                    //               const Color.fromARGB(255, 190, 185, 185),
+                    //           colorBorder: whiteColor,
+                    //           borderWidth: 2,
+                    //           colorProgressDark:
+                    //               const Color.fromARGB(255, 186, 39, 110)),
+                    //       borderRadius: BorderRadius.circular(24)),
+                    // ),
                     kSizedBoxH20,
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

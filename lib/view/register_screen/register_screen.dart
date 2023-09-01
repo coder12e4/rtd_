@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:rtd_project/controller/authentication/auth.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
 import 'package:rtd_project/core/common_widget/dropdown_widget.dart';
@@ -9,26 +12,29 @@ import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/view/home_screen/home_page.dart';
 
 class RegisterScreen extends StatelessWidget {
-  const RegisterScreen({super.key});
+  RegisterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: baseColor,
       body: SingleChildScrollView(
-        child: Column(children: [
+          child: GetBuilder<Athentication>(builder: (controller) {
+        return Column(children: [
           memberShipRegWidget(context),
           nochBarAboveLoginContainer(),
           SizedBox(
             height: 5.h,
           ),
-          textFieldContainer(context),
-        ]),
-      ),
+          textFieldContainer(context, controller),
+        ]);
+      })),
     );
   }
 
-  Container textFieldContainer(BuildContext context) {
+  Container textFieldContainer(BuildContext context, controller) {
+    final Athentication imagePickerService = Get.find();
+
     List<String> _bloodGroups = [
       'A+',
       'A-',
@@ -104,6 +110,9 @@ class RegisterScreen extends StatelessWidget {
                     context: context,
                     builder: (context) => Imagepiker(),
                   );
+                  // final imagewidget = Imagepiker();
+                  // imagePickerService.ksaDoc.value =
+                  //     imagewidget.pickImage(ImageSource.gallery);
                 },
                 buttonBackgroundColor: whiteColor,
                 buttonForegroundColor: Colors.blue,
@@ -330,6 +339,117 @@ class RegisterScreen extends StatelessWidget {
               .headlineLarge!
               .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
         ),
+      ),
+    );
+  }
+  imagePickerWidget(context){
+    Container(
+      height: 320.h,
+      width: 390.w,
+      decoration: const BoxDecoration(
+        color: whiteColor,
+        borderRadius: BorderRadiusDirectional.only(
+          topEnd: Radius.circular(50),
+          topStart: Radius.circular(50),
+        ),
+      ),
+      child: Column(
+        children: [
+          SizedBox(
+            height: 30.h,
+          ),
+          const Text(
+            "Upload your ID Proof",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          SizedBox(
+            height: 30.h,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              GestureDetector(
+                onTap: () async {
+                  final imagefile = await pickImage(ImageSource.gallery);
+                  if (imagefile != null) {}
+                },
+                child: Container(
+                  width: 116,
+                  height: 121,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(36),
+                      color: const Color(0xfff3f3f3)),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset('assets/images/gallary.png'),
+                      SizedBox(
+                        height: 5.h,
+                      ),
+                      const Text("Choose from Gallery",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ))
+                    ],
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () async {
+                  final image =
+                      await imagePickerService.pickImage(ImageSource.camera);
+                  if (image != null) {}
+                },
+                child: Container(
+                  width: 116,
+                  height: 121,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(36),
+                      color: const Color(0xfff3f3f3)),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset('assets/images/camara.png'),
+                      SizedBox(
+                        height: 5.h,
+                      ),
+                      const Text("Capture from Camera",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ))
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+          SizedBox(
+            height: 20.h,
+          ),
+          const Text("No file Selected",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              )),
+          SizedBox(
+            height: 20.h,
+          ),
+          ButtonWidget(
+              press: () {
+                Navigator.pop(context);
+              },
+              buttonBackgroundColor: buttenBlue,
+              buttonForegroundColor: whiteColor,
+              buttonText: 'Upload',
+              borderAvalable: true)
+        ],
       ),
     );
   }

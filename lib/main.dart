@@ -3,7 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart'; // Import the 'get' package
 import 'package:rtd_project/view/splash_screen/splash_page.dart';
 
+import 'controller/authentication/auth.dart';
+
 void main() {
+  Get.put(Athentication());
   runApp(const MyApp());
 }
 
