@@ -1,14 +1,14 @@
 import 'package:get/get.dart';
 import 'package:rtd_project/controller/authentication/login_contoller.dart';
 import 'package:rtd_project/helper/router.dart';
-import 'package:rtd_project/view/login_screen/login_page.dart';
+
 
 class SplashScreenController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // splashDelay();
-    onLogin();
+    splashDelay();
+    // onLogin();
   }
 
   Future splashDelay() async {

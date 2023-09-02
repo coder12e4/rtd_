@@ -35,10 +35,16 @@ class MyApp extends StatelessWidget {
           getPages: AppRouter.routes,
           defaultTransition: Transition.fadeIn,
           // translations: LocaleString(),
+          theme: ThemeData(
+            fontFamily: 'JekoFont',
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
+          ),
           locale: const Locale('en', 'US'),
         );
       },
     );
   }
 }
+//  
 //start
