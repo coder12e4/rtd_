@@ -19,7 +19,7 @@ class RegisterScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: baseColor,
       body: SingleChildScrollView(
-          child: GetBuilder<Athentication>(builder: (value) {
+          child: GetBuilder<RegisterController>(builder: (value) {
         return Column(children: [
           memberShipRegWidget(context),
           nochBarAboveLoginContainer(),

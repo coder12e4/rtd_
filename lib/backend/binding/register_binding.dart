@@ -5,7 +5,7 @@ class RegisterBinding extends Bindings {
   @override
   void dependencies() async {
     Get.lazyPut(
-      ()=> Athentication(parser: Get.find())
+      ()=> RegisterController(parser: Get.find())
     );
   }
 }

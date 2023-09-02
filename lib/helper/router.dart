@@ -98,8 +98,12 @@
 // import 'package:ultimate_salon_owner_flutter/app/view/verify.dart';
 
 import 'package:get/get.dart';
+import 'package:rtd_project/backend/binding/login_binding.dart';
 import 'package:rtd_project/backend/binding/register_binding.dart';
+import 'package:rtd_project/backend/binding/splash_binding.dart';
+import 'package:rtd_project/view/login_screen/login_page.dart';
 import 'package:rtd_project/view/register_screen/register_screen.dart';
+import 'package:rtd_project/view/splash_screen/splash_page.dart';
 
 class AppRouter {
   static const String initial = '/';
@@ -197,10 +201,10 @@ class AppRouter {
   static String getRegisterCategoriesRoutes() => registerCategoriesRoutes;
 
   static List<GetPage> routes = [
-    // GetPage(
-    //     name: initial,
-    //     page: () => const LoginScreen(),
-    //     binding: LoginBinding()),
+    GetPage(
+        name: initial,
+        page: () => const LOginPage(),
+        binding: LoginBinding()),
     // GetPage(
     //     name: verifyRoutes,
     //     page: () => const VerifyScreen(),
@@ -361,10 +365,10 @@ class AppRouter {
     //     page: () => const IndividualCitiesScreen(),
     //     binding: IndividualCitiesBinding()),
     // GetPage(name: errorRoutes, page: () => const ErrorScreen()),
-    // GetPage(
-    //     name: splash,
-    //     page: () => const SplashScreen(),
-    //     binding: SplashBinding()),
+    GetPage(
+        name: splash,
+        page: () =>  SplashScreen(),
+        binding: SplashBinding()),
     // GetPage(
     //     name: analyticsRoutes,
     //     page: () => const AnalyticScreen(),

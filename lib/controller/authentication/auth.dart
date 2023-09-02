@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rtd_project/backend/parser/sighnup_parser.dart';
 
-class Athentication extends GetxController implements GetxService {
-  Athentication( {required this.parser});
+class RegisterController extends GetxController implements GetxService {
+  RegisterController( {required this.parser});
   final SignUpParser parser;
   final picker = ImagePicker();
 

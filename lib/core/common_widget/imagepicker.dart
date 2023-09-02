@@ -13,7 +13,7 @@ class Imagepiker extends StatelessWidget {
     super.key, 
   });
   // final XFile imagefile;
-  final Athentication imagePickerService = Get.find();
+  final RegisterController imagePickerService = Get.find();
   final picker = ImagePicker();
 
   Future<XFile?> pickImage(ImageSource source) async {

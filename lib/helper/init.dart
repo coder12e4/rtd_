@@ -64,7 +64,10 @@
 // import 'package:ultimate_salon_owner_flutter/app/helper/shared_pref.dart';
 
 import 'package:get/get.dart';
+import 'package:rtd_project/backend/api/api.dart';
+import 'package:rtd_project/backend/parser/login_parser.dart';
 import 'package:rtd_project/backend/parser/sighnup_parser.dart';
+import 'package:rtd_project/core/constraints/api_urls.dart';
 import 'package:rtd_project/helper/shared_pref.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -77,14 +80,14 @@ class MainBinding extends Bindings {
       permanent: true,
     );
 
-    // Get.lazyPut(() => ApiService(appBaseUrl: Environments.apiBaseURL));
+    Get.lazyPut(() => ApiService(appBaseUrl: Constants().baseUrl));
 
     // // Parser LazyLoad
 
-    // Get.lazyPut(
-    //     () => LoginParser(
-    //         apiService: Get.find(), sharedPreferencesManager: Get.find()),
-    //     fenix: true);
+    Get.lazyPut(
+        () => LoginParser(
+            apiService: Get.find(), sharedPreferencesManager: Get.find()),
+        fenix: true);
 
     // Get.lazyPut(
     //     () => VerifyParser(
@@ -96,216 +99,216 @@ class MainBinding extends Bindings {
             apiService: Get.find(), sharedPreferencesManager: Get.find()),
         fenix: true);
 
-  //   Get.lazyPut(
-  //       () => TabsParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => TabsParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => AppointmentParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => AppointmentParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => CalendarsParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => CalendarsParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => InboxParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => InboxParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => ProfileParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => ProfileParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => OrderDetailsParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => OrderDetailsParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => ChatParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => ChatParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => HistoryParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => HistoryParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => StylistParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => StylistParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => AddStylistParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => AddStylistParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => StylistCategoriesParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => StylistCategoriesParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => ProfileCategoriesParse(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => ProfileCategoriesParse(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => GallaryParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => GallaryParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => ReviewParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => ReviewParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => LanguagesParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => LanguagesParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => ContactUsParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => ContactUsParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => AppPagesParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => AppPagesParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => PackagesParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => PackagesParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => AddPackagesParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => AddPackagesParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => PackagesCategoriesParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => PackagesCategoriesParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => ProductsParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => ProductsParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => CreateProductsParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => CreateProductsParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => ShopCategoriesParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => ShopCategoriesParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => ShopSubCategoriesParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => ShopSubCategoriesParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => SalonCategoriesParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => SalonCategoriesParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => CitiesCategoriesParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => CitiesCategoriesParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => AddTimingParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => AddTimingParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => SlotParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => SlotParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => AddSlotParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => AddSlotParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => AddServicesParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => AddServicesParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => ServicesParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => ServicesParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => ServicesCategorisParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => ServicesCategorisParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => PackagesSpecialistParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => PackagesSpecialistParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => IndividualProfileParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => IndividualProfileParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => IndividualProfileCategoriesParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => IndividualProfileCategoriesParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => IndividualCitiesParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => IndividualCitiesParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => SplashParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => SplashParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => AnalyticsParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => AnalyticsParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => FirebaseParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => FirebaseParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => ProductOrderDetailsParse(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => ProductOrderDetailsParse(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(
-  //       () => RegisterCategoriesParser(
-  //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-  //       fenix: true);
+    //   Get.lazyPut(
+    //       () => RegisterCategoriesParser(
+    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //       fenix: true);
 
-  //   Get.lazyPut(() => TabsController(parser: Get.find()));
-  //   Get.lazyPut(() => AppointmentController(parser: Get.find()));
-  //   Get.lazyPut(() => HistoryController(parser: Get.find()));
-  //   Get.lazyPut(() => AnalyticsController(parser: Get.find()));
-  //   Get.lazyPut(() => CalendarsController(parser: Get.find()));
-  //   Get.lazyPut(() => ProfileController(parser: Get.find()));
+    //   Get.lazyPut(() => TabsController(parser: Get.find()));
+    //   Get.lazyPut(() => AppointmentController(parser: Get.find()));
+    //   Get.lazyPut(() => HistoryController(parser: Get.find()));
+    //   Get.lazyPut(() => AnalyticsController(parser: Get.find()));
+    //   Get.lazyPut(() => CalendarsController(parser: Get.find()));
+    //   Get.lazyPut(() => ProfileController(parser: Get.find()));
   }
 }
