@@ -6,7 +6,7 @@ import 'package:rtd_project/view/splash_screen/splash_page.dart';
 import 'controller/authentication/auth.dart';
 
 void main() {
-  Get.put(Athentication());
+  // Get.put(Athentication());
   runApp(const MyApp());
 }
 

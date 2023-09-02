@@ -6,96 +6,100 @@
   terms found in the Website https://initappz.com/license
   Copyright and Good Faith Purchasers © 2022-present initappz.
 */
+// import 'package:get/get.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/add_services_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/add_slot_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/add_timing_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/analytics_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/cities_categories_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/firebase_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/individual_categories_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/individual_cities_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/individual_profile_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/packages_specialist_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/product_order_details_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/register_categories_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/salon_categories_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/add_packages_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/add_stylist_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/app_pages_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/appointment_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/calendar_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/chat_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/contact_us_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/create_products_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/profile_categories_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/gallary_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/history_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/inbox_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/languages_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/login_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/order_details_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/packages_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/products_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/profile_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/review_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/packages_categories_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/services_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/services_categories_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/slot_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/splash_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/stylist_categories_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/shop_categories_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/shop_subcategories_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/signup_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/stylist_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/tabs_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/backend/binding/verify_binding.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/add_services.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/add_slot.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/add_timing.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/analytics.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/cities_categories.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/error.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/firebase.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/individual_categories.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/individual_cities.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/individual_profile.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/packages_specialist.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/product_order_details.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/register_categories.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/salon_categories.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/add_packages.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/add_stylist.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/app_pages.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/appointment.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/calendar.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/chat.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/contact_us.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/create_product.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/profile_categories.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/gallary.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/history.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/inbox.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/languages.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/login.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/order_details.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/packages.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/products.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/profile.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/review.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/packages_categories.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/service_categories.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/services.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/slot.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/splash.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/stylist_categories.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/shop_categories.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/shop_subcategories.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/signup.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/stylist.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/tabs.dart';
+// import 'package:ultimate_salon_owner_flutter/app/view/verify.dart';
+
 import 'package:get/get.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/add_services_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/add_slot_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/add_timing_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/analytics_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/cities_categories_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/firebase_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/individual_categories_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/individual_cities_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/individual_profile_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/packages_specialist_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/product_order_details_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/register_categories_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/salon_categories_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/add_packages_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/add_stylist_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/app_pages_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/appointment_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/calendar_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/chat_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/contact_us_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/create_products_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/profile_categories_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/gallary_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/history_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/inbox_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/languages_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/login_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/order_details_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/packages_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/products_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/profile_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/review_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/packages_categories_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/services_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/services_categories_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/slot_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/splash_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/stylist_categories_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/shop_categories_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/shop_subcategories_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/signup_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/stylist_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/tabs_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/backend/binding/verify_binding.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/add_services.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/add_slot.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/add_timing.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/analytics.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/cities_categories.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/error.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/firebase.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/individual_categories.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/individual_cities.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/individual_profile.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/packages_specialist.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/product_order_details.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/register_categories.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/salon_categories.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/add_packages.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/add_stylist.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/app_pages.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/appointment.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/calendar.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/chat.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/contact_us.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/create_product.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/profile_categories.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/gallary.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/history.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/inbox.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/languages.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/login.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/order_details.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/packages.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/products.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/profile.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/review.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/packages_categories.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/service_categories.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/services.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/slot.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/splash.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/stylist_categories.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/shop_categories.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/shop_subcategories.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/signup.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/stylist.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/tabs.dart';
-import 'package:ultimate_salon_owner_flutter/app/view/verify.dart';
+import 'package:rtd_project/backend/binding/register_binding.dart';
+import 'package:rtd_project/view/register_screen/register_screen.dart';
 
 class AppRouter {
   static const String initial = '/';
@@ -193,191 +197,191 @@ class AppRouter {
   static String getRegisterCategoriesRoutes() => registerCategoriesRoutes;
 
   static List<GetPage> routes = [
-    GetPage(
-        name: initial,
-        page: () => const LoginScreen(),
-        binding: LoginBinding()),
-    GetPage(
-        name: verifyRoutes,
-        page: () => const VerifyScreen(),
-        binding: VerifyBinding()),
+    // GetPage(
+    //     name: initial,
+    //     page: () => const LoginScreen(),
+    //     binding: LoginBinding()),
+    // GetPage(
+    //     name: verifyRoutes,
+    //     page: () => const VerifyScreen(),
+    //     binding: VerifyBinding()),
 
     GetPage(
         name: signUpRoutes,
-        page: () => const SignUpScreen(),
-        binding: SignUpBinding()),
+        page: () =>  RegisterScreen(),
+        binding: RegisterBinding()),
 
 
 
-    GetPage(
-        name: tabRoutes, page: () => const TabScreen(), binding: TabsBinding()),
-    GetPage(
-        name: appointmentRoutes,
-        page: () => const AppointmentScreen(),
-        binding: AppointmentBinding()),
-    GetPage(
-        name: calendarRoutes,
-        page: () => const CalendarScreen(),
-        binding: CalendarsBinding()),
-    GetPage(
-        name: inboxRoutes,
-        page: () => const InboxScreen(),
-        binding: InboxBinding()),
-    GetPage(
-        name: profileRoutes,
-        page: () => const ProfileScreen(),
-        binding: ProfileBinding()),
-    GetPage(
-        name: orderDetailsRoutes,
-        page: () => const OrderDetailsScreen(),
-        binding: OrderDetailsBinding()),
-    GetPage(
-        name: chatRoutes,
-        page: () => const ChatScreen(),
-        binding: ChatBinding()),
-    GetPage(
-        name: historyRoutes,
-        page: () => const HistoryScreen(),
-        binding: HistoryBinding()),
-    GetPage(
-        name: stylistRoutes,
-        page: () => const StylistScreen(),
-        binding: StylistBinding()),
-    GetPage(
-        name: addStylistRoutes,
-        page: () => const AddStylistScreen(),
-        binding: AddStylistBinding()),
-    GetPage(
-        name: stylistCategoriesRoutes,
-        page: () => const StylistCategoriesScreen(),
-        binding: StylistCategoriesBinding()),
-    GetPage(
-        name: profileCategoriesRoutes,
-        page: () => const ProfileCategoriesScreen(),
-        binding: ProfileCategoriesBinding()),
-    GetPage(
-        name: addTimingRoutes,
-        page: () => const AddTimingScreen(),
-        binding: AddTimingBinding(),
-        fullscreenDialog: true),
-    GetPage(
-        name: gallaryRoutes,
-        page: () => const GallaryScreen(),
-        binding: GallaryBinding()),
-    GetPage(
-        name: reviewRoutes,
-        page: () => const ReviewScreen(),
-        binding: ReviewBinding()),
-    GetPage(
-        name: reviewRoutes,
-        page: () => const ReviewScreen(),
-        binding: ReviewBinding()),
-    GetPage(
-        name: languagesRoutes,
-        page: () => const LanguagesScreen(),
-        binding: LanguagesBinding()),
-    GetPage(
-        name: contactUsRoutes,
-        page: () => const ContactUsScreen(),
-        binding: ContactUsBinding()),
-    GetPage(
-        name: appPagesRoutes,
-        page: () => const AppPagesScreen(),
-        binding: AppPagesBinding()),
-    GetPage(
-        name: packagesRoutes,
-        page: () => const PackagesScreen(),
-        binding: PackagesBinding()),
-    GetPage(
-        name: addPackagesRoutes,
-        page: () => const AddPackagesScreen(),
-        binding: AddPackagesBinding()),
-    GetPage(
-        name: packagesCategoriesRoutes,
-        page: () => const PackagesCategoriesScreen(),
-        binding: PackagesCategoriesBinding()),
-    GetPage(
-        name: productsRoutes,
-        page: () => const ProductsScreen(),
-        binding: ProductsBinding()),
-    GetPage(
-        name: createProductsRoutes,
-        page: () => const CreateProductsScreen(),
-        binding: CretaeProductsBinding()),
-    GetPage(
-        name: shopCategoriesRoutes,
-        page: () => const ShopCategoriesScreen(),
-        binding: ShopCategoriesBinding()),
-    GetPage(
-        name: shopSubCategoriesRoutes,
-        page: () => const ShopSubCategoriesScreen(),
-        binding: ShopSubCategoriesBinding()),
-    GetPage(
-        name: salonCategoriesRoutes,
-        page: () => const SalonCategoriesScreen(),
-        binding: SalonCategoriesBinding()),
-    GetPage(
-        name: citiesCategoriesRoutes,
-        page: () => const CitiesCategoriesScreen(),
-        binding: CitiesCategoriesBinding()),
-    GetPage(
-        name: slotRoutes,
-        page: () => const SlotScreen(),
-        binding: SlotBinding()),
-    GetPage(
-        name: addSlotRoutes,
-        page: () => const AddSlotScreen(),
-        binding: AddSlotBinding()),
-    GetPage(
-        name: addServicesRoutes,
-        page: () => const AddServicesScreen(),
-        binding: AddServicesBinding()),
-    GetPage(
-        name: servicesRoutes,
-        page: () => const ServicesScreen(),
-        binding: ServicesBinding()),
-    GetPage(
-        name: servicesCategoriesRoutes,
-        page: () => const ServiceCategoriesScreen(),
-        binding: ServicesCategoriesBinding()),
-    GetPage(
-        name: packagesSpecialistRoutes,
-        page: () => const PackagesSpecialistScreen(),
-        binding: PackagesSpecialistBinding()),
-    GetPage(
-        name: individualProfileRoutes,
-        page: () => const IndividualProfileScreen(),
-        binding: IndividualProfileBinding()),
-    GetPage(
-        name: individualProfileCategoriesRoutes,
-        page: () => const IndividualCategoriesScreen(),
-        binding: IndividualProfileCategoriesBinding()),
-    GetPage(
-        name: individualCitiesRoutes,
-        page: () => const IndividualCitiesScreen(),
-        binding: IndividualCitiesBinding()),
-    GetPage(name: errorRoutes, page: () => const ErrorScreen()),
-    GetPage(
-        name: splash,
-        page: () => const SplashScreen(),
-        binding: SplashBinding()),
-    GetPage(
-        name: analyticsRoutes,
-        page: () => const AnalyticScreen(),
-        binding: AnalyticsBinding()),
-    GetPage(
-        name: firebaseRoutes,
-        page: () => const FirebaseVerificationScreen(),
-        binding: FirebaseBinding(),
-        fullscreenDialog: true),
-    GetPage(
-        name: productOrderDetailsRoutes,
-        page: () => const ProductOrderDetailScreen(),
-        binding: ProductOrderDetailsBinding()),
-    GetPage(
-        name: registerCategoriesRoutes,
-        page: () => const RegisterCategoryScreen(),
-        binding: RegisterCategoriesBinding(),
-        fullscreenDialog: true)
+    // GetPage(
+    //     name: tabRoutes, page: () => const TabScreen(), binding: TabsBinding()),
+    // GetPage(
+    //     name: appointmentRoutes,
+    //     page: () => const AppointmentScreen(),
+    //     binding: AppointmentBinding()),
+    // GetPage(
+    //     name: calendarRoutes,
+    //     page: () => const CalendarScreen(),
+    //     binding: CalendarsBinding()),
+    // GetPage(
+    //     name: inboxRoutes,
+    //     page: () => const InboxScreen(),
+    //     binding: InboxBinding()),
+    // GetPage(
+    //     name: profileRoutes,
+    //     page: () => const ProfileScreen(),
+    //     binding: ProfileBinding()),
+    // GetPage(
+    //     name: orderDetailsRoutes,
+    //     page: () => const OrderDetailsScreen(),
+    //     binding: OrderDetailsBinding()),
+    // GetPage(
+    //     name: chatRoutes,
+    //     page: () => const ChatScreen(),
+    //     binding: ChatBinding()),
+    // GetPage(
+    //     name: historyRoutes,
+    //     page: () => const HistoryScreen(),
+    //     binding: HistoryBinding()),
+    // GetPage(
+    //     name: stylistRoutes,
+    //     page: () => const StylistScreen(),
+    //     binding: StylistBinding()),
+    // GetPage(
+    //     name: addStylistRoutes,
+    //     page: () => const AddStylistScreen(),
+    //     binding: AddStylistBinding()),
+    // GetPage(
+    //     name: stylistCategoriesRoutes,
+    //     page: () => const StylistCategoriesScreen(),
+    //     binding: StylistCategoriesBinding()),
+    // GetPage(
+    //     name: profileCategoriesRoutes,
+    //     page: () => const ProfileCategoriesScreen(),
+    //     binding: ProfileCategoriesBinding()),
+    // GetPage(
+    //     name: addTimingRoutes,
+    //     page: () => const AddTimingScreen(),
+    //     binding: AddTimingBinding(),
+    //     fullscreenDialog: true),
+    // GetPage(
+    //     name: gallaryRoutes,
+    //     page: () => const GallaryScreen(),
+    //     binding: GallaryBinding()),
+    // GetPage(
+    //     name: reviewRoutes,
+    //     page: () => const ReviewScreen(),
+    //     binding: ReviewBinding()),
+    // GetPage(
+    //     name: reviewRoutes,
+    //     page: () => const ReviewScreen(),
+    //     binding: ReviewBinding()),
+    // GetPage(
+    //     name: languagesRoutes,
+    //     page: () => const LanguagesScreen(),
+    //     binding: LanguagesBinding()),
+    // GetPage(
+    //     name: contactUsRoutes,
+    //     page: () => const ContactUsScreen(),
+    //     binding: ContactUsBinding()),
+    // GetPage(
+    //     name: appPagesRoutes,
+    //     page: () => const AppPagesScreen(),
+    //     binding: AppPagesBinding()),
+    // GetPage(
+    //     name: packagesRoutes,
+    //     page: () => const PackagesScreen(),
+    //     binding: PackagesBinding()),
+    // GetPage(
+    //     name: addPackagesRoutes,
+    //     page: () => const AddPackagesScreen(),
+    //     binding: AddPackagesBinding()),
+    // GetPage(
+    //     name: packagesCategoriesRoutes,
+    //     page: () => const PackagesCategoriesScreen(),
+    //     binding: PackagesCategoriesBinding()),
+    // GetPage(
+    //     name: productsRoutes,
+    //     page: () => const ProductsScreen(),
+    //     binding: ProductsBinding()),
+    // GetPage(
+    //     name: createProductsRoutes,
+    //     page: () => const CreateProductsScreen(),
+    //     binding: CretaeProductsBinding()),
+    // GetPage(
+    //     name: shopCategoriesRoutes,
+    //     page: () => const ShopCategoriesScreen(),
+    //     binding: ShopCategoriesBinding()),
+    // GetPage(
+    //     name: shopSubCategoriesRoutes,
+    //     page: () => const ShopSubCategoriesScreen(),
+    //     binding: ShopSubCategoriesBinding()),
+    // GetPage(
+    //     name: salonCategoriesRoutes,
+    //     page: () => const SalonCategoriesScreen(),
+    //     binding: SalonCategoriesBinding()),
+    // GetPage(
+    //     name: citiesCategoriesRoutes,
+    //     page: () => const CitiesCategoriesScreen(),
+    //     binding: CitiesCategoriesBinding()),
+    // GetPage(
+    //     name: slotRoutes,
+    //     page: () => const SlotScreen(),
+    //     binding: SlotBinding()),
+    // GetPage(
+    //     name: addSlotRoutes,
+    //     page: () => const AddSlotScreen(),
+    //     binding: AddSlotBinding()),
+    // GetPage(
+    //     name: addServicesRoutes,
+    //     page: () => const AddServicesScreen(),
+    //     binding: AddServicesBinding()),
+    // GetPage(
+    //     name: servicesRoutes,
+    //     page: () => const ServicesScreen(),
+    //     binding: ServicesBinding()),
+    // GetPage(
+    //     name: servicesCategoriesRoutes,
+    //     page: () => const ServiceCategoriesScreen(),
+    //     binding: ServicesCategoriesBinding()),
+    // GetPage(
+    //     name: packagesSpecialistRoutes,
+    //     page: () => const PackagesSpecialistScreen(),
+    //     binding: PackagesSpecialistBinding()),
+    // GetPage(
+    //     name: individualProfileRoutes,
+    //     page: () => const IndividualProfileScreen(),
+    //     binding: IndividualProfileBinding()),
+    // GetPage(
+    //     name: individualProfileCategoriesRoutes,
+    //     page: () => const IndividualCategoriesScreen(),
+    //     binding: IndividualProfileCategoriesBinding()),
+    // GetPage(
+    //     name: individualCitiesRoutes,
+    //     page: () => const IndividualCitiesScreen(),
+    //     binding: IndividualCitiesBinding()),
+    // GetPage(name: errorRoutes, page: () => const ErrorScreen()),
+    // GetPage(
+    //     name: splash,
+    //     page: () => const SplashScreen(),
+    //     binding: SplashBinding()),
+    // GetPage(
+    //     name: analyticsRoutes,
+    //     page: () => const AnalyticScreen(),
+    //     binding: AnalyticsBinding()),
+    // GetPage(
+    //     name: firebaseRoutes,
+    //     page: () => const FirebaseVerificationScreen(),
+    //     binding: FirebaseBinding(),
+    //     fullscreenDialog: true),
+    // GetPage(
+    //     name: productOrderDetailsRoutes,
+    //     page: () => const ProductOrderDetailScreen(),
+    //     binding: ProductOrderDetailsBinding()),
+    // GetPage(
+    //     name: registerCategoriesRoutes,
+    //     page: () => const RegisterCategoryScreen(),
+    //     binding: RegisterCategoriesBinding(),
+    //     fullscreenDialog: true)
   ];
 }

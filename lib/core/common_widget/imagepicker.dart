@@ -10,9 +10,9 @@ import 'package:rtd_project/core/common_widget/commen_botten.dart';
 
 class Imagepiker extends StatelessWidget {
   Imagepiker({
-    super.key, required this.imagefile,
+    super.key, 
   });
-  final XFile imagefile;
+  // final XFile imagefile;
   final Athentication imagePickerService = Get.find();
   final picker = ImagePicker();
 
