@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -11,8 +14,28 @@ import 'package:rtd_project/core/common_widget/textformfield_widget.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/view/home_screen/home_page.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  XFile? _selectedImage;
+  XFile? _selectedImage1;
+
+  void _updateSelectedImage(XFile? newImage) {
+    setState(() {
+      _selectedImage = newImage;
+    });
+  }
+
+  void _updateSelectedImage1(XFile? newImage) {
+    setState(() {
+      _selectedImage1 = newImage;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +70,7 @@ class RegisterScreen extends StatelessWidget {
     ];
 
     return Container(
-        height: 3690.h,
+        height: 3890.h,
         width: 390.w,
         decoration: const BoxDecoration(
           color: whiteColor,
@@ -60,19 +83,31 @@ class RegisterScreen extends StatelessWidget {
           padding: const EdgeInsets.all(45),
           physics: const NeverScrollableScrollPhysics(),
           children: [
-            TextFormFieldWidget(controller:value.nameRegController, hitText: 'Name'),
+            TextFormFieldWidget(
+                controller: value.nameRegController, hitText: 'Name'),
             textFieldHeight,
-            TextFormFieldWidget(controller:value.nameRegController, hitText: 'DOB'),
+            TextFormFieldWidget(
+                controller: value.emailRegController, hitText: 'email'),
+            textFieldHeight,
+            TextFormFieldWidget(
+                controller: value.passwordRegController, hitText: 'password'),
+            textFieldHeight,
+            TextFormFieldWidget(
+                controller: value.confirmpasswordRegController,
+                hitText: 'confirm password'),
+            textFieldHeight,
+            TextFormFieldWidget(
+                controller: value.nameRegController, hitText: 'DOB'),
             textFieldHeight,
             DropedownWidget(
                 hintText: 'Blood Group', dropDownlist: _bloodGroups),
             textFieldHeight,
             TextFormFieldWidget(
-                controller:value.mobileNumRegController,
+                controller: value.mobileNumRegController,
                 hitText: 'Indian Mobile Number'),
             textFieldHeight,
             TextFormFieldWidget(
-                controller:value.ksaMobileNumRegController,
+                controller: value.ksaMobileNumRegController,
                 hitText: 'KSA Mobile Number'),
             textFieldHeight,
             TextFormFieldWidget(
@@ -108,8 +143,41 @@ class RegisterScreen extends StatelessWidget {
                 press: () {
                   showModalBottomSheet(
                     context: context,
-                    builder: (context) => Imagepiker(),
+                    builder: (context) => Imagepiker(
+                      onImageSelected: _updateSelectedImage,
+                    ),
                   );
+
+                  // showCupertinoModalPopup<void>(
+                  //   context: context,
+                  //   builder: (BuildContext context) => CupertinoActionSheet(
+                  //     title: Text('Choose From'.tr),
+                  //     actions: <CupertinoActionSheetAction>[
+                  //       CupertinoActionSheetAction(
+                  //         isDefaultAction: true,
+                  //         onPressed: () {
+                  //           Navigator.pop(context);
+                  //           value.selectFromGallery('camera');
+                  //         },
+                  //         child: Text('Camera'.tr),
+                  //       ),
+                  //       CupertinoActionSheetAction(
+                  //         onPressed: () {
+                  //           Navigator.pop(context);
+                  //           value.selectFromGallery('gallery');
+                  //         },
+                  //         child: Text('Gallery'.tr),
+                  //       ),
+                  //       CupertinoActionSheetAction(
+                  //         isDestructiveAction: true,
+                  //         onPressed: () {
+                  //           Navigator.pop(context);
+                  //         },
+                  //         child: Text('Cancel'.tr),
+                  //       )
+                  //     ],
+                  //   ),
+                  // );
                   // final imagewidget = Imagepiker();
                   // imagePickerService.ksaDoc.value =
                   //     imagewidget.pickImage(ImageSource.gallery);
@@ -124,12 +192,14 @@ class RegisterScreen extends StatelessWidget {
             dividerAndHeadingWidget(
                 heading: ' Emergency Contact 1 (KSA)', width: 70.w),
             textFieldHeight,
-            TextFormFieldWidget(controller:value.emName1Controller, hitText: 'Name'),
+            TextFormFieldWidget(
+                controller: value.emName1Controller, hitText: 'Name'),
             textFieldHeight,
             const DropedownWidget(hintText: 'Relationship', dropDownlist: []),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: value.emMobileNum1Controller, hitText: 'Mobile Number'),
+                controller: value.emMobileNum1Controller,
+                hitText: 'Mobile Number'),
             //////////////////////////End of third Section?///////////////////////////////////////////////////////////
             textFieldHeight,
             dividerAndHeadingWidget(
@@ -141,7 +211,8 @@ class RegisterScreen extends StatelessWidget {
             const DropedownWidget(hintText: 'Relationship', dropDownlist: []),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: value.emIndiaName2Controller, hitText: 'Mobile Number'),
+                controller: value.emIndiaName2Controller,
+                hitText: 'Mobile Number'),
             //////////////////////////End of Fourth Section?///////////////////////////////////////////////////////////
             textFieldHeight,
             dividerAndHeadingWidget(heading: 'Indian Address', width: 140.w),
@@ -175,7 +246,9 @@ class RegisterScreen extends StatelessWidget {
                   press: () {
                     showModalBottomSheet(
                       context: context,
-                      builder: (context) => Imagepiker(),
+                      builder: (context) => Imagepiker(
+                        onImageSelected: _updateSelectedImage1,
+                      ),
                     );
                   },
                   buttonBackgroundColor: whiteColor,
@@ -194,7 +267,8 @@ class RegisterScreen extends StatelessWidget {
             const DropedownWidget(hintText: 'Relationship', dropDownlist: []),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: value.emIndiaMobile1Controller, hitText: 'Mobile Number'),
+                controller: value.emIndiaMobile1Controller,
+                hitText: 'Mobile Number'),
             /////////////////////End of Sixth Section////////////////////
             textFieldHeight,
             dividerAndHeadingWidget(
@@ -206,7 +280,8 @@ class RegisterScreen extends StatelessWidget {
             const DropedownWidget(hintText: 'Relationship', dropDownlist: []),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: value.emIndiaMobile2Controller, hitText: 'Mobile Number'),
+                controller: value.emIndiaMobile2Controller,
+                hitText: 'Mobile Number'),
             textFieldHeight,
             /////////////////End Of Seventh section///////////////////
             const Divider(),
@@ -215,22 +290,26 @@ class RegisterScreen extends StatelessWidget {
                 controller: value.iqamaNumController, hitText: 'Iqama Number'),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: value.iqamaexperyDateController, hitText: 'Expiry Date'),
+                controller: value.iqamaexperyDateController,
+                hitText: 'Expiry Date'),
             textFieldHeight,
             ////////////////////////End Of Eight Section//////////////////////////
             const Divider(),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: value.passNumController, hitText: 'Passport Number'),
+                controller: value.passNumController,
+                hitText: 'Passport Number'),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: value.passExperyNumController, hitText: 'Expiry Date'),
+                controller: value.passExperyNumController,
+                hitText: 'Expiry Date'),
             textFieldHeight,
             ////////////////////////////End of Nine Section//////////////////
             const Divider(),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: value.maritalStatusController, hitText: 'Martial Status'),
+                controller: value.maritalStatusController,
+                hitText: 'Martial Status'),
             textFieldHeight,
             TextFormFieldWidget(
                 controller: value.numOfChildrenController,
@@ -248,19 +327,23 @@ class RegisterScreen extends StatelessWidget {
             const Divider(),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: value.sponserNameController, hitText: 'Sponsor Name'),
+                controller: value.sponserNameController,
+                hitText: 'Sponsor Name'),
             textFieldHeight,
             TextFormFieldWidget(
                 controller: value.locationController, hitText: 'Location'),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: value.estNmaeController, hitText: 'Establishment Name'),
+                controller: value.estNmaeController,
+                hitText: 'Establishment Name'),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: value.teleNumController, hitText: 'Telephone Number'),
+                controller: value.teleNumController,
+                hitText: 'Telephone Number'),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: value.lastMobileNumController, hitText: 'Mobile Number'),
+                controller: value.lastMobileNumController,
+                hitText: 'Mobile Number'),
             textFieldHeight,
             TextFormFieldWidget(
                 controller: value.sprMobileNumController,
@@ -276,7 +359,8 @@ class RegisterScreen extends StatelessWidget {
             TextFormFieldWidget(
                 controller: value.vehMoedelController, hitText: 'Model'),
             textFieldHeight,
-            TextFormFieldWidget(controller: value.vehTypeController, hitText: 'Type'),
+            TextFormFieldWidget(
+                controller: value.vehTypeController, hitText: 'Type'),
             textFieldHeight,
             TextFormFieldWidget(
                 controller: value.vehCompanyController, hitText: 'Company'),
@@ -289,10 +373,15 @@ class RegisterScreen extends StatelessWidget {
                 buttonText: 'Submit',
                 borderAvalable: false,
                 press: () {
+                  log("first image ${_selectedImage.toString()}");
+                  log("Second image ${_selectedImage1.toString()}");
+                  value.onRegister(_selectedImage, _selectedImage1);
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => NavigationBarpage(),
                   ));
                 }),
+            textFieldHeight,
+            textFieldHeight,
             textFieldHeight,
           ],
         ));
@@ -342,7 +431,8 @@ class RegisterScreen extends StatelessWidget {
       ),
     );
   }
-  imagePickerWidget(context){
+
+  imagePickerWidget(context) {
     Container(
       height: 320.h,
       width: 390.w,
@@ -513,4 +603,3 @@ class _RadioButtonWidgetState extends State<RadioButtonWidget> {
     );
   }
 }
-
