@@ -1,5 +1,6 @@
 /*writen by hariprasad*/
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -11,16 +12,19 @@ class ApiService extends GetxService {
   final int timeoutInSeconds = 30;
   ApiService({required this.appBaseUrl});
 
-
   Future<Response> getPublic(String uri) async {
     try {
-      http.Response response = await http.get(Uri.parse(appBaseUrl + uri),).timeout(Duration(seconds: timeoutInSeconds));
+      http.Response response = await http
+          .get(
+            Uri.parse(uri),
+          )
+          .timeout(Duration(seconds: timeoutInSeconds));
+
       return parseResponse(response, uri);
     } catch (e) {
       return const Response(statusCode: 1, statusText: connectionIssue);
     }
   }
-
 
   Future<Response> getOther(String uri) async {
     try {
@@ -34,7 +38,6 @@ class ApiService extends GetxService {
       return const Response(statusCode: 1, statusText: connectionIssue);
     }
   }
-
 
   Future<Response> getExternal(String uri) async {
     try {
@@ -65,10 +68,27 @@ class ApiService extends GetxService {
   Future<Response> uploadFiles(
     String uri,
     List<MultipartBody> multipartBody,
+    name,
+    email,
+    password,
+    conPassword,
+    inum,
+    ksanum,
+    bloodgroup,
+    iaddress1,
+    iaddress2,
+    iState,
+    iPin,
+    // idoc,
+    kAddress1,
+    kAddress2,
+    kState,
+    kPin,
+    // kDoc,
   ) async {
     try {
       http.MultipartRequest request =
-          http.MultipartRequest('POST', Uri.parse(appBaseUrl + uri));
+          http.MultipartRequest('POST', Uri.parse(uri));
       for (MultipartBody multipart in multipartBody) {
         File file = File(multipart.file.path);
         request.files.add(http.MultipartFile(
@@ -78,6 +98,23 @@ class ApiService extends GetxService {
           filename: file.path.split('/').last,
         ));
       }
+      request.fields['name'] = name;
+      request.fields['email'] = email;
+      request.fields['password'] = password;
+      request.fields['c_pasword'] = conPassword;
+      request.fields['india_mobile_number'] = inum;
+      request.fields['ksa_mobile_number'] = ksanum;
+      request.fields['blood_group'] = bloodgroup;
+      request.fields['indian_address_1'] = iaddress1;
+      request.fields['indian_address_2'] = iaddress2;
+      request.fields['india_state'] = iState;
+      request.fields['india_pin'] = iPin;
+      request.fields['ksa_address_1'] = kAddress1;
+      request.fields['kas_address_2'] = kAddress2;
+      request.fields['ksa_state'] = kState;
+      request.fields['ksa_pin'] = kPin;
+
+
       http.Response response =
           await http.Response.fromStream(await request.send());
       return parseResponse(response, uri);

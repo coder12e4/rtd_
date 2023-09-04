@@ -11,11 +11,56 @@ class SignUpParser {
   SignUpParser(
       {required this.sharedPreferencesManager, required this.apiService});
 
-  Future<Response> uploadImage(XFile data) async {
-    return await apiService
-        .uploadFiles(Constants().baseUrl+Constants().register, [MultipartBody('image', data)]);
+  Future<Response> uploadImage(
+    XFile data,
+    // XFile data2,
+    name,
+    email,
+    password,
+    conPassword,
+    inum,
+    ksanum,
+    bloodgroup,
+    iaddress1,
+    iaddress2,
+    iState,
+    iPin,
+    kAddress1,
+    kAddress2,
+    kState,
+    kPin,
+  ) async {
+    return await apiService.uploadFiles(
+      Constants().baseUrl + Constants().register,
+      [MultipartBody('image', data)],
+     name,
+    email,
+    password,
+    conPassword,
+    inum,
+    ksanum,
+    bloodgroup,
+    iaddress1,
+    iaddress2,
+    iState,
+    iPin,
+    // idoc,
+    kAddress1,
+    kAddress2,
+    kState,
+    kPin,
+    
+    );
   }
 
+  Future<Response> getStates() async {
+    return await apiService
+        .getPublic(Constants().baseUrl + Constants().getAllStates);
+  }
+
+  Future<void> saveToken(key, token) async {
+    sharedPreferencesManager.putString(key, token);
+  }
   // Future<Response> verifyEmail(dynamic body) async {
   //   var response = await apiService.postPublic(AppConstants.verifyEmail, body);
   //   return response;
