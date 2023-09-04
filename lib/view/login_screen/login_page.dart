@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:rtd_project/controller/authentication/login_contoller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
 import 'package:rtd_project/view/login_screen/widgets/login_complete.dart';
@@ -17,74 +18,80 @@ class LOginPage extends StatelessWidget {
         child: Scaffold(
       backgroundColor: baseColor,
       body: SingleChildScrollView(
-        child: Column(
-          // crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            welcomeWidget(context),
-            nochBarAboveLoginContainer(),
-            SizedBox(
-              height: 5.h,
-            ),
-            Container(
-              height: 390.h,
-              width: 390.w,
-              decoration: const BoxDecoration(
-                color: whiteColor,
-                borderRadius: BorderRadiusDirectional.only(
-                  topEnd: Radius.circular(50),
-                  topStart: Radius.circular(50),
+        child: GetBuilder<LoginController>(
+          builder: (value) {
+            return Column(
+              // crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                welcomeWidget(context),
+                nochBarAboveLoginContainer(),
+                SizedBox(
+                  height: 5.h,
                 ),
-              ),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 40.h,
+                Container(
+                  height: 390.h,
+                  width: 390.w,
+                  decoration: const BoxDecoration(
+                    color: whiteColor,
+                    borderRadius: BorderRadiusDirectional.only(
+                      topEnd: Radius.circular(50),
+                      topStart: Radius.circular(50),
+                    ),
                   ),
-                  TextFormFieldWidget(
-                      controller: emailController, hitText: 'Username'),
-                  SizedBox(
-                    height: 20.h,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 40.h,
+                      ),
+                      TextFormFieldWidget(
+                          controller: value.emailController,
+                          hitText: 'Username'),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      TextFormFieldWidget(
+                          controller: value.passwordController,
+                          hitText: 'Password'),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      ButtonWidget(
+                        press: () {
+                          showModalBottomSheet(
+                              context: context,
+                              builder: (context) => LoginComplited());
+                        },
+                        borderAvalable: false,
+                        buttonText: 'Login',
+                        buttonBackgroundColor: buttenBlue,
+                        buttonForegroundColor: whiteColor,
+                      ),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      forgotButton(),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      notAmembertext(),
+                      SizedBox(
+                        height: 15.h,
+                      ),
+                      ButtonWidget(
+                        press: () {
+                          value.onSignUp();
+                        },
+                        borderAvalable: true,
+                        buttonText: 'Register',
+                        buttonBackgroundColor: whiteColor,
+                        buttonForegroundColor: buttenBlue,
+                      ),
+                    ],
                   ),
-                  TextFormFieldWidget(
-                      controller: passwordController, hitText: 'Password'),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  ButtonWidget(
-                    press: () {
-                      showModalBottomSheet(
-                          context: context,
-                          builder: (context) => LoginComplited());
-                    },
-                    borderAvalable: false,
-                    buttonText: 'Login',
-                    buttonBackgroundColor: buttenBlue,
-                    buttonForegroundColor: whiteColor,
-                  ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  forgotButton(),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  notAmembertext(),
-                  SizedBox(
-                    height: 15.h,
-                  ),
-                  ButtonWidget(
-                    press: () {
-                      Get.to(()=>RegisterScreen(), transition: Transition.downToUp);
-                    },
-                    borderAvalable: true,
-                    buttonText: 'Register',
-                    buttonBackgroundColor: whiteColor,
-                    buttonForegroundColor: buttenBlue,
-                  ),
-                ],
-              ),
-            ),
-          ],
+                ),
+              ],
+            );
+          },
         ),
       ),
     ));
@@ -140,8 +147,7 @@ class LOginPage extends StatelessWidget {
   }
 }
 
-final TextEditingController emailController = TextEditingController();
-final TextEditingController passwordController = TextEditingController();
+
 
 // ignore: must_be_immutable
 

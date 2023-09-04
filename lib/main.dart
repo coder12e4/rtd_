@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart'; // Import the 'get' package
+import 'package:rtd_project/core/constraints/api_urls.dart';
+import 'package:rtd_project/helper/init.dart';
+import 'package:rtd_project/helper/router.dart';
+import 'package:rtd_project/util/theme.dart';
 import 'package:rtd_project/view/splash_screen/splash_page.dart';
 
-void main() {
+Future<void> main() async {
+  // Get.put(Athentication());
+  WidgetsFlutterBinding.ensureInitialized();
+  await MainBinding().dependencies();
   runApp(const MyApp());
 }
 
@@ -20,18 +27,24 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       builder: (context, child) {
         return GetMaterialApp(
-          // Use GetMaterialApp from the 'get' package
+          title: 'RTD',
+          color: ThemeProvider.appColor,
           debugShowCheckedModeBanner: false,
-          title: 'Flutter Demo',
+          navigatorKey: Get.key,
+          initialRoute: AppRouter.splash,
+          getPages: AppRouter.routes,
+          defaultTransition: Transition.fadeIn,
+          // translations: LocaleString(),
           theme: ThemeData(
             fontFamily: 'JekoFont',
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             useMaterial3: true,
           ),
-          home: SplashScreen(),
+          locale: const Locale('en', 'US'),
         );
       },
     );
   }
 }
+//  
 //start

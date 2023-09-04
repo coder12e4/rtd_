@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
+import 'package:rtd_project/view/profile_screen/profile_edit_screen/profile_edit_screen.dart';
+import 'package:rtd_project/view/profile_screen/profile_loan_screen/profile_loan_screen.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -33,7 +35,7 @@ class ProfilePage extends StatelessWidget {
                   kSizedBoxH,
                   dividerWidget(),
                   kSizedBoxH,
-                  textButton(),
+                  textButton(context),
                   kSizedBoxH,
                   dividerWidget(),
                   kSizedBoxH,
@@ -139,7 +141,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  textButton() {
+  textButton(context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -149,7 +151,11 @@ class ProfilePage extends StatelessWidget {
                     (states) => const Size(60, 50)),
                 backgroundColor:
                     MaterialStateColor.resolveWith((states) => baseColor)),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ProfileEditScreen(),
+              ));
+            },
             child: const Padding(
               padding:
                   EdgeInsets.only(left: 18.0, right: 18, top: 8, bottom: 8),
@@ -172,7 +178,11 @@ class ProfilePage extends StatelessWidget {
                     (states) => const Size(60, 50)),
                 backgroundColor:
                     MaterialStateColor.resolveWith((states) => baseColor)),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ProfileLoanScreen(),
+              ));
+            },
             child: Padding(
               padding: const EdgeInsets.only(
                   left: 18.0, right: 18, top: 5, bottom: 5),
@@ -237,7 +247,9 @@ class ProfilePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
                   icon: const Icon(
                     Icons.arrow_back,
                     color: whiteColor,
