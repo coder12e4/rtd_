@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:rtd_project/backend/model/states_model.dart';
 import 'package:rtd_project/controller/authentication/auth.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
@@ -24,18 +25,24 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   XFile? _selectedImage;
   XFile? _selectedImage1;
+  bool image1 = false;
+  bool image2 = false;
 
   void _updateSelectedImage(XFile? newImage) {
     setState(() {
       _selectedImage = newImage;
+      image1 = true;
     });
   }
 
   void _updateSelectedImage1(XFile? newImage) {
     setState(() {
       _selectedImage1 = newImage;
+      image2 = true;
     });
   }
+
+  final RegisterController auth = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -55,19 +62,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Container textFieldContainer(BuildContext context, value) {
-    // final Athentication imagePickerService = Get.find();
+  Container textFieldContainer(BuildContext context, RegisterController value) {
+    final RegisterController imagePickerService = Get.find();
 
-    List<String> _bloodGroups = [
-      'A+',
-      'A-',
-      'B+',
-      'B-',
-      'AB+',
-      'AB-',
-      'O+',
-      'O-',
-    ];
+    List<String> allstates = [];
+
+    List<String> allBloodGroup = [];
 
     return Container(
         height: 3890.h,
@@ -99,8 +99,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
             TextFormFieldWidget(
                 controller: value.nameRegController, hitText: 'DOB'),
             textFieldHeight,
-            DropedownWidget(
-                hintText: 'Blood Group', dropDownlist: _bloodGroups),
+            DropdownButtonHideUnderline(
+              child: DropdownButton<States>(
+                  isExpanded: true,
+                  hint: const Text(
+                    "Select States",
+                    style: TextStyle(
+                        color: textFormBase,
+                        fontSize: 16,
+                        letterSpacing: .1,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  icon: const Icon(Icons.keyboard_arrow_down_outlined),
+                  value: auth.selectedItem.value,
+                  items: value.dropdownMenuItems,
+                  onChanged: (value) {
+                    setState(() {
+                      auth.selectedItem.value = value;
+
+                      auth.statesName = auth.selectedItem.value!.stateName;
+
+                      //   newStateList.clear();
+                      //  newStateList=[];
+                      //_dropdownMenuItemsStates.clear();
+                    });
+                  }),
+            ),
             textFieldHeight,
             TextFormFieldWidget(
                 controller: value.mobileNumRegController,
@@ -126,16 +150,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: value.resAddressLine2Controller,
                 hitText: 'Address Line 2'),
             textFieldHeight,
-            DropedownWidget(hintText: 'State', dropDownlist: []),
+            DropedownWidget(hintText: 'State', dropDownlist: allstates),
 
             textFieldHeight,
-            const DropedownWidget(hintText: 'Pin', dropDownlist: []),
+            TextFormFieldWidget(
+                controller: value.pinController1, hitText: 'pin'),
 
             textFieldHeight,
-            const Center(
+            Center(
               child: Text(
-                'No Documents attached',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                !image1 ? 'No Documents attached' : 'Document is selected',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: !image1 ? Colors.red : Colors.green),
               ),
             ),
             textFieldHeight,
@@ -147,40 +174,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onImageSelected: _updateSelectedImage,
                     ),
                   );
-
-                  // showCupertinoModalPopup<void>(
-                  //   context: context,
-                  //   builder: (BuildContext context) => CupertinoActionSheet(
-                  //     title: Text('Choose From'.tr),
-                  //     actions: <CupertinoActionSheetAction>[
-                  //       CupertinoActionSheetAction(
-                  //         isDefaultAction: true,
-                  //         onPressed: () {
-                  //           Navigator.pop(context);
-                  //           value.selectFromGallery('camera');
-                  //         },
-                  //         child: Text('Camera'.tr),
-                  //       ),
-                  //       CupertinoActionSheetAction(
-                  //         onPressed: () {
-                  //           Navigator.pop(context);
-                  //           value.selectFromGallery('gallery');
-                  //         },
-                  //         child: Text('Gallery'.tr),
-                  //       ),
-                  //       CupertinoActionSheetAction(
-                  //         isDestructiveAction: true,
-                  //         onPressed: () {
-                  //           Navigator.pop(context);
-                  //         },
-                  //         child: Text('Cancel'.tr),
-                  //       )
-                  //     ],
-                  //   ),
-                  // );
-                  // final imagewidget = Imagepiker();
-                  // imagePickerService.ksaDoc.value =
-                  //     imagewidget.pickImage(ImageSource.gallery);
                 },
                 buttonBackgroundColor: whiteColor,
                 buttonForegroundColor: Colors.blue,
@@ -211,7 +204,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             const DropedownWidget(hintText: 'Relationship', dropDownlist: []),
             textFieldHeight,
             TextFormFieldWidget(
-                controller: value.emIndiaName2Controller,
+                controller: value.emMObilenum2Controller,
                 hitText: 'Mobile Number'),
             //////////////////////////End of Fourth Section?///////////////////////////////////////////////////////////
             textFieldHeight,
@@ -225,16 +218,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: value.indianAddressLine2Controller,
                 hitText: 'Address Line 2'),
             textFieldHeight,
-            const DropedownWidget(hintText: 'State', dropDownlist: []),
+            DropedownWidget(hintText: 'State', dropDownlist: allstates),
 
             textFieldHeight,
-            const DropedownWidget(hintText: 'Pin', dropDownlist: []),
+            TextFormFieldWidget(
+                controller: value.pinController2, hitText: 'pin'),
+            textFieldHeight,
 
             textFieldHeight,
-            const Center(
+            Center(
               child: Text(
-                'No Documents attached',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                !image2 ? 'No Documents attached' : 'Document is selected',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: !image2 ? Colors.red : Colors.green),
               ),
             ),
             textFieldHeight,
@@ -373,11 +370,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 buttonText: 'Submit',
                 borderAvalable: false,
                 press: () {
-                  log("first image ${_selectedImage.toString()}");
-                  log("Second image ${_selectedImage1.toString()}");
-                  value.onRegister(_selectedImage, _selectedImage1);
+                  log("first image ${_selectedImage!.path.toString()}");
+                  log("Second image ${_selectedImage1!.path.toString()}");
+                  value.onRegister(_selectedImage!, _selectedImage1!);
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => NavigationBarpage(),
+                    builder: (context) => const NavigationBarpage(),
                   ));
                 }),
             textFieldHeight,

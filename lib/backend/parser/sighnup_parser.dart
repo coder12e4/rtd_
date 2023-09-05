@@ -12,7 +12,8 @@ class SignUpParser {
       {required this.sharedPreferencesManager, required this.apiService});
 
   Future<Response> uploadImage(
-    XFile data,
+    XFile data1,
+    XFile data2,
     // XFile data2,
     name,
     email,
@@ -32,30 +33,34 @@ class SignUpParser {
   ) async {
     return await apiService.uploadFiles(
       Constants().baseUrl + Constants().register,
-      [MultipartBody('image', data)],
-     name,
-    email,
-    password,
-    conPassword,
-    inum,
-    ksanum,
-    bloodgroup,
-    iaddress1,
-    iaddress2,
-    iState,
-    iPin,
-    // idoc,
-    kAddress1,
-    kAddress2,
-    kState,
-    kPin,
-    
+      [MultipartBody('document_proof_india', data1),MultipartBody('document_proof_ksa', data2)],
+      name,
+      email,
+      password,
+      conPassword,
+      inum,
+      ksanum,
+      bloodgroup,
+      iaddress1,
+      iaddress2,
+      iState,
+      iPin,
+     
+      kAddress1,
+      kAddress2,
+      kState,
+      kPin,
     );
   }
 
   Future<Response> getStates() async {
     return await apiService
         .getPublic(Constants().baseUrl + Constants().getAllStates);
+  }
+
+  Future<Response> getBloodGroup() async {
+    return await apiService
+        .getPublic(Constants().baseUrl + Constants().getAllBloodGroup );
   }
 
   Future<void> saveToken(key, token) async {
