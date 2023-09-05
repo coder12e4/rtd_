@@ -79,16 +79,19 @@ class ApiService extends GetxService {
     iaddress2,
     iState,
     iPin,
-    // idoc,
+   
     kAddress1,
     kAddress2,
     kState,
     kPin,
-    // kDoc,
+   
   ) async {
     try {
-      http.MultipartRequest request =
-          http.MultipartRequest('POST', Uri.parse(uri));
+      http.MultipartRequest request = http.MultipartRequest(
+        'POST',
+        Uri.parse(uri),
+      );
+      log('multipartBody length: ${multipartBody.length.toString()}');
       for (MultipartBody multipart in multipartBody) {
         File file = File(multipart.file.path);
         request.files.add(http.MultipartFile(
@@ -114,11 +117,14 @@ class ApiService extends GetxService {
       request.fields['ksa_state'] = kState;
       request.fields['ksa_pin'] = kPin;
 
-
       http.Response response =
           await http.Response.fromStream(await request.send());
+      log(uri);
+      log(response.statusCode.toString());
+      log('upload image');
       return parseResponse(response, uri);
     } catch (e) {
+      log(e.toString());
       return const Response(statusCode: 1, statusText: connectionIssue);
     }
   }
@@ -155,9 +161,9 @@ class ApiService extends GetxService {
             'Authorization': 'Bearer $token'
           }).timeout(Duration(seconds: timeoutInSeconds));
 
-      print(response.body);
-      print(token);
-      print(Uri.parse(appBaseUrl + uri));
+      log(response.body);
+      log(token);
+      log(Uri.parse(appBaseUrl + uri).toString());
       return parseResponse(response, uri);
     } catch (e) {
       return const Response(statusCode: 1, statusText: connectionIssue);
@@ -194,6 +200,7 @@ class ApiService extends GetxService {
       statusCode: res.statusCode,
       statusText: res.reasonPhrase,
     );
+    log('response body');
     if (response.statusCode != 200 &&
         response.body != null &&
         response.body is! String) {

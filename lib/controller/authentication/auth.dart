@@ -1,12 +1,13 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rtd_project/backend/api/handler.dart';
+import 'package:rtd_project/backend/model/bloodgroup_model.dart';
 import 'package:rtd_project/backend/model/states_model.dart';
 import 'package:rtd_project/backend/parser/sighnup_parser.dart';
+import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/util/theme.dart';
 import 'package:rtd_project/util/toast.dart';
 import 'package:rtd_project/view/profile_screen/profile_edit_screen/profile_edit_screen.dart';
@@ -19,11 +20,15 @@ class RegisterController extends GetxController implements GetxService {
   Rx<XFile?> ksaDoc = Rx<XFile?>(null);
   Rx<XFile?> indianDoc = Rx<XFile?>(null);
 
-  // @override
-  // void onInit() {
-  //   getStates();
-  //   super.onInit();
-  // }
+  @override
+  void onInit() {
+    getStates();
+    getAllBloodGroup();
+    statesList = allStates;
+    _dropdownMenuItems = buildDropDownMenuItems(statesList!);
+    // selectedItem != null ? dropdownMenuItems[0].value : null;
+    super.onInit();
+  }
 
   final TextEditingController nameRegController = TextEditingController();
   final TextEditingController emailRegController = TextEditingController();
@@ -79,11 +84,21 @@ class RegisterController extends GetxController implements GetxService {
   final TextEditingController vehMoedelController = TextEditingController();
   final TextEditingController vehTypeController = TextEditingController();
   final TextEditingController vehCompanyController = TextEditingController();
-  XFile? _selectedImage;
+  final TextEditingController pinController1 = TextEditingController();
+  final TextEditingController pinController2 = TextEditingController();
+  // XFile? _selectedImage;
   String? cover;
   final gallery = [];
   List<States> _allStates = <States>[];
   List<States> get allStates => _allStates;
+  List<BloodGroup> _getAllbloodGroup = <BloodGroup>[];
+  List<BloodGroup> get getAllbloodGroup => _getAllbloodGroup;
+  String? statesName;
+  List<States>? statesList;
+  Rx<States?> selectedItem = Rx<States?>(null);
+  List<DropdownMenuItem<States>> _dropdownMenuItems =
+      <DropdownMenuItem<States>>[];
+  List<DropdownMenuItem<States>> get dropdownMenuItems => _dropdownMenuItems;
   Future<XFile?> pickImage(ImageSource source) async {
     return await picker.pickImage(source: source);
   }
@@ -183,138 +198,189 @@ class RegisterController extends GetxController implements GetxService {
   //   }
   // }
 
-  Future<void> onRegister(file1, file2) async {
-    if (emailRegController.text == '' ||
-        emailRegController.text.isEmpty ||
-        passwordRegController.text == '' ||
-        passwordRegController.text.isEmpty) {
-      showToast('All fields are required'.tr);
-      return;
-    }
-    if (!GetUtils.isEmail(passwordRegController.text)) {
-      showToast('Email is not valid'.tr);
-      return;
-    }
-
-    Get.dialog(
-      SimpleDialog(
-        children: [
-          Row(
-            children: [
-              const SizedBox(
-                width: 30,
-              ),
-              const CircularProgressIndicator(
-                color: ThemeProvider.appColor,
-              ),
-              const SizedBox(
-                width: 30,
-              ),
-              SizedBox(
-                  child: Text(
-                "Please wait".tr,
-                style: const TextStyle(fontFamily: 'bold'),
-              )),
-            ],
-          )
-        ],
-      ),
-      barrierDismissible: false,
-    );
-
-    var response = await parser.uploadImage(
-      file1,
-      nameRegController,
-      emailRegController,
-      passwordRegController,
-      confirmpasswordRegController,
-      indianMobNumContoller,
-      ksaMobileNumRegController,
-      1,
-      indianAddressLine1Controller,
-      indianAddressLine2Controller,
-      1,
-      '467736',
-      resAddressLine1Controller,
-      resAddressLine2Controller,
-      2,
-      '85964',
-    );
-    Get.back();
-
-    if (response.statusCode == 200) {
-      Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
-      debugPrint(myMap['user_details']['id'].toString());
-
-      if (myMap['user_details'] != '' && myMap['access_token'] != '') {
-        debugPrint(myMap['user']['id'].toString());
-        parser.saveToken('access_token', myMap['token']);
-        // parser.saveInfo(
-        //   myMap['user_details']['id'].toString(),
-        //   myMap['user_details']['name'].toString(),
-        //   myMap['user_details']['email'].toString(),
-
-        // );
-        // var updateParam = {
-        //   "id": myMap['user']['id'].toString(),
-        //   'fcm_token': parser.getFcmToken(),
-        // };
-        // await parser.updateProfile(updateParam, myMap['token']);
-        // onNavigate();
-      } else {
-        showToast('Access denied'.tr);
+  Future<void> onRegister(XFile file1, XFile file2) async {
+    try {
+      if (emailRegController.text == '' ||
+          emailRegController.text.isEmpty ||
+          passwordRegController.text == '' ||
+          passwordRegController.text.isEmpty ||
+          nameRegController.text == '' ||
+          nameRegController.text.isEmpty ||
+          indianAddressLine1Controller.text == '' ||
+          indianAddressLine1Controller.text.isEmpty ||
+          indianAddressLine2Controller.text == '' ||
+          indianAddressLine2Controller.text.isEmpty ||
+          resAddressLine1Controller.text == '' ||
+          resAddressLine1Controller.text.isEmpty ||
+          resAddressLine2Controller.text == '' ||
+          resAddressLine2Controller.text.isEmpty ||
+          indianMobNumContoller.text == '' ||
+          indianMobNumContoller.text.isEmpty ||
+          ksaMobileNumRegController.text == '' ||
+          ksaMobileNumRegController.text.isEmpty ||
+          pinController1.text == '' ||
+          pinController1.text.isEmpty ||
+          pinController2.text == '' ||
+          pinController2.text.isEmpty) {
+        showToast('All fields are required'.tr);
+        return;
       }
-    } else {
-      if (response.statusCode == 401) {
-        Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
-        if (myMap['error'] != '') {
-          showToast(myMap['error'.tr]);
-        } else {
-          showToast('Something went wrong'.tr);
-        }
-        update();
-      } else if (response.statusCode == 500) {
-        Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
-        if (myMap['error'] != '') {
-          showToast(myMap['error'.tr]);
-        } else {
-          showToast('Something went wrong'.tr);
-        }
-        update();
-      } else {
-        ApiChecker.checkApi(response);
-        update();
+      if (!GetUtils.isEmail(emailRegController.text)) {
+        showToast('Email is not valid'.tr);
+        return;
       }
+
+      Get.dialog(
+        SimpleDialog(
+          children: [
+            Row(
+              children: [
+                const SizedBox(
+                  width: 30,
+                ),
+                const CircularProgressIndicator(
+                  color: ThemeProvider.appColor,
+                ),
+                const SizedBox(
+                  width: 30,
+                ),
+                SizedBox(
+                    child: Text(
+                  "Please wait".tr,
+                  style: const TextStyle(fontFamily: 'bold'),
+                )),
+              ],
+            )
+          ],
+        ),
+        barrierDismissible: false,
+      );
+
+      var response = await parser.uploadImage(
+        file1,
+        file2,
+        nameRegController.text,
+        emailRegController.text,
+        passwordRegController.text,
+        confirmpasswordRegController.text,
+        indianMobNumContoller.text,
+        ksaMobileNumRegController.text,
+        '1',
+        indianAddressLine1Controller.text,
+        indianAddressLine2Controller.text,
+        '1',
+        pinController1.text,
+        resAddressLine1Controller.text,
+        resAddressLine2Controller.text,
+        '2',
+        pinController2.text,
+      );
+
+      Get.back();
+
+      log('got response');
+      log('Status Code ${response.statusCode}');
+      if (response.statusCode == 200) {
+        log(response.statusCode.toString());
+        Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
+        debugPrint(myMap['user_details']['id'].toString());
+
+        if (myMap['user_details'] != '' && myMap['access_token'] != '') {
+          debugPrint(myMap['user']['id'].toString());
+          parser.saveToken('access_token', myMap['token']);
+        } else {
+          showToast('Access denied'.tr);
+        }
+      } else {
+        if (response.statusCode == 401) {
+          Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
+          if (myMap['error'] != '') {
+            showToast(myMap['error'.tr]);
+          } else {
+            showToast('Something went wrong'.tr);
+          }
+          update();
+        } else if (response.statusCode == 500) {
+          Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
+          if (myMap['error'] != '') {
+            showToast(myMap['error'.tr]);
+          } else {
+            showToast('Something went wrong'.tr);
+          }
+          update();
+        } else {
+          ApiChecker.checkApi(response);
+          update();
+        }
+      }
+    } catch (e) {
+      // Handle any exceptions that occur during the execution of the function.
+      log('An error occurred: $e');
+      // You can display an error message to the user or take any necessary actions.
     }
   }
 
   void getStates() async {
     var response = await parser.getStates();
     if (response.statusCode == 200) {
-      // final decodedData = jsonDecode(response.body);
       Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
-      // log(decodedData.toString());
+
       var allStates = myMap['data'];
 
       _allStates = [];
-      // _salonCateList = [];
+
       allStates.forEach((data) {
         States individual = States.fromJson(data);
 
         _allStates.add(individual);
       });
-      // final data = GetAllStates.fromJson(decodedData);
-      // List<States> extractedList = data.data;
-      // for (States state in extractedList) {
-      //   States oneStates = state;
-      //   allStates.add(oneStates);
     }
     log(_allStates.toString());
+    update();
+  }
+
+  void getAllBloodGroup() async {
+    var response = await parser.getBloodGroup();
+    if (response.statusCode == 200) {
+      Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
+
+      var allbloodGroup = myMap['data'];
+
+      _getAllbloodGroup = [];
+
+      allbloodGroup.forEach((data) {
+        BloodGroup individual = BloodGroup.fromJson(data);
+
+        _getAllbloodGroup.add(individual);
+      });
+    }
+    log(_getAllbloodGroup.toString());
     update();
   }
 
   void onBack() {
     var context = Get.context as BuildContext;
     Navigator.of(context).pop(true);
+  }
+
+  List<DropdownMenuItem<States>> buildDropDownMenuItems(List listItems) {
+    List<DropdownMenuItem<States>> items = [];
+    for (States listItem in listItems) {
+      items.add(
+        DropdownMenuItem(
+          value: listItem,
+          child: Text(
+            listItem.stateName,
+            style: const TextStyle(
+                color: textFormBase,
+                fontSize: 16,
+                letterSpacing: .1,
+                fontWeight: FontWeight.w500),
+          ),
+        ),
+      );
+    }
+
+    return items;
   }
 }

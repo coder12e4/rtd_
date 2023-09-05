@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rtd_project/backend/api/handler.dart';
 import 'package:rtd_project/backend/parser/login_parser.dart';
-import 'package:rtd_project/controller/authentication/auth.dart';
 import 'package:rtd_project/helper/router.dart';
-import 'package:rtd_project/util/theme.dart';
-import 'package:rtd_project/util/toast.dart';
+
 
 class LoginController extends GetxController implements GetxService {
   final LoginParser parser;
