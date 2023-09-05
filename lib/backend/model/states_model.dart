@@ -9,14 +9,14 @@ GetAllStates getAllStatesFromJson(String str) => GetAllStates.fromJson(json.deco
 String getAllStatesToJson(GetAllStates data) => json.encode(data.toJson());
 
 class GetAllStates {
-    List<States> data;
+    List<AllStatesModel> data;
 
     GetAllStates({
         required this.data,
     });
 
     factory GetAllStates.fromJson(Map<String, dynamic> json) => GetAllStates(
-        data: List<States>.from(json["data"].map((x) => States.fromJson(x))),
+        data: List<AllStatesModel>.from(json["data"].map((x) => AllStatesModel.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -24,14 +24,14 @@ class GetAllStates {
     };
 }
 
-class States {
+class AllStatesModel {
     int id;
     int countryId;
     String stateName;
     dynamic createdAt;
     dynamic updatedAt;
 
-    States({
+    AllStatesModel({
         required this.id,
         required this.countryId,
         required this.stateName,
@@ -39,7 +39,7 @@ class States {
         required this.updatedAt,
     });
 
-    factory States.fromJson(Map<String, dynamic> json) => States(
+    factory AllStatesModel.fromJson(Map<String, dynamic> json) => AllStatesModel(
         id: json["id"],
         countryId: json["country_id"],
         stateName: json["state_name"],

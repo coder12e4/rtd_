@@ -24,8 +24,8 @@ class RegisterController extends GetxController implements GetxService {
   void onInit() {
     getStates();
     getAllBloodGroup();
-    statesList = allStates;
-    _dropdownMenuItems = buildDropDownMenuItems(statesList!);
+
+    // _dropdownMenuItems = buildDropDownMenuItems(statesList!);
     // selectedItem != null ? dropdownMenuItems[0].value : null;
     super.onInit();
   }
@@ -89,16 +89,17 @@ class RegisterController extends GetxController implements GetxService {
   // XFile? _selectedImage;
   String? cover;
   final gallery = [];
-  List<States> _allStates = <States>[];
-  List<States> get allStates => _allStates;
+  List<AllStatesModel> _allStates = <AllStatesModel>[];
+  List<AllStatesModel> get allStates => _allStates;
   List<BloodGroup> _getAllbloodGroup = <BloodGroup>[];
   List<BloodGroup> get getAllbloodGroup => _getAllbloodGroup;
   String? statesName;
-  List<States>? statesList;
-  Rx<States?> selectedItem = Rx<States?>(null);
-  List<DropdownMenuItem<States>> _dropdownMenuItems =
-      <DropdownMenuItem<States>>[];
-  List<DropdownMenuItem<States>> get dropdownMenuItems => _dropdownMenuItems;
+  List<AllStatesModel>? statesList;
+  AllStatesModel? selectedItem;
+  List<DropdownMenuItem<AllStatesModel>> _dropdownMenuItems =
+      <DropdownMenuItem<AllStatesModel>>[];
+  List<DropdownMenuItem<AllStatesModel>> get dropdownMenuItems =>
+      _dropdownMenuItems;
   Future<XFile?> pickImage(ImageSource source) async {
     return await picker.pickImage(source: source);
   }
@@ -277,7 +278,9 @@ class RegisterController extends GetxController implements GetxService {
       );
 
       Get.back();
-
+      if (response.statusCode != 200) {
+        showToast('Server error ${response.statusCode}'.tr);
+      }
       log('got response');
       log('Status Code ${response.statusCode}');
       if (response.statusCode == 200) {
@@ -324,16 +327,19 @@ class RegisterController extends GetxController implements GetxService {
     var response = await parser.getStates();
     if (response.statusCode == 200) {
       Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
-
+      log(myMap.toString());
       var allStates = myMap['data'];
 
       _allStates = [];
 
       allStates.forEach((data) {
-        States individual = States.fromJson(data);
+        AllStatesModel individual = AllStatesModel.fromJson(data);
 
         _allStates.add(individual);
       });
+
+      _dropdownMenuItems = buildDropDownMenuItems(_allStates);
+      selectedItem != null ? _dropdownMenuItems[0].value : null;
     }
     log(_allStates.toString());
     update();
@@ -363,9 +369,10 @@ class RegisterController extends GetxController implements GetxService {
     Navigator.of(context).pop(true);
   }
 
-  List<DropdownMenuItem<States>> buildDropDownMenuItems(List listItems) {
-    List<DropdownMenuItem<States>> items = [];
-    for (States listItem in listItems) {
+  List<DropdownMenuItem<AllStatesModel>> buildDropDownMenuItems(
+      List listItems) {
+    List<DropdownMenuItem<AllStatesModel>> items = [];
+    for (AllStatesModel listItem in listItems) {
       items.add(
         DropdownMenuItem(
           value: listItem,
