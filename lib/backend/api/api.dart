@@ -79,12 +79,10 @@ class ApiService extends GetxService {
     iaddress2,
     iState,
     iPin,
-   
     kAddress1,
     kAddress2,
     kState,
     kPin,
-   
   ) async {
     try {
       http.MultipartRequest request = http.MultipartRequest(
@@ -92,6 +90,8 @@ class ApiService extends GetxService {
         Uri.parse(uri),
       );
       log('multipartBody length: ${multipartBody.length.toString()}');
+      log('multipartBody 1: ${multipartBody[0].file.name.toString()}');
+      log('multipartBody 2: ${multipartBody[1].file.name.toString()}');
       for (MultipartBody multipart in multipartBody) {
         File file = File(multipart.file.path);
         request.files.add(http.MultipartFile(

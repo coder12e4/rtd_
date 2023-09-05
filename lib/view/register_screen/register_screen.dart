@@ -100,7 +100,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: value.nameRegController, hitText: 'DOB'),
             textFieldHeight,
             DropdownButtonHideUnderline(
-              child: DropdownButton<States>(
+              child: DropdownButton<AllStatesModel>(
                   isExpanded: true,
                   hint: const Text(
                     "Select States",
@@ -111,13 +111,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         fontWeight: FontWeight.w500),
                   ),
                   icon: const Icon(Icons.keyboard_arrow_down_outlined),
-                  value: auth.selectedItem.value,
+                  value: value.selectedItem,
                   items: value.dropdownMenuItems,
                   onChanged: (value) {
                     setState(() {
-                      auth.selectedItem.value = value;
+                      auth.selectedItem = value;
 
-                      auth.statesName = auth.selectedItem.value!.stateName;
+                      auth.statesName = auth.selectedItem!.stateName;
 
                       //   newStateList.clear();
                       //  newStateList=[];
@@ -373,9 +373,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   log("first image ${_selectedImage!.path.toString()}");
                   log("Second image ${_selectedImage1!.path.toString()}");
                   value.onRegister(_selectedImage!, _selectedImage1!);
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => const NavigationBarpage(),
-                  ));
+                  // Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  //   builder: (context) => const NavigationBarpage(),
+                  // ));
                 }),
             textFieldHeight,
             textFieldHeight,
