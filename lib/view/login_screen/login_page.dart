@@ -29,7 +29,7 @@ class LOginPage extends StatelessWidget {
                   height: 5.h,
                 ),
                 Container(
-                  height: 390.h,
+                  height: 420.h,
                   width: 390.w,
                   decoration: const BoxDecoration(
                     color: whiteColor,
@@ -41,7 +41,7 @@ class LOginPage extends StatelessWidget {
                   child: Column(
                     children: [
                       SizedBox(
-                        height: 40.h,
+                        height: 30.h,
                       ),
                       TextFormFieldWidget(
                           controller: value.emailController,
@@ -55,8 +55,15 @@ class LOginPage extends StatelessWidget {
                       SizedBox(
                         height: 20.h,
                       ),
+                      TextFormFieldWidget(
+                          controller: value.ksaMobNumController,
+                          hitText: 'Ksa Mobile Number'),
+                      SizedBox(
+                        height: 20.h,
+                      ),
                       ButtonWidget(
                         press: () {
+                          value.onLogin();
                           showModalBottomSheet(
                               context: context,
                               builder: (context) => LoginComplited());
@@ -66,13 +73,13 @@ class LOginPage extends StatelessWidget {
                         buttonBackgroundColor: buttenBlue,
                         buttonForegroundColor: whiteColor,
                       ),
-                      SizedBox(
-                        height: 20.h,
-                      ),
+                      // SizedBox(
+                      //   height: 5.h,
+                      // ),
                       forgotButton(),
-                      SizedBox(
-                        height: 20.h,
-                      ),
+                      // SizedBox(
+                      //   height: 10.h,
+                      // ),
                       notAmembertext(),
                       SizedBox(
                         height: 15.h,
@@ -147,8 +154,4 @@ class LOginPage extends StatelessWidget {
   }
 }
 
-
-
 // ignore: must_be_immutable
-
-

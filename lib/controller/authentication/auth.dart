@@ -379,7 +379,7 @@ class RegisterController extends GetxController implements GetxService {
           child: Text(
             listItem.stateName,
             style: const TextStyle(
-                color: textFormBase,
+                color: Colors.black,
                 fontSize: 16,
                 letterSpacing: .1,
                 fontWeight: FontWeight.w500),

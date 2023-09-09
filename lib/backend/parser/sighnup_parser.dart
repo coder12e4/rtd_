@@ -32,8 +32,11 @@ class SignUpParser {
     kPin,
   ) async {
     return await apiService.uploadFiles(
-      Constants().baseUrl + Constants().register,
-      [MultipartBody('document_proof_india', data1),MultipartBody('document_proof_ksa', data2)],
+      'http://rtd.canisostudio.com/api/register',
+      [
+        MultipartBody('document_proof_india', data1),
+        MultipartBody('document_proof_ksa', data2)
+      ],
       name,
       email,
       password,
@@ -45,7 +48,6 @@ class SignUpParser {
       iaddress2,
       iState,
       iPin,
-     
       kAddress1,
       kAddress2,
       kState,
@@ -60,7 +62,7 @@ class SignUpParser {
 
   Future<Response> getBloodGroup() async {
     return await apiService
-        .getPublic(Constants().baseUrl + Constants().getAllBloodGroup );
+        .getPublic(Constants().baseUrl + Constants().getAllBloodGroup);
   }
 
   Future<void> saveToken(key, token) async {

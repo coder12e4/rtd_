@@ -105,7 +105,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hint: const Text(
                     "Select States",
                     style: TextStyle(
-                        color: textFormBase,
+                        color: Colors.black,
                         fontSize: 16,
                         letterSpacing: .1,
                         fontWeight: FontWeight.w500),
@@ -117,7 +117,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     setState(() {
                       auth.selectedItem = value;
 
-                      auth.statesName = auth.selectedItem!.stateName;
+                      auth.statesName = auth.selectedItem!.id.toString();
+                      log(auth.statesName.toString());
 
                       //   newStateList.clear();
                       //  newStateList=[];

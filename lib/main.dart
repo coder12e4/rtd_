@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart'; // Import the 'get' package
 import 'package:rtd_project/core/constraints/api_urls.dart';
+import 'package:rtd_project/core/constraints/http_certificate/http_certificate.dart';
 import 'package:rtd_project/helper/init.dart';
 import 'package:rtd_project/helper/router.dart';
 import 'package:rtd_project/util/theme.dart';
@@ -11,6 +14,7 @@ Future<void> main() async {
   // Get.put(Athentication());
   WidgetsFlutterBinding.ensureInitialized();
   await MainBinding().dependencies();
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
 }
 
