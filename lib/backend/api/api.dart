@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -88,12 +89,9 @@ class ApiService extends GetxService {
       http.MultipartRequest request = http.MultipartRequest(
         'POST',
         Uri.parse(uri),
-
       );
 
-      request.headers.addAll({
-        "Accept": "application/json"
-      });
+      request.headers.addAll({"Accept": "application/json"});
       for (MultipartBody multipart in multipartBody) {
         File file = File(multipart.file.path);
         request.files.add(http.MultipartFile(
@@ -120,7 +118,8 @@ class ApiService extends GetxService {
       request.fields['ksa_state'] = kState;
       request.fields['ksa_pin'] = kPin;
 
-      http.Response response = await http.Response.fromStream(await request.send());
+      http.Response response =
+          await http.Response.fromStream(await request.send());
       log(uri);
       log(response.statusCode.toString());
       log('upload image');
@@ -133,16 +132,20 @@ class ApiService extends GetxService {
 
   Future<Response> postPublic(String url, dynamic body) async {
     try {
-      http.Response response = await http.post(
+      http.Response response = await http
+          .post(
             Uri.parse(url),
-            headers: {'Accept': "application/json"},
+            headers: {
+              'Accept': "application/json",
+              "Content-Type": "application/json"
+            },
             body: jsonEncode(body),
           )
           .timeout(Duration(seconds: timeoutInSeconds));
 
       print(response.body);
       //print(appBaseUrl + uri);
-      return parseResponse(response,url);
+      return parseResponse(response, url);
     } catch (e) {
       return const Response(statusCode: 1, statusText: connectionIssue);
     }
