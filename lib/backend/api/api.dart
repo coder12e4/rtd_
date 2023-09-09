@@ -88,10 +88,12 @@ class ApiService extends GetxService {
       http.MultipartRequest request = http.MultipartRequest(
         'POST',
         Uri.parse(uri),
+
       );
-      log('multipartBody length: ${multipartBody.length.toString()}');
-      log('multipartBody 1: ${multipartBody[0].file.name.toString()}');
-      log('multipartBody 2: ${multipartBody[1].file.name.toString()}');
+
+      request.headers.addAll({
+        "Accept": "application/json"
+      });
       for (MultipartBody multipart in multipartBody) {
         File file = File(multipart.file.path);
         request.files.add(http.MultipartFile(
@@ -101,6 +103,7 @@ class ApiService extends GetxService {
           filename: file.path.split('/').last,
         ));
       }
+
       request.fields['name'] = name;
       request.fields['email'] = email;
       request.fields['password'] = password;
@@ -117,8 +120,7 @@ class ApiService extends GetxService {
       request.fields['ksa_state'] = kState;
       request.fields['ksa_pin'] = kPin;
 
-      http.Response response =
-          await http.Response.fromStream(await request.send());
+      http.Response response = await http.Response.fromStream(await request.send());
       log(uri);
       log(response.statusCode.toString());
       log('upload image');
@@ -129,20 +131,18 @@ class ApiService extends GetxService {
     }
   }
 
-  Future<Response> postPublic(String uri, dynamic body,
-      {Map<String, String>? headers}) async {
+  Future<Response> postPublic(String url, dynamic body) async {
     try {
-      http.Response response = await http
-          .post(
-            Uri.parse(appBaseUrl + uri),
-            headers: {"Content-Type": "application/json"},
+      http.Response response = await http.post(
+            Uri.parse(url),
+            headers: {'Accept': "application/json"},
             body: jsonEncode(body),
           )
           .timeout(Duration(seconds: timeoutInSeconds));
 
       print(response.body);
-      print(appBaseUrl + uri);
-      return parseResponse(response, appBaseUrl + uri);
+      //print(appBaseUrl + uri);
+      return parseResponse(response,url);
     } catch (e) {
       return const Response(statusCode: 1, statusText: connectionIssue);
     }
@@ -154,10 +154,10 @@ class ApiService extends GetxService {
     String token,
   ) async {
     try {
-      http.Response response = await http.post(Uri.parse(appBaseUrl + uri),
+      http.Response response = await http.post(Uri.parse(uri),
           body: jsonEncode(body),
           headers: {
-            'Content-Type': 'application/json',
+            "Accept": "application/json",
             'Authorization': 'Bearer $token'
           }).timeout(Duration(seconds: timeoutInSeconds));
 
@@ -177,7 +177,7 @@ class ApiService extends GetxService {
     try {
       http.Response response = await http.post(Uri.parse(appBaseUrl + uri),
           headers: {
-            'Content-Type': 'application/json',
+            "Accept": "application/json",
             'Authorization': 'Bearer $token'
           }).timeout(Duration(seconds: timeoutInSeconds));
       return parseResponse(response, uri);

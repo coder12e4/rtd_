@@ -11,13 +11,10 @@ class LoginParser {
   LoginParser(
       {required this.sharedPreferencesManager, required this.apiService});
 
-  Future<Response> login(
-    var body,
-  ) async {
-    var response = apiService.postPublic(
-      Constants().baseUrl + Constants().login,
-      body,
-    );
+  Future<Response> login(dynamic body) async {
+    var response = await apiService.postPublic("http://rtd.canisostudio.com/api/user/login", body);
     return response;
   }
+
+
 }

@@ -80,7 +80,7 @@ class MainBinding extends Bindings {
       permanent: true,
     );
 
-    Get.lazyPut(() => ApiService(appBaseUrl: Constants().baseUrl));
+    Get.lazyPut(() => ApiService(appBaseUrl: Constants.baseUrl));
 
     // // Parser LazyLoad
 

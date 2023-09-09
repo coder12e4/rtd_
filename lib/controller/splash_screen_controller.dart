@@ -16,7 +16,7 @@ class SplashScreenController extends GetxController {
   }
 
   void onLogin() {
-    Get.delete<LoginController>(force: true);
+   // Get.delete<LoginController>(force: true);
     Get.toNamed(AppRouter.getInitialRoute());
   }
 }

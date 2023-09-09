@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:rtd_project/controller/authentication/auth.dart';
+import 'package:rtd_project/controller/authentication/regitration.dart';
 
 class RegisterBinding extends Bindings {
   @override
