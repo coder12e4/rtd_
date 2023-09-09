@@ -26,11 +26,16 @@ class LoginParser {
   }
 
   Future<void> saveInfo(UserData userData) async {
-    log(userData.name.toString());
     final jsondata = userData.toJson();
     final data = jsonEncode(jsondata);
     await sharedPreferencesManager.putString('user_data', data);
 
     log('saved data .......$data');
+  }
+
+  Future<String?> getString(key) async {
+    final data = await sharedPreferencesManager.getString(key);
+
+    return data;
   }
 }

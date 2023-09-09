@@ -132,13 +132,14 @@ class LOginPage extends StatelessWidget {
                           buttonForegroundColor: whiteColor,
                         ),
                         SizedBox(
-                          height: 30.h,
+                          height: 10.h,
                         ),
                         // forgotButton(),
                         // SizedBox(
                         //   height: 10.h,
                         // ),
-                        notAmembertext(),
+
+                        Center(child: notAmembertext()),
                         SizedBox(
                           height: 10.h,
                         ),

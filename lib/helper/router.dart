@@ -207,7 +207,10 @@ class AppRouter {
 
   static List<GetPage> routes = [
     GetPage(
-        name: initial, page: () => const LOginPage(), binding: LoginBinding()),
+      name: initial,
+      page: () => const LOginPage(),
+      binding: LoginBinding(),
+    ),
     // GetPage(
     //     name: verifyRoutes,
     //     page: () => const VerifyScreen(),

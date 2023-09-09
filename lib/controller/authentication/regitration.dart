@@ -1,8 +1,14 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 import 'package:rtd_project/backend/model/bloodgroup_model.dart';
 import 'package:rtd_project/backend/model/states_model.dart';
 import 'package:rtd_project/backend/parser/sighnup_parser.dart';
@@ -10,11 +16,7 @@ import 'package:rtd_project/util/theme.dart';
 import 'package:rtd_project/util/toast.dart';
 import 'package:rtd_project/view/profile_screen/profile_edit_screen/profile_edit_screen.dart';
 
-import 'package:http_parser/http_parser.dart';
-import 'package:http/http.dart' as http;
-import 'package:path/path.dart';
-import 'package:async/async.dart';
-import 'dart:convert';
+import '../../helper/router.dart';
 
 class RegisterController extends GetxController implements GetxService {
   RegisterController({required this.parser});
@@ -103,7 +105,7 @@ class RegisterController extends GetxController implements GetxService {
 
   AllStatesModel? stateKsa;
   String? statesksa;
-  
+
   String? bloodgroupname;
   List<BloodGroup>? bloodgrouplist;
   BloodGroup? bloodGroup;
@@ -118,11 +120,12 @@ class RegisterController extends GetxController implements GetxService {
   List<DropdownMenuItem<BloodGroup>> get dropdownMenuItemsBloodgroup =>
       _dropdownMenuItemsBloodgroup;
 
-var isSelected = false.obs;
+  var isSelected = false.obs;
 
   void toggleSelection() {
     isSelected.value = !isSelected.value;
   }
+
   Future<XFile?> pickImage(ImageSource source) async {
     return await picker.pickImage(source: source);
   }
@@ -473,6 +476,7 @@ var isSelected = false.obs;
         successToast(message.message.toString());
       } else {
         showToast(k['message'].toString());
+        onLogin();
       }
 
       //
@@ -518,6 +522,10 @@ var isSelected = false.obs;
       }else{
       }*/
     });
+  }
+
+  void onLogin() {
+    Get.offNamed(AppRouter.getInitialRoute());
   }
 }
 

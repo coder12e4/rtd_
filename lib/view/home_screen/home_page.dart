@@ -20,8 +20,8 @@ class _NavigationBarpageState extends State<NavigationBarpage> {
     const HomePage(),
     const WallPage(),
     const LoanPage(),
-     BookPage(),
-    const ProfilePage(),
+    BookPage(),
+    ProfilePage(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -69,7 +69,6 @@ class _NavigationBarpageState extends State<NavigationBarpage> {
                           backgroundColor: Colors.black,
                           icon: Icon(Icons.person_2_outlined),
                           label: 'Profile'),
-
                     ]),
               ),
             ),

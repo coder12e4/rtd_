@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rtd_project/backend/parser/login_parser.dart';
+import 'package:rtd_project/controller/authentication/regitration.dart';
 import 'package:rtd_project/helper/router.dart';
 
 import '../../backend/api/handler.dart';
@@ -14,8 +18,10 @@ class LoginController extends GetxController implements GetxService {
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  bool passwordVisible = false;
+  RegisterController? registerController;
 
+  bool passwordVisible = false;
+  UserData? userData;
   void visibiltyValueChange() {
     passwordVisible = !passwordVisible;
     update();
@@ -95,10 +101,13 @@ class LoginController extends GetxController implements GetxService {
         showToast('Access denied'.tr);
       }
   */
-
+      if (myMap['message'] != 'success') {
+        showToast(myMap['message']);
+        return;
+      }
       if (myMap['data']['name'] != '' && myMap['access_token'] != '') {
         debugPrint(myMap['data']['id'].toString());
-        // parser.saveToken(myMap['token']);
+        parser.saveToken('access_token', myMap['access_token']);
         parser.saveInfo(UserData(
           id: myMap['data']['id'],
           name: myMap['data']['name'],
@@ -122,8 +131,14 @@ class LoginController extends GetxController implements GetxService {
           updatedAt: myMap['data']['updated_at'],
           deletedAt: myMap['data']['deleted_at'],
         ));
-        
+        String? data = await parser.getString('user_data');
+        Map<String, dynamic> map = jsonDecode(data!);
+        userData = UserData.fromJson(map);
+
+        log('userData***********${userData!.name}');
         successToast('Login Successful');
+        Future.delayed(const Duration(seconds: 3))
+            .then((value) => onLoginSuccess());
       } else {
         showToast('Access denied'.tr);
       }
@@ -157,7 +172,6 @@ class LoginController extends GetxController implements GetxService {
   }
 
   void onLoginSuccess() {
-    // Get.delete<RegisterController>(force: true);
-    Get.toNamed(AppRouter.getBottomNavRoute());
+    Get.offAllNamed(AppRouter.getBottomNavRoute());
   }
 }

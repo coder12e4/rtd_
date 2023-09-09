@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:rtd_project/helper/router.dart';
 
-
 class SplashScreenController extends GetxController {
   @override
   void onInit() {
@@ -15,7 +14,7 @@ class SplashScreenController extends GetxController {
   }
 
   void onLogin() {
-   // Get.delete<LoginController>(force: true);
-    Get.toNamed(AppRouter.getInitialRoute());
+    // Get.delete<LoginController>(force: true);
+    Get.offNamed(AppRouter.getInitialRoute());
   }
 }
