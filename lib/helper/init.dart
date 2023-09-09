@@ -65,6 +65,7 @@
 
 import 'package:get/get.dart';
 import 'package:rtd_project/backend/api/api.dart';
+import 'package:rtd_project/backend/parser/home_parser.dart';
 import 'package:rtd_project/backend/parser/login_parser.dart';
 import 'package:rtd_project/backend/parser/sighnup_parser.dart';
 import 'package:rtd_project/core/constraints/api_urls.dart';
@@ -97,6 +98,11 @@ class MainBinding extends Bindings {
     Get.lazyPut(
         () => SignUpParser(
             apiService: Get.find(), sharedPreferencesManager: Get.find()),
+        fenix: true);
+
+    Get.lazyPut(
+        () => HomeParser(
+            sharedPreferencesManager: Get.find(), apiService: Get.find()),
         fenix: true);
 
     //   Get.lazyPut(

@@ -1,6 +1,8 @@
 import 'package:awesome_circular_chart/awesome_circular_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:rtd_project/controller/home_screen_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/view/notification/notification.dart';
 
@@ -13,98 +15,100 @@ class HomePage extends StatelessWidget {
         child: Scaffold(
             backgroundColor: baseColor,
             body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  homeTextWidget(context),
-                  Container(
-                    // height: 1050.h,
-                    //hallo
-                    decoration: const BoxDecoration(
-                      color: whiteColor,
-                      borderRadius: BorderRadiusDirectional.only(
-                        topEnd: Radius.circular(40),
-                        topStart: Radius.circular(40),
+              child: GetBuilder<HomeController>(builder: (value) {
+                return Column(
+                  children: [
+                    homeTextWidget(context),
+                    Container(
+                      // height: 1050.h,
+                      //hallo
+                      decoration: const BoxDecoration(
+                        color: whiteColor,
+                        borderRadius: BorderRadiusDirectional.only(
+                          topEnd: Radius.circular(40),
+                          topStart: Radius.circular(40),
+                        ),
                       ),
-                    ),
-                    child: Column(
-                        // physics: const NeverScrollableScrollPhysics(),
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(18.0),
-                            child: Container(
-                              height: 530.h,
-                              // width: 100.w,
-                              decoration: BoxDecoration(
-                                  color: textFormBase,
-                                  borderRadius: BorderRadius.circular(30)),
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 68.h, vertical: 68.w),
-                                      child: Stack(
-                                        children: [
-                                          Positioned(
-                                            child: Container(
-                                              child: AnimatedCircularChart(
-                                                holeRadius: 70.r,
-                                                key: _chartKey,
-                                                size: Size(350.w, 100.h),
-                                                initialChartData: const <CircularStackEntry>[
-                                                  CircularStackEntry(
-                                                    <CircularSegmentEntry>[
-                                                      CircularSegmentEntry(
-                                                        66.67,
-                                                        Color.fromARGB(
-                                                            255, 147, 8, 96),
-                                                        rankKey: 'remaining',
-                                                      ),
-                                                      CircularSegmentEntry(
-                                                        33.33,
-                                                        Color.fromARGB(
-                                                            255, 207, 200, 200),
-                                                        rankKey: 'completed',
-                                                      ),
-                                                    ],
-                                                    rankKey: 'progress',
+                      child: Column(
+                          // physics: const NeverScrollableScrollPhysics(),
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(18.0),
+                              child: Container(
+                                height: 530.h,
+                                // width: 100.w,
+                                decoration: BoxDecoration(
+                                    color: textFormBase,
+                                    borderRadius: BorderRadius.circular(30)),
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 68.h, vertical: 68.w),
+                                        child: Stack(
+                                          children: [
+                                            Positioned(
+                                              child: Container(
+                                                child: AnimatedCircularChart(
+                                                  holeRadius: 70.r,
+                                                  key: _chartKey,
+                                                  size: Size(350.w, 100.h),
+                                                  initialChartData: const <CircularStackEntry>[
+                                                    CircularStackEntry(
+                                                      <CircularSegmentEntry>[
+                                                        CircularSegmentEntry(
+                                                          66.67,
+                                                          Color.fromARGB(
+                                                              255, 147, 8, 96),
+                                                          rankKey: 'remaining',
+                                                        ),
+                                                        CircularSegmentEntry(
+                                                          33.33,
+                                                          Color.fromARGB(255,
+                                                              207, 200, 200),
+                                                          rankKey: 'completed',
+                                                        ),
+                                                      ],
+                                                      rankKey: 'progress',
+                                                    ),
+                                                  ],
+                                                  chartType:
+                                                      CircularChartType.Radial,
+                                                  percentageValues: true,
+                                                  // holeLabel: 'Total Collection',
+                                                  labelStyle: const TextStyle(
+                                                    color: baseColor,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 24.0,
                                                   ),
-                                                ],
-                                                chartType:
-                                                    CircularChartType.Radial,
-                                                percentageValues: true,
-                                                // holeLabel: 'Total Collection',
-                                                labelStyle: const TextStyle(
-                                                  color: baseColor,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 24.0,
+                                                  edgeStyle:
+                                                      SegmentEdgeStyle.round,
+                                                  startAngle: BorderSide
+                                                      .strokeAlignOutside,
                                                 ),
-                                                edgeStyle:
-                                                    SegmentEdgeStyle.round,
-                                                startAngle: BorderSide
-                                                    .strokeAlignOutside,
                                               ),
                                             ),
-                                          ),
-                                          Positioned(
-                                            left: 20.w,
-                                            child: graphCenterText(context),
-                                          ),
-                                        ],
+                                            Positioned(
+                                              left: 20.w,
+                                              child: graphCenterText(context),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  incomBreakdown(),
-                                ],
+                                    incomBreakdown(),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          activeLoan(),
-                        ]),
-                  ),
-                ],
-              ),
+                            activeLoan(),
+                          ]),
+                    ),
+                  ],
+                );
+              }),
             )));
   }
 

@@ -133,4 +133,9 @@ class LoginController extends GetxController implements GetxService {
     // Get.delete<RegisterController>(force: true);
     Get.toNamed(AppRouter.getSignUpRoute());
   }
+
+  void onLoginSuccess() {
+    // Get.delete<RegisterController>(force: true);
+    Get.toNamed(AppRouter.getBottomNavRoute());
+  }
 }
