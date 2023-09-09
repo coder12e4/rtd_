@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -10,11 +9,10 @@ import 'package:rtd_project/backend/model/states_model.dart';
 import 'package:rtd_project/controller/authentication/regitration.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
-import 'package:rtd_project/core/common_widget/dropdown_widget.dart';
 import 'package:rtd_project/core/common_widget/imagepicker.dart';
 import 'package:rtd_project/core/common_widget/textformfield_widget.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
-import 'package:rtd_project/view/home_screen/home_page.dart';
+import 'package:rtd_project/util/toast.dart';
 
 import '../../util/validators.dart';
 
@@ -66,17 +64,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Form textFieldContainer(BuildContext context, RegisterController value) {
-    final RegisterController imagePickerService = Get.find();
-
-    List<String> allstates = [];
-
-    List<String> allBloodGroup = [];
     final _formKey = GlobalKey<FormState>();
 
     return Form(
       key: _formKey,
       child: Container(
-          height: 2200.h,
+          height: 1500.h,
           width: 390.w,
           decoration: const BoxDecoration(
             color: whiteColor,
@@ -97,13 +90,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               TextFormFieldWidget(
                   validator: Rtd_Validators.emailValidator,
-
-                  controller: value.emailRegController, hitText: 'email'),
+                  controller: value.emailRegController,
+                  hitText: 'email'),
 
               textFieldHeight,
               TextFormFieldWidget(
-                validator: Rtd_Validators.passwordValidator,
-                  controller: value.passwordRegController, hitText: 'password'),
+                  validator: Rtd_Validators.passwordValidator,
+                  controller: value.passwordRegController,
+                  hitText: 'password'),
 
               textFieldHeight,
               TextFormFieldWidget(
@@ -121,10 +115,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   controller: value.confirmpasswordRegController,
                   hitText: 'confirm password'),
 
-
               textFieldHeight,
               TextFormFieldWidget(
-                validator: Rtd_Validators.mobileNumberValidator,
+                  validator: Rtd_Validators.mobileNumberValidator,
                   controller: value.mobileNumRegController,
                   hitText: 'Indian Mobile Number'),
               textFieldHeight,
@@ -136,10 +129,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
               textFieldHeight,
 
               Container(
-                margin: EdgeInsets.only(left: 5,right: 5),
-                padding: EdgeInsets.only(left: 10,right: 10),
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: textFormBase
-                ),
+                margin: const EdgeInsets.only(left: 5, right: 5),
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: textFormBase),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<BloodGroup>(
                       isExpanded: true,
@@ -175,7 +169,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               dividerAndHeadingWidget(heading: 'Indian Address', width: 140.w),
               textFieldHeight,
               TextFormFieldWidget(
-                validator: Rtd_Validators.noneEmptyValidator,
+                  validator: Rtd_Validators.noneEmptyValidator,
                   controller: value.indianAddressLine1Controller,
                   hitText: 'Address Line 1'),
               textFieldHeight,
@@ -185,13 +179,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hitText: 'Address Line 2'),
               textFieldHeight,
 
-
-
               Container(
-                margin: EdgeInsets.only(left: 5,right: 5),
-                padding: EdgeInsets.only(left: 10,right: 10),
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: textFormBase
-                ),
+                margin: const EdgeInsets.only(left: 5, right: 5),
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: textFormBase),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<AllStatesModel>(
                       isExpanded: true,
@@ -215,21 +208,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ),
 
-
-
-
-              /* TextFormFieldWidget(
-                  controller: value.watsappNumRegController,
-                  hitText: 'Whatsapp Number'),
-              textFieldHeight,*/
               //////////////////////////End first Section?///////////////////////////////////////////////////////////
-
-
 
               textFieldHeight,
               TextFormFieldWidget(
                   validator: Rtd_Validators.pincodeValidator,
-                  controller: value.pinController1, hitText: 'pin'),
+                  controller: value.pinController1,
+                  hitText: 'pin'),
 
               textFieldHeight,
               Center(
@@ -245,7 +230,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   press: () {
                     showModalBottomSheet(
                       context: context,
-                      builder: (context) => Imagepiker(
+                      builder: (context) => Imagepiker( 
                         onImageSelected: _updateSelectedImage,
                       ),
                     );
@@ -269,18 +254,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   controller: value.resAddressLine2Controller,
                   hitText: 'Address Line 2'),
 
-
               textFieldHeight,
               TextFormFieldWidget(
                   validator: Rtd_Validators.pincodeValidator,
-                  controller: value.pinController2, hitText: 'pin'),
+                  controller: value.pinController2,
+                  hitText: 'pin'),
               textFieldHeight,
 
               Container(
-                margin: EdgeInsets.only(left: 5,right: 5),
-                padding: EdgeInsets.only(left: 10,right: 10),
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: textFormBase
-                ),
+                margin: const EdgeInsets.only(left: 5, right: 5),
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: textFormBase),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<AllStatesModel>(
                       isExpanded: true,
@@ -303,7 +289,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         });
                       }),
                 ),
-
               ),
 
               textFieldHeight,
@@ -335,153 +320,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     borderAvalable: false),
               ),
 
-              //////////////////////////End Of Second Section?///////////////////////////////////////////////////////////
-          /*    textFieldHeight,
-              dividerAndHeadingWidget(
-                  heading: ' Emergency Contact 1 (KSA)', width: 70.w),
-              textFieldHeight,
-              TextFormFieldWidget(
-                  validator: Rtd_Validators.noneEmptyValidator,
-                  controller: value.emName1Controller, hitText: 'Name'),
-              textFieldHeight,
-              const DropedownWidget(hintText: 'Relationship', dropDownlist: []),
-              textFieldHeight,
-              TextFormFieldWidget(
-                  validator: Rtd_Validators.mobileNumberValidator,
-                  controller: value.emMobileNum1Controller,
-                  hitText: 'Mobile Number'),
-          */    //////////////////////////End of third Section?///////////////////////////////////////////////////////////
-          /*    textFieldHeight,
-              dividerAndHeadingWidget(
-                  heading: ' Emergency Contact 2 (KSA)', width: 60.w),
-              textFieldHeight,
-              TextFormFieldWidget(
-                  validator: Rtd_Validators.noneEmptyValidator,
-                  controller: value.emIndiaName2Controller, hitText: 'Name'),
-              textFieldHeight,
-           *//*   const DropedownWidget(hintText: 'Relationship', dropDownlist: []),
-           *//*   textFieldHeight,
-              TextFormFieldWidget(
-                  validator: Rtd_Validators.mobileNumberValidator,
-                  controller: value.emMObilenum2Controller,
-                  hitText: 'Mobile Number'),
-
-*/
-
-/*
-              textFieldHeight,
-*/
-              /////////////////////End of Fiveth Section////////////////////
-              /*      dividerAndHeadingWidget(
-                  heading: 'Emergency Contact 1: (india)', width: 60.w),
-              textFieldHeight,
-              TextFormFieldWidget(
-                  controller: value.emIndiaName1Controller, hitText: 'Name'),
-              textFieldHeight,
-              const DropedownWidget(hintText: 'Relationship', dropDownlist: []),
-              textFieldHeight,
-              TextFormFieldWidget(
-                  controller: value.emIndiaMobile1Controller,
-                  hitText: 'Mobile Number'),
-              /////////////////////End of Sixth Section////////////////////
-              textFieldHeight,
-              dividerAndHeadingWidget(
-                  heading: 'Emergency Contact 2: (india)', width: 60.w),
-              textFieldHeight,
-              TextFormFieldWidget(
-                  controller: value.emIndiaName2Controller, hitText: 'Name'),
-              textFieldHeight,
-              const DropedownWidget(hintText: 'Relationship', dropDownlist: []),
-              textFieldHeight,
-              TextFormFieldWidget(
-                  controller: value.emIndiaMobile2Controller,
-                  hitText: 'Mobile Number'),
-              textFieldHeight,
-              /////////////////End Of Seventh section///////////////////
-              const Divider(),
-              textFieldHeight,
-              TextFormFieldWidget(
-                  controller: value.iqamaNumController, hitText: 'Iqama Number'),
-              textFieldHeight,
-              TextFormFieldWidget(
-                  controller: value.iqamaexperyDateController,
-                  hitText: 'Expiry Date'),
-              textFieldHeight,
-              ////////////////////////End Of Eight Section//////////////////////////
-              const Divider(),
-              textFieldHeight,
-              TextFormFieldWidget(
-                  controller: value.passNumController,
-                  hitText: 'Passport Number'),
-              textFieldHeight,
-              TextFormFieldWidget(
-                  controller: value.passExperyNumController,
-                  hitText: 'Expiry Date'),
-              textFieldHeight,
-              ////////////////////////////End of Nine Section//////////////////
-              const Divider(),
-              textFieldHeight,
-              TextFormFieldWidget(
-                  controller: value.maritalStatusController,
-                  hitText: 'Martial Status'),
-              textFieldHeight,
-              TextFormFieldWidget(
-                  controller: value.numOfChildrenController,
-                  hitText: 'Number of Children'),
-              textFieldHeight,
-              ////////////////////////End of Tenth Section/////////////////////
-              const Divider(),
-              textFieldHeight,
-              TextFormFieldWidget(
-                  controller: value.nomineController, hitText: 'Nominee'),
-              textFieldHeight,
-              const DropedownWidget(hintText: 'Relationship', dropDownlist: []),
-              textFieldHeight,
-              //////////////////////////End of 11T Section////////////////////////////
-              const Divider(),
-              textFieldHeight,
-              TextFormFieldWidget(
-                  controller: value.sponserNameController,
-                  hitText: 'Sponsor Name'),
-              textFieldHeight,
-              TextFormFieldWidget(
-                  controller: value.locationController, hitText: 'Location'),
-              textFieldHeight,
-              TextFormFieldWidget(
-                  controller: value.estNmaeController,
-                  hitText: 'Establishment Name'),
-              textFieldHeight,
-              TextFormFieldWidget(
-                  controller: value.teleNumController,
-                  hitText: 'Telephone Number'),
-              textFieldHeight,
-              TextFormFieldWidget(
-                  controller: value.lastMobileNumController,
-                  hitText: 'Mobile Number'),
-              textFieldHeight,
-              TextFormFieldWidget(
-                  controller: value.sprMobileNumController,
-                  hitText: 'Sponsor Related Mobile Number'),
-              textFieldHeight,
-              ///////////////////////End of 12TH Section//////////////////
-              const Divider(),
-              textFieldHeight,
-              TextFormFieldWidget(
-                  controller: value.resVehichleNumController,
-                  hitText: 'Responsible Vehicle Number'),
-              textFieldHeight,
-              TextFormFieldWidget(
-                  controller: value.vehMoedelController, hitText: 'Model'),
-              textFieldHeight,
-              TextFormFieldWidget(
-                  controller: value.vehTypeController, hitText: 'Type'),
-        */
-
-            //  textFieldHeight,
-              /*TextFormFieldWidget(
-                  validator: Rtd_Validators.noneEmptyValidator,
-                  controller: value.vehCompanyController, hitText: 'Company'),
-              textFieldHeight,*/
               textFieldHeight,
               const RadioButtonWidget(),
               textFieldHeight,
@@ -491,9 +329,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   buttonText: 'Submit',
                   borderAvalable: false,
                   press: () {
-                    if (_formKey.currentState!.validate()) {
-                      value.onRegister(_selectedImage!, _selectedImage1!);
-                      // Form is valid, perform desired action
+                    if (auth.isSelected.value) {
+                      if (_formKey.currentState!.validate()) {
+                        value.onRegister(_selectedImage!, _selectedImage1!);
+                      }
+                    } else {
+                      showToast('Please Agree the Terms and Conditions');
                     }
                     log("first image ${_selectedImage!.path.toString()}");
                     log("Second image ${_selectedImage1!.path.toString()}");
@@ -646,7 +487,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           SizedBox(
             height: 20.h,
           ),
-         /* const Text("No file Selected",
+          /* const Text("No file Selected",
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -678,29 +519,23 @@ class RadioButtonWidget extends StatefulWidget {
 }
 
 class _RadioButtonWidgetState extends State<RadioButtonWidget> {
-  bool _isSelected = false;
-
+  final RegisterController auth = Get.find();
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        setState(() {
-          _isSelected = !_isSelected; // Toggle the selection state
-        });
+        auth.toggleSelection();
       },
       child: Row(
         children: [
-          Radio<String>(
-            // The actual Radio widget
-            value: 'accepted',
-            groupValue: _isSelected
-                ? 'accepted'
-                : '', // Use groupValue based on _isSelected
-            onChanged: (String? newValue) {
-              setState(() {
-                _isSelected = !_isSelected; // Toggle the selection state
-              });
-            },
+          Obx(
+            () => Radio<String>(
+              value: 'accepted',
+              groupValue: auth.isSelected.value ? 'accepted' : '',
+              onChanged: (String? newValue) {
+                auth.toggleSelection();
+              },
+            ),
           ),
           SizedBox(width: 2.w),
           const Column(

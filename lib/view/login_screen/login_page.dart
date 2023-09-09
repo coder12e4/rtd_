@@ -26,6 +26,9 @@ class LOginPage extends StatelessWidget {
               // crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 welcomeWidget(context),
+                SizedBox(
+                  height: 45.h,
+                ),
                 nochBarAboveLoginContainer(),
                 SizedBox(
                   height: 5.h,
@@ -51,7 +54,7 @@ class LOginPage extends StatelessWidget {
                         TextFormFieldWidget(
                             validator: Rtd_Validators.noneEmptyValidator,
                             controller: value.emailController,
-                            hitText: 'Username'),
+                            hitText: 'Registered Mobile Number'),
                         SizedBox(
                           height: 20.h,
                         ),
@@ -129,7 +132,7 @@ class LOginPage extends StatelessWidget {
                           buttonForegroundColor: whiteColor,
                         ),
                         SizedBox(
-                          height: 10.h,
+                          height: 30.h,
                         ),
                         // forgotButton(),
                         // SizedBox(

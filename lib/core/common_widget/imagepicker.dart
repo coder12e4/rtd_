@@ -12,9 +12,8 @@ class Imagepiker extends StatefulWidget {
   Imagepiker({
     super.key,
     required this.onImageSelected,
-  
   });
-
+  // final String sizeText;
   final ValueChanged<XFile?> onImageSelected;
 
   @override
@@ -129,8 +128,9 @@ class _ImagepikerState extends State<Imagepiker> {
               SizedBox(
                 height: 20.h,
               ),
-              const Text("No file Selected",
+              const Text("*Maximum Image Size 2 MB",
                   style: TextStyle(
+                    color: Colors.red,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   )),

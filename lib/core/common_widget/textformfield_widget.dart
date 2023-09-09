@@ -15,7 +15,7 @@ class TextFormFieldWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FocusNode node = FocusNode();
+    // FocusNode node = FocusNode();
     return Container(
       width: 290.w,
       child: Padding(
@@ -30,19 +30,19 @@ class TextFormFieldWidget extends StatelessWidget {
               fillColor: textFormBase,
               filled: true,
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: textFormBase),
+                borderSide: const BorderSide(color: textFormBase),
                 borderRadius: BorderRadius.circular(20.0),
               ),
               enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: textFormBase),
+                borderSide: const BorderSide(color: textFormBase),
                 borderRadius: BorderRadius.circular(20.0),
               ),
               focusedErrorBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: textFormBase),
+                borderSide: const BorderSide(color: textFormBase),
                 borderRadius: BorderRadius.circular(20.0),
               ),
               errorBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: textFormBase),
+                borderSide: const BorderSide(color: textFormBase),
                 borderRadius: BorderRadius.circular(20.0),
               ),
               hintStyle: const TextStyle(

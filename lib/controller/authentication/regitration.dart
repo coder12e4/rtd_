@@ -3,11 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:rtd_project/backend/api/handler.dart';
 import 'package:rtd_project/backend/model/bloodgroup_model.dart';
 import 'package:rtd_project/backend/model/states_model.dart';
 import 'package:rtd_project/backend/parser/sighnup_parser.dart';
-import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/util/theme.dart';
 import 'package:rtd_project/util/toast.dart';
 import 'package:rtd_project/view/profile_screen/profile_edit_screen/profile_edit_screen.dart';
@@ -102,9 +100,10 @@ class RegisterController extends GetxController implements GetxService {
   String? statesName;
   List<AllStatesModel>? statesList;
   AllStatesModel? selectedItem;
+
   AllStatesModel? stateKsa;
   String? statesksa;
-
+  
   String? bloodgroupname;
   List<BloodGroup>? bloodgrouplist;
   BloodGroup? bloodGroup;
@@ -119,6 +118,11 @@ class RegisterController extends GetxController implements GetxService {
   List<DropdownMenuItem<BloodGroup>> get dropdownMenuItemsBloodgroup =>
       _dropdownMenuItemsBloodgroup;
 
+var isSelected = false.obs;
+
+  void toggleSelection() {
+    isSelected.value = !isSelected.value;
+  }
   Future<XFile?> pickImage(ImageSource source) async {
     return await picker.pickImage(source: source);
   }
@@ -275,8 +279,11 @@ class RegisterController extends GetxController implements GetxService {
         ),
         barrierDismissible: false,
       );
+      log("state 1${selectedItem!.id.toString()}");
+      log('state2${stateKsa!.id.toString()}');
+      log('blood group${bloodGroup!.id.toString()}');
 
-      Upload(
+      await Upload(
         file1,
         file2,
         nameRegController.text,
@@ -285,14 +292,14 @@ class RegisterController extends GetxController implements GetxService {
         confirmpasswordRegController.text,
         indianMobNumContoller.text,
         ksaMobileNumRegController.text,
-        bloodGroup!.id,
+        bloodGroup!.id.toString(),
         indianAddressLine1Controller.text,
         indianAddressLine2Controller.text,
-        '1',
+        selectedItem!.id.toString(),
         pinController1.text,
         resAddressLine1Controller.text,
         resAddressLine2Controller.text,
-        '2',
+        stateKsa!.id.toString(),
         pinController2.text,
       );
     } catch (e) {
@@ -398,7 +405,6 @@ class RegisterController extends GetxController implements GetxService {
   Future<void> Upload(
     XFile data1,
     XFile data2,
-
     name,
     email,
     password,
@@ -453,10 +459,11 @@ class RegisterController extends GetxController implements GetxService {
     request.fields['ksa_pin'] = kPin;
     request.headers.addAll({"Accept": "application/json"});
     var response = await request.send();
-    print(response.statusCode);
+    log(response.statusCode.toString());
+    log(response.statusCode.toString());
     // final respStr = await response.stream.bytesToString();
     response.stream.transform(utf8.decoder).listen((value) {
-      print(value);
+      log(value);
       var k = json.decode(value);
 
       eror message = eror.fromJson(k);
