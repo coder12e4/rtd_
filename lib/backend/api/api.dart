@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -137,6 +138,7 @@ class ApiService extends GetxService {
     };
     final String requestBodyJson = jsonEncode(body);
     try {
+
       log(uri);
       log(body.toString());
 
@@ -152,6 +154,7 @@ class ApiService extends GetxService {
       log('from ApiService ${response.statusCode.toString()}');
       log(uri);
       return parseResponse(response, uri);
+
     } catch (e) {
       log(' from api service ${e.toString()}');
       return const Response(statusCode: 1, statusText: connectionIssue);

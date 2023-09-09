@@ -5,8 +5,6 @@ import 'package:rtd_project/controller/authentication/login_contoller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
 import 'package:rtd_project/util/validators.dart';
-import 'package:rtd_project/view/login_screen/widgets/login_complete.dart';
-import 'package:rtd_project/view/register_screen/register_screen.dart';
 
 import '../../core/common_widget/textformfield_widget.dart';
 
@@ -28,6 +26,9 @@ class LOginPage extends StatelessWidget {
               // crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 welcomeWidget(context),
+                SizedBox(
+                  height: 45.h,
+                ),
                 nochBarAboveLoginContainer(),
                 SizedBox(
                   height: 5.h,
@@ -57,7 +58,7 @@ class LOginPage extends StatelessWidget {
                         SizedBox(
                           height: 20.h,
                         ),
-                        Container(
+                        SizedBox(
                           width: 290.w,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -82,7 +83,7 @@ class LOginPage extends StatelessWidget {
                                     ),
                                     onPressed: () {
                                       // Update the state i.e. toogle the state of passwordVisible variable
-                                      value.VisibiltyValueChange();
+                                      value.visibiltyValueChange();
                                     },
                                   ),
                                   hintText: "Password",
@@ -131,12 +132,12 @@ class LOginPage extends StatelessWidget {
                           buttonForegroundColor: whiteColor,
                         ),
                         SizedBox(
-                          height: 10.h,
+                          height: 30.h,
                         ),
-                        forgotButton(),
-                        SizedBox(
-                          height: 10.h,
-                        ),
+                        // forgotButton(),
+                        // SizedBox(
+                        //   height: 10.h,
+                        // ),
                         notAmembertext(),
                         SizedBox(
                           height: 10.h,

@@ -13,7 +13,7 @@ class Imagepiker extends StatefulWidget {
     super.key,
     required this.onImageSelected,
   });
-
+  // final String sizeText;
   final ValueChanged<XFile?> onImageSelected;
 
   @override

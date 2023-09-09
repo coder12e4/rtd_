@@ -230,7 +230,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   press: () {
                     showModalBottomSheet(
                       context: context,
-                      builder: (context) => Imagepiker(
+                      builder: (context) => Imagepiker( 
                         onImageSelected: _updateSelectedImage,
                       ),
                     );
