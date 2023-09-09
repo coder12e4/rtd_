@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:rtd_project/controller/authentication/login_contoller.dart';
 import 'package:rtd_project/helper/router.dart';
 
 
@@ -16,7 +15,7 @@ class SplashScreenController extends GetxController {
   }
 
   void onLogin() {
-    Get.delete<LoginController>(force: true);
+   // Get.delete<LoginController>(force: true);
     Get.toNamed(AppRouter.getInitialRoute());
   }
 }

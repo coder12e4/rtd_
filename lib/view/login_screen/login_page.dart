@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:rtd_project/controller/authentication/login_contoller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
+import 'package:rtd_project/util/validators.dart';
 import 'package:rtd_project/view/login_screen/widgets/login_complete.dart';
 import 'package:rtd_project/view/register_screen/register_screen.dart';
 
@@ -14,6 +15,9 @@ class LOginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
+    FocusNode node = FocusNode();
+
     return SafeArea(
         child: Scaffold(
       backgroundColor: baseColor,
@@ -28,72 +32,126 @@ class LOginPage extends StatelessWidget {
                 SizedBox(
                   height: 5.h,
                 ),
-                Container(
-                  height: 420.h,
-                  width: 390.w,
-                  decoration: const BoxDecoration(
-                    color: whiteColor,
-                    borderRadius: BorderRadiusDirectional.only(
-                      topEnd: Radius.circular(50),
-                      topStart: Radius.circular(50),
+                Form(
+                  key: _formKey,
+                  child: Container(
+                    height: 390.h,
+                    width: 390.w,
+                    padding: const EdgeInsets.only(left: 35, right: 35),
+                    decoration: const BoxDecoration(
+                      color: whiteColor,
+                      borderRadius: BorderRadiusDirectional.only(
+                        topEnd: Radius.circular(50),
+                        topStart: Radius.circular(50),
+                      ),
                     ),
-                  ),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 30.h,
-                      ),
-                      TextFormFieldWidget(
-                          controller: value.emailController,
-                          hitText: 'Username'),
-                      SizedBox(
-                        height: 20.h,
-                      ),
-                      TextFormFieldWidget(
-                          controller: value.passwordController,
-                          hitText: 'Password'),
-                      SizedBox(
-                        height: 20.h,
-                      ),
-                      TextFormFieldWidget(
-                          controller: value.ksaMobNumController,
-                          hitText: 'Ksa Mobile Number'),
-                      SizedBox(
-                        height: 20.h,
-                      ),
-                      ButtonWidget(
-                        press: () {
-                          value.onLogin();
-                          showModalBottomSheet(
-                              context: context,
-                              builder: (context) => LoginComplited());
-                        },
-                        borderAvalable: false,
-                        buttonText: 'Login',
-                        buttonBackgroundColor: buttenBlue,
-                        buttonForegroundColor: whiteColor,
-                      ),
-                      // SizedBox(
-                      //   height: 5.h,
-                      // ),
-                      forgotButton(),
-                      // SizedBox(
-                      //   height: 10.h,
-                      // ),
-                      notAmembertext(),
-                      SizedBox(
-                        height: 15.h,
-                      ),
-                      ButtonWidget(
-                        press: () {
-                          value.onSignUp();
-                        },
-                        borderAvalable: true,
-                        buttonText: 'Register',
-                        buttonBackgroundColor: whiteColor,
-                        buttonForegroundColor: buttenBlue,
-                      ),
-                    ],
+                    child: ListView(
+                      children: [
+                        SizedBox(
+                          height: 40.h,
+                        ),
+                        TextFormFieldWidget(
+                            validator: Rtd_Validators.noneEmptyValidator,
+                            controller: value.emailController,
+                            hitText: 'Registered Mobile Number'),
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                        Container(
+                          width: 290.w,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              focusNode: node,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              validator: Rtd_Validators.passwordValidator,
+                              controller: value.passwordController,
+                              obscureText: value.passwordVisible,
+                              decoration: InputDecoration(
+                                  border:
+                                      InputBorder.none, // Removes the underline
+
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      // Based on passwordVisible state choose the icon
+                                      value.passwordVisible
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                      color: Theme.of(context).primaryColorDark,
+                                    ),
+                                    onPressed: () {
+                                      // Update the state i.e. toogle the state of passwordVisible variable
+                                      value.VisibiltyValueChange();
+                                    },
+                                  ),
+                                  hintText: "Password",
+                                  fillColor: textFormBase,
+                                  filled: true,
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide:
+                                        const BorderSide(color: textFormBase),
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  focusedErrorBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        const BorderSide(color: textFormBase),
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        const BorderSide(color: textFormBase),
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  errorBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        const BorderSide(color: textFormBase),
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  hintStyle: const TextStyle(
+                                      color: Color.fromARGB(255, 112, 111, 111),
+                                      fontWeight: FontWeight.bold)),
+                              textAlign: TextAlign
+                                  .center, // Centers the text inside the field
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                        ButtonWidget(
+                          press: () {
+                            if (_formKey.currentState!.validate()) {
+                              value.onLogin();
+                            }
+                          },
+                          borderAvalable: false,
+                          buttonText: 'Login',
+                          buttonBackgroundColor: buttenBlue,
+                          buttonForegroundColor: whiteColor,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        forgotButton(),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        notAmembertext(),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        ButtonWidget(
+                          press: () {
+                            value.onSignUp();
+                          },
+                          borderAvalable: true,
+                          buttonText: 'Register',
+                          buttonBackgroundColor: whiteColor,
+                          buttonForegroundColor: buttenBlue,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

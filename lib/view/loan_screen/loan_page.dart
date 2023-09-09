@@ -8,6 +8,8 @@ import 'package:rtd_project/view/loan_screen/widgets/attach_bottem_sheet.dart';
 import 'package:rtd_project/view/loan_screen/widgets/cancel_popup.dart';
 import 'package:rtd_project/view/loan_screen/widgets/porpose.dart';
 
+import '../../util/validators.dart';
+
 class LoanPage extends StatelessWidget {
   const LoanPage({super.key});
 
@@ -331,7 +333,9 @@ class LoanPage extends StatelessWidget {
         SizedBox(
           height: 20.h,
         ),
-        TextFormFieldWidget(controller: loanController, hitText: 'Loan Amount'),
+        TextFormFieldWidget(
+            validator: Rtd_Validators.noneEmptyValidator,
+            controller: loanController, hitText: 'Loan Amount'),
         SizedBox(
           height: 20.h,
         ),

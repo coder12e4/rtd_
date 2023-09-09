@@ -1,16 +1,20 @@
 import 'dart:developer';
-
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:rtd_project/backend/api/handler.dart';
 import 'package:rtd_project/backend/model/bloodgroup_model.dart';
 import 'package:rtd_project/backend/model/states_model.dart';
 import 'package:rtd_project/backend/parser/sighnup_parser.dart';
-import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/util/theme.dart';
 import 'package:rtd_project/util/toast.dart';
 import 'package:rtd_project/view/profile_screen/profile_edit_screen/profile_edit_screen.dart';
+
+import 'package:http_parser/http_parser.dart';
+import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
+import 'package:async/async.dart';
+import 'dart:convert';
 
 class RegisterController extends GetxController implements GetxService {
   RegisterController({required this.parser});
@@ -24,9 +28,6 @@ class RegisterController extends GetxController implements GetxService {
   void onInit() {
     getStates();
     getAllBloodGroup();
-
-    // _dropdownMenuItems = buildDropDownMenuItems(statesList!);
-    // selectedItem != null ? dropdownMenuItems[0].value : null;
     super.onInit();
   }
 
@@ -89,17 +90,39 @@ class RegisterController extends GetxController implements GetxService {
   // XFile? _selectedImage;
   String? cover;
   final gallery = [];
+
   List<AllStatesModel> _allStates = <AllStatesModel>[];
   List<AllStatesModel> get allStates => _allStates;
+
   List<BloodGroup> _getAllbloodGroup = <BloodGroup>[];
   List<BloodGroup> get getAllbloodGroup => _getAllbloodGroup;
+
   String? statesName;
   List<AllStatesModel>? statesList;
   AllStatesModel? selectedItem;
+
+  AllStatesModel? stateKsa;
+  String? statesksa;
+  
+  String? bloodgroupname;
+  List<BloodGroup>? bloodgrouplist;
+  BloodGroup? bloodGroup;
+
   List<DropdownMenuItem<AllStatesModel>> _dropdownMenuItems =
       <DropdownMenuItem<AllStatesModel>>[];
   List<DropdownMenuItem<AllStatesModel>> get dropdownMenuItems =>
       _dropdownMenuItems;
+
+  List<DropdownMenuItem<BloodGroup>> _dropdownMenuItemsBloodgroup =
+      <DropdownMenuItem<BloodGroup>>[];
+  List<DropdownMenuItem<BloodGroup>> get dropdownMenuItemsBloodgroup =>
+      _dropdownMenuItemsBloodgroup;
+
+var isSelected = false.obs;
+
+  void toggleSelection() {
+    isSelected.value = !isSelected.value;
+  }
   Future<XFile?> pickImage(ImageSource source) async {
     return await picker.pickImage(source: source);
   }
@@ -201,7 +224,7 @@ class RegisterController extends GetxController implements GetxService {
 
   Future<void> onRegister(XFile file1, XFile file2) async {
     try {
-      if (emailRegController.text == '' ||
+      /*if (emailRegController.text == '' ||
           emailRegController.text.isEmpty ||
           passwordRegController.text == '' ||
           passwordRegController.text.isEmpty ||
@@ -225,7 +248,7 @@ class RegisterController extends GetxController implements GetxService {
           pinController2.text.isEmpty) {
         showToast('All fields are required'.tr);
         return;
-      }
+      }*/
       if (!GetUtils.isEmail(emailRegController.text)) {
         showToast('Email is not valid'.tr);
         return;
@@ -256,8 +279,11 @@ class RegisterController extends GetxController implements GetxService {
         ),
         barrierDismissible: false,
       );
+      log("state 1${selectedItem!.id.toString()}");
+      log('state2${stateKsa!.id.toString()}');
+      log('blood group${bloodGroup!.id.toString()}');
 
-      var response = await parser.uploadImage(
+      await Upload(
         file1,
         file2,
         nameRegController.text,
@@ -266,56 +292,16 @@ class RegisterController extends GetxController implements GetxService {
         confirmpasswordRegController.text,
         indianMobNumContoller.text,
         ksaMobileNumRegController.text,
-        '1',
+        bloodGroup!.id.toString(),
         indianAddressLine1Controller.text,
         indianAddressLine2Controller.text,
-        '1',
+        selectedItem!.id.toString(),
         pinController1.text,
         resAddressLine1Controller.text,
         resAddressLine2Controller.text,
-        '2',
+        stateKsa!.id.toString(),
         pinController2.text,
       );
-
-      Get.back();
-      if (response.statusCode != 200) {
-        showToast('Server error ${response.statusCode}'.tr);
-      }
-      log('got response');
-      log('Status Code ${response.statusCode}');
-      if (response.statusCode == 200) {
-        log(response.statusCode.toString());
-        Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
-        debugPrint(myMap['user_details']['id'].toString());
-
-        if (myMap['user_details'] != '' && myMap['access_token'] != '') {
-          debugPrint(myMap['user']['id'].toString());
-          parser.saveToken('access_token', myMap['token']);
-        } else {
-          showToast('Access denied'.tr);
-        }
-      } else {
-        if (response.statusCode == 401) {
-          Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
-          if (myMap['error'] != '') {
-            showToast(myMap['error'.tr]);
-          } else {
-            showToast('Something went wrong'.tr);
-          }
-          update();
-        } else if (response.statusCode == 500) {
-          Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
-          if (myMap['error'] != '') {
-            showToast(myMap['error'.tr]);
-          } else {
-            showToast('Something went wrong'.tr);
-          }
-          update();
-        } else {
-          ApiChecker.checkApi(response);
-          update();
-        }
-      }
     } catch (e) {
       // Handle any exceptions that occur during the execution of the function.
       log('An error occurred: $e');
@@ -334,7 +320,6 @@ class RegisterController extends GetxController implements GetxService {
 
       allStates.forEach((data) {
         AllStatesModel individual = AllStatesModel.fromJson(data);
-
         _allStates.add(individual);
       });
 
@@ -356,9 +341,12 @@ class RegisterController extends GetxController implements GetxService {
 
       allbloodGroup.forEach((data) {
         BloodGroup individual = BloodGroup.fromJson(data);
-
         _getAllbloodGroup.add(individual);
       });
+
+      _dropdownMenuItemsBloodgroup =
+          buildDropDownMenuItemsBloodGroup(_getAllbloodGroup);
+      bloodGroup != null ? _dropdownMenuItemsBloodgroup[0].value : null;
     }
     log(_getAllbloodGroup.toString());
     update();
@@ -378,6 +366,7 @@ class RegisterController extends GetxController implements GetxService {
           value: listItem,
           child: Text(
             listItem.stateName,
+            textAlign: TextAlign.center,
             style: const TextStyle(
                 color: Colors.black,
                 fontSize: 16,
@@ -389,5 +378,161 @@ class RegisterController extends GetxController implements GetxService {
     }
 
     return items;
+  }
+
+  List<DropdownMenuItem<BloodGroup>> buildDropDownMenuItemsBloodGroup(
+      List listItems) {
+    List<DropdownMenuItem<BloodGroup>> items = [];
+    for (BloodGroup listItem in listItems) {
+      items.add(
+        DropdownMenuItem(
+          value: listItem,
+          child: Text(
+            listItem.groupName,
+            style: const TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                letterSpacing: .1,
+                fontWeight: FontWeight.w500),
+          ),
+        ),
+      );
+    }
+
+    return items;
+  }
+
+  Future<void> Upload(
+    XFile data1,
+    XFile data2,
+    name,
+    email,
+    password,
+    conPassword,
+    inum,
+    ksanum,
+    bloodgroup,
+    iaddress1,
+    iaddress2,
+    iState,
+    iPin,
+    kAddress1,
+    kAddress2,
+    kState,
+    kPin,
+  ) async {
+    File file1 = File(data1.path);
+    File file2 = File(data2.path);
+    var stream3 = http.ByteStream(DelegatingStream.typed(file1.openRead()));
+    var length3 = await file1.length();
+
+    var stream4 = http.ByteStream(DelegatingStream.typed(file2.openRead()));
+    var length4 = await file2.length();
+    var uri = Uri.parse("http://rtd.canisostudio.com/api/register");
+
+    var request = http.MultipartRequest("POST", uri);
+
+    var representative_driving_liesence_image = http.MultipartFile(
+        'document_proof_india', stream3, length3,
+        filename: basename(file1.path), contentType: MediaType('image', 'png'));
+    var representative_company_idcard_image = http.MultipartFile(
+        'document_proof_ksa', stream4, length4,
+        filename: basename(file2.path), contentType: MediaType('image', 'png'));
+
+    request.files.add(representative_driving_liesence_image);
+    request.files.add(representative_company_idcard_image);
+
+    request.fields['name'] = name;
+    request.fields['email'] = email;
+    request.fields['password'] = password;
+    request.fields['c_password'] = conPassword;
+    request.fields['india_mobile_number'] = inum;
+    request.fields['ksa_mobile_number'] = ksanum;
+    request.fields['blood_group'] = bloodgroup;
+    request.fields['indian_address_1'] = iaddress1;
+    request.fields['indian_address_2'] = iaddress2;
+    request.fields['india_state'] = iState;
+    request.fields['india_pin'] = iPin;
+    request.fields['ksa_address_1'] = kAddress1;
+    request.fields['ksa_address_2'] = kAddress2;
+    request.fields['ksa_state'] = kState;
+    request.fields['ksa_pin'] = kPin;
+    request.headers.addAll({"Accept": "application/json"});
+    var response = await request.send();
+    log(response.statusCode.toString());
+    log(response.statusCode.toString());
+    // final respStr = await response.stream.bytesToString();
+    response.stream.transform(utf8.decoder).listen((value) {
+      log(value);
+      var k = json.decode(value);
+
+      eror message = eror.fromJson(k);
+      Get.back();
+
+      if (message.status!) {
+        successToast(message.message.toString());
+      } else {
+        showToast(k['message'].toString());
+      }
+
+      //
+      /*if(k['status']==true){
+        var message= k['message'];
+        (response.statusCode != 200) {
+          showToast('Server error ${response.statusCode}'.tr);
+        }
+        log('got response');
+        log('Status Code ${response.statusCode}');
+        if (response.statusCode == 200) {
+          log(response.statusCode.toString());
+          Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
+          debugPrint(myMap['user_details']['id'].toString());
+          if (myMap['user_details'] != '' && myMap['access_token'] != '') {
+            debugPrint(myMap['user']['id'].toString());
+            parser.saveToken('access_token', myMap['token']);
+          } else {
+            showToast('Access denied'.tr);
+          }
+        } else {
+          if (response.statusCode == 401) {
+            Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
+            if (myMap['error'] != '') {
+              showToast(myMap['error'.tr]);
+            } else {
+              showToast('Something went wrong'.tr);
+            }
+            update();
+          } else if (response.statusCode == 500) {
+            Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
+            if (myMap['error'] != '') {
+              showToast(myMap['error'.tr]);
+            } else {
+              showToast('Something went wrong'.tr);
+            }
+            update();
+          } else {
+            ApiChecker.checkApi(response);
+            update();
+          }
+        }
+      }else{
+      }*/
+    });
+  }
+}
+
+class eror {
+  String? message;
+  bool? status;
+  eror({this.message, this.status});
+  eror.fromJson(Map<String, dynamic> json) {
+    message = json['message'];
+    status = json['status'];
+  }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['message'] = this.message;
+    data['status'] = this.status;
+    return data;
   }
 }

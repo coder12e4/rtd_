@@ -12,12 +12,18 @@ class LoginParser {
       {required this.sharedPreferencesManager, required this.apiService});
 
   Future<Response> login(dynamic body) async {
+
     var response = await apiService.postPublic(
-        Constants().baseUrl + Constants().login, body);
+        Constants.baseUrl + Constants.login, body);
     return response;
   }
 
   Future<void> saveToken(key, token) async {
     sharedPreferencesManager.putString(key, token);
   }
-}
+
+  }
+  
+
+
+

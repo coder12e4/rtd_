@@ -1,19 +1,20 @@
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:rtd_project/backend/model/bloodgroup_model.dart';
 import 'package:rtd_project/backend/model/states_model.dart';
-import 'package:rtd_project/controller/authentication/auth.dart';
+import 'package:rtd_project/controller/authentication/regitration.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
-import 'package:rtd_project/core/common_widget/dropdown_widget.dart';
 import 'package:rtd_project/core/common_widget/imagepicker.dart';
 import 'package:rtd_project/core/common_widget/textformfield_widget.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
-import 'package:rtd_project/view/home_screen/home_page.dart';
+import 'package:rtd_project/util/toast.dart';
+
+import '../../util/validators.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -62,327 +63,292 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Container textFieldContainer(BuildContext context, RegisterController value) {
-    final RegisterController imagePickerService = Get.find();
+  Form textFieldContainer(BuildContext context, RegisterController value) {
+    final _formKey = GlobalKey<FormState>();
 
-    List<String> allstates = [];
-
-    List<String> allBloodGroup = [];
-
-    return Container(
-        height: 3890.h,
-        width: 390.w,
-        decoration: const BoxDecoration(
-          color: whiteColor,
-          borderRadius: BorderRadiusDirectional.only(
-            topEnd: Radius.circular(50),
-            topStart: Radius.circular(50),
+    return Form(
+      key: _formKey,
+      child: Container(
+          height: 1500.h,
+          width: 390.w,
+          decoration: const BoxDecoration(
+            color: whiteColor,
+            borderRadius: BorderRadiusDirectional.only(
+              topEnd: Radius.circular(50),
+              topStart: Radius.circular(50),
+            ),
           ),
-        ),
-        child: ListView(
-          padding: const EdgeInsets.all(45),
-          physics: const NeverScrollableScrollPhysics(),
-          children: [
-            TextFormFieldWidget(
-                controller: value.nameRegController, hitText: 'Name'),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.emailRegController, hitText: 'email'),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.passwordRegController, hitText: 'password'),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.confirmpasswordRegController,
-                hitText: 'confirm password'),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.nameRegController, hitText: 'DOB'),
-            textFieldHeight,
-            DropdownButtonHideUnderline(
-              child: DropdownButton<AllStatesModel>(
-                  isExpanded: true,
-                  hint: const Text(
-                    "Select States",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        letterSpacing: .1,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  icon: const Icon(Icons.keyboard_arrow_down_outlined),
-                  value: value.selectedItem,
-                  items: value.dropdownMenuItems,
-                  onChanged: (value) {
-                    setState(() {
-                      auth.selectedItem = value;
+          child: ListView(
+            padding: const EdgeInsets.all(45),
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
+              TextFormFieldWidget(
+                  validator: Rtd_Validators.noneEmptyValidator,
+                  controller: value.nameRegController,
+                  hitText: 'Name'),
+              textFieldHeight,
 
-                      auth.statesName = auth.selectedItem!.id.toString();
-                      log(auth.statesName.toString());
+              TextFormFieldWidget(
+                  validator: Rtd_Validators.emailValidator,
+                  controller: value.emailRegController,
+                  hitText: 'email'),
 
-                      //   newStateList.clear();
-                      //  newStateList=[];
-                      //_dropdownMenuItemsStates.clear();
-                    });
-                  }),
-            ),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.mobileNumRegController,
-                hitText: 'Indian Mobile Number'),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.ksaMobileNumRegController,
-                hitText: 'KSA Mobile Number'),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.watsappNumRegController,
-                hitText: 'Whatsapp Number'),
-            textFieldHeight,
-            //////////////////////////End first Section?///////////////////////////////////////////////////////////
-            dividerAndHeadingWidget(
-                heading: 'Residence Address in KSA', width: 80.w),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.resAddressLine1Controller,
-                hitText: 'Address Line 1'),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.resAddressLine2Controller,
-                hitText: 'Address Line 2'),
-            textFieldHeight,
-            DropedownWidget(hintText: 'State', dropDownlist: allstates),
+              textFieldHeight,
+              TextFormFieldWidget(
+                  validator: Rtd_Validators.passwordValidator,
+                  controller: value.passwordRegController,
+                  hitText: 'password'),
 
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.pinController1, hitText: 'pin'),
+              textFieldHeight,
+              TextFormFieldWidget(
+                  validator: (valuee) {
+                    if (valuee!.isEmpty) {
+                      return "Please Re-Enter New Password";
+                    } else if (valuee.length < 5) {
+                      return "Password must be atleast 5 characters long";
+                    } else if (valuee != value.passwordRegController.text) {
+                      return "Password must be same as above";
+                    } else {
+                      return null;
+                    }
+                  },
+                  controller: value.confirmpasswordRegController,
+                  hitText: 'confirm password'),
 
-            textFieldHeight,
-            Center(
-              child: Text(
-                !image1 ? 'No Documents attached' : 'Document is selected',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: !image1 ? Colors.red : Colors.green),
+              textFieldHeight,
+              TextFormFieldWidget(
+                  validator: Rtd_Validators.mobileNumberValidator,
+                  controller: value.mobileNumRegController,
+                  hitText: 'Indian Mobile Number'),
+              textFieldHeight,
+              TextFormFieldWidget(
+                  validator: Rtd_Validators.mobileNumberValidator,
+                  controller: value.ksaMobileNumRegController,
+                  hitText: 'Mobile Number'),
+
+              textFieldHeight,
+
+              Container(
+                margin: const EdgeInsets.only(left: 5, right: 5),
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: textFormBase),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<BloodGroup>(
+                      isExpanded: true,
+                      hint: const Text(
+                        "Select Your blood group",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            letterSpacing: .1,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      icon: const Icon(Icons.keyboard_arrow_down_outlined),
+                      value: value.bloodGroup,
+                      items: value.dropdownMenuItemsBloodgroup,
+                      onChanged: (value) {
+                        setState(() {
+                          auth.bloodGroup = value;
+
+                          auth.bloodgroupname = value!.groupName.toString();
+
+                          //   newStateList.clear();
+                          //  newStateList=[];
+                          //_dropdownMenuItemsStates.clear();
+                        });
+                      }),
+                ),
               ),
-            ),
-            textFieldHeight,
-            ButtonWidget(
-                press: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) => Imagepiker(
-                      onImageSelected: _updateSelectedImage,
-                    ),
-                  );
-                },
-                buttonBackgroundColor: whiteColor,
-                buttonForegroundColor: Colors.blue,
-                buttonText: 'Attach Address Proof',
-                borderAvalable: true),
 
-            //////////////////////////End Of Second Section?///////////////////////////////////////////////////////////
-            textFieldHeight,
-            dividerAndHeadingWidget(
-                heading: ' Emergency Contact 1 (KSA)', width: 70.w),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.emName1Controller, hitText: 'Name'),
-            textFieldHeight,
-            const DropedownWidget(hintText: 'Relationship', dropDownlist: []),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.emMobileNum1Controller,
-                hitText: 'Mobile Number'),
-            //////////////////////////End of third Section?///////////////////////////////////////////////////////////
-            textFieldHeight,
-            dividerAndHeadingWidget(
-                heading: ' Emergency Contact 2 (KSA)', width: 60.w),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.emIndiaName2Controller, hitText: 'Name'),
-            textFieldHeight,
-            const DropedownWidget(hintText: 'Relationship', dropDownlist: []),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.emMObilenum2Controller,
-                hitText: 'Mobile Number'),
-            //////////////////////////End of Fourth Section?///////////////////////////////////////////////////////////
-            textFieldHeight,
-            dividerAndHeadingWidget(heading: 'Indian Address', width: 140.w),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.indianAddressLine1Controller,
-                hitText: 'Address Line 1'),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.indianAddressLine2Controller,
-                hitText: 'Address Line 2'),
-            textFieldHeight,
-            DropedownWidget(hintText: 'State', dropDownlist: allstates),
+              textFieldHeight,
 
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.pinController2, hitText: 'pin'),
-            textFieldHeight,
+              //////////////////////////End of Fourth Section?///////////////////////////////////////////////////////////
+              textFieldHeight,
+              dividerAndHeadingWidget(heading: 'Indian Address', width: 140.w),
+              textFieldHeight,
+              TextFormFieldWidget(
+                  validator: Rtd_Validators.noneEmptyValidator,
+                  controller: value.indianAddressLine1Controller,
+                  hitText: 'Address Line 1'),
+              textFieldHeight,
+              TextFormFieldWidget(
+                  validator: Rtd_Validators.noneEmptyValidator,
+                  controller: value.indianAddressLine2Controller,
+                  hitText: 'Address Line 2'),
+              textFieldHeight,
 
-            textFieldHeight,
-            Center(
-              child: Text(
-                !image2 ? 'No Documents attached' : 'Document is selected',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: !image2 ? Colors.red : Colors.green),
+              Container(
+                margin: const EdgeInsets.only(left: 5, right: 5),
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: textFormBase),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<AllStatesModel>(
+                      isExpanded: true,
+                      hint: const Text(
+                        "Select States",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            letterSpacing: .1,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      icon: const Icon(Icons.keyboard_arrow_down_outlined),
+                      value: value.selectedItem,
+                      items: value.dropdownMenuItems,
+                      onChanged: (value) {
+                        setState(() {
+                          auth.selectedItem = value;
+                          auth.statesName = auth.selectedItem!.stateName;
+                        });
+                      }),
+                ),
               ),
-            ),
-            textFieldHeight,
-            Container(
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.blue),
-                  borderRadius: BorderRadius.circular(20)),
-              child: ButtonWidget(
+
+              //////////////////////////End first Section?///////////////////////////////////////////////////////////
+
+              textFieldHeight,
+              TextFormFieldWidget(
+                  validator: Rtd_Validators.pincodeValidator,
+                  controller: value.pinController1,
+                  hitText: 'pin'),
+
+              textFieldHeight,
+              Center(
+                child: Text(
+                  !image1 ? 'No Documents attached' : 'Document is selected',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: !image1 ? Colors.red : Colors.green),
+                ),
+              ),
+              textFieldHeight,
+              ButtonWidget(
                   press: () {
                     showModalBottomSheet(
                       context: context,
                       builder: (context) => Imagepiker(
-                        onImageSelected: _updateSelectedImage1,
+                        onImageSelected: _updateSelectedImage,
                       ),
                     );
                   },
                   buttonBackgroundColor: whiteColor,
                   buttonForegroundColor: Colors.blue,
                   buttonText: 'Attach Address Proof',
-                  borderAvalable: false),
-            ),
-            textFieldHeight,
-            /////////////////////End of Fiveth Section////////////////////
-            dividerAndHeadingWidget(
-                heading: 'Emergency Contact 1: (india)', width: 60.w),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.emIndiaName1Controller, hitText: 'Name'),
-            textFieldHeight,
-            const DropedownWidget(hintText: 'Relationship', dropDownlist: []),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.emIndiaMobile1Controller,
-                hitText: 'Mobile Number'),
-            /////////////////////End of Sixth Section////////////////////
-            textFieldHeight,
-            dividerAndHeadingWidget(
-                heading: 'Emergency Contact 2: (india)', width: 60.w),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.emIndiaName2Controller, hitText: 'Name'),
-            textFieldHeight,
-            const DropedownWidget(hintText: 'Relationship', dropDownlist: []),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.emIndiaMobile2Controller,
-                hitText: 'Mobile Number'),
-            textFieldHeight,
-            /////////////////End Of Seventh section///////////////////
-            const Divider(),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.iqamaNumController, hitText: 'Iqama Number'),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.iqamaexperyDateController,
-                hitText: 'Expiry Date'),
-            textFieldHeight,
-            ////////////////////////End Of Eight Section//////////////////////////
-            const Divider(),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.passNumController,
-                hitText: 'Passport Number'),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.passExperyNumController,
-                hitText: 'Expiry Date'),
-            textFieldHeight,
-            ////////////////////////////End of Nine Section//////////////////
-            const Divider(),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.maritalStatusController,
-                hitText: 'Martial Status'),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.numOfChildrenController,
-                hitText: 'Number of Children'),
-            textFieldHeight,
-            ////////////////////////End of Tenth Section/////////////////////
-            const Divider(),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.nomineController, hitText: 'Nominee'),
-            textFieldHeight,
-            const DropedownWidget(hintText: 'Relationship', dropDownlist: []),
-            textFieldHeight,
-            //////////////////////////End of 11T Section////////////////////////////
-            const Divider(),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.sponserNameController,
-                hitText: 'Sponsor Name'),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.locationController, hitText: 'Location'),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.estNmaeController,
-                hitText: 'Establishment Name'),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.teleNumController,
-                hitText: 'Telephone Number'),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.lastMobileNumController,
-                hitText: 'Mobile Number'),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.sprMobileNumController,
-                hitText: 'Sponsor Related Mobile Number'),
-            textFieldHeight,
-            ///////////////////////End of 12TH Section//////////////////
-            const Divider(),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.resVehichleNumController,
-                hitText: 'Responsible Vehicle Number'),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.vehMoedelController, hitText: 'Model'),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.vehTypeController, hitText: 'Type'),
-            textFieldHeight,
-            TextFormFieldWidget(
-                controller: value.vehCompanyController, hitText: 'Company'),
-            textFieldHeight,
-            const RadioButtonWidget(),
-            textFieldHeight,
-            ButtonWidget(
-                buttonBackgroundColor: buttenBlue,
-                buttonForegroundColor: whiteColor,
-                buttonText: 'Submit',
-                borderAvalable: false,
-                press: () {
-                  log("first image ${_selectedImage!.path.toString()}");
-                  log("Second image ${_selectedImage1!.path.toString()}");
-                  value.onRegister(_selectedImage!, _selectedImage1!);
-                  // Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  //   builder: (context) => const NavigationBarpage(),
-                  // ));
-                }),
-            textFieldHeight,
-            textFieldHeight,
-            textFieldHeight,
-          ],
-        ));
+                  borderAvalable: true),
+              textFieldHeight,
+
+              dividerAndHeadingWidget(
+                  heading: 'Residence Address in KSA', width: 80.w),
+              textFieldHeight,
+              TextFormFieldWidget(
+                  validator: Rtd_Validators.noneEmptyValidator,
+                  controller: value.resAddressLine1Controller,
+                  hitText: 'Address Line 1'),
+              textFieldHeight,
+              TextFormFieldWidget(
+                  validator: Rtd_Validators.noneEmptyValidator,
+                  controller: value.resAddressLine2Controller,
+                  hitText: 'Address Line 2'),
+
+              textFieldHeight,
+              TextFormFieldWidget(
+                  validator: Rtd_Validators.pincodeValidator,
+                  controller: value.pinController2,
+                  hitText: 'pin'),
+              textFieldHeight,
+
+              Container(
+                margin: const EdgeInsets.only(left: 5, right: 5),
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: textFormBase),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<AllStatesModel>(
+                      isExpanded: true,
+                      hint: const Text(
+                        "Select States",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            letterSpacing: .1,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      icon: const Icon(Icons.keyboard_arrow_down_outlined),
+                      value: value.stateKsa,
+                      items: value.dropdownMenuItems,
+                      onChanged: (value) {
+                        setState(() {
+                          auth.stateKsa = value;
+                          auth.statesName = auth.stateKsa!.stateName;
+                        });
+                      }),
+                ),
+              ),
+
+              textFieldHeight,
+              Center(
+                child: Text(
+                  !image2 ? 'No Documents attached' : 'Document is selected',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: !image2 ? Colors.red : Colors.green),
+                ),
+              ),
+              textFieldHeight,
+              Container(
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.blue),
+                    borderRadius: BorderRadius.circular(20)),
+                child: ButtonWidget(
+                    press: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) => Imagepiker(
+                          onImageSelected: _updateSelectedImage1,
+                        ),
+                      );
+                    },
+                    buttonBackgroundColor: whiteColor,
+                    buttonForegroundColor: Colors.blue,
+                    buttonText: 'Attach Address Proof',
+                    borderAvalable: false),
+              ),
+
+              textFieldHeight,
+              const RadioButtonWidget(),
+              textFieldHeight,
+              ButtonWidget(
+                  buttonBackgroundColor: buttenBlue,
+                  buttonForegroundColor: whiteColor,
+                  buttonText: 'Submit',
+                  borderAvalable: false,
+                  press: () {
+                    if (auth.isSelected.value) {
+                      if (_formKey.currentState!.validate()) {
+                        value.onRegister(_selectedImage!, _selectedImage1!);
+                      }
+                    } else {
+                      showToast('Please Agree the Terms and Conditions');
+                    }
+                    log("first image ${_selectedImage!.path.toString()}");
+                    log("Second image ${_selectedImage1!.path.toString()}");
+
+                    // Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    //   builder: (context) => const NavigationBarpage(),
+                    // ));
+                  }),
+              textFieldHeight,
+              textFieldHeight,
+              textFieldHeight,
+            ],
+          )),
+    );
   }
 
   Row dividerAndHeadingWidget({heading, width}) {
@@ -521,11 +487,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
           SizedBox(
             height: 20.h,
           ),
-          const Text("No file Selected",
+          /* const Text("No file Selected",
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-              )),
+              )),*/
           SizedBox(
             height: 20.h,
           ),
@@ -553,29 +519,23 @@ class RadioButtonWidget extends StatefulWidget {
 }
 
 class _RadioButtonWidgetState extends State<RadioButtonWidget> {
-  bool _isSelected = false;
-
+  final RegisterController auth = Get.find();
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        setState(() {
-          _isSelected = !_isSelected; // Toggle the selection state
-        });
+        auth.toggleSelection();
       },
       child: Row(
         children: [
-          Radio<String>(
-            // The actual Radio widget
-            value: 'accepted',
-            groupValue: _isSelected
-                ? 'accepted'
-                : '', // Use groupValue based on _isSelected
-            onChanged: (String? newValue) {
-              setState(() {
-                _isSelected = !_isSelected; // Toggle the selection state
-              });
-            },
+          Obx(
+            () => Radio<String>(
+              value: 'accepted',
+              groupValue: auth.isSelected.value ? 'accepted' : '',
+              onChanged: (String? newValue) {
+                auth.toggleSelection();
+              },
+            ),
           ),
           SizedBox(width: 2.w),
           const Column(

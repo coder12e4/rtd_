@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:rtd_project/controller/authentication/auth.dart';
+import 'package:rtd_project/controller/authentication/regitration.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
 
@@ -12,7 +12,6 @@ class Imagepiker extends StatefulWidget {
   Imagepiker({
     super.key,
     required this.onImageSelected,
-  
   });
 
   final ValueChanged<XFile?> onImageSelected;
@@ -129,8 +128,9 @@ class _ImagepikerState extends State<Imagepiker> {
               SizedBox(
                 height: 20.h,
               ),
-              const Text("No file Selected",
+              const Text("*Maximum Image Size 2 MB",
                   style: TextStyle(
+                    color: Colors.red,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   )),

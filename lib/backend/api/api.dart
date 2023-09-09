@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:rtd_project/core/constraints/api_urls.dart';
 
 class ApiService extends GetxService {
   final String appBaseUrl;
@@ -90,9 +89,8 @@ class ApiService extends GetxService {
         'POST',
         Uri.parse(uri),
       );
-      log('multipartBody length: ${multipartBody.length.toString()}');
-      log('multipartBody 1: ${multipartBody[0].file.name.toString()}');
-      log('multipartBody 2: ${multipartBody[1].file.name.toString()}');
+
+      request.headers.addAll({"Accept": "application/json"});
       for (MultipartBody multipart in multipartBody) {
         File file = File(multipart.file.path);
         request.files.add(http.MultipartFile(
@@ -102,6 +100,7 @@ class ApiService extends GetxService {
           filename: file.path.split('/').last,
         ));
       }
+
       request.fields['name'] = name;
       request.fields['email'] = email;
       request.fields['password'] = password;
@@ -158,6 +157,24 @@ class ApiService extends GetxService {
       return const Response(statusCode: 1, statusText: connectionIssue);
     }
   }
+//   Future<Response> postPublic(String url, dynamic body) async {
+//     try {
+//       http.Response response = await http.post(
+//             Uri.parse(url),
+//             headers: {'Accept': "application/json"},
+//             body: jsonEncode(body),
+//           )
+//           .timeout(Duration(seconds: timeoutInSeconds));
+
+//       print(response.body);
+//       //print(appBaseUrl + uri);
+//       return parseResponse(response,url);
+// >>>>>>> b9f06c447ec4f4a4bb4b7ff334e752e96abf1121
+//     } catch (e) {
+//       log(' from api service ${e.toString()}');
+//       return const Response(statusCode: 1, statusText: connectionIssue);
+//     }
+//   }
 
   Future<Response> postPrivate(
     String uri,
@@ -165,10 +182,10 @@ class ApiService extends GetxService {
     String token,
   ) async {
     try {
-      http.Response response = await http.post(Uri.parse(appBaseUrl + uri),
+      http.Response response = await http.post(Uri.parse(uri),
           body: jsonEncode(body),
           headers: {
-            'Content-Type': 'application/json',
+            "Accept": "application/json",
             'Authorization': 'Bearer $token'
           }).timeout(Duration(seconds: timeoutInSeconds));
 
@@ -188,7 +205,7 @@ class ApiService extends GetxService {
     try {
       http.Response response = await http.post(Uri.parse(appBaseUrl + uri),
           headers: {
-            'Content-Type': 'application/json',
+            "Accept": "application/json",
             'Authorization': 'Bearer $token'
           }).timeout(Duration(seconds: timeoutInSeconds));
       return parseResponse(response, uri);

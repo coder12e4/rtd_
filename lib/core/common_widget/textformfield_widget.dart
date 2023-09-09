@@ -7,23 +7,44 @@ class TextFormFieldWidget extends StatelessWidget {
     super.key,
     required this.controller,
     required this.hitText,
+    required this.validator,
   });
   final TextEditingController controller;
   final String hitText;
+  final String? Function(String?)? validator;
+
   @override
   Widget build(BuildContext context) {
+    // FocusNode node = FocusNode();
     return Container(
-      height: 50.h,
       width: 290.w,
-      decoration: BoxDecoration(
-          color: textFormBase, borderRadius: BorderRadius.circular(20)),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
+          validator: validator,
           controller: controller,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: InputDecoration(
               border: InputBorder.none, // Removes the underline
               hintText: hitText,
+              fillColor: textFormBase,
+              filled: true,
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: textFormBase),
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: const BorderSide(color: textFormBase),
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              focusedErrorBorder: UnderlineInputBorder(
+                borderSide: const BorderSide(color: textFormBase),
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              errorBorder: UnderlineInputBorder(
+                borderSide: const BorderSide(color: textFormBase),
+                borderRadius: BorderRadius.circular(20.0),
+              ),
               hintStyle: const TextStyle(
                   color: Color.fromARGB(255, 112, 111, 111),
                   fontWeight: FontWeight.bold)),

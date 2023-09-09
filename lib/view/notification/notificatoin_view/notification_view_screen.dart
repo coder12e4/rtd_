@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
 import 'package:rtd_project/core/common_widget/textformfield_widget.dart';
+import 'package:rtd_project/util/validators.dart';
 import 'package:rtd_project/view/notification/notificatoin_view/radio_button.dart';
 
 
@@ -73,6 +74,7 @@ class NotificationViewScreen extends StatelessWidget {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 38.0.w, vertical: 9.h),
                             child: TextFormFieldWidget(
+                              validator: Rtd_Validators.noneEmptyValidator,
                               controller: reasonContoller,
                               hitText: "Type your reason here",
                             ),
