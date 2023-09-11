@@ -20,7 +20,7 @@ class LoginController extends GetxController implements GetxService {
   final passwordController = TextEditingController();
   RegisterController? registerController;
 
-  bool passwordVisible = false;
+  bool passwordVisible = true;
   UserData? userData;
   void visibiltyValueChange() {
     passwordVisible = !passwordVisible;
