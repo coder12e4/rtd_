@@ -72,6 +72,8 @@ import 'package:rtd_project/core/constraints/api_urls.dart';
 import 'package:rtd_project/helper/shared_pref.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../backend/parser/edit_profile_parser.dart';
+
 class MainBinding extends Bindings {
   @override
   Future<void> dependencies() async {
@@ -104,7 +106,8 @@ class MainBinding extends Bindings {
         () => HomeParser(
             sharedPreferencesManager: Get.find(), apiService: Get.find()),
         fenix: true);
-
+    Get.lazyPut(() => EditProfileParser(
+        apiService: Get.find(), sharedPreferencesManager: Get.find()));
     //   Get.lazyPut(
     //       () => TabsParser(
     //           apiService: Get.find(), sharedPreferencesManager: Get.find()),

@@ -76,32 +76,18 @@ class LoginController extends GetxController implements GetxService {
     if (response.statusCode == 200) {
       Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
 
-      debugPrint(myMap['data']['id'].toString());
+      //   var updateParam = {
+      //     "id": myMap['user']['id'].toString(),
+      //     'fcm_token': parser.getFcmToken(),
+      //   };
+      //   await parser.updateProfile(updateParam, myMap['token']);
+      //   onNavigate();
+      // } else {
+      //   showToast('Access denied'.tr);
+      // }
 
-      /*    if (myMap['user'] != '' &&
-          myMap['token'] != '' &&
-          myMap['user']['type'] == 'user') {
-        debugPrint(myMap['user']['id'].toString());
-       // parser.saveToken(myMap['token']);
-        parser.saveInfo(
-          myMap['user']['id'].toString(),
-          myMap['user']['first_name'].toString(),
-          myMap['user']['last_name'].toString(),
-          myMap['user']['cover'].toString(),
-          myMap['user']['email'].toString(),
-          myMap['user']['mobile'].toString(),
-        );
-        var updateParam = {
-          "id": myMap['user']['id'].toString(),
-          'fcm_token': parser.getFcmToken(),
-        };
-        await parser.updateProfile(updateParam, myMap['token']);
-        onNavigate();
-      } else {
-        showToast('Access denied'.tr);
-      }
-  */
-      if (myMap['message'] != 'success') {
+      if (myMap['status'] != true) {
+        Get.back();
         showToast(myMap['message']);
         return;
       }
