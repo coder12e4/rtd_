@@ -100,7 +100,7 @@ class MainBinding extends Bindings {
     Get.lazyPut(
             () => ElectedMemberParser(
             apiService: Get.find(), sharedPreferencesManager: Get.find()),
-        fenix: true);
+        );
     Get.lazyPut(
         () => SignUpParser(
             apiService: Get.find(), sharedPreferencesManager: Get.find()),
