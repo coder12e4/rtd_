@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:rtd_project/controller/authentication/login_contoller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
-import 'package:rtd_project/view/profile_screen/profile_edit_screen/profile_edit_screen.dart';
 import 'package:rtd_project/view/profile_screen/profile_loan_screen/profile_loan_screen.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -157,9 +156,10 @@ class ProfilePage extends StatelessWidget {
                 backgroundColor:
                     MaterialStateColor.resolveWith((states) => baseColor)),
             onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const ProfileEditScreen(),
-              ));
+              // Navigator.of(context).push(MaterialPageRoute(
+              //   builder: (context) => const ProfileEditScreen(),
+              // ));
+              Get.toNamed('/editprofile');
             },
             child: const Padding(
               padding:

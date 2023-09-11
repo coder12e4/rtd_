@@ -105,9 +105,11 @@ import 'package:rtd_project/backend/binding/register_binding.dart';
 import 'package:rtd_project/backend/binding/splash_binding.dart';
 import 'package:rtd_project/view/book_screen/elected_member_screen/elected_member_screen.dart';
 import 'package:rtd_project/view/login_screen/login_page.dart';
+import 'package:rtd_project/view/profile_screen/profile_edit_screen/profile_edit_screen.dart';
 import 'package:rtd_project/view/register_screen/register_screen.dart';
 import 'package:rtd_project/view/splash_screen/splash_page.dart';
 
+import '../backend/binding/edit_profile_binding.dart';
 import '../view/home_screen/home_page.dart';
 
 class AppRouter {
@@ -117,7 +119,7 @@ class AppRouter {
   static const String electedMemberRoutes = '/electedMember';
   static const String signUpRoutes = '/signup';
   static const String tabRoutes = '/tabs';
-  static const String appointmentRoutes = '/appointment';
+  static const String editprofileRoutes = '/editprofile';
   static const String calendarRoutes = '/calendar';
   static const String inboxRoutes = '/inbox';
   static const String profileRoutes = '/profile';
@@ -166,7 +168,7 @@ class AppRouter {
   static String getBottomNavRoute() => bottomNavRoutes;
   static String getElectedMemberRoute() => electedMemberRoutes;
   static String getTabRoute() => tabRoutes;
-  static String getAppointmentRoute() => appointmentRoutes;
+  static String getEditProfileRoute() => editprofileRoutes;
   static String getCalendarRoute() => calendarRoutes;
   static String getInboxRoute() => inboxRoutes;
   static String getProfileRoute() => profileRoutes;
@@ -235,10 +237,10 @@ class AppRouter {
         binding: ElectedMemberBinding()),
     // GetPage(
     //     name: tabRoutes, page: () => const TabScreen(), binding: TabsBinding()),
-    // GetPage(
-    //     name: appointmentRoutes,
-    //     page: () => const AppointmentScreen(),
-    //     binding: AppointmentBinding()),
+    GetPage(
+        name: editprofileRoutes,
+        page: () => const ProfileEditScreen(),
+        binding: EditProfileBinding()),
     // GetPage(
     //     name: calendarRoutes,
     //     page: () => const CalendarScreen(),

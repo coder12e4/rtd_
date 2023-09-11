@@ -102,9 +102,7 @@ class LoginController extends GetxController implements GetxService {
       }
   */
       if (myMap['message'] != 'success') {
-        Get.back();
         showToast(myMap['message']);
-
         return;
       }
       if (myMap['data']['name'] != '' && myMap['access_token'] != '') {
