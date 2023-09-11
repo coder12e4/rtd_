@@ -101,7 +101,7 @@ class LoginController extends GetxController implements GetxService {
         showToast('Access denied'.tr);
       }
   */
-      if (myMap['message'] != 'success') {
+      if (myMap['status'] != true) {
         showToast(myMap['message']);
         return;
       }
