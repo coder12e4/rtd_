@@ -98,10 +98,12 @@
 // import 'package:ultimate_salon_owner_flutter/app/view/verify.dart';
 
 import 'package:get/get.dart';
+import 'package:rtd_project/backend/binding/elected_member_binding.dart';
 import 'package:rtd_project/backend/binding/home_binding.dart';
 import 'package:rtd_project/backend/binding/login_binding.dart';
 import 'package:rtd_project/backend/binding/register_binding.dart';
 import 'package:rtd_project/backend/binding/splash_binding.dart';
+import 'package:rtd_project/view/book_screen/elected_member_screen/elected_member_screen.dart';
 import 'package:rtd_project/view/login_screen/login_page.dart';
 import 'package:rtd_project/view/register_screen/register_screen.dart';
 import 'package:rtd_project/view/splash_screen/splash_page.dart';
@@ -112,6 +114,7 @@ class AppRouter {
   static const String initial = '/';
   static const String verifyRoutes = '/verify';
   static const String bottomNavRoutes = '/bottomNav';
+  static const String electedMemberRoutes = '/electedMember';
   static const String signUpRoutes = '/signup';
   static const String tabRoutes = '/tabs';
   static const String appointmentRoutes = '/appointment';
@@ -161,6 +164,7 @@ class AppRouter {
   static String getVerifyRoute() => verifyRoutes;
   static String getSignUpRoute() => signUpRoutes;
   static String getBottomNavRoute() => bottomNavRoutes;
+  static String getElectedMemberRoute() => electedMemberRoutes;
   static String getTabRoute() => tabRoutes;
   static String getAppointmentRoute() => appointmentRoutes;
   static String getCalendarRoute() => calendarRoutes;
@@ -225,6 +229,10 @@ class AppRouter {
         page: () => const NavigationBarpage(),
         binding: HomeBinding()),
 
+    GetPage(
+        name: electedMemberRoutes,
+        page: () => ElectedMemberScreen(),
+        binding: ElectedMemberBinding()),
     // GetPage(
     //     name: tabRoutes, page: () => const TabScreen(), binding: TabsBinding()),
     // GetPage(
