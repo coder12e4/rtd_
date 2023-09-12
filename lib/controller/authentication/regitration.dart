@@ -30,6 +30,7 @@ class RegisterController extends GetxController implements GetxService {
   @override
   void onInit() {
     getStates();
+
     getAllBloodGroup();
     super.onInit();
   }

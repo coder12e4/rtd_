@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:get/get.dart';
 
 import '../../core/constraints/api_urls.dart';
@@ -14,7 +12,7 @@ class ProfileParser {
 
   Future<Response> getUserData() async {
     final accessToken = sharedPreferencesManager.getString('access_token');
-    log('access token****************$accessToken');
+
     return await apiService.getPrivate(
         Constants.baseUrl + Constants.getUserDetails, accessToken!);
   }

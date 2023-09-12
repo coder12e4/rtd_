@@ -6,6 +6,7 @@ import 'package:rtd_project/controller/profile_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/util/alert_dialog.dart';
+import 'package:rtd_project/util/theme.dart';
 import 'package:rtd_project/view/profile_screen/profile_loan_screen/profile_loan_screen.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -17,97 +18,110 @@ class ProfilePage extends StatelessWidget {
         child: Scaffold(
       backgroundColor: baseColor,
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            appbar(context),
-            Container(
-                height: 1200.h,
-                decoration: const BoxDecoration(
-                    color: whiteColor,
-                    borderRadius: BorderRadiusDirectional.only(
-                      topStart: Radius.circular(50),
-                      topEnd: Radius.circular(50),
-                    )),
-                child: ListView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: [
-                    imageContainer(),
-                    kSizedBoxH,
-                    // nameText(value),
-                    kSizedBoxH,
-                    dividerWidget(),
-                    kSizedBoxH,
-                    textButton(context),
-                    kSizedBoxH,
-                    dividerWidget(),
-                    kSizedBoxH,
-                    detailsText(
-                        'India', " ${'value.userData!.indiaMobileNumber'}"),
-                    kSizedBoxH,
-                    dividerWidget(),
-                    kSizedBoxH,
-                    detailsText(
-                        'KSA', "+91 ${'value.userData!.ksaMobileNumber'}"),
-                    kSizedBoxH,
-                    dividerWidget(),
-                    kSizedBoxH,
-                    detailsText('Mail Address', 'value.userData!.email'),
-                    kSizedBoxH,
-                    // dividerWidget(),
-                    // kSizedBoxH,
-                    // detailsText('Mail Address', 'example@gmail.com'),
-                    kSizedBoxH,
-                    dividerWidget(),
-                    kSizedBoxH,
-                    detailsText('Blood Group', 'B+'),
-                    dividerWidget(),
-                    kSizedBoxH,
-                    detailsText(
-                        'Indian Address', 'value.userData!.indianAddress1'),
-                    kSizedBoxH,
-                    dividerWidget(),
-                    kSizedBoxH,
-                    detailsText(
-                        'Saudi Arabia Address', 'value.userData!.ksaAddress1'),
-                    dividerWidget(),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(left: 45.0.w, right: 8.0.w),
-                          child: const Text(
-                            'Documents',
-                            style: TextStyle(
-                                color: Color.fromARGB(255, 97, 95, 95),
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        documentContainer(),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        documentContainer(),
-                        kSizedBoxH,
-                        dividerWidget(),
-                      ],
-                    ),
-                  ],
-                )),
-          ],
-        ),
+        child: GetBuilder<ProfileController>(builder: (value) {
+          return Column(
+            children: [
+              appbar(context),
+              Container(
+                  height: 1200.h,
+                  decoration: const BoxDecoration(
+                      color: whiteColor,
+                      borderRadius: BorderRadiusDirectional.only(
+                        topStart: Radius.circular(50),
+                        topEnd: Radius.circular(50),
+                      )),
+                  child: value.loading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                          color: ThemeProvider.blackColor,
+                        ))
+                      : ListView(
+                          physics: const NeverScrollableScrollPhysics(),
+                          children: [
+                            imageContainer(),
+                            kSizedBoxH,
+                            nameText(value),
+                            kSizedBoxH,
+                            dividerWidget(),
+                            kSizedBoxH,
+                            textButton(context),
+                            kSizedBoxH,
+                            dividerWidget(),
+                            kSizedBoxH,
+                            detailsText('India',
+                                " ${value.userData!.data.indiaMobileNumber}"),
+                            kSizedBoxH,
+                            dividerWidget(),
+                            kSizedBoxH,
+                            detailsText(
+                                'KSA', value.userData!.data.ksaMobileNumber),
+                            kSizedBoxH,
+                            dividerWidget(),
+                            kSizedBoxH,
+                            detailsText(
+                                'Mail Address', value.userData!.data.email),
+                            kSizedBoxH,
+                            // dividerWidget(),
+                            // kSizedBoxH,
+                            // detailsText('Mail Address', 'example@gmail.com'),
+                            kSizedBoxH,
+                            dividerWidget(),
+                            kSizedBoxH,
+                            detailsText('Blood Group',
+                                value.userData!.data.bloodGroup.toString()),
+                            dividerWidget(),
+                            kSizedBoxH,
+                            detailsText('Indian Address',
+                                "${value.userData!.data.indianAddress1}\n${value.userData!.data.indianAddress2}"),
+                            kSizedBoxH,
+                            dividerWidget(),
+                            kSizedBoxH,
+                            detailsText('Saudi Arabia Address',
+                                '${value.userData!.data.ksaAddress1}\n${value.userData!.data.ksaAddress2}'),
+                            dividerWidget(),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 45.0.w, right: 8.0.w),
+                                  child: const Text(
+                                    'Documents',
+                                    style: TextStyle(
+                                        color: Color.fromARGB(255, 97, 95, 95),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 4,
+                                ),
+                                documentContainer(
+                                    value.userData!.data.documentProofIndia),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                documentContainer(
+                                    value.userData!.data.documentProofKsa),
+                                kSizedBoxH,
+                                dividerWidget(),
+                              ],
+                            ),
+                          ],
+                        )),
+            ],
+          );
+        }),
       ),
     ));
   }
 
-  Container documentContainer() {
+  Container documentContainer(documentProof) {
     return Container(
       margin: EdgeInsets.only(left: 36.w),
       height: 130.h,
       width: 280.w,
       decoration: BoxDecoration(
+          image: DecorationImage(image: NetworkImage(documentProof)),
           color: const Color.fromARGB(255, 223, 220, 220),
           borderRadius: BorderRadius.circular(20)),
     );
@@ -213,14 +227,14 @@ class ProfilePage extends StatelessWidget {
   }
 
   Column nameText(ProfileController value) {
-    return const Column(
+    return Column(
       children: [
         Text(
-          ' value.userData!.name!',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          value.userData!.data.name,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
-        Text('(M.${'value.userData!.id'})',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+        Text('(M.${value.userData!.data.id})',
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
       ],
     );
   }
