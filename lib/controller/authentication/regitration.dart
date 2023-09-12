@@ -15,6 +15,7 @@ import 'package:rtd_project/backend/parser/sighnup_parser.dart';
 import 'package:rtd_project/util/theme.dart';
 import 'package:rtd_project/util/toast.dart';
 import 'package:rtd_project/view/profile_screen/profile_edit_screen/profile_edit_screen.dart';
+import 'package:rtd_project/view/register_screen/widgets/register_success.dart';
 
 import '../../helper/router.dart';
 
@@ -474,6 +475,7 @@ class RegisterController extends GetxController implements GetxService {
 
       if (message.status!) {
         successToast(message.message.toString());
+        Get.bottomSheet(const RegisterComplited(), isDismissible: false);
       } else {
         showToast(k['message'].toString());
         onLogin();

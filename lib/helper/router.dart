@@ -98,18 +98,20 @@
 // import 'package:ultimate_salon_owner_flutter/app/view/verify.dart';
 
 import 'package:get/get.dart';
+import 'package:rtd_project/backend/binding/bottom_navigation_binding.dart';
 import 'package:rtd_project/backend/binding/elected_member_binding.dart';
-import 'package:rtd_project/backend/binding/home_binding.dart';
 import 'package:rtd_project/backend/binding/login_binding.dart';
 import 'package:rtd_project/backend/binding/register_binding.dart';
 import 'package:rtd_project/backend/binding/splash_binding.dart';
 import 'package:rtd_project/view/book_screen/elected_member_screen/elected_member_screen.dart';
 import 'package:rtd_project/view/login_screen/login_page.dart';
 import 'package:rtd_project/view/profile_screen/profile_edit_screen/profile_edit_screen.dart';
+import 'package:rtd_project/view/profile_screen/profile_page.dart';
 import 'package:rtd_project/view/register_screen/register_screen.dart';
 import 'package:rtd_project/view/splash_screen/splash_page.dart';
 
 import '../backend/binding/edit_profile_binding.dart';
+import '../backend/binding/profile_binding.dart';
 import '../view/home_screen/home_page.dart';
 
 class AppRouter {
@@ -119,8 +121,8 @@ class AppRouter {
   static const String electedMemberRoutes = '/electedMember';
   static const String signUpRoutes = '/signup';
   static const String tabRoutes = '/tabs';
-  static const String editprofileRoutes = '/editprofile';
-  static const String calendarRoutes = '/calendar';
+  static const String editProfileRoutes = '/editProfile';
+  static const String userProfileRoutes = '/userProfile';
   static const String inboxRoutes = '/inbox';
   static const String profileRoutes = '/profile';
   static const String orderDetailsRoutes = '/order_details';
@@ -168,8 +170,8 @@ class AppRouter {
   static String getBottomNavRoute() => bottomNavRoutes;
   static String getElectedMemberRoute() => electedMemberRoutes;
   static String getTabRoute() => tabRoutes;
-  static String getEditProfileRoute() => editprofileRoutes;
-  static String getCalendarRoute() => calendarRoutes;
+  static String getEditProfileRoute() => editProfileRoutes;
+  static String getUserProfileRoute() => userProfileRoutes;
   static String getInboxRoute() => inboxRoutes;
   static String getProfileRoute() => profileRoutes;
   static String getOrderDetailsRoute() => orderDetailsRoutes;
@@ -229,7 +231,7 @@ class AppRouter {
     GetPage(
         name: bottomNavRoutes,
         page: () => const NavigationBarpage(),
-        binding: HomeBinding()),
+        binding: BottomNavBinding()),
 
     GetPage(
         name: electedMemberRoutes,
@@ -238,13 +240,13 @@ class AppRouter {
     // GetPage(
     //     name: tabRoutes, page: () => const TabScreen(), binding: TabsBinding()),
     GetPage(
-        name: editprofileRoutes,
+        name: editProfileRoutes,
         page: () => const ProfileEditScreen(),
         binding: EditProfileBinding()),
-    // GetPage(
-    //     name: calendarRoutes,
-    //     page: () => const CalendarScreen(),
-    //     binding: CalendarsBinding()),
+    GetPage(
+        name: userProfileRoutes,
+        page: () => const ProfilePage(),
+        binding: ProfileBinding()),
     // GetPage(
     //     name: inboxRoutes,
     //     page: () => const InboxScreen(),

@@ -1,7 +1,10 @@
 import 'package:get/get.dart';
-import 'package:rtd_project/helper/router.dart';
+
+import '../backend/parser/splash_screen_parser.dart';
 
 class SplashScreenController extends GetxController {
+  final SplashScreenParser parser;
+  SplashScreenController({required this.parser});
   @override
   void onInit() {
     super.onInit();
@@ -15,6 +18,7 @@ class SplashScreenController extends GetxController {
 
   void onLogin() {
     // Get.delete<LoginController>(force: true);
-    Get.offNamed(AppRouter.getInitialRoute());
+    parser.getPage();
+    // final token = Get.offNamed(AppRouter.getInitialRoute());
   }
 }
