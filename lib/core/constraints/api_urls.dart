@@ -6,4 +6,6 @@ class Constants {
   static const String getAllBloodGroup = 'api/get_blood_groups';
   static const String getAllElectedMembers = 'api/user/board-members/list';
   static const String getUserDetails = 'api/user/details';
+  static const String updateProfile = 'api/user/update';
+
 }
