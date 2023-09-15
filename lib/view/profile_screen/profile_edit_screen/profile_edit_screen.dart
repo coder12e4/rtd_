@@ -70,7 +70,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                           ProfileEditScreenTextField(
                               controller: value.saudiMobNumContoller,
                               hinttext: value.profileData!.ksaMobileNumber,
-                              labelText: "Saudi Arabia "),
+                              labelText: "KSA"),
                           kSizedBoxH,
 
                           ProfileEditScreenTextField(
