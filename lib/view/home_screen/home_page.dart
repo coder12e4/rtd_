@@ -19,7 +19,7 @@ class NavigationBarpage extends StatefulWidget {
 
 class _NavigationBarpageState extends State<NavigationBarpage> {
   final List<Widget> _tablist = [
-    const HomePage(),
+     HomePage(),
     const WallPage(),
     const LoanPage(),
     BookPage(),

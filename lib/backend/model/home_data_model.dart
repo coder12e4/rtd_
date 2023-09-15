@@ -1,155 +1,149 @@
+// To parse this JSON data, do
+//
+//     final homeData = homeDataFromJson(jsonString);
+
+import 'dart:convert';
+
+HomeData homeDataFromJson(String str) => HomeData.fromJson(json.decode(str));
+
+String homeDataToJson(HomeData data) => json.encode(data.toJson());
+
 class HomeData {
-  bool? status;
-  Data? data;
-  String? message;
+  bool status;
+  Data data;
+  String message;
 
-  HomeData({this.status, this.data, this.message});
+  HomeData({
+    required this.status,
+    required this.data,
+    required this.message,
+  });
 
-  HomeData.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
-    message = json['message'];
-  }
+  factory HomeData.fromJson(Map<String, dynamic> json) => HomeData(
+    status: json["status"],
+    data: Data.fromJson(json["data"]),
+    message: json["message"],
+  );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['status'] = status;
-    if (this.data != null) {
-      data['data'] = this.data!.toJson();
-    }
-    data['message'] = message;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    "status": status,
+    "data": data.toJson(),
+    "message": message,
+  };
 }
 
 class Data {
-  GraphData? graphData;
-  IncomeBreakdown? incomeBreakdown;
-  List<ActiveLoan>? activeLoan;
+  GraphData graphData;
+  IncomeBreakdown incomeBreakdown;
+  List<ActiveLoan> activeLoan;
 
-  Data({this.graphData, this.incomeBreakdown, this.activeLoan});
+  Data({
+    required this.graphData,
+    required this.incomeBreakdown,
+    required this.activeLoan,
+  });
 
-  Data.fromJson(Map<String, dynamic> json) {
-    graphData = json['graph_data'] != null
-        ? GraphData.fromJson(json['graph_data'])
-        : null;
-    incomeBreakdown = json['income_breakdown'] != null
-        ? IncomeBreakdown.fromJson(json['income_breakdown'])
-        : null;
-    if (json['active_loan'] != null) {
-      activeLoan = <ActiveLoan>[];
-      json['active_loan'].forEach((v) {
-        activeLoan!.add(ActiveLoan.fromJson(v));
-      });
-    }
-  }
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
+    graphData: GraphData.fromJson(json["graph_data"]),
+    incomeBreakdown: IncomeBreakdown.fromJson(json["income_breakdown"]),
+    activeLoan: List<ActiveLoan>.from(json["active_loan"].map((x) => ActiveLoan.fromJson(x))),
+  );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    if (graphData != null) {
-      data['graph_data'] = graphData!.toJson();
-    }
-    if (incomeBreakdown != null) {
-      data['income_breakdown'] = incomeBreakdown!.toJson();
-    }
-    if (activeLoan != null) {
-      data['active_loan'] = activeLoan!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
-
-class GraphData {
-  int? userId;
-  String? userName;
-  int? graphCount;
-  int? totalCollection;
-  int? balance;
-
-  GraphData(
-      {this.userId,
-      this.userName,
-      this.graphCount,
-      this.totalCollection,
-      this.balance});
-
-  GraphData.fromJson(Map<String, dynamic> json) {
-    userId = json['user_id'];
-    userName = json['user_name'];
-    graphCount = json['graph_count'];
-    totalCollection = json['total_collection'];
-    balance = json['balance'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['user_id'] = userId;
-    data['user_name'] = userName;
-    data['graph_count'] = graphCount;
-    data['total_collection'] = totalCollection;
-    data['balance'] = balance;
-    return data;
-  }
-}
-
-class IncomeBreakdown {
-  String? typeOfJob;
-  int? memebershipAmound;
-  int? activeLoans;
-  int? closedLoans;
-
-  IncomeBreakdown(
-      {this.typeOfJob,
-      this.memebershipAmound,
-      this.activeLoans,
-      this.closedLoans});
-
-  IncomeBreakdown.fromJson(Map<String, dynamic> json) {
-    typeOfJob = json['type_of_job'];
-    memebershipAmound = json['memebership_amound'];
-    activeLoans = json['active_loans'];
-    closedLoans = json['closed_loans'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['type_of_job'] = typeOfJob;
-    data['memebership_amound'] = memebershipAmound;
-    data['active_loans'] = activeLoans;
-    data['closed_loans'] = closedLoans;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    "graph_data": graphData.toJson(),
+    "income_breakdown": incomeBreakdown.toJson(),
+    "active_loan": List<dynamic>.from(activeLoan.map((x) => x.toJson())),
+  };
 }
 
 class ActiveLoan {
-  int? loanId;
-  int? loanAmount;
-  String? startDate;
-  String? endDate;
-  String? loanType;
+  int loanId;
+  int loanAmount;
+  String startDate;
+  String endDate;
+  String loanType;
 
-  ActiveLoan(
-      {this.loanId,
-      this.loanAmount,
-      this.startDate,
-      this.endDate,
-      this.loanType});
+  ActiveLoan({
+    required this.loanId,
+    required this.loanAmount,
+    required this.startDate,
+    required this.endDate,
+    required this.loanType,
+  });
 
-  ActiveLoan.fromJson(Map<String, dynamic> json) {
-    loanId = json['loan_id'];
-    loanAmount = json['loan_amount'];
-    startDate = json['start_date'];
-    endDate = json['end_date'];
-    loanType = json['loan_type'];
-  }
+  factory ActiveLoan.fromJson(Map<String, dynamic> json) => ActiveLoan(
+    loanId: json["loan_id"],
+    loanAmount: json["loan_amount"],
+    startDate: json["start_date"],
+    endDate: json["end_date"],
+    loanType: json["loan_type"],
+  );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['loan_id'] = loanId;
-    data['loan_amount'] = loanAmount;
-    data['start_date'] = startDate;
-    data['end_date'] = endDate;
-    data['loan_type'] = loanType;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    "loan_id": loanId,
+    "loan_amount": loanAmount,
+    "start_date": startDate,
+    "end_date": endDate,
+    "loan_type": loanType,
+  };
+}
+
+class GraphData {
+  int userId;
+  String userName;
+  int graphCount;
+  int totalCollection;
+  int balance;
+
+  GraphData({
+    required this.userId,
+    required this.userName,
+    required this.graphCount,
+    required this.totalCollection,
+    required this.balance,
+  });
+
+  factory GraphData.fromJson(Map<String, dynamic> json) => GraphData(
+    userId: json["user_id"],
+    userName: json["user_name"],
+    graphCount: json["graph_count"],
+    totalCollection: json["total_collection"],
+    balance: json["balance"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "user_id": userId,
+    "user_name": userName,
+    "graph_count": graphCount,
+    "total_collection": totalCollection,
+    "balance": balance,
+  };
+}
+
+class IncomeBreakdown {
+  String typeOfJob;
+  int memebershipAmound;
+  int activeLoans;
+  int closedLoans;
+
+  IncomeBreakdown({
+    required this.typeOfJob,
+    required this.memebershipAmound,
+    required this.activeLoans,
+    required this.closedLoans,
+  });
+
+  factory IncomeBreakdown.fromJson(Map<String, dynamic> json) => IncomeBreakdown(
+    typeOfJob: json["type_of_job"],
+    memebershipAmound: json["memebership_amound"],
+    activeLoans: json["active_loans"],
+    closedLoans: json["closed_loans"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "type_of_job": typeOfJob,
+    "memebership_amound": memebershipAmound,
+    "active_loans": activeLoans,
+    "closed_loans": closedLoans,
+  };
 }

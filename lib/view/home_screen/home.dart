@@ -1,118 +1,181 @@
 import 'package:awesome_circular_chart/awesome_circular_chart.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:rtd_project/backend/model/home_data_model.dart';
 import 'package:rtd_project/controller/home_screen_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/view/notification/notification.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class HomePage extends StatefulWidget {
+  HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final HomeController contoller = Get.find();
+// @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //
+  // }
+  // @override
+  // void dispose() {
+  //   Get.delete<HomeController>(force: true);
+  //   super.dispose();
+  // }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
             backgroundColor: baseColor,
             body: SingleChildScrollView(
-              child: GetBuilder<HomeController>(builder: (value) {
-                return Column(
-                  children: [
-                    homeTextWidget(context),
-                    Container(
-                      // height: 1050.h,
-                      //hallo
-                      decoration: const BoxDecoration(
-                        color: whiteColor,
-                        borderRadius: BorderRadiusDirectional.only(
-                          topEnd: Radius.circular(40),
-                          topStart: Radius.circular(40),
-                        ),
-                      ),
-                      child: Column(
-                          // physics: const NeverScrollableScrollPhysics(),
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(18.0),
-                              child: Container(
-                                height: 500.h,
-                                // width: 100.w,
-                                decoration: BoxDecoration(
-                                    color: textFormBase,
-                                    borderRadius: BorderRadius.circular(30)),
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 68.h, vertical: 68.w),
-                                        child: Stack(
-                                          children: [
-                                            Positioned(
-                                              child: Container(
-                                                child: AnimatedCircularChart(
-                                                  holeRadius: 70.r,
-                                                  key: _chartKey,
-                                                  size: Size(350.w, 100.h),
-                                                  initialChartData: const <CircularStackEntry>[
-                                                    CircularStackEntry(
-                                                      <CircularSegmentEntry>[
-                                                        CircularSegmentEntry(
-                                                          66.67,
-                                                          Color.fromARGB(
-                                                              255, 147, 8, 96),
-                                                          rankKey: 'remaining',
-                                                        ),
-                                                        CircularSegmentEntry(
-                                                          33.33,
-                                                          Color.fromARGB(255,
-                                                              207, 200, 200),
-                                                          rankKey: 'completed',
+              child: FutureBuilder<HomeData>(
+                  future: contoller.getHomeDatas(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Container(
+                        height: 690.h,
+                        width: 390.w,
+                        color: Colors.white,
+                        child: const Center(
+                            child: CircularProgressIndicator(
+                          color: Colors.black,
+                          strokeWidth: 6,
+                        )),
+                      );
+                    }
+
+                    final HomeData homeData = snapshot.data!;
+                    return Column(
+                      children: [
+                        homeTextWidget(context),
+                        Container(
+                          // height: 1050.h,
+                          //hallo
+                          decoration: const BoxDecoration(
+                            color: whiteColor,
+                            borderRadius: BorderRadiusDirectional.only(
+                              topEnd: Radius.circular(40),
+                              topStart: Radius.circular(40),
+                            ),
+                          ),
+                          child: Column(
+                              // physics: const NeverScrollableScrollPhysics(),
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(18.0),
+                                  child: Container(
+                                    height: 500.h,
+                                    // width: 100.w,
+                                    decoration: BoxDecoration(
+                                        color: textFormBase,
+                                        borderRadius:
+                                            BorderRadius.circular(30)),
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 68.h,
+                                                vertical: 68.w),
+                                            child: Stack(
+                                              children: [
+                                                Positioned(
+                                                  child: Container(
+                                                    child:
+                                                        AnimatedCircularChart(
+                                                      holeRadius: 70.r,
+                                                      key: _chartKey,
+                                                      size: Size(350.w, 100.h),
+                                                      initialChartData: <CircularStackEntry>[
+                                                        CircularStackEntry(
+                                                          <CircularSegmentEntry>[
+                                                            CircularSegmentEntry(
+                                                              homeData
+                                                                      .data
+                                                                      .graphData
+                                                                      .graphCount
+                                                                      .toDouble() ??
+                                                                  0.0,
+                                                              const Color
+                                                                      .fromARGB(
+                                                                  255,
+                                                                  147,
+                                                                  8,
+                                                                  96),
+                                                              rankKey:
+                                                                  'remaining',
+                                                            ),
+                                                            CircularSegmentEntry(
+                                                              100 -
+                                                                  homeData
+                                                                      .data
+                                                                      .graphData
+                                                                      .graphCount
+                                                                      .toDouble(),
+                                                              const Color
+                                                                      .fromARGB(
+                                                                  255,
+                                                                  207,
+                                                                  200,
+                                                                  200),
+                                                              rankKey:
+                                                                  'completed',
+                                                            ),
+                                                          ],
+                                                          rankKey: 'progress',
                                                         ),
                                                       ],
-                                                      rankKey: 'progress',
+                                                      chartType:
+                                                          CircularChartType
+                                                              .Radial,
+                                                      percentageValues: true,
+                                                      // holeLabel: 'Total Collection',
+                                                      labelStyle:
+                                                          const TextStyle(
+                                                        color: baseColor,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 24.0,
+                                                      ),
+                                                      edgeStyle:
+                                                          SegmentEdgeStyle
+                                                              .round,
+                                                      startAngle: BorderSide
+                                                          .strokeAlignOutside,
                                                     ),
-                                                  ],
-                                                  chartType:
-                                                      CircularChartType.Radial,
-                                                  percentageValues: true,
-                                                  // holeLabel: 'Total Collection',
-                                                  labelStyle: const TextStyle(
-                                                    color: baseColor,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 24.0,
                                                   ),
-                                                  edgeStyle:
-                                                      SegmentEdgeStyle.round,
-                                                  startAngle: BorderSide
-                                                      .strokeAlignOutside,
                                                 ),
-                                              ),
+                                                Positioned(
+                                                  left: 30.w,
+                                                  child: graphCenterText(
+                                                      context, homeData),
+                                                ),
+                                              ],
                                             ),
-                                            Positioned(
-                                              left: 20.w,
-                                              child: graphCenterText(context),
-                                            ),
-                                          ],
+                                          ),
                                         ),
-                                      ),
+                                        incomBreakdown(homeData),
+                                      ],
                                     ),
-                                    incomBreakdown(),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            ),
-                            activeLoan(),
-                          ]),
-                    ),
-                  ],
-                );
-              }),
+                                activeLoan(homeData),
+                              ]),
+                        ),
+                      ],
+                    );
+                  }),
             )));
   }
 
-  graphCenterText(context) {
+  graphCenterText(context, homeData) {
     return Column(
       children: [
         const Text(
@@ -120,7 +183,7 @@ class HomePage extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
         ),
         Text(
-          '1000SR',
+          homeData.data.graphData.totalCollection.toString(),
           style: Theme.of(context)
               .textTheme
               .displayLarge!
@@ -134,7 +197,7 @@ class HomePage extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
         ),
         Text(
-          '800SR',
+          '${homeData.data.graphData.balance}SR',
           style: Theme.of(context)
               .textTheme
               .displayLarge!
@@ -144,7 +207,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Container activeLoan() {
+  Container activeLoan(homeData) {
     return Container(
       // height: 200.h,
       child: Padding(
@@ -160,18 +223,19 @@ class HomePage extends StatelessWidget {
               ),
             ),
             ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: 3,
-              itemBuilder: (context, index) => activeLoanData(),
-            )
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: homeData.data.activeLoan.length,
+                itemBuilder: (context, index) {
+                  return activeLoanData(homeData.data.activeLoan![index]);
+                })
           ],
         ),
       ),
     );
   }
 
-  Padding activeLoanData() {
+  Padding activeLoanData(data) {
     return Padding(
       padding: EdgeInsets.only(top: 10.h),
       child: Container(
@@ -183,11 +247,11 @@ class HomePage extends StatelessWidget {
           padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 20.h),
           child: Column(
             children: [
-              IncomRow(price: '10SR', title: 'Loan Amount'),
-              Divider(),
-              activeLoanRow(title: 'Start Date', date: '09/09/2023'),
-              activeLoanRow(title: 'End Date', date: '09/10/2023'),
-              activeLoanRow(title: 'Loan Type', date: 'Scheme Name Here')
+              IncomRow(price: '${data.loanAmount}SR', title: 'Loan Amount'),
+              const Divider(),
+              activeLoanRow(title: 'Start Date', date: '${data.startDate}'),
+              activeLoanRow(title: 'End Date', date: '${data.endDate}'),
+              activeLoanRow(title: 'Loan Type', date: '${data.loanType}')
             ],
           ),
         ),
@@ -195,7 +259,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Expanded incomBreakdown() {
+  Expanded incomBreakdown(homeData) {
     return Expanded(
         child: Container(
       height: 450.h,
@@ -211,9 +275,13 @@ class HomePage extends StatelessWidget {
             SizedBox(
               height: 10.h,
             ),
-            IncomRow(title: 'Truck', price: '700SR'),
-            Divider(),
-            IncomRow(title: 'Membership', price: '300SR'),
+            IncomRow(
+                title: homeData.data.incomeBreakdown.typeOfJob,
+                price: '${homeData.data.incomeBreakdown.memebershipAmound}SR'),
+            const Divider(),
+            IncomRow(
+                title: 'Membership',
+                price: '${homeData.data.incomeBreakdown.memebershipAmound}SR'),
             SizedBox(
               height: 30.h,
             ),
@@ -224,9 +292,13 @@ class HomePage extends StatelessWidget {
             SizedBox(
               height: 10.h,
             ),
-            IncomRow(title: 'Active', price: '10'),
-            Divider(),
-            IncomRow(title: 'Closed', price: '50'),
+            IncomRow(
+                title: 'Active',
+                price: '${homeData.data.incomeBreakdown.activeLoans}'),
+            const Divider(),
+            IncomRow(
+                title: 'Closed',
+                price: '${homeData.data.incomeBreakdown.closedLoans}'),
           ],
         ),
       ),
@@ -300,7 +372,7 @@ class HomePage extends StatelessWidget {
           IconButton(
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => NotificationScreen(),
+                  builder: (context) => const NotificationScreen(),
                 ));
               },
               icon: const Icon(

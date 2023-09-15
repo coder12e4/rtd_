@@ -91,7 +91,7 @@ class BookPage extends StatelessWidget {
   }
 
   Container appbar(BuildContext context, ) {
-    final ElectedMemberController electedMemb = Get.find();
+    // final ElectedMemberController electedMemb = Get.find();
     return Container(
       margin: EdgeInsets.only(top: 10.h),
       child: Column(
@@ -115,11 +115,8 @@ class BookPage extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () {
-                  electedMemb.goToELectedMemberScreen();
-                  // Get.toNamed(AppRouter.getElectedMemberRoute());
-                  // Navigator.of(context).push(MaterialPageRoute(
-                  //   builder: (context) => ElectedMemberScreen(),
-                  // ));
+                  Get.toNamed(AppRouter.getElectedMemberRoute());
+
                 },
                 icon: const Icon(
                   Icons.people_alt_rounded,
