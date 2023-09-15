@@ -19,84 +19,79 @@ class BookPage extends StatelessWidget {
     'Location 4',
     'Location 5',
   ];
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-          backgroundColor: baseColor,
-          body: SingleChildScrollView(
-            child: SizedBox(
-                child:
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    appbar(context),
-                    Container(
-                      // height: 1200.h,
-                      decoration: const BoxDecoration(
-                          color: whiteColor,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(30),
-                              topRight: Radius.circular(30))),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(top: 18.0.h),
-                            child: Center(
-                              child: DropedownWidget(
-                                  hintText: 'Location',
-                                  dropDownlist: locationlist),
-                            ),
+      backgroundColor: baseColor,
+      body: SingleChildScrollView(
+        child: SizedBox(
+          child:
+               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  appbar(context),
+                  Container(
+                    // height: 1200.h,
+                    decoration: const BoxDecoration(
+                        color: whiteColor,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            topRight: Radius.circular(30))),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(top: 18.0.h),
+                          child: Center(
+                            child: DropedownWidget(
+                                hintText: 'Location', dropDownlist: locationlist),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 28.0.h, left: 40.w),
-                            child: const Text(
-                              '08 Members',
-                              style: TextStyle(
-                                  color: Color.fromARGB(255, 123, 120, 120),
-                                  fontWeight: FontWeight.bold),
-                            ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 28.0.h, left: 40.w),
+                          child: const Text(
+                            '08 Members',
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 123, 120, 120),
+                                fontWeight: FontWeight.bold),
                           ),
-                          ListView.separated(
-                            padding: const EdgeInsets.all(30),
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: 8,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (
-                                              context) => const BookEditPage(),
-                                        ));
-                                  },
-                                  child: const MemberistTileWidget(),
-                                ),
-                              );
-                            },
-                            separatorBuilder: (context, index) =>
-                            const Divider(
-                              color: Color.fromARGB(255, 227, 224, 224),
-                            ),
-                          )
-                        ],
-                      ),
+                        ),
+                        ListView.separated(
+                          padding: const EdgeInsets.all(30),
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: 8,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => const BookEditPage(),
+                                  ));
+                                },
+                                child: const MemberistTileWidget(),
+                              ),
+                            );
+                          },
+                          separatorBuilder: (context, index) => const Divider(
+                            color: Color.fromARGB(255, 227, 224, 224),
+                          ),
+                        )
+                      ],
                     ),
-                  ],
-                )
+                  ),
+                ],
+              )
 
-            ),
-          ),
-        ));
+        ),
+      ),
+    ));
   }
 
   Container appbar(BuildContext context, ) {
-    // final ElectedMemberController electedMemb = Get.find();
+    final ElectedMemberController electedMemb = Get.find();
     return Container(
       margin: EdgeInsets.only(top: 10.h),
       child: Column(
@@ -120,8 +115,8 @@ class BookPage extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () {
-                  // electedMemb.goToELectedMemberScreen();
-                  Get.toNamed(AppRouter.getElectedMemberRoute());
+                  electedMemb.goToELectedMemberScreen();
+                  // Get.toNamed(AppRouter.getElectedMemberRoute());
                   // Navigator.of(context).push(MaterialPageRoute(
                   //   builder: (context) => ElectedMemberScreen(),
                   // ));

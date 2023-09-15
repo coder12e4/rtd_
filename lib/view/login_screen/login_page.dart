@@ -53,7 +53,7 @@ class LOginPage extends StatelessWidget {
                         ),
                         TextFormFieldWidget(
                             validator: Rtd_Validators.noneEmptyValidator,
-                            controller: value.emailController,
+                            controller: value.mobileNumberController,
                             hitText: 'Registered Mobile Number'),
                         SizedBox(
                           height: 20.h,

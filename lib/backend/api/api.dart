@@ -55,11 +55,10 @@ class ApiService extends GetxService {
 
   Future<Response> getPrivate(String uri, String token) async {
     try {
-      http.Response response = await http.get(Uri.parse(appBaseUrl + uri),
-          headers: {
-            'Content-Type': 'application/json;',
-            'Authorization': 'Bearer $token'
-          }).timeout(Duration(seconds: timeoutInSeconds));
+      http.Response response = await http.get(Uri.parse(uri), headers: {
+        'Content-Type': 'application/json;',
+        'Authorization': 'Bearer $token'
+      }).timeout(Duration(seconds: timeoutInSeconds));
       return parseResponse(response, uri);
     } catch (e) {
       return const Response(statusCode: 1, statusText: connectionIssue);
@@ -138,7 +137,6 @@ class ApiService extends GetxService {
     };
     final String requestBodyJson = jsonEncode(body);
     try {
-
       log(uri);
       log(body.toString());
 
@@ -154,7 +152,6 @@ class ApiService extends GetxService {
       log('from ApiService ${response.statusCode.toString()}');
       log(uri);
       return parseResponse(response, uri);
-
     } catch (e) {
       log(' from api service ${e.toString()}');
       return const Response(statusCode: 1, statusText: connectionIssue);

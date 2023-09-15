@@ -5,10 +5,10 @@ import 'package:get/get.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 
+import '../../../backend/model/bloodgroup_model.dart';
+import '../../../backend/model/profile_model.dart';
+import '../../../backend/model/states_model.dart';
 import '../../../controller/profile_edit_controller.dart';
-
-List<String> bloodGroup = ['o+', 'o-', 'A+', 'B+', 'A-'];
-String selectedBloodGroup = 'Select a blood group';
 
 class ProfileEditScreen extends StatefulWidget {
   const ProfileEditScreen({super.key});
@@ -16,6 +16,8 @@ class ProfileEditScreen extends StatefulWidget {
   @override
   State<ProfileEditScreen> createState() => _ProfileEditScreenState();
 }
+
+Data? userData;
 
 class _ProfileEditScreenState extends State<ProfileEditScreen> {
   @override
@@ -25,6 +27,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       backgroundColor: baseColor,
       body: SingleChildScrollView(
         child: GetBuilder<EditProfileController>(builder: (value) {
+          userData = value.userData!.data;
           return Column(
             children: [
               appbar(context),
@@ -32,150 +35,248 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 height: 20.h,
               ),
               Container(
-                height: 950.h,
+                height: 1020.h,
                 decoration: const BoxDecoration(
                     color: whiteColor,
                     borderRadius: BorderRadiusDirectional.only(
                       topStart: Radius.circular(50),
                       topEnd: Radius.circular(50),
                     )),
-                child: ListView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: [
-                    imageContainer(),
-                    kSizedBoxH,
-                    nameText(),
-                    kSizedBoxH,
-                    dividerWidget(),
-                    kSizedBoxH,
-
-                    ProfileEditScreenTextField(
-                        controller: indianMobNumContoller,
-                        hinttext: '+91 9745123456',
-                        labelText: "India"),
-                    kSizedBoxH20,
-                    // dividerWidget(),
-                    // kSizedBoxH,
-                    ProfileEditScreenTextField(
-                        controller: saudiMobNumContoller,
-                        hinttext: '+91 9745123456',
-                        labelText: "Saudi Arabia "),
-                    kSizedBoxH,
-                    // dividerWidget(),
-                    kSizedBoxH,
-                    ProfileEditScreenTextField(
-                        controller: mailContoller,
-                        hinttext: 'example@gmail.com',
-                        labelText: "Mail Address"),
-                    kSizedBoxH,
-                    // dividerWidget(),
-                    kSizedBoxH,
-                    ProfileEditScreenTextField(
-                        controller: mail2Contoller,
-                        hinttext: 'example@gmail.com',
-                        labelText: "Mail Address"),
-                    kSizedBoxH,
-                    // dividerWidget(),
-                    kSizedBoxH,
-                    Center(
-                      child: DropdownButton<String>(
-                        underline: Container(),
-                        value:
-                            selectedBloodGroup, // Set the initial value (hint text)
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedBloodGroup = newValue!;
-                          });
-                        },
-                        items: [
-                          // Add a dummy item with hint text as the first option
-                          const DropdownMenuItem<String>(
-                            value:
-                                'Select a blood group', // This value doesn't have to match any real value
-                            alignment: Alignment.center,
-                            child: Text('Blood Group'),
+                child: value.loading == true || value.userData == null
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 200.h,
                           ),
-                          // Generate other blood group options
-                          ...bloodGroup
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              alignment: Alignment.center,
-                              value: value,
-                              child: Text(value),
-                            );
-                          })
+                          const CircularProgressIndicator(),
+                        ],
+                      )
+                    : ListView(
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: [
+                          imageContainer(value),
+                          kSizedBoxH,
+                          nameText(value),
+                          kSizedBoxH,
+                          dividerWidget(),
+                          kSizedBoxH,
+
+                          ProfileEditScreenTextField(
+                              controller: indianMobNumContoller,
+                              hinttext: value.userData!.data.indiaMobileNumber,
+                              labelText: "India"),
+                          kSizedBoxH20,
+
+                          ProfileEditScreenTextField(
+                              controller: saudiMobNumContoller,
+                              hinttext: value.userData!.data.ksaMobileNumber,
+                              labelText: "Saudi Arabia "),
+                          kSizedBoxH,
+
+                          ProfileEditScreenTextField(
+                              controller: mailContoller,
+                              hinttext: 'example@gmail.com',
+                              labelText: "Mail Address"),
+                          kSizedBoxH,
+                          Padding(
+                            padding: const EdgeInsets.only(left: 45, right: 45),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<BloodGroup>(
+                                  isExpanded: true,
+                                  hint: const Text(
+                                    "Select Blood group",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        letterSpacing: .1,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  icon: const Icon(
+                                      Icons.keyboard_arrow_down_outlined),
+                                  value: value.bloodGroup,
+                                  items: value.dropdownMenuItemsBloodgroup,
+                                  onChanged: (valuee) {
+                                    setState(() {
+                                      value.bloodGroup = valuee;
+                                      value.bloodGroupName =
+                                          valuee?.groupName.toString();
+                                    });
+                                  }),
+                            ),
+                          ),
+                          // Center(
+                          //   child: DropdownButton<String>(
+                          //     underline: Container(),
+                          //     value:
+                          //         selectedBloodGroup, // Set the initial value (hint text)
+                          //     onChanged: (String? newValue) {
+                          //       setState(() {
+                          //         selectedBloodGroup = newValue!;
+                          //       });
+                          //     },
+                          //     items: [
+                          //       // Add a dummy item with hint text as the first option
+                          //       const DropdownMenuItem<String>(
+                          //         value:
+                          //             'Select a blood group', // This value doesn't have to match any real value
+                          //         alignment: Alignment.center,
+                          //         child: Text('Blood Group'),
+                          //       ),
+                          //       // Generate other blood group options
+                          //       ...bloodGroup.map<DropdownMenuItem<String>>(
+                          //           (String value) {
+                          //         return DropdownMenuItem<String>(
+                          //           alignment: Alignment.center,
+                          //           value: value,
+                          //           child: Text(value),
+                          //         );
+                          //       })
+                          //     ],
+                          //   ),
+                          // ),
+                          // kSizedBoxH,
+                          dividerWidget(),
+                          kSizedBoxH,
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 38.0.w),
+                            child: Text(
+                              ' Indian Address Line  :',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey.shade600),
+                            ),
+                          ),
+                          // ProfileEditScreenTextField(
+                          //     controller: indianAddStateContoller,
+                          //     hinttext: 'Kerala',
+                          //     labelText: "State"),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 45, right: 45),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<AllStatesModel>(
+                                  isExpanded: true,
+                                  hint: const Text(
+                                    "Select States",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        letterSpacing: .1,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  icon: const Icon(
+                                      Icons.keyboard_arrow_down_outlined),
+                                  value: value.selectedItem,
+                                  items: value.dropdownMenuItems,
+                                  onChanged: (valuee) {
+                                    setState(() {
+                                      value.selectedItem = valuee;
+                                      value.statesName =
+                                          value.selectedItem!.stateName;
+                                    });
+                                  }),
+                            ),
+                          ),
+                          dividerWidget(),
+                          ProfileEditScreenTextField(
+                              controller: indianAddressContoller1,
+                              hinttext: value.userData!.data.indiaPin,
+                              labelText: "Address 1"),
+                          ProfileEditScreenTextField(
+                              controller: indianAddressContoller2,
+                              hinttext: value.userData!.data.indiaPin,
+                              labelText: "Address 2"),
+                          ProfileEditScreenTextField(
+                              controller: indiaAddPinContoller,
+                              hinttext: value.userData!.data.indiaPin,
+                              labelText: "Pin"),
+                          kSizedBoxH20,
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 38.0.w),
+                            child: Text(
+                              ' KSA Address Line  :',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey.shade600),
+                            ),
+                          ),
+
+                          Padding(
+                            padding: const EdgeInsets.only(left: 45, right: 45),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<AllStatesModel>(
+                                  isExpanded: true,
+                                  hint: const Text(
+                                    "Select States",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        letterSpacing: .1,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  icon: const Icon(
+                                      Icons.keyboard_arrow_down_outlined),
+                                  value: value.stateKsa,
+                                  items: value.dropdownMenuItems,
+                                  onChanged: (valuee) {
+                                    setState(() {
+                                      value.stateKsa = valuee;
+                                      value.statesName =
+                                          value.stateKsa!.stateName;
+                                    });
+                                  }),
+                            ),
+                          ),
+                          dividerWidget(),
+
+                          ProfileEditScreenTextField(
+                              controller: ksaAddressContoller1,
+                              hinttext: ksaAddressContoller2.text,
+                              labelText: "Address 1"),
+                          ProfileEditScreenTextField(
+                              controller: ksaAddressContoller2,
+                              hinttext: ksaAddressContoller2.text,
+                              labelText: "Address 2"),
+                          ProfileEditScreenTextField(
+                              controller: saudiAddPinContoller,
+                              hinttext: '677743',
+                              labelText: "Pin"),
+
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 100.0.w, vertical: 20.h),
+                            child: TextButton(
+                                style: ButtonStyle(
+                                    minimumSize:
+                                        MaterialStateProperty.resolveWith(
+                                            (states) => const Size(60, 50)),
+                                    backgroundColor:
+                                        MaterialStateColor.resolveWith(
+                                            (states) => baseColor)),
+                                onPressed: () {},
+                                child: const Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 20.0, right: 18, top: 8, bottom: 8),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Icon(Icons.save_outlined,
+                                          color: whiteColor),
+                                      Text(
+                                        'Save Edit',
+                                        style: TextStyle(
+                                            color: whiteColor, fontSize: 16),
+                                      ),
+                                    ],
+                                  ),
+                                )),
+                          ),
                         ],
                       ),
-                    ),
-                    // kSizedBoxH,
-                    dividerWidget(),
-                    kSizedBoxH,
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 38.0.w),
-                      child: Text(
-                        ' Indian Address Line  :',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey.shade600),
-                      ),
-                    ),
-                    ProfileEditScreenTextField(
-                        controller: indianAddStateContoller,
-                        hinttext: 'Kerala',
-                        labelText: "State"),
-                    kSizedBoxH20,
-                    ProfileEditScreenTextField(
-                        controller: indiaAddPinContoller,
-                        hinttext: 'example@gmail.com',
-                        labelText: "Pin"),
-                    kSizedBoxH20,
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 38.0.w),
-                      child: Text(
-                        ' Saudi Arabia Address Line  :',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey.shade600),
-                      ),
-                    ),
-                    ProfileEditScreenTextField(
-                        controller: saudiAddStateContoller,
-                        hinttext: 'Kerala',
-                        labelText: "State"),
-                    kSizedBoxH20,
-                    ProfileEditScreenTextField(
-                        controller: saudiAddPinContoller,
-                        hinttext: 'example@gmail.com',
-                        labelText: "Pin"),
-
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 100.0.w, vertical: 20.h),
-                      child: TextButton(
-                          style: ButtonStyle(
-                              minimumSize: MaterialStateProperty.resolveWith(
-                                  (states) => const Size(60, 50)),
-                              backgroundColor: MaterialStateColor.resolveWith(
-                                  (states) => baseColor)),
-                          onPressed: () {},
-                          child: const Padding(
-                            padding: EdgeInsets.only(
-                                left: 20.0, right: 18, top: 8, bottom: 8),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Icon(Icons.save_outlined, color: whiteColor),
-                                Text(
-                                  'Save Edit',
-                                  style: TextStyle(
-                                      color: whiteColor, fontSize: 16),
-                                ),
-                              ],
-                            ),
-                          )),
-                    ),
-                  ],
-                ),
               )
             ],
           );
@@ -285,27 +386,27 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     );
   }
 
-  Column nameText() {
-    return const Column(
+  Column nameText(EditProfileController value) {
+    return Column(
       children: [
         Text(
-          'Shanavas Kolangattil',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          value.userData!.data.name,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
-        Text('(M.109)',
+        const Text('Not Available',
             textAlign: TextAlign.center,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
       ],
     );
   }
 
-  imageContainer() {
+  imageContainer(EditProfileController value) {
     return Center(
       child: Container(
         margin: EdgeInsets.only(top: 30.h),
         child: Stack(
           children: [
-            Container(
+            SizedBox(
               // color: baseColor,
               height: 110.h,
               width: 110.w,
@@ -359,7 +460,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
-                  onPressed: () {},
+                  onPressed: () => Get.back(),
                   icon: const Icon(
                     Icons.arrow_back,
                     color: whiteColor,
@@ -394,21 +495,25 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
 }
 
 final TextEditingController indianMobNumContoller =
-    TextEditingController(text: '+91 9745123456');
+    TextEditingController(text: userData!.indiaMobileNumber);
 final TextEditingController saudiMobNumContoller =
-    TextEditingController(text: '+91 9745123456');
+    TextEditingController(text: userData!.ksaMobileNumber);
 final TextEditingController mailContoller =
-    TextEditingController(text: 'example@gmail.com');
+    TextEditingController(text: userData!.email);
 final TextEditingController mail2Contoller =
     TextEditingController(text: 'example@gmail.com');
-final TextEditingController indianAddStateContoller =
-    TextEditingController(text: 'Kerala');
+final TextEditingController indianAddressContoller1 =
+    TextEditingController(text: userData!.indianAddress1);
+final TextEditingController indianAddressContoller2 =
+    TextEditingController(text: userData!.indianAddress2);
 final TextEditingController indiaAddPinContoller =
-    TextEditingController(text: '688011');
-final TextEditingController saudiAddStateContoller =
-    TextEditingController(text: 'Damam');
+    TextEditingController(text: userData!.indiaPin);
+final TextEditingController ksaAddressContoller1 =
+    TextEditingController(text: userData!.ksaAddress1);
+final TextEditingController ksaAddressContoller2 =
+    TextEditingController(text: userData!.ksaAddress2);
 final TextEditingController saudiAddPinContoller =
-    TextEditingController(text: '15263');
+    TextEditingController(text: userData!.ksaPin);
 
 class ProfileEditScreenTextField extends StatelessWidget {
   const ProfileEditScreenTextField({
