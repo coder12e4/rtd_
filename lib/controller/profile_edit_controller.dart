@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -13,10 +14,20 @@ class EditProfileController extends GetxController implements GetxService {
   EditProfileController({required this.parser});
   @override
   void onInit() {
-    getUserDatas();
+    getProfileData();
+
     getStates();
     getAllBloodGroup();
     super.onInit();
+    indianMobNumContoller.text = profileData!.indiaMobileNumber;
+    saudiMobNumContoller.text = profileData!.ksaMobileNumber;
+    mailContoller.text = profileData!.email;
+    indianAddressContoller1.text = profileData!.indianAddress1;
+    indianAddressContoller2.text = profileData!.indianAddress2;
+    indiaAddPinContoller.text = profileData!.indiaPin;
+    ksaAddressContoller1.text = profileData!.ksaAddress1;
+    ksaAddressContoller2.text = profileData!.ksaAddress2;
+    saudiAddPinContoller.text = profileData!.ksaPin;
   }
 
   List<AllStatesModel> _allStates = <AllStatesModel>[];
@@ -41,30 +52,22 @@ class EditProfileController extends GetxController implements GetxService {
   AllStatesModel? stateKsa;
 
   String? statesKsa;
+  Data? profileData;
   Profile? userData;
   String? statesName;
   AllStatesModel? selectedItem;
   bool loading = true;
-  void getUserDatas() async {
-    final response = await parser.getUserData();
-
-    if (response.statusCode == 200) {
-      try {
-        log(response.statusCode.toString());
-        Map<String, dynamic> data = Map<String, dynamic>.from(response.body);
-
-        userData = Profile.fromJson(data);
-        log(data.toString());
-        log(userData!.data.name.toString());
-        loading = false;
-      } catch (e) {
-        log(e.toString());
-      }
-    } else {
-      log(response.body.toString());
-    }
-    update();
-  }
+  TextEditingController indianMobNumContoller = TextEditingController();
+  TextEditingController saudiMobNumContoller = TextEditingController();
+  TextEditingController mailContoller = TextEditingController();
+  // TextEditingController mail2Contoller =
+  //     TextEditingController(text: 'example@gmail.com');
+  TextEditingController indianAddressContoller1 = TextEditingController();
+  TextEditingController indianAddressContoller2 = TextEditingController();
+  TextEditingController indiaAddPinContoller = TextEditingController();
+  TextEditingController ksaAddressContoller1 = TextEditingController();
+  TextEditingController ksaAddressContoller2 = TextEditingController();
+  TextEditingController saudiAddPinContoller = TextEditingController();
 
   void getStates() async {
     var response = await parser.getStates();
@@ -152,5 +155,43 @@ class EditProfileController extends GetxController implements GetxService {
     }
 
     return items;
+  }
+
+  void getProfileData() {
+    final data = parser.sharedPreferencesManager.getString('profile_data');
+    Map<String, dynamic> map = jsonDecode(data!);
+    profileData = Data.fromJson(map);
+
+    log("profile data${profileData!.name}");
+    loading = false;
+  }
+
+  Future<void> updateProfileData() async {
+    final body = {
+      "id": profileData!.id.toString(),
+      "name": profileData!.name,
+      "email": mailContoller.text,
+      "verification_status": profileData!.verificationStatus,
+      "india_mobile_number": indianMobNumContoller.text,
+      "ksa_mobile_number": saudiMobNumContoller.text,
+      "blood_group": bloodGroup!.id.toString(),
+      "indian_address_1": indianAddressContoller1.text,
+      "indian_address_2": indianAddressContoller2.text,
+      "india_state": selectedItem!.id.toString(),
+      "india_pin": indiaAddPinContoller.text,
+      "document_proof_india": profileData!.documentProofIndia,
+      "ksa_address_1": ksaAddressContoller1.text,
+      "ksa_address_2": ksaAddressContoller2.text,
+      "ksa_state": stateKsa!.id.toString(),
+      "ksa_pin": saudiAddPinContoller.text,
+      "document_proof_ksa": profileData!.documentProofKsa,
+    };
+    log('blood id:${bloodGroup!.id}');
+    log('state id:${selectedItem!.id}');
+    log('stateksa id:${stateKsa!.id}');
+    Response response = await parser.updateUserData(body);
+    log(response.body.toString());
+    log(response.statusCode.toString());
+    if (response.statusCode == 200) {}
   }
 }

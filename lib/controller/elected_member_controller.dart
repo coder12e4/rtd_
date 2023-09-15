@@ -1,16 +1,14 @@
-import 'dart:developer';
 import 'dart:async';
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:rtd_project/backend/model/elected_member_model.dart';
 import 'package:rtd_project/backend/parser/elected_member_parser.dart';
-import 'package:rtd_project/helper/router.dart';
 
 class ElectedMemberController extends GetxController implements GetxService {
   final ElectedMemberParser parser;
 
   ElectedMemberController({required this.parser});
-
-
 
   List<ElectedMemberData> _allElectedMembers = <ElectedMemberData>[];
   List<ElectedMemberData> get allElectedMembers => _allElectedMembers;
@@ -30,9 +28,5 @@ class ElectedMemberController extends GetxController implements GetxService {
     }
     log(_allElectedMembers.toString());
     return _allElectedMembers;
-  }
-
-  void goToELectedMemberScreen() {
-    Get.toNamed(AppRouter.getElectedMemberRoute());
   }
 }

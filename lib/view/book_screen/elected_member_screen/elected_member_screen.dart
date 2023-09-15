@@ -116,7 +116,7 @@ class ElectedMemberScreen extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () {
-                  Get.toNamed(AppRouter.electedMemberRoutes);
+                  Get.toNamed(AppRouter.getElectedMemberRoute());
                 },
                 icon: const Icon(
                   Icons.people_alt_rounded,

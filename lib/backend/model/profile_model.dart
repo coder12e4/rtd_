@@ -35,16 +35,16 @@ class Data {
   int bloodGroup;
   String indianAddress1;
   String indianAddress2;
-  AState indiaState;
+  dynamic indiaState;
   String indiaPin;
   String documentProofIndia;
   String ksaAddress1;
   String ksaAddress2;
-  AState ksaState;
+  dynamic ksaState;
   String ksaPin;
   String documentProofKsa;
-  DateTime createdAt;
-  DateTime updatedAt;
+  String createdAt;
+  String updatedAt;
   dynamic deletedAt;
 
   Data({
@@ -90,8 +90,8 @@ class Data {
         ksaState: AState.fromJson(json["ksa_state"]),
         ksaPin: json["ksa_pin"],
         documentProofKsa: json["document_proof_ksa"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"],
+        updatedAt: json["updated_at"],
         deletedAt: json["deleted_at"],
       );
 
@@ -106,16 +106,16 @@ class Data {
         "blood_group": bloodGroup,
         "indian_address_1": indianAddress1,
         "indian_address_2": indianAddress2,
-        "india_state": indiaState.toJson(),
+        "india_state": indiaState,
         "india_pin": indiaPin,
         "document_proof_india": documentProofIndia,
         "ksa_address_1": ksaAddress1,
         "ksa_address_2": ksaAddress2,
-        "ksa_state": ksaState.toJson(),
+        "ksa_state": ksaState,
         "ksa_pin": ksaPin,
         "document_proof_ksa": documentProofKsa,
-        "created_at": createdAt.toIso8601String(),
-        "updated_at": updatedAt.toIso8601String(),
+        "created_at": createdAt,
+        "updated_at": updatedAt,
         "deleted_at": deletedAt,
       };
 }

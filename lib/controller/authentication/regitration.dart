@@ -14,7 +14,6 @@ import 'package:rtd_project/backend/model/states_model.dart';
 import 'package:rtd_project/backend/parser/sighnup_parser.dart';
 import 'package:rtd_project/util/theme.dart';
 import 'package:rtd_project/util/toast.dart';
-import 'package:rtd_project/view/profile_screen/profile_edit_screen/profile_edit_screen.dart';
 import 'package:rtd_project/view/register_screen/widgets/register_success.dart';
 
 import '../../helper/router.dart';
@@ -44,6 +43,7 @@ class RegisterController extends GetxController implements GetxService {
   final TextEditingController mobileNumRegController = TextEditingController();
   final TextEditingController ksaMobileNumRegController =
       TextEditingController();
+  final TextEditingController indianMobNumContoller = TextEditingController();
   final TextEditingController watsappNumRegController = TextEditingController();
 /////resisidants adress in ksa/////////
   final TextEditingController resAddressLine1Controller =

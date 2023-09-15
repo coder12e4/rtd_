@@ -27,7 +27,6 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       backgroundColor: baseColor,
       body: SingleChildScrollView(
         child: GetBuilder<EditProfileController>(builder: (value) {
-          userData = value.userData!.data;
           return Column(
             children: [
               appbar(context),
@@ -42,7 +41,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                       topStart: Radius.circular(50),
                       topEnd: Radius.circular(50),
                     )),
-                child: value.loading == true || value.userData == null
+                child: value.loading == true
                     ? Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -63,19 +62,19 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                           kSizedBoxH,
 
                           ProfileEditScreenTextField(
-                              controller: indianMobNumContoller,
-                              hinttext: value.userData!.data.indiaMobileNumber,
+                              controller: value.indianMobNumContoller,
+                              hinttext: value.profileData!.indiaMobileNumber,
                               labelText: "India"),
                           kSizedBoxH20,
 
                           ProfileEditScreenTextField(
-                              controller: saudiMobNumContoller,
-                              hinttext: value.userData!.data.ksaMobileNumber,
+                              controller: value.saudiMobNumContoller,
+                              hinttext: value.profileData!.ksaMobileNumber,
                               labelText: "Saudi Arabia "),
                           kSizedBoxH,
 
                           ProfileEditScreenTextField(
-                              controller: mailContoller,
+                              controller: value.mailContoller,
                               hinttext: 'example@gmail.com',
                               labelText: "Mail Address"),
                           kSizedBoxH,
@@ -106,36 +105,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                   }),
                             ),
                           ),
-                          // Center(
-                          //   child: DropdownButton<String>(
-                          //     underline: Container(),
-                          //     value:
-                          //         selectedBloodGroup, // Set the initial value (hint text)
-                          //     onChanged: (String? newValue) {
-                          //       setState(() {
-                          //         selectedBloodGroup = newValue!;
-                          //       });
-                          //     },
-                          //     items: [
-                          //       // Add a dummy item with hint text as the first option
-                          //       const DropdownMenuItem<String>(
-                          //         value:
-                          //             'Select a blood group', // This value doesn't have to match any real value
-                          //         alignment: Alignment.center,
-                          //         child: Text('Blood Group'),
-                          //       ),
-                          //       // Generate other blood group options
-                          //       ...bloodGroup.map<DropdownMenuItem<String>>(
-                          //           (String value) {
-                          //         return DropdownMenuItem<String>(
-                          //           alignment: Alignment.center,
-                          //           value: value,
-                          //           child: Text(value),
-                          //         );
-                          //       })
-                          //     ],
-                          //   ),
-                          // ),
+
                           // kSizedBoxH,
                           dividerWidget(),
                           kSizedBoxH,
@@ -148,10 +118,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                   color: Colors.grey.shade600),
                             ),
                           ),
-                          // ProfileEditScreenTextField(
-                          //     controller: indianAddStateContoller,
-                          //     hinttext: 'Kerala',
-                          //     labelText: "State"),
+
                           Padding(
                             padding: const EdgeInsets.only(left: 45, right: 45),
                             child: DropdownButtonHideUnderline(
@@ -181,16 +148,16 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                           ),
                           dividerWidget(),
                           ProfileEditScreenTextField(
-                              controller: indianAddressContoller1,
-                              hinttext: value.userData!.data.indiaPin,
+                              controller: value.indianAddressContoller1,
+                              hinttext: value.profileData!.indiaPin,
                               labelText: "Address 1"),
                           ProfileEditScreenTextField(
-                              controller: indianAddressContoller2,
-                              hinttext: value.userData!.data.indiaPin,
+                              controller: value.indianAddressContoller2,
+                              hinttext: value.profileData!.indiaPin,
                               labelText: "Address 2"),
                           ProfileEditScreenTextField(
-                              controller: indiaAddPinContoller,
-                              hinttext: value.userData!.data.indiaPin,
+                              controller: value.indiaAddPinContoller,
+                              hinttext: value.profileData!.indiaPin,
                               labelText: "Pin"),
                           kSizedBoxH20,
                           Padding(
@@ -233,15 +200,15 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                           dividerWidget(),
 
                           ProfileEditScreenTextField(
-                              controller: ksaAddressContoller1,
-                              hinttext: ksaAddressContoller2.text,
+                              controller: value.ksaAddressContoller1,
+                              hinttext: value.ksaAddressContoller2.text,
                               labelText: "Address 1"),
                           ProfileEditScreenTextField(
-                              controller: ksaAddressContoller2,
-                              hinttext: ksaAddressContoller2.text,
+                              controller: value.ksaAddressContoller2,
+                              hinttext: value.ksaAddressContoller2.text,
                               labelText: "Address 2"),
                           ProfileEditScreenTextField(
-                              controller: saudiAddPinContoller,
+                              controller: value.saudiAddPinContoller,
                               hinttext: '677743',
                               labelText: "Pin"),
 
@@ -256,7 +223,9 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                     backgroundColor:
                                         MaterialStateColor.resolveWith(
                                             (states) => baseColor)),
-                                onPressed: () {},
+                                onPressed: () {
+                                  value.updateProfileData();
+                                },
                                 child: const Padding(
                                   padding: EdgeInsets.only(
                                       left: 20.0, right: 18, top: 8, bottom: 8),
@@ -390,7 +359,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     return Column(
       children: [
         Text(
-          value.userData!.data.name,
+          value.profileData!.name,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         const Text('Not Available',
@@ -493,27 +462,6 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     );
   }
 }
-
-final TextEditingController indianMobNumContoller =
-    TextEditingController(text: userData!.indiaMobileNumber);
-final TextEditingController saudiMobNumContoller =
-    TextEditingController(text: userData!.ksaMobileNumber);
-final TextEditingController mailContoller =
-    TextEditingController(text: userData!.email);
-final TextEditingController mail2Contoller =
-    TextEditingController(text: 'example@gmail.com');
-final TextEditingController indianAddressContoller1 =
-    TextEditingController(text: userData!.indianAddress1);
-final TextEditingController indianAddressContoller2 =
-    TextEditingController(text: userData!.indianAddress2);
-final TextEditingController indiaAddPinContoller =
-    TextEditingController(text: userData!.indiaPin);
-final TextEditingController ksaAddressContoller1 =
-    TextEditingController(text: userData!.ksaAddress1);
-final TextEditingController ksaAddressContoller2 =
-    TextEditingController(text: userData!.ksaAddress2);
-final TextEditingController saudiAddPinContoller =
-    TextEditingController(text: userData!.ksaPin);
 
 class ProfileEditScreenTextField extends StatelessWidget {
   const ProfileEditScreenTextField({

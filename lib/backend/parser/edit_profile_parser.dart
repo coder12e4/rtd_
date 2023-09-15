@@ -9,12 +9,6 @@ class EditProfileParser {
   final ApiService apiService;
   EditProfileParser(
       {required this.sharedPreferencesManager, required this.apiService});
-  Future<Response> getUserData() async {
-    final accessToken = sharedPreferencesManager.getString('access_token');
-
-    return await apiService.getPrivate(
-        Constants.baseUrl + Constants.getUserDetails, accessToken!);
-  }
 
   Future<Response> getStates() async {
     return await apiService
@@ -24,5 +18,11 @@ class EditProfileParser {
   Future<Response> getBloodGroup() async {
     return await apiService
         .getPublic(Constants.baseUrl + Constants.getAllBloodGroup);
+  }
+
+  Future<Response> updateUserData(body) async {
+    final accessToken = sharedPreferencesManager.getString('access_token');
+    return await apiService.postPrivate(
+        Constants.baseUrl + Constants.updateProfile, body, accessToken!);
   }
 }

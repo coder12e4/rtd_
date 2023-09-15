@@ -80,7 +80,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Form(
       key: _formKey,
       child: Container(
-          height: 1500.h,
+          height: 1800.h,
           width: 390.w,
           decoration: const BoxDecoration(
             color: whiteColor,

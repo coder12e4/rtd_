@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:get/get.dart';
 import 'package:rtd_project/backend/model/home_data_model.dart';
 
@@ -14,13 +12,14 @@ class HomeController extends GetxController implements GetxService {
     super.onInit();
   }
 
+  HomeData? data;
+  bool loading = true;
   Future<void> getHomeDatas() async {
     Response response = await parser.getHomeData();
     // log(response.body.toString());
     if (response.statusCode == 200) {
-      HomeData data = HomeData.fromJson(response.body);
-
-      log(data.status.toString());
+      data = HomeData.fromJson(response.body);
+      loading = false;
     }
   }
 }
