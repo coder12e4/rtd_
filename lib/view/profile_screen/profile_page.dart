@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:rtd_project/controller/profile_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
+import 'package:rtd_project/helper/router.dart';
 import 'package:rtd_project/util/alert_dialog.dart';
 import 'package:rtd_project/util/theme.dart';
 import 'package:rtd_project/view/profile_screen/profile_loan_screen/profile_loan_screen.dart';
@@ -30,7 +31,7 @@ class ProfilePage extends StatelessWidget {
                         topStart: Radius.circular(50),
                         topEnd: Radius.circular(50),
                       )),
-                  child: value.loading
+                  child: value.loading || value.userData == null
                       ? const Center(
                           child: CircularProgressIndicator(
                           color: ThemeProvider.blackColor,
@@ -61,9 +62,6 @@ class ProfilePage extends StatelessWidget {
                             detailsText(
                                 'Mail Address', value.userData!.data.email),
                             kSizedBoxH,
-                            // dividerWidget(),
-                            // kSizedBoxH,
-                            // detailsText('Mail Address', 'example@gmail.com'),
                             kSizedBoxH,
                             dividerWidget(),
                             kSizedBoxH,
@@ -121,9 +119,23 @@ class ProfilePage extends StatelessWidget {
       height: 130.h,
       width: 280.w,
       decoration: BoxDecoration(
-          image: DecorationImage(image: NetworkImage(documentProof)),
+          // image: DecorationImage(image: NetworkImage(documentProof)),
           color: const Color.fromARGB(255, 223, 220, 220),
           borderRadius: BorderRadius.circular(20)),
+      child: Image.network(
+        documentProof,
+        errorBuilder: (context, error, stackTrace) => Padding(
+          padding: const EdgeInsets.all(10.0).r,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error_outline),
+              kSizedBoxH,
+              Text(error.toString()),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -171,7 +183,7 @@ class ProfilePage extends StatelessWidget {
               // Navigator.of(context).push(MaterialPageRoute(
               //   builder: (context) => const ProfileEditScreen(),
               // ));
-              Get.toNamed('/editprofile');
+              Get.toNamed(AppRouter.getEditProfileRoute());
             },
             child: const Padding(
               padding:
@@ -233,8 +245,8 @@ class ProfilePage extends StatelessWidget {
           value.userData!.data.name,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
-        Text('(M.${value.userData!.data.id})',
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+        const Text('Not Available',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
       ],
     );
   }
@@ -263,15 +275,6 @@ class ProfilePage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // IconButton(
-              //     onPressed: () {
-              //       Navigator.of(context).pop();
-              //     },
-              //     icon: const Icon(
-              //       Icons.arrow_back,
-              //       color: whiteColor,
-              //       size: 30,
-              //     )),
               SizedBox(
                 width: 145.w,
               ),

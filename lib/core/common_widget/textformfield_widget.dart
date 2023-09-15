@@ -16,7 +16,7 @@ class TextFormFieldWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // FocusNode node = FocusNode();
-    return Container(
+    return SizedBox(
       width: 290.w,
       child: Padding(
         padding: const EdgeInsets.all(8.0),

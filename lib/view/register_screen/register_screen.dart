@@ -1,5 +1,7 @@
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -12,6 +14,7 @@ import 'package:rtd_project/core/common_widget/commen_botten.dart';
 import 'package:rtd_project/core/common_widget/imagepicker.dart';
 import 'package:rtd_project/core/common_widget/textformfield_widget.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
+import 'package:rtd_project/util/theme.dart';
 import 'package:rtd_project/util/toast.dart';
 
 import '../../util/validators.dart';
@@ -26,8 +29,16 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   XFile? _selectedImage;
   XFile? _selectedImage1;
+  XFile? _profileImage;
   bool image1 = false;
   bool image2 = false;
+  bool selectProfileImage = false;
+  void _updateProfileImage(XFile? profileImage) {
+    setState(() {
+      _profileImage = profileImage;
+      selectProfileImage = true;
+    });
+  }
 
   void _updateSelectedImage(XFile? newImage) {
     setState(() {
@@ -79,9 +90,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
           ),
           child: ListView(
-            padding: const EdgeInsets.all(45),
+            padding: const EdgeInsets.all(45).r,
             physics: const NeverScrollableScrollPhysics(),
             children: [
+              profileImage(context),
+              textFieldHeight,
               TextFormFieldWidget(
                   validator: Rtd_Validators.noneEmptyValidator,
                   controller: value.nameRegController,
@@ -93,28 +106,141 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   controller: value.emailRegController,
                   hitText: 'email'),
 
-              textFieldHeight,
-              TextFormFieldWidget(
-                  validator: Rtd_Validators.passwordValidator,
-                  controller: value.passwordRegController,
-                  hitText: 'password'),
+              // textFieldHeight,
+              // TextFormFieldWidget(
+              //     validator: Rtd_Validators.passwordValidator,
+              //     controller: value.passwordRegController,
+              //     hitText: 'password'),
 
               textFieldHeight,
-              TextFormFieldWidget(
+              SizedBox(
+                width: 290.w,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    focusNode: FocusNode(),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: Rtd_Validators.passwordValidator,
+                    controller: value.passwordRegController,
+                    obscureText: value.passwordVisible,
+                    decoration: InputDecoration(
+                        border: InputBorder.none, // Removes the underline
+
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            // Based on passwordVisible state choose the icon
+                            value.passwordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: Theme.of(context).primaryColorDark,
+                          ),
+                          onPressed: () {
+                            // Update the state i.e. toogle the state of passwordVisible variable
+                            value.visibityPasswordChange();
+                          },
+                        ),
+                        hintText: " Password",
+                        fillColor: textFormBase,
+                        filled: true,
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: textFormBase),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        focusedErrorBorder: UnderlineInputBorder(
+                          borderSide: const BorderSide(color: textFormBase),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: const BorderSide(color: textFormBase),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        errorBorder: UnderlineInputBorder(
+                          borderSide: const BorderSide(color: textFormBase),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        hintStyle: const TextStyle(
+                            color: Color.fromARGB(255, 112, 111, 111),
+                            fontWeight: FontWeight.bold)),
+                    textAlign:
+                        TextAlign.center, // Centers the text inside the field
+                  ),
+                ),
+              ),
+              // TextFormFieldWidget(
+              //     validator: (valuee) {
+              //       if (valuee!.isEmpty) {
+              //         return "Please Re-Enter New Password";
+              //       } else if (valuee.length < 5) {
+              //         return "Password must be atleast 5 characters long";
+              //       } else if (valuee != value.passwordRegController.text) {
+              //         return "Password must be same as above";
+              //       } else {
+              //         return null;
+              //       }
+              //     },
+              //     controller: value.confirmpasswordRegController,
+              //     hitText: 'confirm password'),
+              textFieldHeight,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  focusNode: FocusNode(),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (valuee) {
                     if (valuee!.isEmpty) {
                       return "Please Re-Enter New Password";
                     } else if (valuee.length < 5) {
                       return "Password must be atleast 5 characters long";
-                    } else if (valuee != value.passwordRegController.text) {
+                    } else if (value != value.passwordRegController.text) {
                       return "Password must be same as above";
                     } else {
                       return null;
                     }
                   },
                   controller: value.confirmpasswordRegController,
-                  hitText: 'confirm password'),
+                  obscureText: value.confirmPasswordVisible,
+                  decoration: InputDecoration(
+                      border: InputBorder.none, // Removes the underline
 
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          // Based on passwordVisible state choose the icon
+                          value.confirmPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Theme.of(context).primaryColorDark,
+                        ),
+                        onPressed: () {
+                          // Update the state i.e. toogle the state of passwordVisible variable
+                          value.visibityConfirmPasswordChange();
+                        },
+                      ),
+                      hintText: "Confirm Password",
+                      fillColor: textFormBase,
+                      filled: true,
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: textFormBase),
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      focusedErrorBorder: UnderlineInputBorder(
+                        borderSide: const BorderSide(color: textFormBase),
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: const BorderSide(color: textFormBase),
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      errorBorder: UnderlineInputBorder(
+                        borderSide: const BorderSide(color: textFormBase),
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      hintStyle: const TextStyle(
+                          color: Color.fromARGB(255, 112, 111, 111),
+                          fontWeight: FontWeight.bold)),
+                  textAlign:
+                      TextAlign.center, // Centers the text inside the field
+                ),
+              ),
               textFieldHeight,
               TextFormFieldWidget(
                   validator: Rtd_Validators.mobileNumberValidator,
@@ -230,7 +356,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   press: () {
                     showModalBottomSheet(
                       context: context,
-                      builder: (context) => Imagepiker( 
+                      builder: (context) => Imagepiker(
                         onImageSelected: _updateSelectedImage,
                       ),
                     );
@@ -331,7 +457,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   press: () {
                     if (auth.isSelected.value) {
                       if (_formKey.currentState!.validate()) {
-                        value.onRegister(_selectedImage!, _selectedImage1!);
+                        value.onRegister(
+                            _selectedImage!, _selectedImage1!, _profileImage!);
                       }
                     } else {
                       showToast('Please Agree the Terms and Conditions');
@@ -348,6 +475,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
               textFieldHeight,
             ],
           )),
+    );
+  }
+
+  Stack profileImage(BuildContext context) {
+    return Stack(
+      alignment: AlignmentDirectional.topCenter,
+      children: [
+        CircleAvatar(
+          radius: 55.r,
+          backgroundImage: !selectProfileImage
+              ? const AssetImage('assets/images/defaultpic.webp')
+                  as ImageProvider
+              : FileImage(File(_profileImage!.path)),
+        ),
+        Positioned(
+          bottom: 0,
+          right: 90.w,
+          child: CircleAvatar(
+            backgroundColor: ThemeProvider.blackColor,
+            child: IconButton(
+              onPressed: () => showModalBottomSheet(
+                context: context,
+                builder: (context) =>
+                    Imagepiker(onImageSelected: _updateProfileImage),
+              ),
+              icon: const Icon(
+                CupertinoIcons.camera,
+                color: ThemeProvider.whiteColor,
+              ),
+            ),
+          ),
+        )
+      ],
     );
   }
 

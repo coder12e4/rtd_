@@ -94,6 +94,8 @@ class RegisterController extends GetxController implements GetxService {
   // XFile? _selectedImage;
   String? cover;
   final gallery = [];
+  bool passwordVisible = true;
+  bool confirmPasswordVisible = true;
 
   List<AllStatesModel> _allStates = <AllStatesModel>[];
   List<AllStatesModel> get allStates => _allStates;
@@ -226,8 +228,17 @@ class RegisterController extends GetxController implements GetxService {
   //     }
   //   }
   // }
+  void visibityPasswordChange() {
+    passwordVisible = !passwordVisible;
+    update();
+  }
 
-  Future<void> onRegister(XFile file1, XFile file2) async {
+  void visibityConfirmPasswordChange() {
+    confirmPasswordVisible = !confirmPasswordVisible;
+    update();
+  }
+
+  Future<void> onRegister(XFile file1, XFile file2, XFile profileImage) async {
     try {
       /*if (emailRegController.text == '' ||
           emailRegController.text.isEmpty ||
@@ -288,9 +299,10 @@ class RegisterController extends GetxController implements GetxService {
       log('state2${stateKsa!.id.toString()}');
       log('blood group${bloodGroup!.id.toString()}');
 
-      await Upload(
+      await upload(
         file1,
         file2,
+        profileImage,
         nameRegController.text,
         emailRegController.text,
         passwordRegController.text,
@@ -407,9 +419,10 @@ class RegisterController extends GetxController implements GetxService {
     return items;
   }
 
-  Future<void> Upload(
+  Future<void> upload(
     XFile data1,
     XFile data2,
+    XFile data3,
     name,
     email,
     password,
@@ -428,11 +441,15 @@ class RegisterController extends GetxController implements GetxService {
   ) async {
     File file1 = File(data1.path);
     File file2 = File(data2.path);
+    File profileImage = File(data3.path);
     var stream3 = http.ByteStream(DelegatingStream.typed(file1.openRead()));
     var length3 = await file1.length();
 
     var stream4 = http.ByteStream(DelegatingStream.typed(file2.openRead()));
     var length4 = await file2.length();
+    var stream5 =
+        http.ByteStream(DelegatingStream.typed(profileImage.openRead()));
+    var length5 = await profileImage.length();
     var uri = Uri.parse("http://rtd.canisostudio.com/api/register");
 
     var request = http.MultipartRequest("POST", uri);
@@ -443,9 +460,14 @@ class RegisterController extends GetxController implements GetxService {
     var representative_company_idcard_image = http.MultipartFile(
         'document_proof_ksa', stream4, length4,
         filename: basename(file2.path), contentType: MediaType('image', 'png'));
+    var representative_profile_image = http.MultipartFile(
+        'profile_image', stream5, length5,
+        filename: basename(profileImage.path),
+        contentType: MediaType('image', 'png'));
 
     request.files.add(representative_driving_liesence_image);
     request.files.add(representative_company_idcard_image);
+    request.files.add(representative_profile_image);
 
     request.fields['name'] = name;
     request.fields['email'] = email;
