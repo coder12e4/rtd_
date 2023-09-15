@@ -1,25 +1,39 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:rtd_project/backend/model/home_data_model.dart';
 
 import '../backend/parser/home_parser.dart';
+import 'dart:async';
+
 
 class HomeController extends GetxController implements GetxService {
   final HomeParser parser;
   HomeController({required this.parser});
   @override
-  void onInit() {
-    getHomeDatas();
+  void onInit() async{
+    await getHomeDatas();
     super.onInit();
   }
 
-  HomeData? data;
-  bool loading = true;
-  Future<void> getHomeDatas() async {
+     HomeData? homeData;
+  final _homeDataController = StreamController<HomeData>();
+
+  Stream<HomeData> get homeDataStream => _homeDataController.stream;
+
+
+  Future<HomeData> getHomeDatas() async {
     Response response = await parser.getHomeData();
-    // log(response.body.toString());
+
     if (response.statusCode == 200) {
-      data = HomeData.fromJson(response.body);
-      loading = false;
+      HomeData data = HomeData.fromJson(response.body);
+      homeData = data;
+      log(data.data.graphData.toString());
+
+      _homeDataController.add(data); // Emit data to the stream
     }
+    return homeData!;
   }
+
 }
