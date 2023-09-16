@@ -9,6 +9,7 @@ import '../../../backend/model/bloodgroup_model.dart';
 import '../../../backend/model/profile_model.dart';
 import '../../../backend/model/states_model.dart';
 import '../../../controller/profile_edit_controller.dart';
+import '../../../util/validators.dart';
 
 class ProfileEditScreen extends StatefulWidget {
   const ProfileEditScreen({super.key});
@@ -18,240 +19,268 @@ class ProfileEditScreen extends StatefulWidget {
 }
 
 Data? userData;
+final _formKey = GlobalKey<FormState>();
 
 class _ProfileEditScreenState extends State<ProfileEditScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-      backgroundColor: baseColor,
-      body: SingleChildScrollView(
-        child: GetBuilder<EditProfileController>(builder: (value) {
-          return Column(
-            children: [
-              appbar(context),
-              SizedBox(
-                height: 20.h,
-              ),
-              Container(
-                height: 1020.h,
-                decoration: const BoxDecoration(
-                    color: whiteColor,
-                    borderRadius: BorderRadiusDirectional.only(
-                      topStart: Radius.circular(50),
-                      topEnd: Radius.circular(50),
-                    )),
-                child: value.loading == true
-                    ? Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            height: 200.h,
-                          ),
-                          const CircularProgressIndicator(),
-                        ],
-                      )
-                    : ListView(
-                        physics: const NeverScrollableScrollPhysics(),
-                        children: [
-                          imageContainer(value),
-                          kSizedBoxH,
-                          nameText(value),
-                          kSizedBoxH,
-                          dividerWidget(),
-                          kSizedBoxH,
-
-                          ProfileEditScreenTextField(
-                              controller: value.indianMobNumContoller,
-                              hinttext: value.profileData!.indiaMobileNumber,
-                              labelText: "India"),
-                          kSizedBoxH20,
-
-                          ProfileEditScreenTextField(
-                              controller: value.saudiMobNumContoller,
-                              hinttext: value.profileData!.ksaMobileNumber,
-                              labelText: "KSA"),
-                          kSizedBoxH,
-
-                          ProfileEditScreenTextField(
-                              controller: value.mailContoller,
-                              hinttext: 'example@gmail.com',
-                              labelText: "Mail Address"),
-                          kSizedBoxH,
-                          Padding(
-                            padding: const EdgeInsets.only(left: 45, right: 45),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<BloodGroup>(
-                                  isExpanded: true,
-                                  hint: const Text(
-                                    "Select Blood group",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        letterSpacing: .1,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  icon: const Icon(
-                                      Icons.keyboard_arrow_down_outlined),
-                                  value: value.bloodGroup,
-                                  items: value.dropdownMenuItemsBloodgroup,
-                                  onChanged: (valuee) {
-                                    setState(() {
-                                      value.bloodGroup = valuee;
-                                      value.bloodGroupName =
-                                          valuee?.groupName.toString();
-                                    });
-                                  }),
+      child: Scaffold(
+        backgroundColor: baseColor,
+        body: SingleChildScrollView(
+          child: GetBuilder<EditProfileController>(builder: (value) {
+            return Column(
+              children: [
+                appbar(context),
+                SizedBox(
+                  height: 20.h,
+                ),
+                Container(
+                  height: 1020.h,
+                  decoration: const BoxDecoration(
+                      color: whiteColor,
+                      borderRadius: BorderRadiusDirectional.only(
+                        topStart: Radius.circular(50),
+                        topEnd: Radius.circular(50),
+                      )),
+                  child: value.loading == true
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: 200.h,
                             ),
-                          ),
+                            const CircularProgressIndicator(),
+                          ],
+                        )
+                      : Form(
+                          key: _formKey,
+                          child: ListView(
+                            physics: const NeverScrollableScrollPhysics(),
+                            children: [
+                              imageContainer(value),
+                              kSizedBoxH,
+                              nameText(value),
+                              kSizedBoxH,
+                              dividerWidget(),
+                              kSizedBoxH,
 
-                          // kSizedBoxH,
-                          dividerWidget(),
-                          kSizedBoxH,
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 38.0.w),
-                            child: Text(
-                              ' Indian Address Line  :',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey.shade600),
-                            ),
-                          ),
+                              ProfileEditScreenTextField(
+                                  validator:
+                                      Rtd_Validators.mobileNumberValidator,
+                                  controller: value.indianMobNumContoller,
+                                  hinttext:
+                                      value.profileData!.indiaMobileNumber,
+                                  labelText: "India"),
+                              kSizedBoxH20,
 
-                          Padding(
-                            padding: const EdgeInsets.only(left: 45, right: 45),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<AllStatesModel>(
-                                  isExpanded: true,
-                                  hint: const Text(
-                                    "Select States",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        letterSpacing: .1,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  icon: const Icon(
-                                      Icons.keyboard_arrow_down_outlined),
-                                  value: value.selectedItem,
-                                  items: value.dropdownMenuItems,
-                                  onChanged: (valuee) {
-                                    setState(() {
-                                      value.selectedItem = valuee;
-                                      value.statesName =
-                                          value.selectedItem!.stateName;
-                                    });
-                                  }),
-                            ),
-                          ),
-                          dividerWidget(),
-                          ProfileEditScreenTextField(
-                              controller: value.indianAddressContoller1,
-                              hinttext: value.profileData!.indiaPin,
-                              labelText: "Address 1"),
-                          ProfileEditScreenTextField(
-                              controller: value.indianAddressContoller2,
-                              hinttext: value.profileData!.indiaPin,
-                              labelText: "Address 2"),
-                          ProfileEditScreenTextField(
-                              controller: value.indiaAddPinContoller,
-                              hinttext: value.profileData!.indiaPin,
-                              labelText: "Pin"),
-                          kSizedBoxH20,
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 38.0.w),
-                            child: Text(
-                              ' KSA Address Line  :',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey.shade600),
-                            ),
-                          ),
+                              ProfileEditScreenTextField(
+                                  validator:
+                                      Rtd_Validators.mobileNumberValidator,
+                                  controller: value.saudiMobNumContoller,
+                                  hinttext: value.profileData!.ksaMobileNumber,
+                                  labelText: "KSA"),
+                              kSizedBoxH,
 
-                          Padding(
-                            padding: const EdgeInsets.only(left: 45, right: 45),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<AllStatesModel>(
-                                  isExpanded: true,
-                                  hint: const Text(
-                                    "Select States",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        letterSpacing: .1,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  icon: const Icon(
-                                      Icons.keyboard_arrow_down_outlined),
-                                  value: value.stateKsa,
-                                  items: value.dropdownMenuItems,
-                                  onChanged: (valuee) {
-                                    setState(() {
-                                      value.stateKsa = valuee;
-                                      value.statesName =
-                                          value.stateKsa!.stateName;
-                                    });
-                                  }),
-                            ),
-                          ),
-                          dividerWidget(),
-
-                          ProfileEditScreenTextField(
-                              controller: value.ksaAddressContoller1,
-                              hinttext: value.ksaAddressContoller2.text,
-                              labelText: "Address 1"),
-                          ProfileEditScreenTextField(
-                              controller: value.ksaAddressContoller2,
-                              hinttext: value.ksaAddressContoller2.text,
-                              labelText: "Address 2"),
-                          ProfileEditScreenTextField(
-                              controller: value.saudiAddPinContoller,
-                              hinttext: '677743',
-                              labelText: "Pin"),
-
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 100.0.w, vertical: 20.h),
-                            child: TextButton(
-                                style: ButtonStyle(
-                                    minimumSize:
-                                        MaterialStateProperty.resolveWith(
-                                            (states) => const Size(60, 50)),
-                                    backgroundColor:
-                                        MaterialStateColor.resolveWith(
-                                            (states) => baseColor)),
-                                onPressed: () {
-                                  value.updateProfileData();
-                                },
-                                child: const Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 20.0, right: 18, top: 8, bottom: 8),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Icon(Icons.save_outlined,
-                                          color: whiteColor),
-                                      Text(
-                                        'Save Edit',
+                              ProfileEditScreenTextField(
+                                  validator: Rtd_Validators.emailValidator,
+                                  controller: value.mailContoller,
+                                  hinttext: 'example@gmail.com',
+                                  labelText: "Mail Address"),
+                              kSizedBoxH,
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 45, right: 45),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton<BloodGroup>(
+                                      isExpanded: true,
+                                      hint: const Text(
+                                        "Select Blood group",
+                                        textAlign: TextAlign.center,
                                         style: TextStyle(
-                                            color: whiteColor, fontSize: 16),
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                            letterSpacing: .1,
+                                            fontWeight: FontWeight.w500),
                                       ),
-                                    ],
-                                  ),
-                                )),
+                                      icon: const Icon(
+                                          Icons.keyboard_arrow_down_outlined),
+                                      value: value.bloodGroup,
+                                      items: value.dropdownMenuItemsBloodgroup,
+                                      onChanged: (valuee) {
+                                        setState(() {
+                                          value.bloodGroup = valuee;
+                                          value.bloodGroupName =
+                                              valuee?.groupName.toString();
+                                        });
+                                      }),
+                                ),
+                              ),
+
+                              // kSizedBoxH,
+                              dividerWidget(),
+                              kSizedBoxH,
+                              Padding(
+                                padding:
+                                    EdgeInsets.symmetric(horizontal: 38.0.w),
+                                child: Text(
+                                  ' Indian Address Line  :',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey.shade600),
+                                ),
+                              ),
+
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 45, right: 45),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton<AllStatesModel>(
+                                      isExpanded: true,
+                                      hint: const Text(
+                                        "Select States",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                            letterSpacing: .1,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      icon: const Icon(
+                                          Icons.keyboard_arrow_down_outlined),
+                                      value: value.selectedItem,
+                                      items: value.dropdownMenuItems,
+                                      onChanged: (valuee) {
+                                        setState(() {
+                                          value.selectedItem = valuee;
+                                          value.statesName =
+                                              value.selectedItem!.stateName;
+                                        });
+                                      }),
+                                ),
+                              ),
+                              dividerWidget(),
+                              ProfileEditScreenTextField(
+                                  validator: Rtd_Validators.noneEmptyValidator,
+                                  controller: value.indianAddressContoller1,
+                                  hinttext: value.profileData!.indiaPin,
+                                  labelText: "Address 1"),
+                              ProfileEditScreenTextField(
+                                  validator: Rtd_Validators.noneEmptyValidator,
+                                  controller: value.indianAddressContoller2,
+                                  hinttext: value.profileData!.indiaPin,
+                                  labelText: "Address 2"),
+                              ProfileEditScreenTextField(
+                                  validator: Rtd_Validators.pincodeValidator,
+                                  controller: value.indiaAddPinContoller,
+                                  hinttext: value.profileData!.indiaPin,
+                                  labelText: "Pin"),
+                              kSizedBoxH20,
+                              Padding(
+                                padding:
+                                    EdgeInsets.symmetric(horizontal: 38.0.w),
+                                child: Text(
+                                  ' KSA Address Line  :',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey.shade600),
+                                ),
+                              ),
+
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 45, right: 45),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton<AllStatesModel>(
+                                      isExpanded: true,
+                                      hint: const Text(
+                                        "Select States",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                            letterSpacing: .1,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      icon: const Icon(
+                                          Icons.keyboard_arrow_down_outlined),
+                                      value: value.stateKsa,
+                                      items: value.dropdownMenuItems,
+                                      onChanged: (valuee) {
+                                        setState(() {
+                                          value.stateKsa = valuee;
+                                          value.statesName =
+                                              value.stateKsa!.stateName;
+                                        });
+                                      }),
+                                ),
+                              ),
+                              dividerWidget(),
+
+                              ProfileEditScreenTextField(
+                                  validator: Rtd_Validators.noneEmptyValidator,
+                                  controller: value.ksaAddressContoller1,
+                                  hinttext: value.ksaAddressContoller2.text,
+                                  labelText: "Address 1"),
+                              ProfileEditScreenTextField(
+                                  validator: Rtd_Validators.noneEmptyValidator,
+                                  controller: value.ksaAddressContoller2,
+                                  hinttext: value.ksaAddressContoller2.text,
+                                  labelText: "Address 2"),
+                              ProfileEditScreenTextField(
+                                  validator: Rtd_Validators.pincodeValidator,
+                                  controller: value.saudiAddPinContoller,
+                                  hinttext: '677743',
+                                  labelText: "Pin"),
+
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 100.0.w, vertical: 20.h),
+                                child: TextButton(
+                                    style: ButtonStyle(
+                                        minimumSize:
+                                            MaterialStateProperty.resolveWith(
+                                                (states) => const Size(60, 50)),
+                                        backgroundColor:
+                                            MaterialStateColor.resolveWith(
+                                                (states) => baseColor)),
+                                    onPressed: () {
+                                      if (_formKey.currentState!.validate()) {
+                                        value.updateProfileData();
+                                      }
+                                    },
+                                    child: const Padding(
+                                      padding: EdgeInsets.only(
+                                          left: 20.0,
+                                          right: 18,
+                                          top: 8,
+                                          bottom: 8),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Icon(Icons.save_outlined,
+                                              color: whiteColor),
+                                          Text(
+                                            'Save Edit',
+                                            style: TextStyle(
+                                                color: whiteColor,
+                                                fontSize: 16),
+                                          ),
+                                        ],
+                                      ),
+                                    )),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-              )
-            ],
-          );
-        }),
+                        ),
+                )
+              ],
+            );
+          }),
+        ),
       ),
-    ));
+    );
   }
 
   Container documentContainer() {
@@ -464,15 +493,16 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
 }
 
 class ProfileEditScreenTextField extends StatelessWidget {
-  const ProfileEditScreenTextField({
-    super.key,
-    required this.hinttext,
-    required this.labelText,
-    required this.controller,
-  });
+  const ProfileEditScreenTextField(
+      {super.key,
+      required this.hinttext,
+      required this.labelText,
+      required this.controller,
+      required this.validator});
   final String hinttext;
   final String labelText;
   final TextEditingController controller;
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {

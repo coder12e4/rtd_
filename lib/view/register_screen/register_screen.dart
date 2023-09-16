@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -106,12 +105,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   controller: value.emailRegController,
                   hitText: 'email'),
 
-              // textFieldHeight,
-              // TextFormFieldWidget(
-              //     validator: Rtd_Validators.passwordValidator,
-              //     controller: value.passwordRegController,
-              //     hitText: 'password'),
-
               textFieldHeight,
               SizedBox(
                 width: 290.w,
@@ -166,20 +159,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
               ),
-              // TextFormFieldWidget(
-              //     validator: (valuee) {
-              //       if (valuee!.isEmpty) {
-              //         return "Please Re-Enter New Password";
-              //       } else if (valuee.length < 5) {
-              //         return "Password must be atleast 5 characters long";
-              //       } else if (valuee != value.passwordRegController.text) {
-              //         return "Password must be same as above";
-              //       } else {
-              //         return null;
-              //       }
-              //     },
-              //     controller: value.confirmpasswordRegController,
-              //     hitText: 'confirm password'),
+
               textFieldHeight,
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -191,7 +171,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       return "Please Re-Enter New Password";
                     } else if (valuee.length < 5) {
                       return "Password must be atleast 5 characters long";
-                    } else if (value != value.passwordRegController.text) {
+                    } else if (valuee != value.passwordRegController.text) {
                       return "Password must be same as above";
                     } else {
                       return null;
@@ -457,14 +437,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   press: () {
                     if (auth.isSelected.value) {
                       if (_formKey.currentState!.validate()) {
+                        if (_profileImage == null) {
+                          showToast('Add profile picture'.tr);
+                          return;
+                        }
                         value.onRegister(
                             _selectedImage!, _selectedImage1!, _profileImage!);
                       }
                     } else {
                       showToast('Please Agree the Terms and Conditions');
                     }
-                    log("first image ${_selectedImage!.path.toString()}");
-                    log("Second image ${_selectedImage1!.path.toString()}");
+                    // log("first image ${_selectedImage!.path.toString()}");
+                    // log("Second image ${_selectedImage1!.path.toString()}");
 
                     // Navigator.of(context).pushReplacement(MaterialPageRoute(
                     //   builder: (context) => const NavigationBarpage(),
