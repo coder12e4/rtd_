@@ -167,31 +167,28 @@ class EditProfileController extends GetxController implements GetxService {
   }
 
   Future<void> updateProfileData() async {
-    final body = {
-      "id": profileData!.id.toString(),
+    final Map<String, dynamic> body = {
       "name": profileData!.name,
       "email": mailContoller.text,
-      "verification_status": profileData!.verificationStatus,
-      "india_mobile_number": indianMobNumContoller.text,
-      "ksa_mobile_number": saudiMobNumContoller.text,
-      "blood_group": bloodGroup!.id.toString(),
+      "india_mobile_number": indianMobNumContoller.text.toString(),
+      "ksa_mobile_number": saudiMobNumContoller.text.toString(),
+      "blood_group": bloodGroup!.id,
       "indian_address_1": indianAddressContoller1.text,
       "indian_address_2": indianAddressContoller2.text,
-      "india_state": selectedItem!.id.toString(),
-      "india_pin": indiaAddPinContoller.text,
-      "document_proof_india": profileData!.documentProofIndia,
+      "india_state": selectedItem!.id,
+      "india_pin": indiaAddPinContoller.text.toString(),
       "ksa_address_1": ksaAddressContoller1.text,
       "ksa_address_2": ksaAddressContoller2.text,
-      "ksa_state": stateKsa!.id.toString(),
-      "ksa_pin": saudiAddPinContoller.text,
-      "document_proof_ksa": profileData!.documentProofKsa,
+      "ksa_state": stateKsa!.id,
+      "ksa_pin": saudiAddPinContoller.text.toString(),
     };
     log('blood id:${bloodGroup!.id}');
     log('state id:${selectedItem!.id}');
     log('stateksa id:${stateKsa!.id}');
     Response response = await parser.updateUserData(body);
-    log(response.body.toString());
     log(response.statusCode.toString());
-    if (response.statusCode == 200) {}
+    if (response.statusCode == 200) {
+      log(response.body.toString());
+    }
   }
 }

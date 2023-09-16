@@ -191,7 +191,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       return "Please Re-Enter New Password";
                     } else if (valuee.length < 5) {
                       return "Password must be atleast 5 characters long";
-                    } else if (value != value.passwordRegController.text) {
+                    } else if (valuee != value.passwordRegController.text) {
                       return "Password must be same as above";
                     } else {
                       return null;
@@ -244,7 +244,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               textFieldHeight,
               TextFormFieldWidget(
                   validator: Rtd_Validators.mobileNumberValidator,
-                  controller: value.mobileNumRegController,
+                  controller: value.indianMobNumContoller,
                   hitText: 'Indian Mobile Number'),
               textFieldHeight,
               TextFormFieldWidget(

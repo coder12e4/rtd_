@@ -141,7 +141,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                     setState(() {
                                       value.selectedItem = valuee;
                                       value.statesName =
-                                          value.selectedItem!.stateName;
+                                          value.selectedItem!.stateName.toString();
                                     });
                                   }),
                             ),

@@ -439,6 +439,7 @@ class RegisterController extends GetxController implements GetxService {
     kState,
     kPin,
   ) async {
+    log('${inum}: $ksanum');
     File file1 = File(data1.path);
     File file2 = File(data2.path);
     File profileImage = File(data3.path);
