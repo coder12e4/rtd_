@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
+import 'package:rtd_project/util/toast.dart';
 
 import '../../../backend/model/bloodgroup_model.dart';
 import '../../../backend/model/profile_model.dart';
@@ -19,7 +20,7 @@ class ProfileEditScreen extends StatefulWidget {
 }
 
 Data? userData;
-final _formKey = GlobalKey<FormState>();
+final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 class _ProfileEditScreenState extends State<ProfileEditScreen> {
   @override
@@ -36,7 +37,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                   height: 20.h,
                 ),
                 Container(
-                  height: 1020.h,
+                  height: 1300.h,
                   decoration: const BoxDecoration(
                       color: whiteColor,
                       borderRadius: BorderRadiusDirectional.only(
@@ -55,6 +56,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         )
                       : Form(
                           key: _formKey,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           child: ListView(
                             physics: const NeverScrollableScrollPhysics(),
                             children: [
@@ -192,27 +194,28 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                     const EdgeInsets.only(left: 45, right: 45),
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButton<AllStatesModel>(
-                                      isExpanded: true,
-                                      hint: const Text(
-                                        "Select States",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 16,
-                                            letterSpacing: .1,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                      icon: const Icon(
-                                          Icons.keyboard_arrow_down_outlined),
-                                      value: value.stateKsa,
-                                      items: value.dropdownMenuItems,
-                                      onChanged: (valuee) {
-                                        setState(() {
-                                          value.stateKsa = valuee;
-                                          value.statesName =
-                                              value.stateKsa!.stateName;
-                                        });
-                                      }),
+                                    isExpanded: true,
+                                    hint: const Text(
+                                      "Select States",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          letterSpacing: .1,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    icon: const Icon(
+                                        Icons.keyboard_arrow_down_outlined),
+                                    value: value.stateKsa,
+                                    items: value.dropdownMenuItems,
+                                    onChanged: (valuee) {
+                                      setState(() {
+                                        value.stateKsa = valuee;
+                                        value.statesName =
+                                            value.stateKsa!.stateName;
+                                      });
+                                    },
+                                  ),
                                 ),
                               ),
                               dividerWidget(),
@@ -220,7 +223,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                               ProfileEditScreenTextField(
                                   validator: Rtd_Validators.noneEmptyValidator,
                                   controller: value.ksaAddressContoller1,
-                                  hinttext: value.ksaAddressContoller2.text,
+                                  hinttext: value.ksaAddressContoller1.text,
                                   labelText: "Address 1"),
                               ProfileEditScreenTextField(
                                   validator: Rtd_Validators.noneEmptyValidator,
@@ -246,6 +249,15 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                                 (states) => baseColor)),
                                     onPressed: () {
                                       if (_formKey.currentState!.validate()) {
+                                        if (value.bloodGroupName == null) {
+                                          showToast('Select blood group');
+                                          return;
+                                        }
+                                        if (value.stateKsa == null ||
+                                            value.selectedItem == null) {
+                                          showToast('Select States');
+                                          return;
+                                        }
                                         value.updateProfileData();
                                       }
                                     },
@@ -511,6 +523,7 @@ class ProfileEditScreenTextField extends StatelessWidget {
       child: TextFormField(
         cursorColor: baseColor,
         style: const TextStyle(color: baseColor),
+        validator: validator,
         controller: controller,
         decoration: InputDecoration(
             focusedBorder: UnderlineInputBorder(

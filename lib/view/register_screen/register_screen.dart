@@ -224,7 +224,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               textFieldHeight,
               TextFormFieldWidget(
                   validator: Rtd_Validators.mobileNumberValidator,
-                  controller: value.mobileNumRegController,
+                  controller: value.indianMobNumContoller,
                   hitText: 'Indian Mobile Number'),
               textFieldHeight,
               TextFormFieldWidget(

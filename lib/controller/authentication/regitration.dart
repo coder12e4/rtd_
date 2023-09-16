@@ -269,10 +269,7 @@ class RegisterController extends GetxController implements GetxService {
         showToast('Email is not valid'.tr);
         return;
       }
-      if (profileImage == null || profileImage.path.isEmpty) {
-        showToast('select profile image'.tr);
-        return;
-      }
+
       Get.dialog(
         SimpleDialog(
           children: [
@@ -442,6 +439,7 @@ class RegisterController extends GetxController implements GetxService {
     kState,
     kPin,
   ) async {
+    log('${inum}: $ksanum');
     File file1 = File(data1.path);
     File file2 = File(data2.path);
     File profileImage = File(data3.path);
@@ -503,7 +501,6 @@ class RegisterController extends GetxController implements GetxService {
         successToast(message.message.toString());
         Get.bottomSheet(const RegisterComplited(), isDismissible: false);
       } else {
-        log(k['message'].toString());
         showToast(k['message'].toString());
         onLogin();
       }

@@ -153,7 +153,8 @@ class _HomePageState extends State<HomePage> {
                                                   ),
                                                 ),
                                                 Positioned(
-                                                  left: 30.w,
+                                                  top: 5.h,
+                                                  left: 25.w,
                                                   child: graphCenterText(
                                                       context, homeData),
                                                 ),

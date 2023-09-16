@@ -29,5 +29,6 @@ void logOutDialog() {
 
 logOut() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.remove('profile_data');
   prefs.clear();
 }
