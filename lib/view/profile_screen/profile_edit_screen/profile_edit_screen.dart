@@ -37,7 +37,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                   height: 20.h,
                 ),
                 Container(
-                  height: 1300.h,
+                  height: 1100.h,
+                  width: 390.w,
                   decoration: const BoxDecoration(
                       color: whiteColor,
                       borderRadius: BorderRadiusDirectional.only(
@@ -45,14 +46,15 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         topEnd: Radius.circular(50),
                       )),
                   child: value.loading == true
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 200.h,
-                            ),
-                            const CircularProgressIndicator(),
-                          ],
+                      ? Container(
+                          height: 590.h,
+                          width: 390.w,
+                          color: Colors.white,
+                          child: const Center(
+                              child: CircularProgressIndicator(
+                            color: Colors.black,
+                            strokeWidth: 6,
+                          )),
                         )
                       : Form(
                           key: _formKey,
@@ -72,7 +74,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                       Rtd_Validators.mobileNumberValidator,
                                   controller: value.indianMobNumContoller,
                                   hinttext:
-                                      value.profileData!.indiaMobileNumber,
+                                      value.userData!.data.indiaMobileNumber,
                                   labelText: "India"),
                               kSizedBoxH20,
 
@@ -80,7 +82,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                   validator:
                                       Rtd_Validators.mobileNumberValidator,
                                   controller: value.saudiMobNumContoller,
-                                  hinttext: value.profileData!.ksaMobileNumber,
+                                  hinttext:
+                                      value.userData!.data.ksaMobileNumber,
                                   labelText: "KSA"),
                               kSizedBoxH,
 
@@ -165,17 +168,17 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                               ProfileEditScreenTextField(
                                   validator: Rtd_Validators.noneEmptyValidator,
                                   controller: value.indianAddressContoller1,
-                                  hinttext: value.profileData!.indiaPin,
+                                  hinttext: value.userData!.data.indiaPin,
                                   labelText: "Address 1"),
                               ProfileEditScreenTextField(
                                   validator: Rtd_Validators.noneEmptyValidator,
                                   controller: value.indianAddressContoller2,
-                                  hinttext: value.profileData!.indiaPin,
+                                  hinttext: value.userData!.data.indiaPin,
                                   labelText: "Address 2"),
                               ProfileEditScreenTextField(
                                   validator: Rtd_Validators.pincodeValidator,
                                   controller: value.indiaAddPinContoller,
-                                  hinttext: value.profileData!.indiaPin,
+                                  hinttext: value.userData!.data.indiaPin,
                                   labelText: "Pin"),
                               kSizedBoxH20,
                               Padding(
@@ -400,7 +403,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     return Column(
       children: [
         Text(
-          value.profileData!.name,
+          value.userData!.data.name,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         const Text('Not Available',

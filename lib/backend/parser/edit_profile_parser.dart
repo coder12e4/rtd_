@@ -20,9 +20,20 @@ class EditProfileParser {
         .getPublic(Constants.baseUrl + Constants.getAllBloodGroup);
   }
 
-  Future<Response> updateUserData(body) async {
+  Future<Response> getUserData() async {
     final accessToken = sharedPreferencesManager.getString('access_token');
+
+    return await apiService.getPrivate(
+        Constants.baseUrl + Constants.getUserDetails, accessToken!);
+  }
+
+  Future<String> getToken() async {
+    String accessToken =  sharedPreferencesManager.getString('access_token')!;
+    return accessToken;
+  }
+  Future<Response> updateUserData(body) async {
+    String accessToken =  sharedPreferencesManager.getString('access_token')!;
     return await apiService.postPrivate(
-        Constants.baseUrl + Constants.updateProfile, body, accessToken!);
+        Constants.baseUrl + Constants.updateProfile, body, accessToken);
   }
 }

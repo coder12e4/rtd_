@@ -24,7 +24,7 @@ class ProfilePage extends StatelessWidget {
             children: [
               appbar(context),
               Container(
-                  height: 1200.h,
+                  height: 1050.h,
                   decoration: const BoxDecoration(
                       color: whiteColor,
                       borderRadius: BorderRadiusDirectional.only(
@@ -180,9 +180,6 @@ class ProfilePage extends StatelessWidget {
                 backgroundColor:
                     MaterialStateColor.resolveWith((states) => baseColor)),
             onPressed: () {
-              // Navigator.of(context).push(MaterialPageRoute(
-              //   builder: (context) => const ProfileEditScreen(),
-              // ));
               Get.toNamed(AppRouter.getEditProfileRoute());
             },
             child: const Padding(

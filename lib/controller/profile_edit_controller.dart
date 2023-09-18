@@ -3,32 +3,30 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rtd_project/controller/profile_controller.dart';
+import 'package:rtd_project/core/constraints/api_urls.dart';
+import 'package:rtd_project/helper/router.dart';
+import 'package:rtd_project/helper/shared_pref.dart';
+import 'package:rtd_project/util/toast.dart';
 
 import '../backend/model/bloodgroup_model.dart';
 import '../backend/model/profile_model.dart';
 import '../backend/model/states_model.dart';
 import '../backend/parser/edit_profile_parser.dart';
+import 'package:http/http.dart' as http;
 
 class EditProfileController extends GetxController implements GetxService {
   final EditProfileParser parser;
   EditProfileController({required this.parser});
   @override
   void onInit() {
-    getProfileData();
+    super.onInit();
+    getUserDatas();
     getStates();
     getAllBloodGroup();
-    super.onInit();
-    indianMobNumContoller.text = profileData!.indiaMobileNumber;
-    saudiMobNumContoller.text = profileData!.ksaMobileNumber;
-    mailContoller.text = profileData!.email;
-    indianAddressContoller1.text = profileData!.indianAddress1;
-    indianAddressContoller2.text = profileData!.indianAddress2;
-    indiaAddPinContoller.text = profileData!.indiaPin;
-    ksaAddressContoller1.text = profileData!.ksaAddress1;
-    ksaAddressContoller2.text = profileData!.ksaAddress2;
-    saudiAddPinContoller.text = profileData!.ksaPin;
   }
 
+  Profile? userData;
   List<AllStatesModel> _allStates = <AllStatesModel>[];
   List<AllStatesModel> get allStates => _allStates;
 
@@ -156,30 +154,53 @@ class EditProfileController extends GetxController implements GetxService {
     return items;
   }
 
-  void getProfileData() {
-    final data = parser.sharedPreferencesManager.getString('profile_data');
-    Map<String, dynamic> map = jsonDecode(data!);
-    profileData = Data.fromJson(map);
+  void getUserDatas() async {
+    final response = await parser.getUserData();
 
-    log("profile data${profileData!.name}");
-    loading = false;
+    if (response.statusCode == 200) {
+      try {
+        log(response.statusCode.toString());
+
+        Map<String, dynamic> data = Map<String, dynamic>.from(response.body);
+        log(data.toString());
+
+        userData = Profile.fromJson(data);
+        indianMobNumContoller.text = userData!.data.indiaMobileNumber;
+        saudiMobNumContoller.text = userData!.data.ksaMobileNumber;
+        mailContoller.text = userData!.data.email;
+        indianAddressContoller1.text = userData!.data.indianAddress1;
+        indianAddressContoller2.text = userData!.data.indianAddress2;
+        indiaAddPinContoller.text = userData!.data.indiaPin;
+        ksaAddressContoller1.text = userData!.data.ksaAddress1;
+        ksaAddressContoller2.text = userData!.data.ksaAddress2;
+        saudiAddPinContoller.text = userData!.data.ksaPin;
+
+        log("Profile Edit Screen :${userData!.data.name.toString()}");
+        loading = false;
+      } catch (e) {
+        log(e.toString());
+      }
+    } else {
+      log(response.body.toString());
+    }
+    update();
   }
 
   Future<void> updateProfileData() async {
     var body = {
-      "name": profileData!.name,
+      "name": userData!.data.name,
       "email": mailContoller.text,
-      "india_mobile_number": indianMobNumContoller.text,
-      "ksa_mobile_number": saudiMobNumContoller.text,
-      "blood_group": bloodGroup!.id.toString(),
-      "indian_address_1": indianAddressContoller1.text,
-      "indian_address_2": indianAddressContoller2.text,
-      "india_state": selectedItem!.id,
-      "india_pin": indiaAddPinContoller.text,
+      "in_mobile": indianMobNumContoller.text,
+      "ksa_mobile": saudiMobNumContoller.text,
+      "blood_group": bloodGroup!.id,
+      "in_address_1": indianAddressContoller1.text,
+      "in_address_2": indianAddressContoller2.text,
+      "in_state": selectedItem!.id,
+      "in_pin": indiaAddPinContoller.text,
       "ksa_address_1": ksaAddressContoller1.text,
       "ksa_address_2": ksaAddressContoller2.text,
       "ksa_state": stateKsa!.id,
-      "ksa_pin": saudiAddPinContoller.text,
+      "ksa_pin": saudiAddPinContoller.text
     };
     log('blood id:${bloodGroup!.id}');
     log('state id:${selectedItem!.id}');
@@ -188,6 +209,23 @@ class EditProfileController extends GetxController implements GetxService {
     log(response.statusCode.toString());
     if (response.statusCode == 200) {
       log(response.body.toString());
+      if(response.body['status']){
+        successToast(response.body['message']);
+        onProfileEditSuccess();
+      }else{
+        showToast(response.body['message']);
+      }
+
+
+
     }
   }
+  void onProfileEditSuccess() {
+    final ProfileController profilecontroller = Get.find();
+    profilecontroller.getUserDatas();
+    Get.delete<EditProfileController>(force: true);
+    Get.offNamed(AppRouter.getBottomNavRoute());
+  }
+
+
 }
