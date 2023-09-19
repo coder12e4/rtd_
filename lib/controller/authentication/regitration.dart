@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:rtd_project/backend/model/bloodgroup_model.dart';
 import 'package:rtd_project/backend/model/states_model.dart';
+import 'package:rtd_project/backend/model/vehicle_type_model.dart';
 import 'package:rtd_project/backend/parser/sighnup_parser.dart';
 import 'package:rtd_project/util/theme.dart';
 import 'package:rtd_project/util/toast.dart';
@@ -31,6 +32,7 @@ class RegisterController extends GetxController implements GetxService {
     getStates();
 
     getAllBloodGroup();
+    getVehicleType();
     super.onInit();
   }
 
@@ -91,6 +93,7 @@ class RegisterController extends GetxController implements GetxService {
   final TextEditingController vehCompanyController = TextEditingController();
   final TextEditingController pinController1 = TextEditingController();
   final TextEditingController pinController2 = TextEditingController();
+  final TextEditingController vehicleNumContoller = TextEditingController();
   // XFile? _selectedImage;
   String? cover;
   final gallery = [];
@@ -103,6 +106,8 @@ class RegisterController extends GetxController implements GetxService {
   List<BloodGroup> _getAllbloodGroup = <BloodGroup>[];
   List<BloodGroup> get getAllbloodGroup => _getAllbloodGroup;
 
+  List<VehicleData> _getAllVehicleType = <VehicleData>[];
+  List<VehicleData> get getAllVehicleType => _getAllVehicleType;
   String? statesName;
   List<AllStatesModel>? statesList;
   AllStatesModel? selectedItem;
@@ -112,6 +117,10 @@ class RegisterController extends GetxController implements GetxService {
 
   String? bloodgroupname;
   List<BloodGroup>? bloodgrouplist;
+
+  String? vehicleTypeName;
+  List<VehicleData>? vehicleTypeList;
+  VehicleData? vehicleType;
   BloodGroup? bloodGroup;
 
   List<DropdownMenuItem<AllStatesModel>> _dropdownMenuItems =
@@ -123,6 +132,11 @@ class RegisterController extends GetxController implements GetxService {
       <DropdownMenuItem<BloodGroup>>[];
   List<DropdownMenuItem<BloodGroup>> get dropdownMenuItemsBloodgroup =>
       _dropdownMenuItemsBloodgroup;
+
+  List<DropdownMenuItem<VehicleData>> _dropdownMenuItemsVehicleModel =
+      <DropdownMenuItem<VehicleData>>[];
+  List<DropdownMenuItem<VehicleData>> get dropdownMenuItemsVehicleModel =>
+      _dropdownMenuItemsVehicleModel;
 
   var isSelected = false.obs;
 
@@ -317,6 +331,8 @@ class RegisterController extends GetxController implements GetxService {
         resAddressLine1Controller.text,
         resAddressLine2Controller.text,
         stateKsa!.id.toString(),
+        vehicleNumContoller.text,
+        vehicleType!.id.toString(),
         pinController2.text,
       );
     } catch (e) {
@@ -344,6 +360,28 @@ class RegisterController extends GetxController implements GetxService {
       selectedItem != null ? _dropdownMenuItems[0].value : null;
     }
     log(_allStates.toString());
+    update();
+  }
+
+  void getVehicleType() async {
+    var response = await parser.getVehicleType();
+    if (response.statusCode == 200) {
+      Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
+      log(myMap.toString());
+      var allvehicleType = myMap['data'];
+
+      _getAllVehicleType = [];
+
+      allvehicleType.forEach((data) {
+        VehicleData individual = VehicleData.fromJson(data);
+        _getAllVehicleType.add(individual);
+      });
+
+      _dropdownMenuItemsVehicleModel =
+          buildDropDownMenuItemsVehivleType(_getAllVehicleType);
+      vehicleType != null ? _dropdownMenuItems[0].value : null;
+    }
+    log(_getAllVehicleType.toString());
     update();
   }
 
@@ -419,6 +457,29 @@ class RegisterController extends GetxController implements GetxService {
     return items;
   }
 
+  List<DropdownMenuItem<VehicleData>> buildDropDownMenuItemsVehivleType(
+      List listItems) {
+    List<DropdownMenuItem<VehicleData>> items = [];
+    for (VehicleData listItem in listItems) {
+      items.add(
+        DropdownMenuItem(
+          value: listItem,
+          child: Text(
+            listItem.name,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                letterSpacing: .1,
+                fontWeight: FontWeight.w500),
+          ),
+        ),
+      );
+    }
+
+    return items;
+  }
+
   Future<void> upload(
     XFile data1,
     XFile data2,
@@ -437,8 +498,11 @@ class RegisterController extends GetxController implements GetxService {
     kAddress1,
     kAddress2,
     kState,
+    vehicleNum,
+    vehicletype,
     kPin,
   ) async {
+    log('Vehicle data  ${vehicleType!.id}');
     log('${inum}: $ksanum');
     File file1 = File(data1.path);
     File file2 = File(data2.path);
@@ -484,6 +548,8 @@ class RegisterController extends GetxController implements GetxService {
     request.fields['ksa_address_1'] = kAddress1;
     request.fields['ksa_address_2'] = kAddress2;
     request.fields['ksa_state'] = kState;
+    request.fields['vehicle_number'] = vehicleNum;
+    request.fields['vehicle_type_id'] = vehicletype;
     request.fields['ksa_pin'] = kPin;
     request.headers.addAll({"Accept": "application/json"});
     var response = await request.send();
@@ -502,7 +568,7 @@ class RegisterController extends GetxController implements GetxService {
         Get.bottomSheet(const RegisterComplited(), isDismissible: false);
       } else {
         showToast(k['message'].toString());
-        onLogin();
+        // onLogin();
       }
 
       //

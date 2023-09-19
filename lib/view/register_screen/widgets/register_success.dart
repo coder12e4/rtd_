@@ -50,7 +50,7 @@ class RegisterComplited extends StatelessWidget {
               },
               buttonBackgroundColor: buttenBlue,
               buttonForegroundColor: whiteColor,
-              buttonText: 'Wait!',
+              buttonText: 'Continue!',
               borderAvalable: true)
         ],
       ),

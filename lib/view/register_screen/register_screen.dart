@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rtd_project/backend/model/bloodgroup_model.dart';
 import 'package:rtd_project/backend/model/states_model.dart';
+import 'package:rtd_project/backend/model/vehicle_type_model.dart';
 import 'package:rtd_project/controller/authentication/regitration.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
@@ -396,6 +397,47 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       }),
                 ),
               ),
+              textFieldHeight,
+              TextFormFieldWidget(
+                  validator: Rtd_Validators.noneEmptyValidator,
+                  controller: value.vehicleNumContoller,
+                  hitText: 'KL-04-AB-2214'),
+              textFieldHeight,
+
+              Container(
+                margin: const EdgeInsets.only(left: 5, right: 5),
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: textFormBase),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<VehicleData>(
+                      isExpanded: true,
+                      hint: const Text(
+                        "Select Your Vehicle Model ",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            letterSpacing: .1,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      icon: const Icon(Icons.keyboard_arrow_down_outlined),
+                      value: value.vehicleType,
+                      items: value.dropdownMenuItemsVehicleModel,
+                      onChanged: (value) {
+                        setState(() {
+                          auth.vehicleType = value;
+
+                          auth.vehicleTypeName = value!.name.toString();
+
+                          //   newStateList.clear();
+                          //  newStateList=[];
+                          //_dropdownMenuItemsStates.clear();
+                        });
+                      }),
+                ),
+              ),
+
 
               textFieldHeight,
               Center(

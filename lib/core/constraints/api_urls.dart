@@ -7,5 +7,6 @@ class Constants {
   static const String getAllElectedMembers = 'api/user/board-members/list';
   static const String getUserDetails = 'api/user/details';
   static const String updateProfile = 'api/user/update';
+  static const String getVehicleType = 'api/vehicle-types';
 
 }
