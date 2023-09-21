@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:rtd_project/core/color/colors.dart';
 
 import '../../controller/bottom_navigation_controller.dart';
+import '../../helper/router.dart';
 import '../book_screen/book_page.dart';
 import '../loan_screen/loan_page.dart';
 import '../profile_screen/profile_page.dart';
@@ -19,7 +20,7 @@ class NavigationBarpage extends StatefulWidget {
 
 class _NavigationBarpageState extends State<NavigationBarpage> {
   final List<Widget> _tablist = [
-     HomePage(),
+    HomePage(),
     const WallPage(),
     const LoanPage(),
     BookPage(),
@@ -48,9 +49,40 @@ class _NavigationBarpageState extends State<NavigationBarpage> {
                     showSelectedLabels: true,
                     showUnselectedLabels: true,
                     // backgroundColor: Colors.amber,
-                    currentIndex: value.pageIndex!,
+                    currentIndex: value.tabId!,
                     onTap: (int index) {
-                      value.updateTabId(index);
+                      // value.updateTabId(index);
+                      switch (index) {
+                        case 0:
+                          {
+                            Get.offAllNamed(AppRouter.getBottomNavRoute(),
+                                arguments: [index]);
+                          }
+                          break;
+                        case 1:
+                          {
+                            Get.offAllNamed(AppRouter.getBottomNavRoute(),
+                                arguments: [index]);
+                          }
+                          break;
+                        case 2:
+                          {
+                            Get.offAllNamed(AppRouter.getBottomNavRoute(),
+                                arguments: [index]);
+                          }
+                          break;
+                        case 3:
+                          {
+                            Get.offAllNamed(AppRouter.getBottomNavRoute(),
+                                arguments: [index]);
+                          }
+                          break;
+                        case 4:
+                          {
+                            Get.offAllNamed(AppRouter.getBottomNavRoute(),
+                                arguments: [index]);
+                          }
+                      }
                     },
                     items: const [
                       BottomNavigationBarItem(

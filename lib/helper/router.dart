@@ -100,6 +100,7 @@
 import 'package:get/get.dart';
 import 'package:rtd_project/backend/binding/bottom_navigation_binding.dart';
 import 'package:rtd_project/backend/binding/elected_member_binding.dart';
+import 'package:rtd_project/backend/binding/loan_screen_binding.dart';
 import 'package:rtd_project/backend/binding/login_binding.dart';
 import 'package:rtd_project/backend/binding/register_binding.dart';
 import 'package:rtd_project/backend/binding/splash_binding.dart';
@@ -113,6 +114,7 @@ import 'package:rtd_project/view/splash_screen/splash_page.dart';
 import '../backend/binding/edit_profile_binding.dart';
 import '../backend/binding/profile_binding.dart';
 import '../view/home_screen/home_page.dart';
+import '../view/loan_screen/loan_page.dart';
 
 class AppRouter {
   static const String initial = '/';
@@ -127,7 +129,7 @@ class AppRouter {
   static const String profileRoutes = '/profile';
   static const String orderDetailsRoutes = '/order_details';
   static const String chatRoutes = '/chat';
-  static const String historyRoutes = '/history';
+  static const String loanRoutes = '/loan';
   static const String stylistRoutes = '/stylist';
   static const String addStylistRoutes = '/add_stylist';
   static const String stylistCategoriesRoutes = '/select_stylist';
@@ -176,7 +178,7 @@ class AppRouter {
   static String getProfileRoute() => profileRoutes;
   static String getOrderDetailsRoute() => orderDetailsRoutes;
   static String getChatRoute() => chatRoutes;
-  static String getHistoryRoute() => historyRoutes;
+  static String getLoanRoute() => loanRoutes;
   static String getStylistRoute() => stylistRoutes;
   static String getAddStylistRoute() => addStylistRoutes;
   static String getStylistCategoriesRoute() => stylistCategoriesRoutes;
@@ -263,10 +265,10 @@ class AppRouter {
     //     name: chatRoutes,
     //     page: () => const ChatScreen(),
     //     binding: ChatBinding()),
-    // GetPage(
-    //     name: historyRoutes,
-    //     page: () => const HistoryScreen(),
-    //     binding: HistoryBinding()),
+    GetPage(
+        name: loanRoutes,
+        page: () => const LoanPage(),
+        binding: LoanScreenBinding()),
     // GetPage(
     //     name: stylistRoutes,
     //     page: () => const StylistScreen(),

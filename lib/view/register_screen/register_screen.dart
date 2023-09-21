@@ -438,7 +438,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ),
 
-
               textFieldHeight,
               Center(
                 child: Text(

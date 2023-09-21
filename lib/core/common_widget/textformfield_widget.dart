@@ -3,16 +3,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rtd_project/core/color/colors.dart';
 
 class TextFormFieldWidget extends StatelessWidget {
-  const TextFormFieldWidget({
-    super.key,
-    required this.controller,
-    required this.hitText,
-    required this.validator,
-  });
+  const TextFormFieldWidget(
+      {super.key,
+      required this.controller,
+      required this.hitText,
+      required this.validator,
+      this.textInputType});
   final TextEditingController controller;
   final String hitText;
   final String? Function(String?)? validator;
-
+  final TextInputType? textInputType;
   @override
   Widget build(BuildContext context) {
     // FocusNode node = FocusNode();
@@ -23,6 +23,7 @@ class TextFormFieldWidget extends StatelessWidget {
         child: TextFormField(
           validator: validator,
           controller: controller,
+          keyboardType: textInputType,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: InputDecoration(
               border: InputBorder.none, // Removes the underline

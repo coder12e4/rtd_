@@ -8,5 +8,7 @@ class Constants {
   static const String getUserDetails = 'api/user/details';
   static const String updateProfile = 'api/user/update';
   static const String getVehicleType = 'api/vehicle-types';
-
+  static const String loanType = 'api/user/loan-type/list';
+  static const String loanSurties = 'api/user/sureties/list';
+  static const String cancelLoanRequest = 'api/user/loan/request/cancel';
 }

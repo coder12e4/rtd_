@@ -9,13 +9,30 @@ class BottomNavController extends GetxController
   late TabController tabController;
   BottomNavController({required this.parser});
   int? pageIndex;
+  int tabId = 0;
+
   @override
   void onInit() {
-    pageIndex = 0;
-    tabController =
-        TabController(length: 5, vsync: this, initialIndex: pageIndex!);
+    try {
+      tabId = int.parse(Get.arguments[0].toString());
+    } catch (e) {
+      print("Exception from tabs");
+      print(e);
+    }
+    tabController = TabController(length: 5, vsync: this, initialIndex: tabId);
     super.onInit();
+
+    print("tabid");
+    print(tabId);
   }
+
+  // @override
+  // void onInit() {
+  //   pageIndex = 0;
+  //   tabController =
+  //       TabController(length: 5, vsync: this, initialIndex: pageIndex!);
+  //   super.onInit();
+  // }
 
   void updateTabId(int index) {
     pageIndex = index;

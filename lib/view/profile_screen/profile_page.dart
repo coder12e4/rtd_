@@ -39,7 +39,7 @@ class ProfilePage extends StatelessWidget {
                       : ListView(
                           physics: const NeverScrollableScrollPhysics(),
                           children: [
-                            imageContainer(),
+                            imageContainer(value),
                             kSizedBoxH,
                             nameText(value),
                             kSizedBoxH,
@@ -248,7 +248,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Container imageContainer() {
+  Container imageContainer(ProfileController value) {
     return Container(
       margin: EdgeInsets.only(top: 30.h),
       height: 100.h,

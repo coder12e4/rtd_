@@ -20,16 +20,16 @@ class HomeData {
   });
 
   factory HomeData.fromJson(Map<String, dynamic> json) => HomeData(
-    status: json["status"],
-    data: Data.fromJson(json["data"]),
-    message: json["message"],
-  );
+        status: json["status"],
+        data: Data.fromJson(json["data"]),
+        message: json["message"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "status": status,
-    "data": data.toJson(),
-    "message": message,
-  };
+        "status": status,
+        "data": data.toJson(),
+        "message": message,
+      };
 }
 
 class Data {
@@ -44,16 +44,17 @@ class Data {
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    graphData: GraphData.fromJson(json["graph_data"]),
-    incomeBreakdown: IncomeBreakdown.fromJson(json["income_breakdown"]),
-    activeLoan: List<ActiveLoan>.from(json["active_loan"].map((x) => ActiveLoan.fromJson(x))),
-  );
+        graphData: GraphData.fromJson(json["graph_data"]),
+        incomeBreakdown: IncomeBreakdown.fromJson(json["income_breakdown"]),
+        activeLoan: List<ActiveLoan>.from(
+            json["active_loan"].map((x) => ActiveLoan.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "graph_data": graphData.toJson(),
-    "income_breakdown": incomeBreakdown.toJson(),
-    "active_loan": List<dynamic>.from(activeLoan.map((x) => x.toJson())),
-  };
+        "graph_data": graphData.toJson(),
+        "income_breakdown": incomeBreakdown.toJson(),
+        "active_loan": List<dynamic>.from(activeLoan.map((x) => x.toJson())),
+      };
 }
 
 class ActiveLoan {
@@ -72,20 +73,20 @@ class ActiveLoan {
   });
 
   factory ActiveLoan.fromJson(Map<String, dynamic> json) => ActiveLoan(
-    loanId: json["loan_id"],
-    loanAmount: json["loan_amount"],
-    startDate: json["start_date"],
-    endDate: json["end_date"],
-    loanType: json["loan_type"],
-  );
+        loanId: json["loan_id"],
+        loanAmount: json["loan_amount"],
+        startDate: json["start_date"],
+        endDate: json["end_date"],
+        loanType: json["loan_type"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "loan_id": loanId,
-    "loan_amount": loanAmount,
-    "start_date": startDate,
-    "end_date": endDate,
-    "loan_type": loanType,
-  };
+        "loan_id": loanId,
+        "loan_amount": loanAmount,
+        "start_date": startDate,
+        "end_date": endDate,
+        "loan_type": loanType,
+      };
 }
 
 class GraphData {
@@ -104,20 +105,20 @@ class GraphData {
   });
 
   factory GraphData.fromJson(Map<String, dynamic> json) => GraphData(
-    userId: json["user_id"],
-    userName: json["user_name"],
-    graphCount: json["graph_count"],
-    totalCollection: json["total_collection"],
-    balance: json["balance"],
-  );
+        userId: json["user_id"],
+        userName: json["user_name"],
+        graphCount: json["graph_count"],
+        totalCollection: json["total_collection"],
+        balance: json["balance"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "user_id": userId,
-    "user_name": userName,
-    "graph_count": graphCount,
-    "total_collection": totalCollection,
-    "balance": balance,
-  };
+        "user_id": userId,
+        "user_name": userName,
+        "graph_count": graphCount,
+        "total_collection": totalCollection,
+        "balance": balance,
+      };
 }
 
 class IncomeBreakdown {
@@ -133,17 +134,18 @@ class IncomeBreakdown {
     required this.closedLoans,
   });
 
-  factory IncomeBreakdown.fromJson(Map<String, dynamic> json) => IncomeBreakdown(
-    typeOfJob: json["type_of_job"],
-    memebershipAmound: json["memebership_amound"],
-    activeLoans: json["active_loans"],
-    closedLoans: json["closed_loans"],
-  );
+  factory IncomeBreakdown.fromJson(Map<String, dynamic> json) =>
+      IncomeBreakdown(
+        typeOfJob: json["type_of_job"],
+        memebershipAmound: json["memebership_amound"],
+        activeLoans: json["active_loans"],
+        closedLoans: json["closed_loans"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "type_of_job": typeOfJob,
-    "memebership_amound": memebershipAmound,
-    "active_loans": activeLoans,
-    "closed_loans": closedLoans,
-  };
+        "type_of_job": typeOfJob,
+        "memebership_amound": memebershipAmound,
+        "active_loans": activeLoans,
+        "closed_loans": closedLoans,
+      };
 }

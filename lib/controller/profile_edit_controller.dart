@@ -1,19 +1,15 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rtd_project/controller/profile_controller.dart';
-import 'package:rtd_project/core/constraints/api_urls.dart';
 import 'package:rtd_project/helper/router.dart';
-import 'package:rtd_project/helper/shared_pref.dart';
 import 'package:rtd_project/util/toast.dart';
 
 import '../backend/model/bloodgroup_model.dart';
 import '../backend/model/profile_model.dart';
 import '../backend/model/states_model.dart';
 import '../backend/parser/edit_profile_parser.dart';
-import 'package:http/http.dart' as http;
 
 class EditProfileController extends GetxController implements GetxService {
   final EditProfileParser parser;
@@ -209,23 +205,19 @@ class EditProfileController extends GetxController implements GetxService {
     log(response.statusCode.toString());
     if (response.statusCode == 200) {
       log(response.body.toString());
-      if(response.body['status']){
+      if (response.body['status']) {
         successToast(response.body['message']);
         onProfileEditSuccess();
-      }else{
+      } else {
         showToast(response.body['message']);
       }
-
-
-
     }
   }
+
   void onProfileEditSuccess() {
     final ProfileController profilecontroller = Get.find();
     profilecontroller.getUserDatas();
     Get.delete<EditProfileController>(force: true);
     Get.offNamed(AppRouter.getBottomNavRoute());
   }
-
-
 }
