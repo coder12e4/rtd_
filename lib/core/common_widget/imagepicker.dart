@@ -24,9 +24,11 @@ class _ImagepikerState extends State<Imagepiker> {
   // final RegisterController imagePickerService = Get.find();
 
   final picker = ImagePicker();
-
+  dynamic image;
   Future pickImage(ImageSource source) async {
-    return await picker.pickImage(source: source);
+    image = await picker.pickImage(source: source);
+    log('image************${image.path}');
+    return image;
   }
 
   bool isGallery = false;
@@ -66,6 +68,7 @@ class _ImagepikerState extends State<Imagepiker> {
               GestureDetector(
                 onTap: () async {
                   widget.onImageSelected(await pickImage(ImageSource.gallery));
+
                   setState(() {
                     isGallery = true;
                   });
@@ -74,30 +77,54 @@ class _ImagepikerState extends State<Imagepiker> {
                   // value.selectFromGallery('gallery');
                   log(widget.onImageSelected.toString());
                 },
-                child: Container(
-                  width: 116,
-                  height: 121,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(36),
-                      color: const Color(0xfff3f3f3)),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      isGallery == false
-                          ? Image.asset('assets/images/gallary.png')
-                          : Image.file(File('')),
-                      SizedBox(
-                        height: 5.h,
+                child: isGallery == false
+                    ? Container(
+                        width: 116,
+                        height: 121,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(36),
+                            color: const Color(0xfff3f3f3)),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset('assets/images/gallary.png'),
+                            SizedBox(
+                              height: 5.h,
+                            ),
+                            const Text("Choose from Gallery",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ))
+                          ],
+                        ),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Image.file(
+                              File(image.path),
+                              height: 80.h,
+                              width: 121.w,
+                              fit: BoxFit.contain,
+                            ),
+                            SizedBox(
+                              height: 5.h,
+                            ),
+                            const Text(
+                              'Selected Image',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.green,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                      const Text("Choose from Gallery",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ))
-                    ],
-                  ),
-                ),
               ),
               GestureDetector(
                 onTap: () async {
@@ -108,28 +135,54 @@ class _ImagepikerState extends State<Imagepiker> {
                   // value.selectFromGallery('camera');
                   log(widget.onImageSelected.toString());
                 },
-                child: Container(
-                  width: 116,
-                  height: 121,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(36),
-                      color: const Color(0xfff3f3f3)),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset('assets/images/camara.png'),
-                      SizedBox(
-                        height: 5.h,
+                child: isCamera == false
+                    ? Container(
+                        width: 116,
+                        height: 121,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(36),
+                            color: const Color(0xfff3f3f3)),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset('assets/images/camara.png'),
+                            SizedBox(
+                              height: 5.h,
+                            ),
+                            const Text("Capture from Camera",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ))
+                          ],
+                        ),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Image.file(
+                              File(image.path),
+                              height: 80.h,
+                              width: 121.w,
+                              fit: BoxFit.contain,
+                            ),
+                            SizedBox(
+                              height: 5.h,
+                            ),
+                            const Text(
+                              'Selected Image',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.green,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                      const Text("Capture from Camera",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ))
-                    ],
-                  ),
-                ),
               )
             ],
           ),

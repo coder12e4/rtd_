@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final homeData = homeDataFromJson(jsonString);
-
 import 'dart:convert';
 
 HomeData homeDataFromJson(String str) => HomeData.fromJson(json.decode(str));
@@ -9,143 +5,97 @@ HomeData homeDataFromJson(String str) => HomeData.fromJson(json.decode(str));
 String homeDataToJson(HomeData data) => json.encode(data.toJson());
 
 class HomeData {
-  bool status;
-  Data data;
-  String message;
+  int totalCollectionAmount;
+  int totalAmountBalance;
+  Income income;
+  Loans loans;
+  ActiveLoan activeLoan;
 
   HomeData({
-    required this.status,
-    required this.data,
-    required this.message,
-  });
-
-  factory HomeData.fromJson(Map<String, dynamic> json) => HomeData(
-        status: json["status"],
-        data: Data.fromJson(json["data"]),
-        message: json["message"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "status": status,
-        "data": data.toJson(),
-        "message": message,
-      };
-}
-
-class Data {
-  GraphData graphData;
-  IncomeBreakdown incomeBreakdown;
-  List<ActiveLoan> activeLoan;
-
-  Data({
-    required this.graphData,
-    required this.incomeBreakdown,
+    required this.totalCollectionAmount,
+    required this.totalAmountBalance,
+    required this.income,
+    required this.loans,
     required this.activeLoan,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-        graphData: GraphData.fromJson(json["graph_data"]),
-        incomeBreakdown: IncomeBreakdown.fromJson(json["income_breakdown"]),
-        activeLoan: List<ActiveLoan>.from(
-            json["active_loan"].map((x) => ActiveLoan.fromJson(x))),
+  factory HomeData.fromJson(Map<String, dynamic> json) => HomeData(
+        totalCollectionAmount: json["total_collection_amount"],
+        totalAmountBalance: json["total_amount_balance"],
+        income: Income.fromJson(json["income"]),
+        loans: Loans.fromJson(json["loans"]),
+        activeLoan: ActiveLoan.fromJson(json["active_loan"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "graph_data": graphData.toJson(),
-        "income_breakdown": incomeBreakdown.toJson(),
-        "active_loan": List<dynamic>.from(activeLoan.map((x) => x.toJson())),
+        "total_collection_amount": totalCollectionAmount,
+        "total_amount_balance": totalAmountBalance,
+        "income": income.toJson(),
+        "loans": loans.toJson(),
+        "active_loan": activeLoan.toJson(),
       };
 }
 
 class ActiveLoan {
-  int loanId;
   int loanAmount;
   String startDate;
-  String endDate;
   String loanType;
 
   ActiveLoan({
-    required this.loanId,
     required this.loanAmount,
     required this.startDate,
-    required this.endDate,
     required this.loanType,
   });
 
   factory ActiveLoan.fromJson(Map<String, dynamic> json) => ActiveLoan(
-        loanId: json["loan_id"],
         loanAmount: json["loan_amount"],
         startDate: json["start_date"],
-        endDate: json["end_date"],
-        loanType: json["loan_type"],
+        loanType: json["Loan Type"],
       );
 
   Map<String, dynamic> toJson() => {
-        "loan_id": loanId,
         "loan_amount": loanAmount,
         "start_date": startDate,
-        "end_date": endDate,
-        "loan_type": loanType,
+        "Loan Type": loanType,
       };
 }
 
-class GraphData {
-  int userId;
-  String userName;
-  int graphCount;
-  int totalCollection;
-  int balance;
+class Income {
+  int truck;
+  int membership;
 
-  GraphData({
-    required this.userId,
-    required this.userName,
-    required this.graphCount,
-    required this.totalCollection,
-    required this.balance,
+  Income({
+    required this.truck,
+    required this.membership,
   });
 
-  factory GraphData.fromJson(Map<String, dynamic> json) => GraphData(
-        userId: json["user_id"],
-        userName: json["user_name"],
-        graphCount: json["graph_count"],
-        totalCollection: json["total_collection"],
-        balance: json["balance"],
+  factory Income.fromJson(Map<String, dynamic> json) => Income(
+        truck: json["truck"],
+        membership: json["membership"],
       );
 
   Map<String, dynamic> toJson() => {
-        "user_id": userId,
-        "user_name": userName,
-        "graph_count": graphCount,
-        "total_collection": totalCollection,
-        "balance": balance,
+        "truck": truck,
+        "membership": membership,
       };
 }
 
-class IncomeBreakdown {
-  String typeOfJob;
-  int memebershipAmound;
-  int activeLoans;
-  int closedLoans;
+class Loans {
+  int active;
+  int closed;
 
-  IncomeBreakdown({
-    required this.typeOfJob,
-    required this.memebershipAmound,
-    required this.activeLoans,
-    required this.closedLoans,
+  Loans({
+    required this.active,
+    required this.closed,
   });
 
-  factory IncomeBreakdown.fromJson(Map<String, dynamic> json) =>
-      IncomeBreakdown(
-        typeOfJob: json["type_of_job"],
-        memebershipAmound: json["memebership_amound"],
-        activeLoans: json["active_loans"],
-        closedLoans: json["closed_loans"],
+  factory Loans.fromJson(Map<String, dynamic> json) => Loans(
+        active: json["active"],
+        closed: json["closed"],
       );
 
   Map<String, dynamic> toJson() => {
-        "type_of_job": typeOfJob,
-        "memebership_amound": memebershipAmound,
-        "active_loans": activeLoans,
-        "closed_loans": closedLoans,
+        "active": active,
+        "closed": closed,
       };
 }

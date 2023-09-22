@@ -36,27 +36,34 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 SizedBox(
                   height: 20.h,
                 ),
-                Container(
-                  height: 1100.h,
-                  width: 390.w,
-                  decoration: const BoxDecoration(
-                      color: whiteColor,
-                      borderRadius: BorderRadiusDirectional.only(
-                        topStart: Radius.circular(50),
-                        topEnd: Radius.circular(50),
-                      )),
-                  child: value.loading == true
-                      ? Container(
-                          height: 590.h,
-                          width: 390.w,
-                          color: Colors.white,
-                          child: const Center(
-                              child: CircularProgressIndicator(
+                value.loading == true
+                    ? Container(
+                        height: 600.h,
+                        // width: 100,
+                        decoration: const BoxDecoration(
+                          color: whiteColor,
+                          borderRadius: BorderRadiusDirectional.only(
+                            topEnd: Radius.circular(40),
+                            topStart: Radius.circular(40),
+                          ),
+                        ),
+                        child: const Center(
+                          child: CircularProgressIndicator(
                             color: Colors.black,
                             strokeWidth: 6,
-                          )),
-                        )
-                      : Form(
+                          ),
+                        ),
+                      )
+                    : Container(
+                        height: 1300.h,
+                        width: 390.w,
+                        decoration: const BoxDecoration(
+                            color: whiteColor,
+                            borderRadius: BorderRadiusDirectional.only(
+                              topStart: Radius.circular(50),
+                              topEnd: Radius.circular(50),
+                            )),
+                        child: Form(
                           key: _formKey,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           child: ListView(
@@ -88,10 +95,16 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                               kSizedBoxH,
 
                               ProfileEditScreenTextField(
-                                  validator: Rtd_Validators.emailValidator,
+                                  validator: Rtd_Validators.noneEmptyValidator,
                                   controller: value.mailContoller,
                                   hinttext: 'example@gmail.com',
                                   labelText: "Mail Address"),
+                              kSizedBoxH,
+                              ProfileEditScreenTextField(
+                                  validator: Rtd_Validators.emailValidator,
+                                  controller: value.vehicleNumberContoller,
+                                  hinttext: 'Eg: KL-04-AB-2214',
+                                  labelText: "Vehicle Number"),
                               kSizedBoxH,
                               Padding(
                                 padding:
@@ -289,7 +302,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                             ],
                           ),
                         ),
-                )
+                      )
               ],
             );
           }),
@@ -399,17 +412,12 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     );
   }
 
-  Column nameText(EditProfileController value) {
-    return Column(
-      children: [
-        Text(
-          value.userData!.data.name,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-        ),
-        const Text('Not Available',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-      ],
+  Align nameText(EditProfileController value) {
+    return Align(
+      child: Text(
+        value.userData!.data.name,
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+      ),
     );
   }
 

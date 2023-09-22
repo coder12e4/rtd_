@@ -80,7 +80,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Form(
       key: _formKey,
       child: Container(
-          height: 1800.h,
+          height: 1850.h,
           width: 390.w,
           decoration: const BoxDecoration(
             color: whiteColor,
@@ -98,12 +98,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
               TextFormFieldWidget(
                   validator: Rtd_Validators.noneEmptyValidator,
                   controller: value.nameRegController,
+                  textInputType: TextInputType.text,
                   hitText: 'Name'),
               textFieldHeight,
 
               TextFormFieldWidget(
                   validator: Rtd_Validators.emailValidator,
                   controller: value.emailRegController,
+                  textInputType: TextInputType.emailAddress,
                   hitText: 'email'),
 
               textFieldHeight,
@@ -226,11 +228,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
               TextFormFieldWidget(
                   validator: Rtd_Validators.mobileNumberValidator,
                   controller: value.indianMobNumContoller,
+                  textInputType: TextInputType.phone,
                   hitText: 'Indian Mobile Number'),
               textFieldHeight,
               TextFormFieldWidget(
                   validator: Rtd_Validators.mobileNumberValidator,
                   controller: value.ksaMobileNumRegController,
+                  textInputType: TextInputType.phone,
                   hitText: 'Mobile Number'),
 
               textFieldHeight,
@@ -244,13 +248,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<BloodGroup>(
                       isExpanded: true,
-                      hint: const Text(
-                        "Select Your blood group",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            letterSpacing: .1,
-                            fontWeight: FontWeight.w500),
+                      hint: Center(
+                        child: Text(
+                          "Select Your blood group",
+                          style: TextStyle(
+                              color: Colors.black.withOpacity(.55),
+                              fontSize: 17,
+                              letterSpacing: .1,
+                              fontWeight: FontWeight.w600),
+                        ),
                       ),
                       icon: const Icon(Icons.keyboard_arrow_down_outlined),
                       value: value.bloodGroup,
@@ -295,13 +301,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<AllStatesModel>(
                       isExpanded: true,
-                      hint: const Text(
-                        "Select States",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            letterSpacing: .1,
-                            fontWeight: FontWeight.w500),
+                      hint: Center(
+                        child: Text(
+                          "Select States",
+                          style: TextStyle(
+                              color: Colors.black.withOpacity(.55),
+                              fontSize: 17,
+                              letterSpacing: .1,
+                              fontWeight: FontWeight.w600),
+                        ),
                       ),
                       icon: const Icon(Icons.keyboard_arrow_down_outlined),
                       value: value.selectedItem,
@@ -321,6 +329,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               TextFormFieldWidget(
                   validator: Rtd_Validators.pincodeValidator,
                   controller: value.pinController1,
+                  textInputType: TextInputType.number,
                   hitText: 'pin'),
 
               textFieldHeight,
@@ -365,6 +374,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               TextFormFieldWidget(
                   validator: Rtd_Validators.pincodeValidator,
                   controller: value.pinController2,
+                  textInputType: TextInputType.number,
                   hitText: 'pin'),
               textFieldHeight,
 
@@ -377,14 +387,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<AllStatesModel>(
                       isExpanded: true,
-                      hint: const Text(
-                        "Select States",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            letterSpacing: .1,
-                            fontWeight: FontWeight.w500),
+                      hint: Center(
+                        child: Text(
+                          "Select States",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.black.withOpacity(.55),
+                              fontSize: 17,
+                              letterSpacing: .1,
+                              fontWeight: FontWeight.w600),
+                        ),
                       ),
                       icon: const Icon(Icons.keyboard_arrow_down_outlined),
                       value: value.stateKsa,
@@ -401,7 +413,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               TextFormFieldWidget(
                   validator: Rtd_Validators.noneEmptyValidator,
                   controller: value.vehicleNumContoller,
-                  hitText: 'KL-04-AB-2214'),
+                  hitText: 'Eg: KL-04-AB-2214'),
               textFieldHeight,
 
               Container(
@@ -413,13 +425,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<VehicleData>(
                       isExpanded: true,
-                      hint: const Text(
-                        "Select Your Vehicle Model ",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            letterSpacing: .1,
-                            fontWeight: FontWeight.w500),
+                      hint: Center(
+                        child: Text(
+                          "Select Your Vehicle Model ",
+                          style: TextStyle(
+                              color: Colors.black.withOpacity(.55),
+                              fontSize: 17,
+                              letterSpacing: .1,
+                              fontWeight: FontWeight.w600),
+                        ),
                       ),
                       icon: const Icon(Icons.keyboard_arrow_down_outlined),
                       value: value.vehicleType,

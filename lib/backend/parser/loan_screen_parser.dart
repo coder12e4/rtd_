@@ -29,4 +29,11 @@ class LoanScreenParser {
         Constants.baseUrl + Constants.cancelLoanRequest, body, accessToken!);
     return response;
   }
+
+  Future<Response> getLoanRequestData() async {
+    final accessToken = sharedPreferencesManager.getString('access_token');
+    var response = await apiService.getPrivate(
+        Constants.baseUrl + Constants.getLoanRequest, accessToken!);
+    return response;
+  }
 }

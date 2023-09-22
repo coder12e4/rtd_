@@ -1,5 +1,4 @@
 import 'package:awesome_circular_chart/awesome_circular_chart.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -70,7 +69,7 @@ class _HomePageState extends State<HomePage> {
                                 Padding(
                                   padding: const EdgeInsets.all(18.0),
                                   child: Container(
-                                    height: 500.h,
+                                    height: 450.h,
                                     // width: 100.w,
                                     decoration: BoxDecoration(
                                         color: textFormBase,
@@ -97,30 +96,22 @@ class _HomePageState extends State<HomePage> {
                                                         CircularStackEntry(
                                                           <CircularSegmentEntry>[
                                                             CircularSegmentEntry(
-                                                              homeData
-                                                                      .data
-                                                                      .graphData
-                                                                      .graphCount
+                                                              homeData.totalCollectionAmount
                                                                       .toDouble() ??
                                                                   0.0,
                                                               const Color
-                                                                      .fromARGB(
-                                                                  255,
-                                                                  147,
-                                                                  8,
-                                                                  96),
+                                                                  .fromARGB(255,
+                                                                  147, 8, 96),
                                                               rankKey:
                                                                   'remaining',
                                                             ),
                                                             CircularSegmentEntry(
                                                               100 -
                                                                   homeData
-                                                                      .data
-                                                                      .graphData
-                                                                      .graphCount
+                                                                      .totalAmountBalance
                                                                       .toDouble(),
                                                               const Color
-                                                                      .fromARGB(
+                                                                  .fromARGB(
                                                                   255,
                                                                   207,
                                                                   200,
@@ -176,7 +167,7 @@ class _HomePageState extends State<HomePage> {
             )));
   }
 
-  graphCenterText(context, homeData) {
+  graphCenterText(context, HomeData homeData) {
     return Column(
       children: [
         const Text(
@@ -184,7 +175,7 @@ class _HomePageState extends State<HomePage> {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
         ),
         Text(
-          homeData.data.graphData.totalCollection.toString(),
+          '${homeData.totalCollectionAmount} INR',
           style: Theme.of(context)
               .textTheme
               .displayLarge!
@@ -198,7 +189,7 @@ class _HomePageState extends State<HomePage> {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
         ),
         Text(
-          '${homeData.data.graphData.balance}SR',
+          '${homeData.totalAmountBalance} INR',
           style: Theme.of(context)
               .textTheme
               .displayLarge!
@@ -208,7 +199,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Container activeLoan(homeData) {
+  Container activeLoan(HomeData homeData) {
     return Container(
       // height: 200.h,
       child: Padding(
@@ -223,24 +214,18 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
               ),
             ),
-            ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: homeData.data.activeLoan.length,
-                itemBuilder: (context, index) {
-                  return activeLoanData(homeData.data.activeLoan![index]);
-                })
+            activeLoanData(homeData),
           ],
         ),
       ),
     );
   }
 
-  Padding activeLoanData(data) {
+  Padding activeLoanData(HomeData data) {
     return Padding(
       padding: EdgeInsets.only(top: 10.h),
       child: Container(
-        height: 170.h,
+        height: 120.h,
         decoration: BoxDecoration(
             color: textFormBase,
             borderRadius: BorderRadius.all(Radius.circular(30.r))),
@@ -248,11 +233,15 @@ class _HomePageState extends State<HomePage> {
           padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 20.h),
           child: Column(
             children: [
-              IncomRow(price: '${data.loanAmount}SR', title: 'Loan Amount'),
+              IncomRow(
+                  price: '${data.activeLoan.loanAmount} INR',
+                  title: 'Loan Amount'),
               const Divider(),
-              activeLoanRow(title: 'Start Date', date: '${data.startDate}'),
-              activeLoanRow(title: 'End Date', date: '${data.endDate}'),
-              activeLoanRow(title: 'Loan Type', date: '${data.loanType}')
+              activeLoanRow(
+                  title: 'Start Date', date: '${data.activeLoan.startDate}'),
+              // activeLoanRow(title: 'End Date', date: '${data.activeLoan.}'),
+              activeLoanRow(
+                  title: 'Loan Type', date: '${data.activeLoan.loanType}')
             ],
           ),
         ),
@@ -260,10 +249,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Expanded incomBreakdown(homeData) {
+  Expanded incomBreakdown(HomeData homeData) {
     return Expanded(
-        child: Container(
-      height: 450.h,
+        child: SizedBox(
+      height: 400.h,
       child: Padding(
         padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 20.h),
         child: Column(
@@ -276,13 +265,11 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: 10.h,
             ),
-            IncomRow(
-                title: homeData.data.incomeBreakdown.typeOfJob,
-                price: '${homeData.data.incomeBreakdown.memebershipAmound}SR'),
+            IncomRow(title: 'Truck', price: '${homeData.income.truck} INR'),
             const Divider(),
             IncomRow(
                 title: 'Membership',
-                price: '${homeData.data.incomeBreakdown.memebershipAmound}SR'),
+                price: '${homeData.income.membership} INR'),
             SizedBox(
               height: 30.h,
             ),
@@ -293,13 +280,9 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: 10.h,
             ),
-            IncomRow(
-                title: 'Active',
-                price: '${homeData.data.incomeBreakdown.activeLoans}'),
+            IncomRow(title: 'Active', price: '${homeData.loans.active}'),
             const Divider(),
-            IncomRow(
-                title: 'Closed',
-                price: '${homeData.data.incomeBreakdown.closedLoans}'),
+            IncomRow(title: 'Closed', price: '${homeData.loans.closed}'),
           ],
         ),
       ),

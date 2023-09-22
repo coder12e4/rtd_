@@ -8,7 +8,7 @@ String loanRequestDataToJson(LoanRequestData data) =>
 
 class LoanRequestData {
   bool status;
-  List<Datum> data;
+  List<LoanData> data;
   String message;
   String accessToken;
   String tokenType;
@@ -24,7 +24,8 @@ class LoanRequestData {
   factory LoanRequestData.fromJson(Map<String, dynamic> json) =>
       LoanRequestData(
         status: json["status"],
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+        data:
+            List<LoanData>.from(json["data"].map((x) => LoanData.fromJson(x))),
         message: json["message"],
         accessToken: json["access_token"],
         tokenType: json["token_type"],
@@ -39,7 +40,7 @@ class LoanRequestData {
       };
 }
 
-class Datum {
+class LoanData {
   int id;
   String loanAmount;
   DateTime createdAt;
@@ -47,7 +48,7 @@ class Datum {
   String statusText;
   List<Surety> sureties;
 
-  Datum({
+  LoanData({
     required this.id,
     required this.loanAmount,
     required this.createdAt,
@@ -56,7 +57,7 @@ class Datum {
     required this.sureties,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory LoanData.fromJson(Map<String, dynamic> json) => LoanData(
         id: json["id"],
         loanAmount: json["loan_amount"],
         createdAt: DateTime.parse(json["created_at"]),

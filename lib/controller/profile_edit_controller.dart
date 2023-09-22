@@ -53,6 +53,7 @@ class EditProfileController extends GetxController implements GetxService {
   TextEditingController indianMobNumContoller = TextEditingController();
   TextEditingController saudiMobNumContoller = TextEditingController();
   TextEditingController mailContoller = TextEditingController();
+  TextEditingController vehicleNumberContoller = TextEditingController();
   // TextEditingController mail2Contoller =
   //     TextEditingController(text: 'example@gmail.com');
   TextEditingController indianAddressContoller1 = TextEditingController();
@@ -164,6 +165,7 @@ class EditProfileController extends GetxController implements GetxService {
         indianMobNumContoller.text = userData!.data.indiaMobileNumber;
         saudiMobNumContoller.text = userData!.data.ksaMobileNumber;
         mailContoller.text = userData!.data.email;
+        vehicleNumberContoller.text = '';
         indianAddressContoller1.text = userData!.data.indianAddress1;
         indianAddressContoller2.text = userData!.data.indianAddress2;
         indiaAddPinContoller.text = userData!.data.indiaPin;

@@ -10,9 +10,11 @@ import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
+import '../backend/model/loan/loan_request_model.dart';
 import '../backend/model/loan/loan_type_model.dart';
 import '../backend/model/loan/surties_model.dart';
 import '../backend/parser/loan_screen_parser.dart';
+import '../util/theme.dart';
 import '../util/toast.dart';
 
 class LoanScreenController extends GetxController {
@@ -20,14 +22,18 @@ class LoanScreenController extends GetxController {
   LoanScreenController({required this.parser});
   @override
   void onInit() {
+    getLoanRequestData();
     getLoanType();
     getSurties();
+
     super.onInit();
   }
 
   bool loading = true;
   Data? loan;
   TextEditingController loanAmountController = TextEditingController();
+  List<LoanData> _loanData = <LoanData>[];
+  List<LoanData> get loanData => _loanData;
   List<SuretiesData>? surties;
   List<int> _addedSurties = <int>[];
   List<int> get addedSurties => _addedSurties;
@@ -61,9 +67,44 @@ class LoanScreenController extends GetxController {
     update();
   }
 
+  Future<void> getLoanRequestData() async {
+    Response response = await parser.getLoanRequestData();
+    if (response.statusCode == 200) {
+      loanData.clear();
+      loading = true;
+
+      update();
+
+      try {
+        Map<String, dynamic> jsonData =
+            Map<String, dynamic>.from(response.body);
+        List allData = jsonData['data'];
+        for (var element in allData) {
+          LoanData individual = LoanData.fromJson(element);
+          loanData.add(individual);
+        }
+      } catch (e) {
+        log('Loan request data error $e');
+      }
+    }
+    loading = false;
+    update();
+  }
+
   Future<void> cancelLoanRequest(id) async {
     final body = {"loan_request_id": id.toString()};
     Response response = await parser.cancelLoanRequest(body);
+    if (response.statusCode == 200) {
+      try {
+        Map<String, dynamic> jsonData =
+            Map<String, dynamic>.from(response.body);
+        successToast(jsonData['message']);
+        await getLoanRequestData();
+      } catch (e) {
+        log(e.toString());
+      }
+    }
+    update();
     log(response.body.toString());
   }
 
@@ -124,6 +165,31 @@ class LoanScreenController extends GetxController {
     loanPurpose,
     surties,
   ) async {
+    Get.dialog(
+      SimpleDialog(
+        children: [
+          Row(
+            children: [
+              const SizedBox(
+                width: 30,
+              ),
+              const CircularProgressIndicator(
+                color: ThemeProvider.appColor,
+              ),
+              const SizedBox(
+                width: 30,
+              ),
+              SizedBox(
+                  child: Text(
+                "Please wait".tr,
+                style: const TextStyle(fontFamily: 'bold'),
+              )),
+            ],
+          )
+        ],
+      ),
+      barrierDismissible: false,
+    );
     File file1 = File(data1.path);
 
     var stream3 = http.ByteStream(DelegatingStream.typed(file1.openRead()));
@@ -161,7 +227,10 @@ class LoanScreenController extends GetxController {
       Get.back();
 
       if (message.status!) {
+        _addedSurties.clear();
+
         successToast(message.message.toString());
+        getLoanRequestData();
       } else {
         showToast(k['message'].toString());
         // onLogin();

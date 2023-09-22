@@ -36,7 +36,7 @@ class LOginPage extends StatelessWidget {
                 Form(
                   key: _formKey,
                   child: Container(
-                    height: 390.h,
+                    height: 350.h,
                     width: 390.w,
                     padding: const EdgeInsets.only(left: 35, right: 35),
                     decoration: const BoxDecoration(
@@ -47,6 +47,7 @@ class LOginPage extends StatelessWidget {
                       ),
                     ),
                     child: ListView(
+                      physics: const NeverScrollableScrollPhysics(),
                       children: [
                         SizedBox(
                           height: 40.h,
@@ -54,6 +55,7 @@ class LOginPage extends StatelessWidget {
                         TextFormFieldWidget(
                             validator: Rtd_Validators.noneEmptyValidator,
                             controller: value.mobileNumberController,
+                            textInputType: TextInputType.phone,
                             hitText: 'Registered Mobile Number'),
                         SizedBox(
                           height: 20.h,

@@ -5,8 +5,9 @@ import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
 
 class CancelPopup extends StatelessWidget {
-  const CancelPopup({super.key, required this.controller});
+  const CancelPopup({super.key, required this.controller, required this.index});
   final LoanScreenController controller;
+  final int index;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -35,7 +36,7 @@ class CancelPopup extends StatelessWidget {
                 buttonText: "Yes",
                 borderAvalable: false,
                 press: () {
-                  controller.cancelLoanRequest(5);
+                  controller.cancelLoanRequest(controller.loanData[index].id);
                   Navigator.pop(context);
                 }),
             ButtonWidget(

@@ -4,16 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:rtd_project/controller/loan_screen_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
 import 'package:rtd_project/core/common_widget/textformfield_widget.dart';
+import 'package:rtd_project/util/theme.dart';
 import 'package:rtd_project/util/toast.dart';
 import 'package:rtd_project/view/loan_screen/widgets/cancel_popup.dart';
 
 import '../../backend/model/loan/loan_type_model.dart';
 import '../../core/common_widget/imagepicker.dart';
-import '../../util/theme.dart';
 import '../../util/validators.dart';
 
 class LoanPage extends StatefulWidget {
@@ -54,6 +55,8 @@ class _LoanPageState extends State<LoanPage> {
   }
 
   Container requestDate(String date) {
+    String formattedDate =
+        DateFormat('dd/MM/yyyy').format(DateTime.parse(date));
     return Container(
       height: 30.h,
       width: 120.w,
@@ -61,23 +64,29 @@ class _LoanPageState extends State<LoanPage> {
           borderRadius: BorderRadius.all(Radius.circular(30)),
           color: textFormBase),
       child: Center(
-        child: Text(date, textAlign: TextAlign.center),
+        child: Text(formattedDate, textAlign: TextAlign.center),
       ),
     );
   }
 
   Widget tabBarView(BuildContext context, LoanScreenController value) {
     return value.loading == true
-        ? Padding(
-            padding: EdgeInsets.symmetric(vertical: 200.h),
-            child: Container(
-                height: 100,
-                width: 100,
-                color: Colors.white,
-                child: const Center(
-                    child: CircularProgressIndicator(
-                  color: Colors.black,
-                ))),
+        ? Container(
+            height: 465.h,
+            // width: 100,
+            decoration: const BoxDecoration(
+              color: whiteColor,
+              borderRadius: BorderRadiusDirectional.only(
+                topEnd: Radius.circular(40),
+                topStart: Radius.circular(40),
+              ),
+            ),
+            child: const Center(
+              child: CircularProgressIndicator(
+                color: Colors.black,
+                strokeWidth: 6,
+              ),
+            ),
           )
         : Container(
             height: 462.h,
@@ -98,30 +107,34 @@ class _LoanPageState extends State<LoanPage> {
           );
   }
 
-  ListView requestView(BuildContext context, LoanScreenController value) {
-    return ListView.builder(
-      physics: const BouncingScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: 2,
-      itemBuilder: (context, index) => Column(children: [
-        SizedBox(
-          height: 10.h,
-        ),
-        requestDate('19/10/2023'),
-        SizedBox(
-          height: 10.h,
-        ),
-        requestData(index == 0 ? true : false, context, value)
-      ]),
+  Padding requestView(BuildContext context, LoanScreenController value) {
+    return Padding(
+      padding: EdgeInsets.only(top: 2.5.h),
+      child: ListView.builder(
+        physics: const BouncingScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: value.loanData.length,
+        itemBuilder: (context, index) => Column(children: [
+          SizedBox(
+            height: 10.h,
+          ),
+          requestDate(value.loanData[index].createdAt.toString()),
+          SizedBox(
+            height: 10.h,
+          ),
+          requestData(context, value, index)
+        ]),
+      ),
     );
   }
 
   Padding requestData(
-      bool prossesing, BuildContext context, LoanScreenController value) {
+      BuildContext context, LoanScreenController value, int index) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: Container(
-        height: prossesing == true ? 300.h : 360.h,
+        // height: prossesing == true ? 300.h : 360.h,
+        height: 300.h,
         width: 500.w,
         decoration: BoxDecoration(
             color: textFormBase,
@@ -134,23 +147,7 @@ class _LoanPageState extends State<LoanPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                        color: whiteColor,
-                        borderRadius: BorderRadius.all(Radius.circular(30))),
-                    height: 40.h,
-                    width: 140.w,
-                    child: Center(
-                      child: Text(
-                        prossesing == true
-                            ? 'Status:Prossesing'
-                            : 'Status:Rejected',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
+                  loanStatusContainer(value, index),
                   Container(
                     height: 40.h,
                     width: 110.w,
@@ -168,62 +165,65 @@ class _LoanPageState extends State<LoanPage> {
                   )
                 ],
               ),
-              Divider(),
-              loanAmount(price: '200SR', title: 'ആവശ്യപ്പെട്ടത്:'),
-              Divider(),
-              imageRow(prossesing),
+              const Divider(),
+              loanAmount(
+                  price: value.loanData[index].loanAmount,
+                  title: 'ആവശ്യപ്പെട്ടത്:'),
+              const Divider(),
+              imageRow(value, index),
               SizedBox(
                 height: 8.h,
               ),
-              prossesing == true
-                  ? ButtonWidget(
-                      buttonBackgroundColor: whiteColor,
-                      buttonForegroundColor: buttenBlue,
-                      buttonText: 'Cancel Request',
-                      borderAvalable: true,
-                      controller: value,
-                      press: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (context) => CancelPopup(
-                            controller: value,
-                          ),
-                        );
-                      })
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Reasons for rejection:',
-                          style: TextStyle(
-                              color: Colors.black54,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        SizedBox(
-                          height: 8.h,
-                        ),
-                        const Text(
-                          'Here reasons for the rejection can be shown',
-                          style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.w600),
-                        ),
-                        const Text(
-                          ' \ . First reason for rejection',
-                          style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.w600),
-                        ),
-                        const Text(
-                          ' \. Second reason for rejection',
-                          style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.w600),
-                        ),
-                        const Text(
-                          ' \. Third reason for rejection',
-                          style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.w600),
-                        )
-                      ],
-                    )
+
+              ButtonWidget(
+                  buttonBackgroundColor: whiteColor,
+                  buttonForegroundColor: buttenBlue,
+                  buttonText: 'Cancel Request',
+                  borderAvalable: true,
+                  controller: value,
+                  press: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) => CancelPopup(
+                        controller: value,
+                        index: index,
+                      ),
+                    );
+                  })
+              // : Column(
+              //     crossAxisAlignment: CrossAxisAlignment.start,
+              //     children: [
+              //       const Text(
+              //         'Reasons for rejection:',
+              //         style: TextStyle(
+              //             color: Colors.black54,
+              //             fontWeight: FontWeight.w600),
+              //       ),
+              //       SizedBox(
+              //         height: 8.h,
+              //       ),
+              //       const Text(
+              //         'Here reasons for the rejection can be shown',
+              //         style: TextStyle(
+              //             color: Colors.black, fontWeight: FontWeight.w600),
+              //       ),
+              //       const Text(
+              //         ' \ . First reason for rejection',
+              //         style: TextStyle(
+              //             color: Colors.black, fontWeight: FontWeight.w600),
+              //       ),
+              //       const Text(
+              //         ' \. Second reason for rejection',
+              //         style: TextStyle(
+              //             color: Colors.black, fontWeight: FontWeight.w600),
+              //       ),
+              //       const Text(
+              //         ' \. Third reason for rejection',
+              //         style: TextStyle(
+              //             color: Colors.black, fontWeight: FontWeight.w600),
+              //       )
+              //     ],
+              //   )
             ],
           ),
         ),
@@ -231,45 +231,152 @@ class _LoanPageState extends State<LoanPage> {
     );
   }
 
-  Row imageRow(bool prossesing) {
-    return Row(
-      children: [
-        Chechmarkimage(true, true),
-        Chechmarkimage(true, true),
-        Chechmarkimage(false, prossesing == false ? true : false),
-        Chechmarkimage(false, prossesing == false ? true : false)
-      ],
+  Container loanStatusContainer(LoanScreenController value, int index) {
+    if (value.loanData[index].status == 3) {
+      return Container(
+        decoration: const BoxDecoration(
+            color: ThemeProvider.blackColor,
+            borderRadius: BorderRadius.all(Radius.circular(30))),
+        height: 40.h,
+        width: 150.w,
+        child: Center(
+          child: Text(
+            'Status:  ${value.loanData[index].statusText}',
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+                color: ThemeProvider.whiteColor, fontWeight: FontWeight.bold),
+          ),
+        ),
+      );
+    }
+    if (value.loanData[index].status == 1) {
+      return Container(
+        decoration: const BoxDecoration(
+            color: Colors.green,
+            borderRadius: BorderRadius.all(Radius.circular(30))),
+        height: 40.h,
+        width: 150.w,
+        child: Center(
+          child: Text(
+            'Status:  ${value.loanData[index].statusText}',
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+                color: ThemeProvider.whiteColor, fontWeight: FontWeight.bold),
+          ),
+        ),
+      );
+    }
+    if (value.loanData[index].status == 2) {
+      return Container(
+        decoration: const BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.all(Radius.circular(30))),
+        height: 40.h,
+        width: 150.w,
+        child: Center(
+          child: Text(
+            'Status:  ${value.loanData[index].statusText}',
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+                color: ThemeProvider.whiteColor, fontWeight: FontWeight.bold),
+          ),
+        ),
+      );
+    }
+    return Container(
+      decoration: const BoxDecoration(
+          color: whiteColor,
+          borderRadius: BorderRadius.all(Radius.circular(30))),
+      height: 40.h,
+      width: 150.w,
+      child: Center(
+        child: Text(
+          'Status:  ${value.loanData[index].statusText}',
+          textAlign: TextAlign.center,
+          style:
+              const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+      ),
     );
   }
 
-  Stack Chechmarkimage(bool checkmark, bool markAvalable) {
+  Widget imageRow(LoanScreenController controller, int index) {
+    return SizedBox(
+      height: 60.h,
+      child: ListView.separated(
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, imageIndex) =>
+              checkMarkImage(controller, index, imageIndex),
+          separatorBuilder: (context, index) => SizedBox(
+                width: 15.w,
+              ),
+          itemCount: controller.loanData[index].sureties.length),
+    );
+  }
+
+  Stack checkMarkImage(
+      LoanScreenController controller, int index, int imageIndex) {
     return Stack(
       children: [
         Positioned(
           child: CircleAvatar(
             minRadius: 30.r,
-            backgroundImage:
-                const AssetImage('assets/images/pexels-pixabay-220453 1.png'),
+            backgroundImage: NetworkImage(
+                controller.loanData[index].sureties[imageIndex].profileImage),
           ),
         ),
         Positioned(
-            bottom: 0,
-            right: 0,
-            child: markAvalable == true
-                ? Container(
-                    width: 20.w,
-                    height: 18.h,
-                    decoration: BoxDecoration(
-                        color: checkmark == true ? Colors.green : Colors.red,
-                        borderRadius: BorderRadius.all(Radius.circular(50.r))),
-                    child: Icon(
-                      checkmark == true ? Icons.check : Icons.close,
-                      color: Colors.white,
-                      size: 16,
-                    ),
-                  )
-                : Container())
+          bottom: 0,
+          right: 0,
+          child: surtieStatus(controller, index, imageIndex),
+        )
       ],
+    );
+  }
+
+  Container surtieStatus(
+      LoanScreenController controller, int index, int imageIndex) {
+    if (controller.loanData[index].sureties[imageIndex].status == 0) {
+      return Container(
+        width: 20.w,
+        height: 18.h,
+        decoration: BoxDecoration(
+            color: Colors.grey,
+            borderRadius: BorderRadius.all(Radius.circular(50.r))),
+        child: const Icon(
+          Icons.pending_actions,
+          color: Colors.white,
+          size: 16,
+        ),
+      );
+    }
+    if (controller.loanData[index].sureties[imageIndex].status == 1) {
+      return Container(
+        width: 20.w,
+        height: 18.h,
+        decoration: BoxDecoration(
+            color: Colors.green,
+            borderRadius: BorderRadius.all(Radius.circular(50.r))),
+        child: const Icon(
+          Icons.check,
+          color: Colors.white,
+          size: 16,
+        ),
+      );
+    }
+
+    return Container(
+      width: 20.w,
+      height: 18.h,
+      decoration: BoxDecoration(
+          color: Colors.red,
+          borderRadius: BorderRadius.all(Radius.circular(50.r))),
+      child: const Icon(
+        Icons.close,
+        color: Colors.white,
+        size: 16,
+      ),
     );
   }
 
@@ -290,7 +397,7 @@ class _LoanPageState extends State<LoanPage> {
             ],
           ),
           Text(
-            price!,
+            '$price INR',
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           )
         ],
@@ -330,7 +437,7 @@ class _LoanPageState extends State<LoanPage> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 40.h),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
             height: 20.h,
@@ -348,15 +455,15 @@ class _LoanPageState extends State<LoanPage> {
                 child: DropdownButton<Data>(
                   isExpanded: true,
                   underline: Container(),
-                  hint: const Center(
+                  hint: Center(
                     child: Text(
                       "Select Loan Type",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: ThemeProvider.blackColor,
-                          fontSize: 16,
+                          color: Colors.black.withOpacity(.55),
+                          fontSize: 17,
                           letterSpacing: .1,
-                          fontWeight: FontWeight.w500),
+                          fontWeight: FontWeight.w600),
                     ),
                   ),
                   value: value.loan,
@@ -376,7 +483,8 @@ class _LoanPageState extends State<LoanPage> {
           SizedBox(
             height: 10.h,
           ),
-          const Text('Choose Sureties', textAlign: TextAlign.start),
+          const Align(
+              alignment: Alignment.centerLeft, child: Text('Choose Sureties')),
           SizedBox(
             height: 10.h,
           ),
@@ -437,7 +545,7 @@ class _LoanPageState extends State<LoanPage> {
             ),
           ),
           SizedBox(
-            height: 20.h,
+            height: 10.h,
           ),
           TextFormFieldWidget(
               validator: Rtd_Validators.noneEmptyValidator,
@@ -479,7 +587,7 @@ class _LoanPageState extends State<LoanPage> {
                 );
               }),
           SizedBox(
-            height: 30.h,
+            height: 20.h,
           ),
           ButtonWidget(
             buttonBackgroundColor: buttenBlue,
@@ -502,6 +610,8 @@ class _LoanPageState extends State<LoanPage> {
               }
               value.upload(_selectedImage!, value.loan!.id, value.loan!.id,
                   value.addedSurties);
+              value.getLoanRequestData();
+              _selectedImage = null;
             },
           )
         ],
