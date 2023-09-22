@@ -1,22 +1,38 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:rtd_project/controller/loan_screen_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
-import 'package:rtd_project/core/common_widget/dropdown_widget.dart';
 import 'package:rtd_project/core/common_widget/textformfield_widget.dart';
-import 'package:rtd_project/view/loan_screen/widgets/attach_bottem_sheet.dart';
+import 'package:rtd_project/util/theme.dart';
+import 'package:rtd_project/util/toast.dart';
 import 'package:rtd_project/view/loan_screen/widgets/cancel_popup.dart';
-import 'package:rtd_project/view/loan_screen/widgets/porpose.dart';
 
+import '../../backend/model/loan/loan_type_model.dart';
+import '../../core/common_widget/imagepicker.dart';
 import '../../util/validators.dart';
 
-class LoanPage extends StatelessWidget {
+class LoanPage extends StatefulWidget {
   const LoanPage({super.key});
 
   @override
+  State<LoanPage> createState() => _LoanPageState();
+}
+
+XFile? _selectedImage;
+bool image1 = false;
+
+class _LoanPageState extends State<LoanPage> {
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
+      child: GetBuilder<LoanScreenController>(builder: (value) {
+        return Scaffold(
             backgroundColor: baseColor,
             body: SingleChildScrollView(
               child: DefaultTabController(
@@ -29,14 +45,18 @@ class LoanPage extends StatelessWidget {
                       height: 70.h,
                     ),
                     tabBar(),
-                    tabBarView(context),
+                    tabBarView(context, value),
                   ],
                 ),
               ),
-            )));
+            ));
+      }),
+    );
   }
 
   Container requestDate(String date) {
+    String formattedDate =
+        DateFormat('dd/MM/yyyy').format(DateTime.parse(date));
     return Container(
       height: 30.h,
       width: 120.w,
@@ -44,53 +64,77 @@ class LoanPage extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(30)),
           color: textFormBase),
       child: Center(
-        child: Text(date, textAlign: TextAlign.center),
+        child: Text(formattedDate, textAlign: TextAlign.center),
       ),
     );
   }
 
-  Container tabBarView(BuildContext context) {
-    return Container(
-      height: 850.h,
-      //hallo
-      decoration: const BoxDecoration(
-        color: whiteColor,
-        borderRadius: BorderRadiusDirectional.only(
-          topEnd: Radius.circular(40),
-          topStart: Radius.circular(40),
-        ),
+  Widget tabBarView(BuildContext context, LoanScreenController value) {
+    return value.loading == true
+        ? Container(
+            height: 465.h,
+            // width: 100,
+            decoration: const BoxDecoration(
+              color: whiteColor,
+              borderRadius: BorderRadiusDirectional.only(
+                topEnd: Radius.circular(40),
+                topStart: Radius.circular(40),
+              ),
+            ),
+            child: const Center(
+              child: CircularProgressIndicator(
+                color: Colors.black,
+                strokeWidth: 6,
+              ),
+            ),
+          )
+        : Container(
+            height: 462.h,
+            //hallo
+            decoration: const BoxDecoration(
+              color: whiteColor,
+              borderRadius: BorderRadiusDirectional.only(
+                topEnd: Radius.circular(40),
+                topStart: Radius.circular(40),
+              ),
+            ),
+            child: TabBarView(
+                physics: const NeverScrollableScrollPhysics(),
+                children: [
+                  NewRequestView(context, value),
+                  requestView(context, value),
+                ]),
+          );
+  }
+
+  Padding requestView(BuildContext context, LoanScreenController value) {
+    return Padding(
+      padding: EdgeInsets.only(top: 2.5.h),
+      child: ListView.builder(
+        physics: const BouncingScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: value.loanData.length,
+        itemBuilder: (context, index) => Column(children: [
+          SizedBox(
+            height: 10.h,
+          ),
+          requestDate(value.loanData[index].createdAt.toString()),
+          SizedBox(
+            height: 10.h,
+          ),
+          requestData(context, value, index)
+        ]),
       ),
-      child:
-          TabBarView(physics: const NeverScrollableScrollPhysics(), children: [
-        NewRequestView(context),
-        requestView(context),
-      ]),
     );
   }
 
-  ListView requestView(BuildContext context) {
-    return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: 2,
-      itemBuilder: (context, index) => Column(children: [
-        SizedBox(
-          height: 10.h,
-        ),
-        requestDate('19/10/2023'),
-        SizedBox(
-          height: 10.h,
-        ),
-        requestData(index == 0 ? true : false, context)
-      ]),
-    );
-  }
-
-  Padding requestData(bool prossesing, BuildContext context) {
+  Padding requestData(
+      BuildContext context, LoanScreenController value, int index) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: Container(
-        height: prossesing == true ? 300.h : 360.h,
+        // height: prossesing == true ? 300.h : 360.h,
+        height: 300.h,
         width: 500.w,
         decoration: BoxDecoration(
             color: textFormBase,
@@ -103,23 +147,7 @@ class LoanPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                        color: whiteColor,
-                        borderRadius: BorderRadius.all(Radius.circular(30))),
-                    height: 40.h,
-                    width: 140.w,
-                    child: Center(
-                      child: Text(
-                        prossesing == true
-                            ? 'Status:Prossesing'
-                            : 'Status:Rejected',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
+                  loanStatusContainer(value, index),
                   Container(
                     height: 40.h,
                     width: 110.w,
@@ -137,59 +165,65 @@ class LoanPage extends StatelessWidget {
                   )
                 ],
               ),
-              Divider(),
-              loanAmount(price: '200SR', title: 'ആവശ്യപ്പെട്ടത്:'),
-              Divider(),
-              imageRow(prossesing),
+              const Divider(),
+              loanAmount(
+                  price: value.loanData[index].loanAmount,
+                  title: 'ആവശ്യപ്പെട്ടത്:'),
+              const Divider(),
+              imageRow(value, index),
               SizedBox(
                 height: 8.h,
               ),
-              prossesing == true
-                  ? ButtonWidget(
-                      buttonBackgroundColor: whiteColor,
-                      buttonForegroundColor: buttenBlue,
-                      buttonText: 'Cancel Request',
-                      borderAvalable: true,
-                      press: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (context) => CancelPopup(),
-                        );
-                      })
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Reasons for rejection:',
-                          style: TextStyle(
-                              color: Colors.black54,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        SizedBox(
-                          height: 8.h,
-                        ),
-                        const Text(
-                          'Here reasons for the rejection can be shown',
-                          style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.w600),
-                        ),
-                        const Text(
-                          ' \ . First reason for rejection',
-                          style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.w600),
-                        ),
-                        const Text(
-                          ' \. Second reason for rejection',
-                          style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.w600),
-                        ),
-                        const Text(
-                          ' \. Third reason for rejection',
-                          style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.w600),
-                        )
-                      ],
-                    )
+
+              ButtonWidget(
+                  buttonBackgroundColor: whiteColor,
+                  buttonForegroundColor: buttenBlue,
+                  buttonText: 'Cancel Request',
+                  borderAvalable: true,
+                  controller: value,
+                  press: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) => CancelPopup(
+                        controller: value,
+                        index: index,
+                      ),
+                    );
+                  })
+              // : Column(
+              //     crossAxisAlignment: CrossAxisAlignment.start,
+              //     children: [
+              //       const Text(
+              //         'Reasons for rejection:',
+              //         style: TextStyle(
+              //             color: Colors.black54,
+              //             fontWeight: FontWeight.w600),
+              //       ),
+              //       SizedBox(
+              //         height: 8.h,
+              //       ),
+              //       const Text(
+              //         'Here reasons for the rejection can be shown',
+              //         style: TextStyle(
+              //             color: Colors.black, fontWeight: FontWeight.w600),
+              //       ),
+              //       const Text(
+              //         ' \ . First reason for rejection',
+              //         style: TextStyle(
+              //             color: Colors.black, fontWeight: FontWeight.w600),
+              //       ),
+              //       const Text(
+              //         ' \. Second reason for rejection',
+              //         style: TextStyle(
+              //             color: Colors.black, fontWeight: FontWeight.w600),
+              //       ),
+              //       const Text(
+              //         ' \. Third reason for rejection',
+              //         style: TextStyle(
+              //             color: Colors.black, fontWeight: FontWeight.w600),
+              //       )
+              //     ],
+              //   )
             ],
           ),
         ),
@@ -197,45 +231,152 @@ class LoanPage extends StatelessWidget {
     );
   }
 
-  Row imageRow(bool prossesing) {
-    return Row(
-      children: [
-        Chechmarkimage(true, true),
-        Chechmarkimage(true, true),
-        Chechmarkimage(false, prossesing == false ? true : false),
-        Chechmarkimage(false, prossesing == false ? true : false)
-      ],
+  Container loanStatusContainer(LoanScreenController value, int index) {
+    if (value.loanData[index].status == 3) {
+      return Container(
+        decoration: const BoxDecoration(
+            color: ThemeProvider.blackColor,
+            borderRadius: BorderRadius.all(Radius.circular(30))),
+        height: 40.h,
+        width: 150.w,
+        child: Center(
+          child: Text(
+            'Status:  ${value.loanData[index].statusText}',
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+                color: ThemeProvider.whiteColor, fontWeight: FontWeight.bold),
+          ),
+        ),
+      );
+    }
+    if (value.loanData[index].status == 1) {
+      return Container(
+        decoration: const BoxDecoration(
+            color: Colors.green,
+            borderRadius: BorderRadius.all(Radius.circular(30))),
+        height: 40.h,
+        width: 150.w,
+        child: Center(
+          child: Text(
+            'Status:  ${value.loanData[index].statusText}',
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+                color: ThemeProvider.whiteColor, fontWeight: FontWeight.bold),
+          ),
+        ),
+      );
+    }
+    if (value.loanData[index].status == 2) {
+      return Container(
+        decoration: const BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.all(Radius.circular(30))),
+        height: 40.h,
+        width: 150.w,
+        child: Center(
+          child: Text(
+            'Status:  ${value.loanData[index].statusText}',
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+                color: ThemeProvider.whiteColor, fontWeight: FontWeight.bold),
+          ),
+        ),
+      );
+    }
+    return Container(
+      decoration: const BoxDecoration(
+          color: whiteColor,
+          borderRadius: BorderRadius.all(Radius.circular(30))),
+      height: 40.h,
+      width: 150.w,
+      child: Center(
+        child: Text(
+          'Status:  ${value.loanData[index].statusText}',
+          textAlign: TextAlign.center,
+          style:
+              const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+      ),
     );
   }
 
-  Stack Chechmarkimage(bool checkmark, bool markAvalable) {
+  Widget imageRow(LoanScreenController controller, int index) {
+    return SizedBox(
+      height: 60.h,
+      child: ListView.separated(
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, imageIndex) =>
+              checkMarkImage(controller, index, imageIndex),
+          separatorBuilder: (context, index) => SizedBox(
+                width: 15.w,
+              ),
+          itemCount: controller.loanData[index].sureties.length),
+    );
+  }
+
+  Stack checkMarkImage(
+      LoanScreenController controller, int index, int imageIndex) {
     return Stack(
       children: [
         Positioned(
           child: CircleAvatar(
             minRadius: 30.r,
-            backgroundImage:
-                const AssetImage('assets/images/pexels-pixabay-220453 1.png'),
+            backgroundImage: NetworkImage(
+                controller.loanData[index].sureties[imageIndex].profileImage),
           ),
         ),
         Positioned(
-            bottom: 0,
-            right: 0,
-            child: markAvalable == true
-                ? Container(
-                    width: 20.w,
-                    height: 18.h,
-                    decoration: BoxDecoration(
-                        color: checkmark == true ? Colors.green : Colors.red,
-                        borderRadius: BorderRadius.all(Radius.circular(50.r))),
-                    child: Icon(
-                      checkmark == true ? Icons.check : Icons.close,
-                      color: Colors.white,
-                      size: 16,
-                    ),
-                  )
-                : Container())
+          bottom: 0,
+          right: 0,
+          child: surtieStatus(controller, index, imageIndex),
+        )
       ],
+    );
+  }
+
+  Container surtieStatus(
+      LoanScreenController controller, int index, int imageIndex) {
+    if (controller.loanData[index].sureties[imageIndex].status == 0) {
+      return Container(
+        width: 20.w,
+        height: 18.h,
+        decoration: BoxDecoration(
+            color: Colors.grey,
+            borderRadius: BorderRadius.all(Radius.circular(50.r))),
+        child: const Icon(
+          Icons.pending_actions,
+          color: Colors.white,
+          size: 16,
+        ),
+      );
+    }
+    if (controller.loanData[index].sureties[imageIndex].status == 1) {
+      return Container(
+        width: 20.w,
+        height: 18.h,
+        decoration: BoxDecoration(
+            color: Colors.green,
+            borderRadius: BorderRadius.all(Radius.circular(50.r))),
+        child: const Icon(
+          Icons.check,
+          color: Colors.white,
+          size: 16,
+        ),
+      );
+    }
+
+    return Container(
+      width: 20.w,
+      height: 18.h,
+      decoration: BoxDecoration(
+          color: Colors.red,
+          borderRadius: BorderRadius.all(Radius.circular(50.r))),
+      child: const Icon(
+        Icons.close,
+        color: Colors.white,
+        size: 16,
+      ),
     );
   }
 
@@ -256,7 +397,7 @@ class LoanPage extends StatelessWidget {
             ],
           ),
           Text(
-            price!,
+            '$price INR',
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           )
         ],
@@ -292,121 +433,204 @@ class LoanPage extends StatelessWidget {
             )));
   }
 
-  Padding NewRequestView(BuildContext context) {
-    List<String> loanType = ['1', '2'];
-    TextEditingController loanController = TextEditingController();
+  Padding NewRequestView(BuildContext context, LoanScreenController value) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 40.h),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        SizedBox(
-          height: 20.h,
-        ),
-        DropedownWidget(hintText: 'Loan Type', dropDownlist: loanType),
-        SizedBox(
-          height: 10.h,
-        ),
-        const Text('Choose Sureties', textAlign: TextAlign.start),
-        SizedBox(
-          height: 10.h,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CircleAvatar(
-              minRadius: 35.r,
-              backgroundColor: textFormBase,
-              backgroundImage:
-                  const AssetImage('assets/images/pexels-pixabay-220453 1.png'),
-            ),
-            CircleAvatar(
-              minRadius: 35.r,
-              backgroundColor: textFormBase,
-              child: IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
-            ),
-            CircleAvatar(
-              minRadius: 35.r,
-              backgroundColor: textFormBase,
-              child: IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
-            ),
-          ],
-        ),
-        SizedBox(
-          height: 20.h,
-        ),
-        TextFormFieldWidget(
-            validator: Rtd_Validators.noneEmptyValidator,
-            controller: loanController, hitText: 'Loan Amount'),
-        SizedBox(
-          height: 20.h,
-        ),
-        GestureDetector(
-          onTap: () => showModalBottomSheet(
-            context: context,
-            builder: (context) => const PorposeWidget(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(
+            height: 20.h,
           ),
-          child: Container(
+          Container(
             height: 50.h,
             width: 290.w,
             decoration: BoxDecoration(
               color: textFormBase,
               borderRadius: BorderRadius.circular(20),
             ),
-            child: const Center(child: Text('purpose')),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 20, left: 20).r,
+                child: DropdownButton<Data>(
+                  isExpanded: true,
+                  underline: Container(),
+                  hint: Center(
+                    child: Text(
+                      "Select Loan Type",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.black.withOpacity(.55),
+                          fontSize: 17,
+                          letterSpacing: .1,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  value: value.loan,
+                  // Set the initial value (hint text)
+                  onChanged: (newValue) {
+                    setState(() {});
+                    value.loan = newValue;
+                    value.purpose = newValue!.title;
+
+                    log(value.loan!.id.toString());
+                  },
+                  items: value.dropdownMenuLoanType,
+                ),
+              ),
+            ),
           ),
-        ),
-        SizedBox(
-          height: 20.h,
-        ),
-        ButtonWidget(
-            buttonBackgroundColor: whiteColor,
-            buttonForegroundColor: buttenBlue,
-            buttonText: 'Attach Docements',
-            borderAvalable: true,
-            press: () {
-              showModalBottomSheet(
-                context: context,
-                builder: (context) => const AttachBottemSheet(),
-              );
-            }),
-        SizedBox(
-          height: 30.h,
-        ),
-        ButtonWidget(
+          SizedBox(
+            height: 10.h,
+          ),
+          const Align(
+              alignment: Alignment.centerLeft, child: Text('Choose Sureties')),
+          SizedBox(
+            height: 10.h,
+          ),
+          SizedBox(
+            height: 80.h,
+            child: ListView.separated(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: value.surties!.length,
+              itemBuilder: (context, index) => GestureDetector(
+                onTap: () {
+                  log(value.surties![index].id.toString());
+                  value.addSurties(value.surties![index].id);
+                  log(value.addedSurties.toString());
+                },
+                child: Stack(
+                  children: [
+                    CircleAvatar(
+                      minRadius: 35.r,
+                      backgroundColor: textFormBase,
+                      backgroundImage: NetworkImage(value
+                              .surties![index].profileImage ??
+                          'http://rtd.canisostudio.com/assets/images/dummy-user.jpg'),
+                    ),
+                    Positioned(
+                      bottom: 10.h,
+                      right: 0,
+                      child: Container(
+                        width: 20.w,
+                        height: 18.h,
+                        decoration: BoxDecoration(
+                            color: value.addedSurties
+                                    .contains(value.surties![index].id)
+                                ? Colors.green
+                                : Colors.black,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(50.r))),
+                        child: value.addedSurties
+                                .contains(value.surties![index].id)
+                            ? const Icon(
+                                Icons.check,
+                                color: Colors.white,
+                                size: 16,
+                              )
+                            : const Icon(
+                                Icons.add,
+                                color: Colors.white,
+                                size: 16,
+                              ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              separatorBuilder: (context, index) => const SizedBox(
+                width: 15,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10.h,
+          ),
+          TextFormFieldWidget(
+              validator: Rtd_Validators.noneEmptyValidator,
+              controller: value.loanAmountController,
+              textInputType: TextInputType.number,
+              hitText: 'Loan Amount'),
+          // SizedBox(
+          //   height: 20.h,
+          // ),
+          // GestureDetector(
+          //   onTap: () => showModalBottomSheet(
+          //     context: context,
+          //     builder: (context) => const PorposeWidget(),
+          //   ),
+          //   child: Container(
+          //     height: 50.h,
+          //     width: 290.w,
+          //     decoration: BoxDecoration(
+          //       color: textFormBase,
+          //       borderRadius: BorderRadius.circular(20),
+          //     ),
+          //     child: Center(child: Text(value.purpose ?? 'purpose')),
+          //   ),
+          // ),
+          SizedBox(
+            height: 20.h,
+          ),
+          ButtonWidget(
+              buttonBackgroundColor: whiteColor,
+              buttonForegroundColor: buttenBlue,
+              buttonText: 'Attach Docements',
+              borderAvalable: true,
+              press: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) => Imagepiker(
+                    onImageSelected: _updateSelectedImage,
+                  ),
+                );
+              }),
+          SizedBox(
+            height: 20.h,
+          ),
+          ButtonWidget(
             buttonBackgroundColor: buttenBlue,
             buttonForegroundColor: whiteColor,
             buttonText: 'submit',
             borderAvalable: false,
-            press: () {})
-      ]),
-    );
-  }
-
-  Container feedDate(String date) {
-    return Container(
-      height: 30.h,
-      width: 120.w,
-      decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(30)),
-          color: textFormBase),
-      child: Center(
-        child: Text(date, textAlign: TextAlign.center),
+            press: () {
+              if (value.loanAmountController.text.isEmpty ||
+                  value.loanAmountController.text == '') {
+                showToast('Enter Amount');
+                return;
+              }
+              if (value.purpose == null) {
+                showToast('Select Loan Type and Purpose');
+                return;
+              }
+              if (_selectedImage == null) {
+                showToast('Select Document');
+                return;
+              }
+              value.upload(_selectedImage!, value.loan!.id, value.loan!.id,
+                  value.addedSurties);
+              value.getLoanRequestData();
+              _selectedImage = null;
+            },
+          )
+        ],
       ),
     );
   }
 
-  //
-
-  Container Divider() {
-    return Container(
-      width: 280.w,
-      child: const Text(
-        overflow: TextOverflow.fade,
-        maxLines: 1,
-        '---------------------------',
-        style: TextStyle(fontSize: 30),
-      ),
-    );
-  }
+  // Container feedDate(String date) {
+  //   return Container(
+  //     height: 30.h,
+  //     width: 120.w,
+  //     decoration: const BoxDecoration(
+  //         borderRadius: BorderRadius.all(Radius.circular(30)),
+  //         color: textFormBase),
+  //     child: Center(
+  //       child: Text(date, textAlign: TextAlign.center),
+  //     ),
+  //   );
+  // }
 
   Padding tabBar() {
     return Padding(
@@ -459,5 +683,12 @@ class LoanPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _updateSelectedImage(XFile? newImage) {
+    setState(() {
+      _selectedImage = newImage;
+      image1 = true;
+    });
   }
 }

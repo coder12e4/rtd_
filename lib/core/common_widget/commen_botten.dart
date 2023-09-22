@@ -5,15 +5,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rtd_project/core/color/colors.dart';
 
 class ButtonWidget extends StatelessWidget {
-  ButtonWidget({
-    super.key,
-    required this.buttonBackgroundColor,
-    required this.buttonForegroundColor,
-    required this.buttonText,
-    required this.borderAvalable,
-    required this.press,
-  });
-
+  ButtonWidget(
+      {super.key,
+      required this.buttonBackgroundColor,
+      required this.buttonForegroundColor,
+      required this.buttonText,
+      required this.borderAvalable,
+      required this.press,
+      this.controller});
+  final controller;
   final Color buttonBackgroundColor;
   final Color buttonForegroundColor;
   final String buttonText;

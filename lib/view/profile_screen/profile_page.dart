@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:rtd_project/controller/profile_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
-import 'package:rtd_project/view/profile_screen/profile_edit_screen/profile_edit_screen.dart';
+import 'package:rtd_project/helper/router.dart';
+import 'package:rtd_project/util/alert_dialog.dart';
 import 'package:rtd_project/view/profile_screen/profile_loan_screen/profile_loan_screen.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -15,105 +18,147 @@ class ProfilePage extends StatelessWidget {
         child: Scaffold(
       backgroundColor: baseColor,
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            appbar(context),
-            Container(
-              height: 1200.h,
-              decoration: const BoxDecoration(
-                  color: whiteColor,
-                  borderRadius: BorderRadiusDirectional.only(
-                    topStart: Radius.circular(50),
-                    topEnd: Radius.circular(50),
-                  )),
-              child: ListView(
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  imageContainer(),
-                  kSizedBoxH,
-                  nameText(),
-                  kSizedBoxH,
-                  dividerWidget(),
-                  kSizedBoxH,
-                  textButton(context),
-                  kSizedBoxH,
-                  dividerWidget(),
-                  kSizedBoxH,
-                  detailsText('India', '+91 9745123456'),
-                  kSizedBoxH,
-                  dividerWidget(),
-                  kSizedBoxH,
-                  detailsText('Saudi Arabia', '+91 9745123456'),
-                  kSizedBoxH,
-                  dividerWidget(),
-                  kSizedBoxH,
-                  detailsText('Mail Address', 'example@gmail.com'),
-                  kSizedBoxH,
-                  dividerWidget(),
-                  kSizedBoxH,
-                  detailsText('Mail Address', 'example@gmail.com'),
-                  kSizedBoxH,
-                  dividerWidget(),
-                  kSizedBoxH,
-                  detailsText('Blood Group', 'B+'),
-                  kSizedBoxH,
-                  dividerWidget(),
-                  kSizedBoxH,
-                  detailsText('Indian Address',
-                      'Address Line 1, Line 2 and Line 3 will be shown here. Pin code and state etc. will follow.'),
-                  kSizedBoxH,
-                  dividerWidget(),
-                  kSizedBoxH,
-                  detailsText('Saudi Arabia Address',
-                      'Address Line 1, Line 2 and Line 3 will be shown here. Pin code and state etc. will follow.'),
-                  dividerWidget(),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 45.0.w, right: 8.0.w),
-                        child: const Text(
-                          'Documents',
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 97, 95, 95),
-                              fontWeight: FontWeight.bold),
+        child: GetBuilder<ProfileController>(builder: (value) {
+          return Column(
+            children: [
+              appbar(context),
+              value.loading || value.userData == null
+                  ? Container(
+                      height: 550.h,
+                      // width: 100,
+                      decoration: const BoxDecoration(
+                        color: whiteColor,
+                        borderRadius: BorderRadiusDirectional.only(
+                          topEnd: Radius.circular(40),
+                          topStart: Radius.circular(40),
                         ),
                       ),
-                      const SizedBox(
-                        height: 4,
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.black,
+                          strokeWidth: 6,
+                        ),
                       ),
-                      documentContainer(),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      documentContainer(),
-                      kSizedBoxH,
-                      dividerWidget(),
-                    ],
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
+                    )
+                  : Container(
+                      height: 1050.h,
+                      decoration: const BoxDecoration(
+                          color: whiteColor,
+                          borderRadius: BorderRadiusDirectional.only(
+                            topStart: Radius.circular(50),
+                            topEnd: Radius.circular(50),
+                          )),
+                      child: ListView(
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: [
+                          imageContainer(value),
+                          kSizedBoxH,
+                          nameText(value),
+                          kSizedBoxH,
+                          dividerWidget(),
+                          kSizedBoxH,
+                          textButton(context),
+                          kSizedBoxH,
+                          dividerWidget(),
+                          kSizedBoxH,
+                          detailsText('India',
+                              " ${value.userData!.data.indiaMobileNumber}"),
+                          kSizedBoxH,
+                          dividerWidget(),
+                          kSizedBoxH,
+                          detailsText(
+                              'KSA', value.userData!.data.ksaMobileNumber),
+                          kSizedBoxH,
+                          dividerWidget(),
+                          kSizedBoxH,
+                          detailsText(
+                              'Mail Address', value.userData!.data.email),
+                          kSizedBoxH,
+                          kSizedBoxH,
+                          dividerWidget(),
+                          kSizedBoxH,
+                          detailsText('Blood Group',
+                              value.userData!.data.bloodGroup.toString()),
+                          dividerWidget(),
+                          kSizedBoxH,
+                          detailsText('Indian Address',
+                              "${value.userData!.data.indianAddress1}\n${value.userData!.data.indianAddress2}"),
+                          kSizedBoxH,
+                          dividerWidget(),
+                          kSizedBoxH,
+                          detailsText('Saudi Arabia Address',
+                              '${value.userData!.data.ksaAddress1}\n${value.userData!.data.ksaAddress2}'),
+                          dividerWidget(),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                    EdgeInsets.only(left: 45.0.w, right: 8.0.w),
+                                child: const Text(
+                                  'Documents',
+                                  style: TextStyle(
+                                      color: Color.fromARGB(255, 97, 95, 95),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 4,
+                              ),
+                              documentContainer(
+                                  value.userData!.data.documentProofIndia),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              documentContainer(
+                                  value.userData!.data.documentProofKsa),
+                              kSizedBoxH,
+                              dividerWidget(),
+                            ],
+                          ),
+                        ],
+                      )),
+            ],
+          );
+        }),
       ),
     ));
   }
 
-  Container documentContainer() {
+  Container documentContainer(documentProof) {
     return Container(
       margin: EdgeInsets.only(left: 36.w),
       height: 130.h,
       width: 280.w,
       decoration: BoxDecoration(
+          image: DecorationImage(
+            fit: BoxFit.contain,
+            image: NetworkImage(documentProof),
+          ),
           color: const Color.fromARGB(255, 223, 220, 220),
           borderRadius: BorderRadius.circular(20)),
+      // child: Image.network(
+      //   documentProof,
+      //   height: 130.h,
+      //   width: 280.w,
+      //   errorBuilder: (context, error, stackTrace) => Padding(
+      //     padding: const EdgeInsets.all(10.0).r,
+      //     child: Column(
+      //       mainAxisAlignment: MainAxisAlignment.center,
+      //       children: [
+      //         const Icon(Icons.error_outline),
+      //         kSizedBoxH,
+      //         Text(error.toString()),
+      //       ],
+      //     ),
+      //   ),
+      // ),
     );
   }
 
   Padding detailsText(title, subtitle) {
     return Padding(
-      padding: EdgeInsets.only(left: 38.0.w),
+      padding: EdgeInsets.only(left: 38.0.w, right: 38.0.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -152,9 +197,7 @@ class ProfilePage extends StatelessWidget {
                 backgroundColor:
                     MaterialStateColor.resolveWith((states) => baseColor)),
             onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ProfileEditScreen(),
-              ));
+              Get.toNamed(AppRouter.getEditProfileRoute());
             },
             child: const Padding(
               padding:
@@ -180,7 +223,7 @@ class ProfilePage extends StatelessWidget {
                     MaterialStateColor.resolveWith((states) => baseColor)),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ProfileLoanScreen(),
+                builder: (context) => const ProfileLoanScreen(),
               ));
             },
             child: Padding(
@@ -209,20 +252,16 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Column nameText() {
-    return const Column(
-      children: [
-        Text(
-          'Shanavas Kolangattil',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-        ),
-        Text('(M.109)',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-      ],
+  Align nameText(ProfileController value) {
+    return Align(
+      child: Text(
+        value.userData!.data.name,
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+      ),
     );
   }
 
-  Container imageContainer() {
+  Container imageContainer(ProfileController value) {
     return Container(
       margin: EdgeInsets.only(top: 30.h),
       height: 100.h,
@@ -246,17 +285,8 @@ class ProfilePage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    color: whiteColor,
-                    size: 30,
-                  )),
               SizedBox(
-                width: 90.w,
+                width: 145.w,
               ),
               Text(
                 'Profile',
@@ -290,7 +320,7 @@ class ProfilePage extends StatelessWidget {
               style: ButtonStyle(
                   backgroundColor:
                       MaterialStateColor.resolveWith((states) => whiteColor)),
-              onPressed: () {},
+              onPressed: () => logOutDialog(),
               child: const Text(
                 'Log Out',
                 style: TextStyle(color: baseColor),

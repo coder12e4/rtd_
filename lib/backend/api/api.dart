@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -54,11 +55,10 @@ class ApiService extends GetxService {
 
   Future<Response> getPrivate(String uri, String token) async {
     try {
-      http.Response response = await http.get(Uri.parse(appBaseUrl + uri),
-          headers: {
-            'Content-Type': 'application/json;',
-            'Authorization': 'Bearer $token'
-          }).timeout(Duration(seconds: timeoutInSeconds));
+      http.Response response = await http.get(Uri.parse(uri), headers: {
+        'Content-Type': 'application/json;',
+        'Authorization': 'Bearer $token'
+      }).timeout(Duration(seconds: timeoutInSeconds));
       return parseResponse(response, uri);
     } catch (e) {
       return const Response(statusCode: 1, statusText: connectionIssue);
@@ -88,12 +88,9 @@ class ApiService extends GetxService {
       http.MultipartRequest request = http.MultipartRequest(
         'POST',
         Uri.parse(uri),
-
       );
 
-      request.headers.addAll({
-        "Accept": "application/json"
-      });
+      request.headers.addAll({"Accept": "application/json"});
       for (MultipartBody multipart in multipartBody) {
         File file = File(multipart.file.path);
         request.files.add(http.MultipartFile(
@@ -116,11 +113,12 @@ class ApiService extends GetxService {
       request.fields['india_state'] = iState;
       request.fields['india_pin'] = iPin;
       request.fields['ksa_address_1'] = kAddress1;
-      request.fields['kas_address_2'] = kAddress2;
+      request.fields['ksa_address_2'] = kAddress2;
       request.fields['ksa_state'] = kState;
       request.fields['ksa_pin'] = kPin;
 
-      http.Response response = await http.Response.fromStream(await request.send());
+      http.Response response =
+          await http.Response.fromStream(await request.send());
       log(uri);
       log(response.statusCode.toString());
       log('upload image');
@@ -131,41 +129,76 @@ class ApiService extends GetxService {
     }
   }
 
-  Future<Response> postPublic(String url, dynamic body) async {
+  Future<Response> postPublic(String uri, dynamic body,
+      {Map<String, String>? headers}) async {
+    final Map<String, String> headers = {
+      "Accept": "application/json",
+      "Content-Type": "application/json", // Set content type to JSON
+    };
+    final String requestBodyJson = jsonEncode(body);
     try {
-      http.Response response = await http.post(
-            Uri.parse(url),
-            headers: {'Accept': "application/json"},
-            body: jsonEncode(body),
+      log(uri);
+      log(body.toString());
+
+      http.Response response = await http
+          .post(
+            Uri.parse(uri),
+            headers: headers,
+            body: requestBodyJson,
           )
           .timeout(Duration(seconds: timeoutInSeconds));
 
-      print(response.body);
-      //print(appBaseUrl + uri);
-      return parseResponse(response,url);
+      log(response.body);
+      log('from ApiService ${response.statusCode.toString()}');
+      log(uri);
+      return parseResponse(response, uri);
     } catch (e) {
+      log(' from api service ${e.toString()}');
       return const Response(statusCode: 1, statusText: connectionIssue);
     }
   }
+//   Future<Response> postPublic(String url, dynamic body) async {
+//     try {
+//       http.Response response = await http.post(
+//             Uri.parse(url),
+//             headers: {'Accept': "application/json"},
+//             body: jsonEncode(body),
+//           )
+//           .timeout(Duration(seconds: timeoutInSeconds));
+
+//       print(response.body);
+//       //print(appBaseUrl + uri);
+//       return parseResponse(response,url);
+// >>>>>>> b9f06c447ec4f4a4bb4b7ff334e752e96abf1121
+//     } catch (e) {
+//       log(' from api service ${e.toString()}');
+//       return const Response(statusCode: 1, statusText: connectionIssue);
+//     }
+//   }
 
   Future<Response> postPrivate(
     String uri,
     dynamic body,
     String token,
   ) async {
+    log(body.toString());
+    log(uri);
     try {
+      final requestBodyJson = jsonEncode(body);
       http.Response response = await http.post(Uri.parse(uri),
-          body: jsonEncode(body),
+          body: requestBodyJson,
           headers: {
             "Accept": "application/json",
-            'Authorization': 'Bearer $token'
+            "Content-Type": "application/json",
+            "Authorization": "Bearer $token"
           }).timeout(Duration(seconds: timeoutInSeconds));
 
       log(response.body);
-      log(token);
-      log(Uri.parse(appBaseUrl + uri).toString());
+
+      log(Uri.parse(uri).toString());
       return parseResponse(response, uri);
     } catch (e) {
+      log(e.toString());
       return const Response(statusCode: 1, statusText: connectionIssue);
     }
   }
@@ -219,6 +252,34 @@ class ApiService extends GetxService {
       response = const Response(statusCode: 0, statusText: connectionIssue);
     }
     return response;
+  }
+
+  Future<Response> postPubliceg(String uri, body,
+      {Map<String, String>? headers}) async {
+    final Map<String, String> headers = {
+      "Accept": "application/json",
+      "Content-Type": "application/json", // Set content type to JSON
+    };
+    final String requestBodyJson = jsonEncode(body);
+    try {
+      var url = Uri.https('rtd.canisostudio.com', '/api/user/login');
+      log(url.toString());
+
+      // log(encodedBody.toString());
+      var response = await http.post(
+        url,
+        body: requestBodyJson,
+        headers: headers,
+      );
+
+      log("decoded data from api service${jsonDecode(response.body)}");
+      log('from ApiService1 ${response.statusCode.toString()}');
+      log(uri);
+      return parseResponse(response, uri);
+    } catch (e) {
+      log(' from api service ${e.toString()}');
+      return const Response(statusCode: 1, statusText: connectionIssue);
+    }
   }
 }
 

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/dropdown_widget.dart';
+import 'package:rtd_project/helper/router.dart';
 import 'package:rtd_project/view/book_screen/book_edit_screen/book_edit_screen.dart';
-import 'package:rtd_project/view/book_screen/elected_member_screen/elected_member_screen.dart';
 import 'package:rtd_project/view/book_screen/widgets/membrlisttile_widgetr.dart';
 
 class BookPage extends StatelessWidget {
@@ -22,7 +23,8 @@ class BookPage extends StatelessWidget {
         child: Scaffold(
       backgroundColor: baseColor,
       body: SingleChildScrollView(
-        child: Column(
+        child: SizedBox(
+            child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             appbar(context),
@@ -63,7 +65,7 @@ class BookPage extends StatelessWidget {
                         child: GestureDetector(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => BookEditPage(),
+                              builder: (context) => const BookEditPage(),
                             ));
                           },
                           child: const MemberistTileWidget(),
@@ -78,12 +80,14 @@ class BookPage extends StatelessWidget {
               ),
             ),
           ],
-        ),
+        )),
       ),
     ));
   }
 
-  Container appbar(BuildContext context) {
+  Container appbar(
+    BuildContext context,
+  ) {
     return Container(
       margin: EdgeInsets.only(top: 10.h),
       child: Column(
@@ -107,11 +111,12 @@ class BookPage extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ElectedMemberScreen(),
-                  ));
+                  Get.toNamed(AppRouter.getElectedMemberRoute());
+                  // Navigator.of(context).push(MaterialPageRoute(
+                  //   builder: (context) => ElectedMemberScreen(),
+                  // ));
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.people_alt_rounded,
                 ),
                 color: whiteColor,

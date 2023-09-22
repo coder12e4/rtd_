@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:rtd_project/core/color/colors.dart';
-import 'package:rtd_project/view/book_screen/book_page.dart';
-import 'package:rtd_project/view/home_screen/home.dart';
-import 'package:rtd_project/view/loan_screen/loan_page.dart';
-import 'package:rtd_project/view/wall_screen/wall_page.dart';
 
+import '../../controller/bottom_navigation_controller.dart';
+import '../../helper/router.dart';
+import '../book_screen/book_page.dart';
+import '../loan_screen/loan_page.dart';
 import '../profile_screen/profile_page.dart';
+import '../wall_screen/wall_page.dart';
+import 'home.dart';
 
 class NavigationBarpage extends StatefulWidget {
   const NavigationBarpage({super.key});
@@ -15,25 +19,28 @@ class NavigationBarpage extends StatefulWidget {
 }
 
 class _NavigationBarpageState extends State<NavigationBarpage> {
-  int _pageindex = 0;
   final List<Widget> _tablist = [
-    const HomePage(),
+    HomePage(),
     const WallPage(),
     const LoanPage(),
-     BookPage(),
+    BookPage(),
     const ProfilePage(),
   ];
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-      body: Stack(
-        children: [
-          _tablist.elementAt(_pageindex),
-          Padding(
-            padding: const EdgeInsets.all(30.0),
-            child: Align(
-              alignment: const Alignment(0.0, 1.0),
+    return GetBuilder<BottomNavController>(
+      builder: (value) {
+        return SafeArea(
+            child: DefaultTabController(
+          length: _tablist.length,
+          child: Scaffold(
+            body: TabBarView(
+              physics: const NeverScrollableScrollPhysics(),
+              controller: value.tabController,
+              children: _tablist,
+            ),
+            bottomNavigationBar: Padding(
+              padding: const EdgeInsets.all(8).r,
               child: ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(30)),
                 child: BottomNavigationBar(
@@ -42,11 +49,40 @@ class _NavigationBarpageState extends State<NavigationBarpage> {
                     showSelectedLabels: true,
                     showUnselectedLabels: true,
                     // backgroundColor: Colors.amber,
-                    currentIndex: _pageindex,
+                    currentIndex: value.tabId!,
                     onTap: (int index) {
-                      setState(() {
-                        _pageindex = index;
-                      });
+                      // value.updateTabId(index);
+                      switch (index) {
+                        case 0:
+                          {
+                            Get.offAllNamed(AppRouter.getBottomNavRoute(),
+                                arguments: [index]);
+                          }
+                          break;
+                        case 1:
+                          {
+                            Get.offAllNamed(AppRouter.getBottomNavRoute(),
+                                arguments: [index]);
+                          }
+                          break;
+                        case 2:
+                          {
+                            Get.offAllNamed(AppRouter.getBottomNavRoute(),
+                                arguments: [index]);
+                          }
+                          break;
+                        case 3:
+                          {
+                            Get.offAllNamed(AppRouter.getBottomNavRoute(),
+                                arguments: [index]);
+                          }
+                          break;
+                        case 4:
+                          {
+                            Get.offAllNamed(AppRouter.getBottomNavRoute(),
+                                arguments: [index]);
+                          }
+                      }
                     },
                     items: const [
                       BottomNavigationBarItem(
@@ -69,13 +105,12 @@ class _NavigationBarpageState extends State<NavigationBarpage> {
                           backgroundColor: Colors.black,
                           icon: Icon(Icons.person_2_outlined),
                           label: 'Profile'),
-
                     ]),
               ),
             ),
-          )
-        ],
-      ),
-    ));
+          ),
+        ));
+      },
+    );
   }
 }

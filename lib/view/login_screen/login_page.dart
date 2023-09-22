@@ -5,8 +5,6 @@ import 'package:rtd_project/controller/authentication/login_contoller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
 import 'package:rtd_project/util/validators.dart';
-import 'package:rtd_project/view/login_screen/widgets/login_complete.dart';
-import 'package:rtd_project/view/register_screen/register_screen.dart';
 
 import '../../core/common_widget/textformfield_widget.dart';
 
@@ -28,18 +26,19 @@ class LOginPage extends StatelessWidget {
               // crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 welcomeWidget(context),
+                SizedBox(
+                  height: 45.h,
+                ),
                 nochBarAboveLoginContainer(),
                 SizedBox(
                   height: 5.h,
                 ),
                 Form(
                   key: _formKey,
-
-
                   child: Container(
-                    height: 390.h,
+                    height: 350.h,
                     width: 390.w,
-                    padding: EdgeInsets.only(left: 35, right: 35),
+                    padding: const EdgeInsets.only(left: 35, right: 35),
                     decoration: const BoxDecoration(
                       color: whiteColor,
                       borderRadius: BorderRadiusDirectional.only(
@@ -48,24 +47,27 @@ class LOginPage extends StatelessWidget {
                       ),
                     ),
                     child: ListView(
+                      physics: const NeverScrollableScrollPhysics(),
                       children: [
                         SizedBox(
                           height: 40.h,
                         ),
                         TextFormFieldWidget(
                             validator: Rtd_Validators.noneEmptyValidator,
-                            controller: value.emailController,
-                            hitText: 'Username'),
+                            controller: value.mobileNumberController,
+                            textInputType: TextInputType.phone,
+                            hitText: 'Registered Mobile Number'),
                         SizedBox(
                           height: 20.h,
                         ),
-                        Container(
+                        SizedBox(
                           width: 290.w,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
                               focusNode: node,
-                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
                               validator: Rtd_Validators.passwordValidator,
                               controller: value.passwordController,
                               obscureText: value.passwordVisible,
@@ -83,27 +85,30 @@ class LOginPage extends StatelessWidget {
                                     ),
                                     onPressed: () {
                                       // Update the state i.e. toogle the state of passwordVisible variable
-                                      value.VisibiltyValueChange();
+                                      value.visibiltyValueChange();
                                     },
                                   ),
                                   hintText: "Password",
                                   fillColor: textFormBase,
                                   filled: true,
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: textFormBase),
+                                    borderSide:
+                                        const BorderSide(color: textFormBase),
                                     borderRadius: BorderRadius.circular(20.0),
                                   ),
                                   focusedErrorBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: textFormBase),
+                                    borderSide:
+                                        const BorderSide(color: textFormBase),
                                     borderRadius: BorderRadius.circular(20.0),
                                   ),
-
                                   enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: textFormBase),
+                                    borderSide:
+                                        const BorderSide(color: textFormBase),
                                     borderRadius: BorderRadius.circular(20.0),
                                   ),
                                   errorBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: textFormBase),
+                                    borderSide:
+                                        const BorderSide(color: textFormBase),
                                     borderRadius: BorderRadius.circular(20.0),
                                   ),
                                   hintStyle: const TextStyle(
@@ -120,7 +125,6 @@ class LOginPage extends StatelessWidget {
                         ButtonWidget(
                           press: () {
                             if (_formKey.currentState!.validate()) {
-
                               value.onLogin();
                             }
                           },
@@ -132,11 +136,12 @@ class LOginPage extends StatelessWidget {
                         SizedBox(
                           height: 10.h,
                         ),
-                        forgotButton(),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        notAmembertext(),
+                        // forgotButton(),
+                        // SizedBox(
+                        //   height: 10.h,
+                        // ),
+
+                        Center(child: notAmembertext()),
                         SizedBox(
                           height: 10.h,
                         ),

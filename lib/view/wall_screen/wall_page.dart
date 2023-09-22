@@ -118,7 +118,6 @@ class WallPage extends StatelessWidget {
                             color: Colors.black, fontWeight: FontWeight.bold),
                       ),
                     ),
-
                   )
                 ],
               ),
@@ -217,7 +216,6 @@ class WallPage extends StatelessWidget {
               buttonText!,
               style: const TextStyle(fontWeight: FontWeight.w700),
             )));
-
   }
 
   Column feedView() {
@@ -334,7 +332,7 @@ class WallPage extends StatelessWidget {
                 ],
               ),
               Divider(),
-              loanAmount(title: 'കൊടുത്തത്:', price: '200SR'),
+              loanAmount(title: 'കൊടുത്തത്:', price: '200 INR'),
               SizedBox(
                 height: 10.h,
               ),

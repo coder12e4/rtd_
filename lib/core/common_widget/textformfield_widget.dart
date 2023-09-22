@@ -3,26 +3,27 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rtd_project/core/color/colors.dart';
 
 class TextFormFieldWidget extends StatelessWidget {
-  const TextFormFieldWidget({
-    super.key,
-    required this.controller,
-    required this.hitText,
-    required this.validator,
-  });
+  const TextFormFieldWidget(
+      {super.key,
+      required this.controller,
+      required this.hitText,
+      required this.validator,
+      this.textInputType});
   final TextEditingController controller;
   final String hitText;
   final String? Function(String?)? validator;
-
+  final TextInputType? textInputType;
   @override
   Widget build(BuildContext context) {
-    FocusNode node = FocusNode();
-    return Container(
+    // FocusNode node = FocusNode();
+    return SizedBox(
       width: 290.w,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
           validator: validator,
           controller: controller,
+          keyboardType: textInputType,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: InputDecoration(
               border: InputBorder.none, // Removes the underline
@@ -30,19 +31,19 @@ class TextFormFieldWidget extends StatelessWidget {
               fillColor: textFormBase,
               filled: true,
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: textFormBase),
+                borderSide: const BorderSide(color: textFormBase),
                 borderRadius: BorderRadius.circular(20.0),
               ),
               enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: textFormBase),
+                borderSide: const BorderSide(color: textFormBase),
                 borderRadius: BorderRadius.circular(20.0),
               ),
               focusedErrorBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: textFormBase),
+                borderSide: const BorderSide(color: textFormBase),
                 borderRadius: BorderRadius.circular(20.0),
               ),
               errorBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: textFormBase),
+                borderSide: const BorderSide(color: textFormBase),
                 borderRadius: BorderRadius.circular(20.0),
               ),
               hintStyle: const TextStyle(

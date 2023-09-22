@@ -45,14 +45,6 @@ class _DropedownWidgetState extends State<DropedownWidget> {
               child: Text(widget.hintText),
             ),
             // Generate other blood group options
-            ...widget.dropDownlist
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                alignment: Alignment.center,
-                value: value,
-                child: Text(value),
-              );
-            })
           ],
         ),
       ),

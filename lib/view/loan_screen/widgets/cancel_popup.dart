@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
+import 'package:rtd_project/controller/loan_screen_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
-import 'package:rtd_project/core/common_widget/imagepicker.dart';
 
 class CancelPopup extends StatelessWidget {
-  const CancelPopup({super.key});
-
+  const CancelPopup({super.key, required this.controller, required this.index});
+  final LoanScreenController controller;
+  final int index;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -25,7 +25,7 @@ class CancelPopup extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
+            const Text(
               'Do you really want to cancel the loan request?',
               textAlign: TextAlign.center,
               style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
@@ -36,6 +36,7 @@ class CancelPopup extends StatelessWidget {
                 buttonText: "Yes",
                 borderAvalable: false,
                 press: () {
+                  controller.cancelLoanRequest(controller.loanData[index].id);
                   Navigator.pop(context);
                 }),
             ButtonWidget(

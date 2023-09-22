@@ -65,6 +65,11 @@ class SignUpParser {
         .getPublic(Constants.baseUrl + Constants.getAllBloodGroup);
   }
 
+  Future<Response> getVehicleType() async {
+    return await apiService
+        .getPublic(Constants.baseUrl + Constants.getVehicleType);
+  }
+
   Future<void> saveToken(key, token) async {
     sharedPreferencesManager.putString(key, token);
   }

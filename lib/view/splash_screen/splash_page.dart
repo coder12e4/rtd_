@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:rtd_project/controller/splash_screen_controller.dart';
+
+import '../../controller/splash_screen_controller.dart';
 
 class SplashScreen extends StatelessWidget {
-  SplashScreen({super.key});
-
-  final splashController = Get.put(SplashScreenController());
+  const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-      body: SingleChildScrollView(
-        physics: const NeverScrollableScrollPhysics(),
-        child: background(context),
+        child: GetBuilder<SplashScreenController>(
+      builder: (controller) => Scaffold(
+        body: SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
+          child: background(context),
+        ),
       ),
     ));
   }

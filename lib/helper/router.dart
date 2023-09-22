@@ -98,25 +98,38 @@
 // import 'package:ultimate_salon_owner_flutter/app/view/verify.dart';
 
 import 'package:get/get.dart';
+import 'package:rtd_project/backend/binding/bottom_navigation_binding.dart';
+import 'package:rtd_project/backend/binding/elected_member_binding.dart';
+import 'package:rtd_project/backend/binding/loan_screen_binding.dart';
 import 'package:rtd_project/backend/binding/login_binding.dart';
 import 'package:rtd_project/backend/binding/register_binding.dart';
 import 'package:rtd_project/backend/binding/splash_binding.dart';
+import 'package:rtd_project/view/book_screen/elected_member_screen/elected_member_screen.dart';
 import 'package:rtd_project/view/login_screen/login_page.dart';
+import 'package:rtd_project/view/profile_screen/profile_edit_screen/profile_edit_screen.dart';
+import 'package:rtd_project/view/profile_screen/profile_page.dart';
 import 'package:rtd_project/view/register_screen/register_screen.dart';
 import 'package:rtd_project/view/splash_screen/splash_page.dart';
+
+import '../backend/binding/edit_profile_binding.dart';
+import '../backend/binding/profile_binding.dart';
+import '../view/home_screen/home_page.dart';
+import '../view/loan_screen/loan_page.dart';
 
 class AppRouter {
   static const String initial = '/';
   static const String verifyRoutes = '/verify';
+  static const String bottomNavRoutes = '/bottomNav';
+  static const String electedMemberRoutes = '/electedMember';
   static const String signUpRoutes = '/signup';
   static const String tabRoutes = '/tabs';
-  static const String appointmentRoutes = '/appointment';
-  static const String calendarRoutes = '/calendar';
+  static const String editProfileRoutes = '/editProfile';
+  static const String userProfileRoutes = '/userProfile';
   static const String inboxRoutes = '/inbox';
   static const String profileRoutes = '/profile';
   static const String orderDetailsRoutes = '/order_details';
   static const String chatRoutes = '/chat';
-  static const String historyRoutes = '/history';
+  static const String loanRoutes = '/loan';
   static const String stylistRoutes = '/stylist';
   static const String addStylistRoutes = '/add_stylist';
   static const String stylistCategoriesRoutes = '/select_stylist';
@@ -156,14 +169,16 @@ class AppRouter {
   static String getInitialRoute() => initial;
   static String getVerifyRoute() => verifyRoutes;
   static String getSignUpRoute() => signUpRoutes;
+  static String getBottomNavRoute() => bottomNavRoutes;
+  static String getElectedMemberRoute() => electedMemberRoutes;
   static String getTabRoute() => tabRoutes;
-  static String getAppointmentRoute() => appointmentRoutes;
-  static String getCalendarRoute() => calendarRoutes;
+  static String getEditProfileRoute() => editProfileRoutes;
+  static String getUserProfileRoute() => userProfileRoutes;
   static String getInboxRoute() => inboxRoutes;
   static String getProfileRoute() => profileRoutes;
   static String getOrderDetailsRoute() => orderDetailsRoutes;
   static String getChatRoute() => chatRoutes;
-  static String getHistoryRoute() => historyRoutes;
+  static String getLoanRoute() => loanRoutes;
   static String getStylistRoute() => stylistRoutes;
   static String getAddStylistRoute() => addStylistRoutes;
   static String getStylistCategoriesRoute() => stylistCategoriesRoutes;
@@ -202,9 +217,10 @@ class AppRouter {
 
   static List<GetPage> routes = [
     GetPage(
-        name: initial,
-        page: () => const LOginPage(),
-        binding: LoginBinding()),
+      name: initial,
+      page: () => const LOginPage(),
+      binding: LoginBinding(),
+    ),
     // GetPage(
     //     name: verifyRoutes,
     //     page: () => const VerifyScreen(),
@@ -212,21 +228,27 @@ class AppRouter {
 
     GetPage(
         name: signUpRoutes,
-        page: () =>  RegisterScreen(),
+        page: () => RegisterScreen(),
         binding: RegisterBinding()),
+    GetPage(
+        name: bottomNavRoutes,
+        page: () => const NavigationBarpage(),
+        binding: BottomNavBinding()),
 
-
-
+    GetPage(
+        name: electedMemberRoutes,
+        page: () => ElectedMemberScreen(),
+        binding: ElectedMemberBinding()),
     // GetPage(
     //     name: tabRoutes, page: () => const TabScreen(), binding: TabsBinding()),
-    // GetPage(
-    //     name: appointmentRoutes,
-    //     page: () => const AppointmentScreen(),
-    //     binding: AppointmentBinding()),
-    // GetPage(
-    //     name: calendarRoutes,
-    //     page: () => const CalendarScreen(),
-    //     binding: CalendarsBinding()),
+    GetPage(
+        name: editProfileRoutes,
+        page: () => const ProfileEditScreen(),
+        binding: EditProfileBinding()),
+    GetPage(
+        name: userProfileRoutes,
+        page: () => const ProfilePage(),
+        binding: ProfileBinding()),
     // GetPage(
     //     name: inboxRoutes,
     //     page: () => const InboxScreen(),
@@ -243,10 +265,10 @@ class AppRouter {
     //     name: chatRoutes,
     //     page: () => const ChatScreen(),
     //     binding: ChatBinding()),
-    // GetPage(
-    //     name: historyRoutes,
-    //     page: () => const HistoryScreen(),
-    //     binding: HistoryBinding()),
+    GetPage(
+        name: loanRoutes,
+        page: () => const LoanPage(),
+        binding: LoanScreenBinding()),
     // GetPage(
     //     name: stylistRoutes,
     //     page: () => const StylistScreen(),
@@ -365,10 +387,7 @@ class AppRouter {
     //     page: () => const IndividualCitiesScreen(),
     //     binding: IndividualCitiesBinding()),
     // GetPage(name: errorRoutes, page: () => const ErrorScreen()),
-    GetPage(
-        name: splash,
-        page: () =>  SplashScreen(),
-        binding: SplashBinding()),
+    GetPage(name: splash, page: () => SplashScreen(), binding: SplashBinding()),
     // GetPage(
     //     name: analyticsRoutes,
     //     page: () => const AnalyticScreen(),
