@@ -27,7 +27,7 @@ class _ImagepikerState extends State<Imagepiker> {
   dynamic image;
   Future pickImage(ImageSource source) async {
     image = await picker.pickImage(source: source);
-    log('image************${image.path}');
+    // log('image************${image.path}');
     return image;
   }
 

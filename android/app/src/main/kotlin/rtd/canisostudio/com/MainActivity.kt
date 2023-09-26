@@ -1,4 +1,4 @@
-package com.example.rtd_project
+package rtd.canisostudio.com
 
 import io.flutter.embedding.android.FlutterActivity
 

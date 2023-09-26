@@ -1,15 +1,26 @@
 import 'dart:io';
+
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart'; 
+import 'package:get/get.dart';
 import 'package:rtd_project/core/constraints/http_certificate/http_certificate.dart';
 import 'package:rtd_project/helper/init.dart';
 import 'package:rtd_project/helper/router.dart';
 import 'package:rtd_project/util/theme.dart';
 
+import 'backend/notification/push_notification.dart';
+
 Future<void> main() async {
-  // Get.put(Athentication());
+  // Get.put(Athentication())
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: ThemeProvider.appColor, // status bar color
+  ));
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await FirebaseApi().initNotifications();
   await MainBinding().dependencies();
   HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
@@ -18,7 +29,7 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({
     super.key,
-  }); 
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -47,5 +58,5 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-//  
+//
 //start

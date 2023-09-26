@@ -112,8 +112,10 @@ import 'package:rtd_project/view/register_screen/register_screen.dart';
 import 'package:rtd_project/view/splash_screen/splash_page.dart';
 
 import '../backend/binding/edit_profile_binding.dart';
+import '../backend/binding/loan_edit_binding.dart';
 import '../backend/binding/profile_binding.dart';
 import '../view/home_screen/home_page.dart';
+import '../view/loan_screen/loan_edit_screen/loan_edit_screen.dart';
 import '../view/loan_screen/loan_page.dart';
 
 class AppRouter {
@@ -128,7 +130,7 @@ class AppRouter {
   static const String inboxRoutes = '/inbox';
   static const String profileRoutes = '/profile';
   static const String orderDetailsRoutes = '/order_details';
-  static const String chatRoutes = '/chat';
+  static const String loanEditRoutes = '/loanEdit';
   static const String loanRoutes = '/loan';
   static const String stylistRoutes = '/stylist';
   static const String addStylistRoutes = '/add_stylist';
@@ -177,7 +179,7 @@ class AppRouter {
   static String getInboxRoute() => inboxRoutes;
   static String getProfileRoute() => profileRoutes;
   static String getOrderDetailsRoute() => orderDetailsRoutes;
-  static String getChatRoute() => chatRoutes;
+  static String getLoanEditRoute() => loanEditRoutes;
   static String getLoanRoute() => loanRoutes;
   static String getStylistRoute() => stylistRoutes;
   static String getAddStylistRoute() => addStylistRoutes;
@@ -228,7 +230,7 @@ class AppRouter {
 
     GetPage(
         name: signUpRoutes,
-        page: () => RegisterScreen(),
+        page: () => const RegisterScreen(),
         binding: RegisterBinding()),
     GetPage(
         name: bottomNavRoutes,
@@ -261,10 +263,10 @@ class AppRouter {
     //     name: orderDetailsRoutes,
     //     page: () => const OrderDetailsScreen(),
     //     binding: OrderDetailsBinding()),
-    // GetPage(
-    //     name: chatRoutes,
-    //     page: () => const ChatScreen(),
-    //     binding: ChatBinding()),
+    GetPage(
+        name: loanEditRoutes,
+        page: () => const LoanEditScreen(),
+        binding: LoanEditBinding()),
     GetPage(
         name: loanRoutes,
         page: () => const LoanPage(),

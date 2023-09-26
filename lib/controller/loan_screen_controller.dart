@@ -22,9 +22,9 @@ class LoanScreenController extends GetxController {
   LoanScreenController({required this.parser});
   @override
   void onInit() {
-    getLoanRequestData();
     getLoanType();
     getSurties();
+    getLoanRequestData();
 
     super.onInit();
   }

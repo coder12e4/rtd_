@@ -13,4 +13,6 @@ class Constants {
   static const String cancelLoanRequest = 'api/user/loan/request/cancel';
   static const String getLoanRequest = 'api/user/loan/request/list';
   static const String getHomeData = 'api/user/home';
+  static const String loanRequestEdit = 'api/user/loan/request/edit';
+  static const String getWallFeedData = 'api/user/wall/feeds';
 }

@@ -27,12 +27,18 @@ class EditProfileParser {
         Constants.baseUrl + Constants.getUserDetails, accessToken!);
   }
 
+  Future<Response> getVehicleType() async {
+    return await apiService
+        .getPublic(Constants.baseUrl + Constants.getVehicleType);
+  }
+
   Future<String> getToken() async {
-    String accessToken =  sharedPreferencesManager.getString('access_token')!;
+    String accessToken = sharedPreferencesManager.getString('access_token')!;
     return accessToken;
   }
+
   Future<Response> updateUserData(body) async {
-    String accessToken =  sharedPreferencesManager.getString('access_token')!;
+    String accessToken = sharedPreferencesManager.getString('access_token')!;
     return await apiService.postPrivate(
         Constants.baseUrl + Constants.updateProfile, body, accessToken);
   }

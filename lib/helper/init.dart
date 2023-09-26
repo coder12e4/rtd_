@@ -67,6 +67,7 @@ import 'package:get/get.dart';
 import 'package:rtd_project/backend/api/api.dart';
 import 'package:rtd_project/backend/parser/elected_member_parser.dart';
 import 'package:rtd_project/backend/parser/home_parser.dart';
+import 'package:rtd_project/backend/parser/loan_edit_parser.dart';
 import 'package:rtd_project/backend/parser/login_parser.dart';
 import 'package:rtd_project/backend/parser/profile_parser.dart';
 import 'package:rtd_project/backend/parser/sighnup_parser.dart';
@@ -141,10 +142,10 @@ class MainBinding extends Bindings {
         () => BottomNavParser(
             apiService: Get.find(), sharedPreferencesManager: Get.find()),
         fenix: true);
-    // Get.lazyPut(
-    //     () => VerifyParser(
-    //         apiService: Get.find(), sharedPreferencesManager: Get.find()),
-    //     fenix: true);
+    Get.lazyPut(
+        () => LoanEditParser(
+            apiService: Get.find(), sharedPreferencesManager: Get.find()),
+        fenix: true);
     //   Get.lazyPut(
     //       () => OrderDetailsParser(
     //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
