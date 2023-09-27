@@ -10,41 +10,46 @@ import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
-import '../backend/model/loan/loan_request_model.dart';
-import '../backend/model/loan/loan_type_model.dart';
-import '../backend/model/loan/surties_model.dart';
-import '../backend/parser/loan_screen_parser.dart';
-import '../util/theme.dart';
-import '../util/toast.dart';
+import '../../backend/model/loan/loan_edite_model.dart';
+import '../../backend/model/loan/loan_type_model.dart';
+import '../../backend/model/loan/surties_model.dart';
+import '../../backend/parser/loan/loan_edit_parser.dart';
+import '../../helper/router.dart';
+import '../../util/theme.dart';
+import '../../util/toast.dart';
+import 'loan_screen_controller.dart';
 
-class LoanScreenController extends GetxController {
-  final LoanScreenParser parser;
-  LoanScreenController({required this.parser});
+class LoanEditController extends GetxController implements GetxService {
+  final LoanEditParser parser;
+
+  LoanEditController({required this.parser});
   @override
   void onInit() {
-    getLoanType();
+    loanId = Get.arguments[0].toString();
     getSurties();
-    getLoanRequestData();
+    getLoanType();
+    getLoanDetails(loanId);
 
     super.onInit();
   }
 
-  bool loading = true;
+  String? loanId;
+  XFile? loanDocument;
   Data? loan;
-  TextEditingController loanAmountController = TextEditingController();
-  List<LoanData> _loanData = <LoanData>[];
-  List<LoanData> get loanData => _loanData;
+  String? purpose;
   List<SuretiesData>? surties;
   List<int> _addedSurties = <int>[];
   List<int> get addedSurties => _addedSurties;
-  List<Data> _getLoanTypes = <Data>[];
-  List<Data> get getLoanTypes => _getLoanTypes;
   List<DropdownMenuItem<Data>> _dropdownMenuLoanType =
       <DropdownMenuItem<Data>>[];
   List<DropdownMenuItem<Data>> get dropdownMenuLoanType =>
       _dropdownMenuLoanType;
-  LoanType? loanType;
-  String? purpose;
+
+  List<Data> _getLoanTypes = <Data>[];
+  List<Data> get getLoanTypes => _getLoanTypes;
+  bool loading = true;
+  LoanData? loanData;
+  TextEditingController loanAmountController = TextEditingController();
   Future<void> getLoanType() async {
     Response response = await parser.getLoanTypes();
     if (response.statusCode == 200) {
@@ -67,45 +72,44 @@ class LoanScreenController extends GetxController {
     update();
   }
 
-  Future<void> getLoanRequestData() async {
-    Response response = await parser.getLoanRequestData();
-    if (response.statusCode == 200) {
-      loanData.clear();
-      loading = true;
-
-      update();
-
-      try {
-        Map<String, dynamic> jsonData =
-            Map<String, dynamic>.from(response.body);
-        List allData = jsonData['data'];
-        for (var element in allData) {
-          LoanData individual = LoanData.fromJson(element);
-          loanData.add(individual);
-        }
-      } catch (e) {
-        log('Loan request data error $e');
-      }
-    }
-    loading = false;
-    update();
-  }
-
-  Future<void> cancelLoanRequest(id) async {
-    final body = {"loan_request_id": id.toString()};
-    Response response = await parser.cancelLoanRequest(body);
+  Future<void> getSurties() async {
+    Response response = await parser.getSurties();
     if (response.statusCode == 200) {
       try {
-        Map<String, dynamic> jsonData =
-            Map<String, dynamic>.from(response.body);
-        successToast(jsonData['message']);
-        await getLoanRequestData();
+        Map<String, dynamic> data = Map<String, dynamic>.from(response.body);
+        var allLoan = data['data'];
+        surties = [];
+        allLoan.forEach((data) {
+          SuretiesData individual = SuretiesData.fromJson(data);
+          surties!.add(individual);
+        });
+
+        log(surties.toString());
       } catch (e) {
         log(e.toString());
       }
     }
+
     update();
-    log(response.body.toString());
+  }
+
+  Future<void> getLoanDetails(id) async {
+    final body = {"loan_request_id": id};
+    Response response = await parser.getLoanDetails(body);
+    addedSurties.clear();
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonData = Map<String, dynamic>.from(response.body);
+      loanData = LoanData.fromJson(jsonData);
+      for (var element in loanData!.data.sureties) {
+        addedSurties.add(element.userId);
+      }
+      final imagePath = await parser.urlToFile(loanData!.data.loanDocument);
+      loanDocument = XFile(imagePath.path);
+      loanAmountController.text = loanData!.data.loanAmount;
+      loading = false;
+    }
+    log(loanData!.toString());
+    update();
   }
 
   List<DropdownMenuItem<Data>> buildDropDownMenuItemsLoanType(List listItems) {
@@ -129,42 +133,7 @@ class LoanScreenController extends GetxController {
     return items;
   }
 
-  Future<void> getSurties() async {
-    Response response = await parser.getSurties();
-    if (response.statusCode == 200) {
-      try {
-        Map<String, dynamic> data = Map<String, dynamic>.from(response.body);
-        var allLoan = data['data'];
-        surties = [];
-        allLoan.forEach((data) {
-          SuretiesData individual = SuretiesData.fromJson(data);
-          surties!.add(individual);
-        });
-
-        log(surties.toString());
-      } catch (e) {
-        log(e.toString());
-      }
-    }
-    loading = false;
-    update();
-  }
-
-  addSurties(id) {
-    if (addedSurties.contains(id)) {
-      addedSurties.remove(id);
-    } else {
-      addedSurties.add(id);
-    }
-    update();
-  }
-
-  Future<void> upload(
-    XFile data1,
-    loanTypeId,
-    loanPurpose,
-    surties,
-  ) async {
+  Future<void> upload(XFile? data1) async {
     Get.dialog(
       SimpleDialog(
         children: [
@@ -190,52 +159,70 @@ class LoanScreenController extends GetxController {
       ),
       barrierDismissible: false,
     );
-    File file1 = File(data1.path);
+
+    File file1 = File(data1 == null ? loanDocument!.path : data1.path);
 
     var stream3 = http.ByteStream(DelegatingStream.typed(file1.openRead()));
+
     var length3 = await file1.length();
 
     var uri =
-        Uri.parse("http://rtd.canisostudio.com/api/user/loan/request/create");
+        Uri.parse("http://rtd.canisostudio.com/api/user/loan/request/update");
 
     var request = http.MultipartRequest("POST", uri);
 
-    var loanDocument = http.MultipartFile('loan_document', stream3, length3,
+    var profileImage = http.MultipartFile('loan_document', stream3, length3,
         filename: basename(file1.path), contentType: MediaType('image', 'png'));
+
     String? accessToken =
         parser.sharedPreferencesManager.getString('access_token');
-    request.files.add(loanDocument);
+    request.files.add(profileImage);
 
-    request.fields['sureties'] = surties.toString();
-    request.fields['loan_purpose'] = loanPurpose.toString();
+    request.fields['loan_request_id'] = loanId!;
+    request.fields['loan_type'] = loan!.id.toString();
     request.fields['loan_amount'] = loanAmountController.text;
-    request.fields['loan_type'] = loanTypeId.toString();
+    request.fields['loan_purpose'] = loan!.id.toString();
+    request.fields['sureties'] = addedSurties.toString();
 
     request.headers.addAll({
       "Accept": "application/json",
       'Authorization': 'Bearer $accessToken',
     });
     var response = await request.send();
-    log(response.statusCode.toString());
-    log(response.statusCode.toString());
+    debugPrint(response.statusCode.toString());
+
     // final respStr = await response.stream.bytesToString();
     response.stream.transform(utf8.decoder).listen((value) {
-      log(value);
+      debugPrint(value);
       var k = json.decode(value);
 
       eror message = eror.fromJson(k);
       Get.back();
 
       if (message.status!) {
-        _addedSurties.clear();
-
         successToast(message.message.toString());
-        getLoanRequestData();
+        onProfileEditSuccess();
       } else {
         showToast(k['message'].toString());
         // onLogin();
       }
     });
+  }
+
+  addSurties(id) {
+    if (addedSurties.contains(id)) {
+      addedSurties.remove(id);
+    } else {
+      addedSurties.add(id);
+    }
+    update();
+  }
+
+  void onProfileEditSuccess() {
+    final LoanScreenController loanScreenController = Get.find();
+    loanScreenController.getLoanRequestData();
+    Get.delete<LoanScreenController>(force: true);
+    Get.offNamed(AppRouter.getBottomNavRoute(), arguments: [2]);
   }
 }
 
@@ -248,7 +235,7 @@ class eror {
     status = json['status'];
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['message'] = this.message;
     data['status'] = this.status;
     return data;

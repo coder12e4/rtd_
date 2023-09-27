@@ -6,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rtd_project/backend/model/loan/loan_type_model.dart';
-import 'package:rtd_project/controller/loan_edit_controller.dart';
+import 'package:rtd_project/controller/loan/loan_edit_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/util/theme.dart';
@@ -14,6 +14,7 @@ import 'package:rtd_project/util/theme.dart';
 import '../../../core/common_widget/commen_botten.dart';
 import '../../../core/common_widget/imagepicker.dart';
 import '../../../core/common_widget/textformfield_widget.dart';
+import '../../../util/toast.dart';
 import '../../../util/validators.dart';
 
 class LoanEditScreen extends StatefulWidget {
@@ -231,21 +232,23 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
                                   buttonText: 'Update',
                                   borderAvalable: false,
                                   press: () {
-                                    // if (value.loanAmountController.text.isEmpty ||
-                                    //     value.loanAmountController.text == '') {
-                                    //   showToast('Enter Amount');
-                                    //   return;
-                                    // }
-                                    // if (value.purpose == null) {
-                                    //   showToast('Select Loan Type and Purpose');
-                                    //   return;
-                                    // }
+                                    if (value.loanAmountController.text
+                                            .isEmpty ||
+                                        value.loanAmountController.text == '') {
+                                      showToast('Enter Amount');
+                                      return;
+                                    }
+                                    if (value.purpose == null) {
+                                      showToast('Select Loan Type and Purpose');
+                                      return;
+                                    }
                                     // if (_selectedImage == null) {
                                     //   showToast('Select Document');
                                     //   return;
                                     // }
-                                    // value.upload(_selectedImage!, value.loan!.id, value.loan!.id,
-                                    //     value.addedSurties);
+                                    value
+                                        .upload(_selectedImage)
+                                        .then((value) => _selectedImage = null);
                                     // value.getLoanRequestData();
                                     // _selectedImage = null;
                                   },

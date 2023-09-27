@@ -3,8 +3,8 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../backend/model/profile_model.dart';
-import '../backend/parser/profile_parser.dart';
+import '../../backend/model/profile_model.dart';
+import '../../backend/parser/profile/profile_parser.dart';
 
 class ProfileController extends GetxController implements GetxService {
   final ProfileParser parser;

@@ -6,7 +6,7 @@ import 'package:rtd_project/backend/api/api.dart';
 import 'package:rtd_project/core/constraints/api_urls.dart';
 import 'package:rtd_project/helper/shared_pref.dart';
 
-import '../model/user_data_model.dart';
+import '../../model/user_data_model.dart';
 
 class LoginParser {
   final SharedPreferencesManager sharedPreferencesManager;

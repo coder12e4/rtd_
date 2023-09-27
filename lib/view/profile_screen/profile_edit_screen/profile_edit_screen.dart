@@ -14,7 +14,7 @@ import '../../../backend/model/bloodgroup_model.dart';
 import '../../../backend/model/profile_model.dart';
 import '../../../backend/model/states_model.dart';
 import '../../../backend/model/vehicle_type_model.dart';
-import '../../../controller/profile_edit_controller.dart';
+import '../../../controller/profile/profile_edit_controller.dart';
 import '../../../core/common_widget/imagepicker.dart';
 import '../../../util/validators.dart';
 
@@ -28,6 +28,9 @@ class ProfileEditScreen extends StatefulWidget {
 Data? userData;
 bool selectProfileImage = false;
 XFile? _profileImage;
+XFile? _docProf1;
+XFile? _docProf2;
+
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 class _ProfileEditScreenState extends State<ProfileEditScreen> {
@@ -63,7 +66,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         ),
                       )
                     : Container(
-                        height: 1350.h,
+                        height: 1550.h,
                         width: 390.w,
                         decoration: const BoxDecoration(
                             color: whiteColor,
@@ -243,6 +246,11 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                   hinttext: value.userData!.data.indiaPin,
                                   labelText: "Pin"),
                               kSizedBoxH20,
+                              documentContainer(
+                                  value.userData!.data.documentProofIndia,
+                                  _docProf1,
+                                  true),
+                              dividerWidget(),
                               Padding(
                                 padding:
                                     EdgeInsets.symmetric(horizontal: 38.0.w),
@@ -295,11 +303,17 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                   controller: value.ksaAddressContoller2,
                                   hinttext: value.ksaAddressContoller2.text,
                                   labelText: "Address 2"),
+
                               ProfileEditScreenTextField(
                                   validator: Rtd_Validators.pincodeValidator,
                                   controller: value.saudiAddPinContoller,
                                   hinttext: '677743',
                                   labelText: "Pin"),
+                              kSizedBoxH20,
+                              documentContainer(
+                                  value.userData!.data.documentProofKsa,
+                                  _docProf2,
+                                  false),
 
                               Padding(
                                 padding: EdgeInsets.symmetric(
@@ -327,11 +341,14 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                           showToast('Select States');
                                           return;
                                         }
-                                        _profileImage == null
-                                            ? value.updateProfileData()
-                                            : value.upload(_profileImage).then(
-                                                (value) =>
-                                                    _profileImage == null);
+                                        value
+                                            .upload(_profileImage, _docProf1,
+                                                _docProf2)
+                                            .then((value) {
+                                          _profileImage == null;
+                                          _docProf1 = null;
+                                          _docProf2 = null;
+                                        });
                                       }
                                     },
                                     child: const Padding(
@@ -365,17 +382,6 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
           }),
         ),
       ),
-    );
-  }
-
-  Container documentContainer() {
-    return Container(
-      margin: EdgeInsets.only(left: 36.w),
-      height: 130.h,
-      width: 280.w,
-      decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 223, 220, 220),
-          borderRadius: BorderRadius.circular(20)),
     );
   }
 
@@ -478,6 +484,42 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     );
   }
 
+  Stack documentContainer(documentProof, XFile? image, bool select) {
+    return Stack(
+      alignment: AlignmentDirectional.center,
+      children: [
+        Container(
+          height: 130.h,
+          width: 280.w,
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.contain,
+                image: image == null
+                    ? NetworkImage(documentProof) as ImageProvider
+                    : FileImage(File(image.path)),
+              ),
+              color: const Color.fromARGB(255, 223, 220, 220),
+              borderRadius: BorderRadius.circular(20)),
+        ),
+        Positioned(
+          top: 0,
+          right: 55.w,
+          child: IconButton(
+            onPressed: () => showModalBottomSheet(
+              context: context,
+              builder: (context) => Imagepiker(
+                onImageSelected: select == true
+                    ? _updateSelectedImage1
+                    : _updateSelectedImage2,
+              ),
+            ),
+            icon: const Icon(Icons.edit_outlined),
+          ),
+        )
+      ],
+    );
+  }
+
   imageContainer(EditProfileController value) {
     return Padding(
       padding: const EdgeInsets.only(top: 20).r,
@@ -529,6 +571,20 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     setState(() {
       _profileImage = profileImage;
       selectProfileImage = true;
+    });
+  }
+
+  void _updateSelectedImage2(XFile? newImage) {
+    setState(() {
+      _docProf2 = newImage;
+      // image1 = true;
+    });
+  }
+
+  void _updateSelectedImage1(XFile? newImage) {
+    setState(() {
+      _docProf1 = newImage;
+      // image1 = true;
     });
   }
 

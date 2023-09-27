@@ -1,13 +1,13 @@
 import 'package:get/get.dart';
 
-import '../../core/constraints/api_urls.dart';
-import '../../helper/shared_pref.dart';
-import '../api/api.dart';
+import '../../../core/constraints/api_urls.dart';
+import '../../../helper/shared_pref.dart';
+import '../../api/api.dart';
 
-class LoanEditParser {
+class LoanScreenParser {
   final SharedPreferencesManager sharedPreferencesManager;
   final ApiService apiService;
-  LoanEditParser(
+  LoanScreenParser(
       {required this.sharedPreferencesManager, required this.apiService});
   Future<Response> getLoanTypes() async {
     final accessToken = sharedPreferencesManager.getString('access_token');
@@ -23,9 +23,17 @@ class LoanEditParser {
     return response;
   }
 
-  Future<Response> getLoanDetails(body) async {
-    String accessToken = sharedPreferencesManager.getString('access_token')!;
-    return await apiService.postPrivate(
-        Constants.baseUrl + Constants.loanRequestEdit, body, accessToken);
+  Future<Response> cancelLoanRequest(body) async {
+    final accessToken = sharedPreferencesManager.getString('access_token');
+    var response = await apiService.postPrivate(
+        Constants.baseUrl + Constants.cancelLoanRequest, body, accessToken!);
+    return response;
+  }
+
+  Future<Response> getLoanRequestData() async {
+    final accessToken = sharedPreferencesManager.getString('access_token');
+    var response = await apiService.getPrivate(
+        Constants.baseUrl + Constants.getLoanRequest, accessToken!);
+    return response;
   }
 }

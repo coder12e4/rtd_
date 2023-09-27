@@ -12,7 +12,7 @@ import 'package:path/path.dart';
 import 'package:rtd_project/backend/model/bloodgroup_model.dart';
 import 'package:rtd_project/backend/model/states_model.dart';
 import 'package:rtd_project/backend/model/vehicle_type_model.dart';
-import 'package:rtd_project/backend/parser/sighnup_parser.dart';
+import 'package:rtd_project/backend/parser/authentication/sighnup_parser.dart';
 import 'package:rtd_project/util/theme.dart';
 import 'package:rtd_project/util/toast.dart';
 import 'package:rtd_project/view/register_screen/widgets/register_success.dart';

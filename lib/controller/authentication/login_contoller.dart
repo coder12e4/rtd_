@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rtd_project/backend/parser/login_parser.dart';
+import 'package:rtd_project/backend/parser/authentication/login_parser.dart';
 import 'package:rtd_project/controller/authentication/regitration.dart';
 import 'package:rtd_project/helper/router.dart';
 
@@ -54,9 +54,9 @@ class LoginController extends GetxController implements GetxService {
               ),
               SizedBox(
                   child: Text(
-                    "Please wait".tr,
-                    style: const TextStyle(fontFamily: 'bold'),
-                  )),
+                "Please wait".tr,
+                style: const TextStyle(fontFamily: 'bold'),
+              )),
             ],
           )
         ],

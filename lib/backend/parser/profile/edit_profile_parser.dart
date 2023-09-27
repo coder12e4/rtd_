@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 
-import '../../core/constraints/api_urls.dart';
-import '../../helper/shared_pref.dart';
-import '../api/api.dart';
+import '../../../core/constraints/api_urls.dart';
+import '../../../helper/shared_pref.dart';
+import '../../api/api.dart';
 
 class EditProfileParser {
   final SharedPreferencesManager sharedPreferencesManager;

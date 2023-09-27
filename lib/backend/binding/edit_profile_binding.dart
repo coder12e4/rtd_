@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:rtd_project/controller/profile_edit_controller.dart';
+import 'package:rtd_project/controller/profile/profile_edit_controller.dart';
 
 class EditProfileBinding extends Bindings {
   @override

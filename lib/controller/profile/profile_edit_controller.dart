@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
@@ -9,16 +9,17 @@ import 'package:http/http.dart ' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
-import 'package:rtd_project/controller/profile_controller.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:rtd_project/controller/profile/profile_controller.dart';
 import 'package:rtd_project/helper/router.dart';
 import 'package:rtd_project/util/toast.dart';
 
-import '../backend/model/bloodgroup_model.dart';
-import '../backend/model/profile_model.dart';
-import '../backend/model/states_model.dart';
-import '../backend/model/vehicle_type_model.dart';
-import '../backend/parser/edit_profile_parser.dart';
-import '../util/theme.dart';
+import '../../backend/model/bloodgroup_model.dart';
+import '../../backend/model/profile_model.dart';
+import '../../backend/model/states_model.dart';
+import '../../backend/model/vehicle_type_model.dart';
+import '../../backend/parser/profile/edit_profile_parser.dart';
+import '../../util/theme.dart';
 
 class EditProfileController extends GetxController implements GetxService {
   final EditProfileParser parser;
@@ -63,7 +64,9 @@ class EditProfileController extends GetxController implements GetxService {
   BloodGroup? bloodGroup;
   String? bloodGroupName;
   AllStatesModel? stateKsa;
-
+  XFile? profileImageFile;
+  XFile? docProofIndia;
+  XFile? docProofKsa;
   String? statesKsa;
   Data? profileData;
 
@@ -88,7 +91,7 @@ class EditProfileController extends GetxController implements GetxService {
     var response = await parser.getStates();
     if (response.statusCode == 200) {
       Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
-      log(myMap.toString());
+      // log(myMap.toString());
       var allStates = myMap['data'];
 
       _allStates = [];
@@ -101,7 +104,7 @@ class EditProfileController extends GetxController implements GetxService {
       _dropdownMenuItems = buildDropDownMenuItems(_allStates);
       selectedItem != null ? _dropdownMenuItems[0].value : null;
     }
-    log(_allStates.toString());
+    // log(_allStates.toString());
     update();
   }
 
@@ -109,7 +112,7 @@ class EditProfileController extends GetxController implements GetxService {
     var response = await parser.getVehicleType();
     if (response.statusCode == 200) {
       Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
-      log(myMap.toString());
+      // log(myMap.toString());
       var allvehicleType = myMap['data'];
 
       _getAllVehicleType = [];
@@ -123,7 +126,7 @@ class EditProfileController extends GetxController implements GetxService {
           buildDropDownMenuItemsVehivleType(_getAllVehicleType);
       vehicleType != null ? _dropdownMenuItems[0].value : null;
     }
-    log(_getAllVehicleType.toString());
+    // log(_getAllVehicleType.toString());
     update();
   }
 
@@ -145,7 +148,7 @@ class EditProfileController extends GetxController implements GetxService {
           buildDropDownMenuItemsBloodGroup(_getAllbloodGroup);
       bloodGroup != null ? _dropdownMenuItemsBloodgroup[0].value : null;
     }
-    log(_getAllbloodGroup.toString());
+    // log(_getAllbloodGroup.toString());
     update();
   }
 
@@ -222,10 +225,10 @@ class EditProfileController extends GetxController implements GetxService {
 
     if (response.statusCode == 200) {
       try {
-        log(response.statusCode.toString());
+        // log(response.statusCode.toString());
 
         Map<String, dynamic> data = Map<String, dynamic>.from(response.body);
-        log(data.toString());
+        // log(data.toString());
 
         userData = Profile.fromJson(data);
         indianMobNumContoller.text = userData!.data.indiaMobileNumber;
@@ -240,80 +243,108 @@ class EditProfileController extends GetxController implements GetxService {
         ksaAddressContoller2.text = userData!.data.ksaAddress2;
         saudiAddPinContoller.text = userData!.data.ksaPin;
         nameController.text = userData!.data.name;
+        final imagePath = await urlToFile(userData!.data.profileImage);
+        final docIndiaPath = await urlToFile(userData!.data.documentProofIndia);
+        final ksaPath = await urlToFile(userData!.data.documentProofKsa);
+        profileImageFile = XFile(imagePath.path);
+        docProofIndia = XFile(docIndiaPath.path);
+        docProofKsa = XFile(ksaPath.path);
 
-        log("Profile Edit Screen :${userData!.data.name.toString()}");
+        debugPrint(
+            'profile image path ********************${profileImageFile!.path}');
+        debugPrint(
+            'document india path ********************${docProofIndia!.path}');
+        debugPrint(
+            'document ksa path ********************${docProofKsa!.path}');
+        // log("Profile Edit Screen :${userData!.data.name.toString()}");
         loading = false;
       } catch (e) {
-        log(e.toString());
+        debugPrint(e.toString());
       }
     } else {
-      log(response.body.toString());
+      debugPrint(response.body.toString());
     }
     update();
   }
 
-  Future<void> updateProfileData() async {
-    Get.dialog(
-      SimpleDialog(
-        children: [
-          Row(
-            children: [
-              const SizedBox(
-                width: 30,
-              ),
-              const CircularProgressIndicator(
-                color: ThemeProvider.appColor,
-              ),
-              const SizedBox(
-                width: 30,
-              ),
-              SizedBox(
-                  child: Text(
-                "Please wait".tr,
-                style: const TextStyle(fontFamily: 'bold'),
-              )),
-            ],
-          )
-        ],
-      ),
-      barrierDismissible: false,
-    );
-    var body = {
-      "name": nameController.text,
-      "email": mailContoller.text,
-      "in_mobile": indianMobNumContoller.text,
-      "ksa_mobile": saudiMobNumContoller.text,
-      "blood_group": bloodGroup!.id,
-      "in_address_1": indianAddressContoller1.text,
-      "in_address_2": indianAddressContoller2.text,
-      "in_state": selectedItem!.id,
-      "in_pin": indiaAddPinContoller.text,
-      "ksa_address_1": ksaAddressContoller1.text,
-      "ksa_address_2": ksaAddressContoller2.text,
-      "ksa_state": stateKsa!.id,
-      "vehicle_number": vehicleNumberContoller.text,
-      "vehicle_type_id": vehicleType!.id,
-      "ksa_pin": saudiAddPinContoller.text
-    };
-    log('blood id:${bloodGroup!.id}');
-    log('state id:${selectedItem!.id}');
-    log('stateksa id:${stateKsa!.id}');
-    Response response = await parser.updateUserData(body);
-    log(response.statusCode.toString());
-    if (response.statusCode == 200) {
-      log(response.body.toString());
-      if (response.body['status']) {
-        successToast(response.body['message']);
-        onProfileEditSuccess();
-      } else {
-        showToast(response.body['message']);
-      }
-    }
+  // Future<void> updateProfileData() async {
+  //   Get.dialog(
+  //     SimpleDialog(
+  //       children: [
+  //         Row(
+  //           children: [
+  //             const SizedBox(
+  //               width: 30,
+  //             ),
+  //             const CircularProgressIndicator(
+  //               color: ThemeProvider.appColor,
+  //             ),
+  //             const SizedBox(
+  //               width: 30,
+  //             ),
+  //             SizedBox(
+  //                 child: Text(
+  //               "Please wait".tr,
+  //               style: const TextStyle(fontFamily: 'bold'),
+  //             )),
+  //           ],
+  //         )
+  //       ],
+  //     ),
+  //     barrierDismissible: false,
+  //   );
+  //   var body = {
+  //     "name": nameController.text,
+  //     "email": mailContoller.text,
+  //     "in_mobile": indianMobNumContoller.text,
+  //     "ksa_mobile": saudiMobNumContoller.text,
+  //     "blood_group": bloodGroup!.id,
+  //     "in_address_1": indianAddressContoller1.text,
+  //     "in_address_2": indianAddressContoller2.text,
+  //     "in_state": selectedItem!.id,
+  //     "in_pin": indiaAddPinContoller.text,
+  //     "ksa_address_1": ksaAddressContoller1.text,
+  //     "ksa_address_2": ksaAddressContoller2.text,
+  //     "ksa_state": stateKsa!.id,
+  //     "vehicle_number": vehicleNumberContoller.text,
+  //     "vehicle_type_id": vehicleType!.id,
+  //     "ksa_pin": saudiAddPinContoller.text
+  //   };
+  //   debugPrint('blood id:${bloodGroup!.id}');
+  //   debugPrint('state id:${selectedItem!.id}');
+  //   debugPrint('stateksa id:${stateKsa!.id}');
+  //   Response response = await parser.updateUserData(body);
+  //   debugPrint(response.statusCode.toString());
+  //   if (response.statusCode == 200) {
+  //     debugPrint(response.body.toString());
+  //     if (response.body['status']) {
+  //       successToast(response.body['message']);
+  //       onProfileEditSuccess();
+  //     } else {
+  //       showToast(response.body['message']);
+  //     }
+  //   }
+  // }
+
+  Future<File> urlToFile(String imageUrl) async {
+// generate random number.
+    var rng = Random();
+// get temporary directory of device.
+    Directory tempDir = await getTemporaryDirectory();
+// get temporary path from temporary directory.
+    String tempPath = tempDir.path;
+// create a new file in temporary path with random file name.
+    File file = File('$tempPath' + (rng.nextInt(100)).toString() + '.png');
+// call http.get method and pass imageUrl into it to get response.
+    http.Response response = await http.get(Uri.parse(imageUrl));
+// write bodyBytes received in response to file.
+    await file.writeAsBytes(response.bodyBytes);
+// now return the file which is created with random name in
+// temporary directory and image bytes from response is written to // that file.
+    return file;
   }
 
-  Future<void> upload(
-    XFile? data1,
-  ) async {
+  Future<void> upload(XFile? data1, XFile? data2, XFile? data3) async {
     Get.dialog(
       SimpleDialog(
         children: [
@@ -339,10 +370,17 @@ class EditProfileController extends GetxController implements GetxService {
       ),
       barrierDismissible: false,
     );
-    File file1 = File(data1!.path);
+
+    File file1 = File(data1 == null ? profileImageFile!.path : data1.path);
+    File file2 = File(data2 == null ? docProofIndia!.path : data2.path);
+    File file3 = File(data3 == null ? docProofKsa!.path : data3.path);
 
     var stream3 = http.ByteStream(DelegatingStream.typed(file1.openRead()));
+    var stream4 = http.ByteStream(DelegatingStream.typed(file2.openRead()));
+    var stream5 = http.ByteStream(DelegatingStream.typed(file3.openRead()));
     var length3 = await file1.length();
+    var length4 = await file2.length();
+    var length5 = await file3.length();
 
     var uri = Uri.parse("http://rtd.canisostudio.com/api/user/update");
 
@@ -350,9 +388,15 @@ class EditProfileController extends GetxController implements GetxService {
 
     var profileImage = http.MultipartFile('profile_image', stream3, length3,
         filename: basename(file1.path), contentType: MediaType('image', 'png'));
+    var docImage1 = http.MultipartFile('in_document', stream4, length4,
+        filename: basename(file1.path), contentType: MediaType('image', 'png'));
+    var docImage2 = http.MultipartFile('ksa_document', stream5, length5,
+        filename: basename(file1.path), contentType: MediaType('image', 'png'));
     String? accessToken =
         parser.sharedPreferencesManager.getString('access_token');
     request.files.add(profileImage);
+    request.files.add(docImage1);
+    request.files.add(docImage2);
 
     request.fields['name'] = nameController.text;
     request.fields['email'] = mailContoller.text;
@@ -375,11 +419,11 @@ class EditProfileController extends GetxController implements GetxService {
       'Authorization': 'Bearer $accessToken',
     });
     var response = await request.send();
-    log(response.statusCode.toString());
-    log(response.statusCode.toString());
+    debugPrint(response.statusCode.toString());
+
     // final respStr = await response.stream.bytesToString();
     response.stream.transform(utf8.decoder).listen((value) {
-      log(value);
+      debugPrint(value);
       var k = json.decode(value);
 
       eror message = eror.fromJson(k);
@@ -412,7 +456,7 @@ class eror {
     status = json['status'];
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['message'] = this.message;
     data['status'] = this.status;
     return data;
