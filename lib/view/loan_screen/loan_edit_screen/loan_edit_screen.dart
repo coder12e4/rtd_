@@ -14,6 +14,7 @@ import 'package:rtd_project/util/theme.dart';
 import '../../../core/common_widget/commen_botten.dart';
 import '../../../core/common_widget/imagepicker.dart';
 import '../../../core/common_widget/textformfield_widget.dart';
+import '../../../helper/router.dart';
 import '../../../util/toast.dart';
 import '../../../util/validators.dart';
 
@@ -132,57 +133,51 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
                                   child: ListView.separated(
                                     shrinkWrap: true,
                                     scrollDirection: Axis.horizontal,
-                                    itemCount: value.surties!.length,
-                                    itemBuilder: (context, index) =>
-                                        GestureDetector(
-                                      onTap: () {
-                                        value.addSurties(
-                                            value.surties![index].id);
-                                        log(value.addedSurties.toString());
-                                      },
-                                      child: Stack(
-                                        children: [
-                                          CircleAvatar(
-                                            minRadius: 35.r,
-                                            backgroundColor: textFormBase,
-                                            backgroundImage: NetworkImage(value
-                                                .surties![index].profileImage),
-                                          ),
-                                          Positioned(
-                                            bottom: 10.h,
-                                            right: 0,
-                                            child: Container(
-                                              width: 20.w,
-                                              height: 18.h,
-                                              decoration: BoxDecoration(
-                                                  color: value.addedSurties
-                                                          .contains(value
-                                                              .surties![index]
-                                                              .id)
-                                                      ? Colors.green
-                                                      : Colors.black,
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(
-                                                              50.r))),
-                                              child: value.addedSurties
-                                                      .contains(value
-                                                          .surties![index].id)
-                                                  ? const Icon(
-                                                      Icons.check,
-                                                      color: Colors.white,
-                                                      size: 16,
-                                                    )
-                                                  : const Icon(
-                                                      Icons.add,
-                                                      color: Colors.white,
-                                                      size: 16,
-                                                    ),
+                                    itemCount: 3,
+                                    itemBuilder: (context, index) => value
+                                                .isSelected[index] ==
+                                            false
+                                        ? GestureDetector(
+                                            onTap: () => Get.toNamed(
+                                                AppRouter
+                                                    .getSearchScreenRoute(),
+                                                arguments: [index, true]),
+                                            child: CircleAvatar(
+                                              minRadius: 35.r,
+                                              backgroundColor: textFormBase,
+                                              child: const Icon(Icons.add),
                                             ),
                                           )
-                                        ],
-                                      ),
-                                    ),
+                                        : Stack(
+                                            children: [
+                                              CircleAvatar(
+                                                minRadius: 35.r,
+                                                backgroundColor: textFormBase,
+                                                backgroundImage: NetworkImage(
+                                                    value.surties[index]!
+                                                        .profileImage),
+                                              ),
+                                              Positioned(
+                                                bottom: 9.h,
+                                                right: 0,
+                                                child: GestureDetector(
+                                                  onTap: () =>
+                                                      value.deleteSurety(index),
+                                                  child: CircleAvatar(
+                                                    minRadius: 15.r,
+                                                    backgroundColor:
+                                                        ThemeProvider
+                                                            .blackColor,
+                                                    child: const Icon(
+                                                      Icons.delete_outline,
+                                                      color: Colors.white,
+                                                      size: 20,
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
                                     separatorBuilder: (context, index) =>
                                         const SizedBox(
                                       width: 15,
@@ -318,7 +313,9 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
           Text(
             'Edit Loan Request',
             style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 24.r),
           ),
           SizedBox(
             width: 80.w,

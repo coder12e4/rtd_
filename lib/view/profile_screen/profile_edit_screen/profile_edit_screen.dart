@@ -582,8 +582,10 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   }
 
   void _updateSelectedImage1(XFile? newImage) {
+    Get.find<EditProfileController>().uploadImage(newImage!.path);
     setState(() {
       _docProf1 = newImage;
+
       // image1 = true;
     });
   }

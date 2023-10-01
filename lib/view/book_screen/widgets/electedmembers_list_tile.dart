@@ -6,7 +6,8 @@ import 'package:rtd_project/core/color/colors.dart';
 class ElectedMemberListTileWidget extends StatelessWidget {
   const ElectedMemberListTileWidget({
     super.key,
-    required this.image,required this.data,
+    required this.image,
+    required this.data,
   });
   final String image;
   final ElectedMemberData data;
@@ -20,6 +21,7 @@ class ElectedMemberListTileWidget extends StatelessWidget {
             height: 80.h,
             width: 90.w,
             decoration: BoxDecoration(
+              shape: BoxShape.circle,
               image: DecorationImage(
                 fit: BoxFit.cover,
                 image: NetworkImage(data.image),

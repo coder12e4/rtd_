@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:rtd_project/controller/profile/profile_controller.dart';
+import 'package:rtd_project/core/constraints/api_urls.dart';
 import 'package:rtd_project/helper/router.dart';
 import 'package:rtd_project/util/toast.dart';
 
@@ -439,10 +440,45 @@ class EditProfileController extends GetxController implements GetxService {
     });
   }
 
+  void uploadImage(data1) {
+    uploadFile(
+        'api/user/profile/ind-document/update', data1, 'document_proof_india');
+  }
+
+  Future<void> uploadFile(String url, String path, String fileName) async {
+    var uri = Uri.parse(Constants.baseUrl + url);
+
+    try {
+      final accessToken =
+          parser.sharedPreferencesManager.getString('access_token');
+      var request = http.MultipartRequest('POST', uri);
+      debugPrint('url $uri');
+      var file1 =
+          await http.MultipartFile.fromPath('document_proof_india', path);
+      request.files.add(file1);
+      request.headers.addAll({
+        "Accept": "application/json",
+        "Authorization": "Bearer $accessToken"
+      });
+      var response = await request.send();
+      debugPrint(response.statusCode.toString());
+      var responseData = await response.stream.bytesToString();
+      var parsedData = json.decode(responseData);
+      debugPrint(' message Data: ${parsedData['message']}');
+      if (response.statusCode == 200) {
+        // Print the response data.
+        debugPrint('File uploaded successfully. Response Data: $responseData');
+      } else {
+        debugPrint('Error uploading file: ${responseData}');
+      }
+    } catch (e) {
+      print('File upload error: $e');
+    }
+  }
+
   void onProfileEditSuccess() {
-    final ProfileController profilecontroller = Get.find();
-    profilecontroller.getUserDatas();
     Get.delete<EditProfileController>(force: true);
+    Get.delete<ProfileController>(force: true);
     Get.offNamed(AppRouter.getBottomNavRoute(), arguments: [4]);
   }
 }

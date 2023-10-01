@@ -100,12 +100,10 @@ class _LoanPageState extends State<LoanPage> {
                 topStart: Radius.circular(40),
               ),
             ),
-            child: TabBarView(
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  NewRequestView(context, value),
-                  requestView(context, value),
-                ]),
+            child: TabBarView(children: [
+              NewRequestView(context, value),
+              requestView(context, value),
+            ]),
           );
   }
 
@@ -191,19 +189,28 @@ class _LoanPageState extends State<LoanPage> {
               ),
 
               ButtonWidget(
-                  buttonBackgroundColor: whiteColor,
-                  buttonForegroundColor: buttenBlue,
-                  buttonText: 'Cancel Request',
-                  borderAvalable: true,
+                  buttonBackgroundColor: value.loanData[index].status != 3
+                      ? whiteColor
+                      : Colors.grey,
+                  buttonForegroundColor: value.loanData[index].status != 3
+                      ? buttenBlue
+                      : whiteColor,
+                  buttonText: value.loanData[index].status != 3
+                      ? 'Cancel Request'
+                      : 'cancelled',
+                  borderAvalable:
+                      value.loanData[index].status == 0 ? true : false,
                   controller: value,
                   press: () {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (context) => CancelPopup(
-                        controller: value,
-                        index: index,
-                      ),
-                    );
+                    value.loanData[index].status != 3
+                        ? showModalBottomSheet(
+                            context: context,
+                            builder: (context) => CancelPopup(
+                              controller: value,
+                              index: index,
+                            ),
+                          )
+                        : null;
                   })
               // : Column(
               //     crossAxisAlignment: CrossAxisAlignment.start,
@@ -508,52 +515,43 @@ class _LoanPageState extends State<LoanPage> {
             child: ListView.separated(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
-              itemCount: value.surties!.length,
-              itemBuilder: (context, index) => GestureDetector(
-                onTap: () {
-                  log(value.surties![index].id.toString());
-                  value.addSurties(value.surties![index].id);
-                  log(value.addedSurties.toString());
-                },
-                child: Stack(
-                  children: [
-                    CircleAvatar(
-                      minRadius: 35.r,
-                      backgroundColor: textFormBase,
-                      backgroundImage: NetworkImage(value
-                              .surties![index].profileImage ??
-                          'http://rtd.canisostudio.com/assets/images/dummy-user.jpg'),
-                    ),
-                    Positioned(
-                      bottom: 10.h,
-                      right: 0,
-                      child: Container(
-                        width: 20.w,
-                        height: 18.h,
-                        decoration: BoxDecoration(
-                            color: value.addedSurties
-                                    .contains(value.surties![index].id)
-                                ? Colors.green
-                                : Colors.black,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(50.r))),
-                        child: value.addedSurties
-                                .contains(value.surties![index].id)
-                            ? const Icon(
-                                Icons.check,
-                                color: Colors.white,
-                                size: 16,
-                              )
-                            : const Icon(
-                                Icons.add,
-                                color: Colors.white,
-                                size: 16,
-                              ),
+              itemCount: 3,
+              itemBuilder: (context, index) => value.isSelected[index] == false
+                  ? GestureDetector(
+                      onTap: () => Get.toNamed(AppRouter.getSearchScreenRoute(),
+                          arguments: [index, false]),
+                      child: CircleAvatar(
+                        minRadius: 35.r,
+                        backgroundColor: textFormBase,
+                        child: const Icon(Icons.add),
                       ),
                     )
-                  ],
-                ),
-              ),
+                  : Stack(
+                      children: [
+                        CircleAvatar(
+                          minRadius: 35.r,
+                          backgroundColor: textFormBase,
+                          backgroundImage:
+                              NetworkImage(value.surties[index]!.profileImage),
+                        ),
+                        Positioned(
+                          bottom: 9.h,
+                          right: 0,
+                          child: GestureDetector(
+                            onTap: () => value.deleteSurety(index),
+                            child: CircleAvatar(
+                              minRadius: 15.r,
+                              backgroundColor: ThemeProvider.blackColor,
+                              child: const Icon(
+                                Icons.delete_outline,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
               separatorBuilder: (context, index) => const SizedBox(
                 width: 15,
               ),

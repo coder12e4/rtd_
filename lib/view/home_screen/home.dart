@@ -8,7 +8,7 @@ import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/view/notification/notification.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -16,17 +16,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final HomeController contoller = Get.find();
-// @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //
-  // }
-  // @override
-  // void dispose() {
-  //   Get.delete<HomeController>(force: true);
-  //   super.dispose();
-  // }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -56,6 +46,7 @@ class _HomePageState extends State<HomePage> {
                         Container(
                           // height: 1050.h,
                           //hallo
+                          height: MediaQuery.sizeOf(context).height,
                           decoration: const BoxDecoration(
                             color: whiteColor,
                             borderRadius: BorderRadiusDirectional.only(
@@ -96,9 +87,9 @@ class _HomePageState extends State<HomePage> {
                                                         CircularStackEntry(
                                                           <CircularSegmentEntry>[
                                                             CircularSegmentEntry(
-                                                              homeData.totalCollectionAmount
-                                                                      .toDouble() ??
-                                                                  0.0,
+                                                              homeData
+                                                                  .totalCollectionAmount
+                                                                  .toDouble(),
                                                               const Color
                                                                   .fromARGB(255,
                                                                   147, 8, 96),

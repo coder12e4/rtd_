@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:rtd_project/controller/wall_screen_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
+import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/util/theme.dart';
 
 class WallPage extends StatelessWidget {
@@ -14,10 +15,9 @@ class WallPage extends StatelessWidget {
     return SafeArea(
         child: Scaffold(
             backgroundColor: baseColor,
-            body: SingleChildScrollView(
-              physics: const NeverScrollableScrollPhysics(),
-              child: DefaultTabController(
-                length: 2,
+            body: DefaultTabController(
+              length: 2,
+              child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
@@ -26,16 +26,16 @@ class WallPage extends StatelessWidget {
                       height: 10.h,
                     ),
                     tabBar(),
-                    tabBarView(),
+                    tabBarView(context),
                   ],
                 ),
               ),
             )));
   }
 
-  Container tabBarView() {
+  Container tabBarView(BuildContext context) {
     return Container(
-      height: 530.h,
+      height: 800.h,
       //hallo
       decoration: const BoxDecoration(
         color: whiteColor,
@@ -45,42 +45,34 @@ class WallPage extends StatelessWidget {
         ),
       ),
       child: GetBuilder<WallScreenController>(builder: (value) {
-        return TabBarView(children: [
-          feedView(value),
-          votesView(),
-        ]);
+        return Padding(
+          padding: EdgeInsets.only(top: 5.h),
+          child: TabBarView(children: [
+            feedView(value),
+            votesView(value),
+          ]),
+        );
       }),
     );
   }
 
-  SingleChildScrollView votesView() {
-    return SingleChildScrollView(
-      child: Column(children: [
-        SizedBox(
-          height: 10.h,
-        ),
-        // *********** uncomment date while doing this section
-        // feedDate(con),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: 2,
-          itemBuilder: (context, index) => VoteData(true, '07'),
-        ),
-        SizedBox(
-          height: 10.h,
-        ),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: 1,
-          itemBuilder: (context, index) => VoteData(false, "08"),
-        ),
-      ]),
+  ListView votesView(WallScreenController controller) {
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: controller.votesData.length,
+      itemBuilder: (context, index) {
+        return Column(
+          children: [
+            kSizedBoxH,
+            feedDate(controller.votesData[index].createdAt.toString()),
+            VoteData(index, controller)
+          ],
+        );
+      },
     );
   }
 
-  Padding VoteData(bool isActive, String filenumber) {
+  Padding VoteData(int index, WallScreenController controller) {
     return Padding(
       padding: EdgeInsets.only(top: 10.h, left: 18.w, right: 18.w),
       child: Container(
@@ -105,7 +97,7 @@ class WallPage extends StatelessWidget {
                     width: 160.w,
                     child: Center(
                       child: Text(
-                        'Pole Number:$filenumber',
+                        'Pole Number: ${controller.votesData[index].id}',
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold),
@@ -120,7 +112,9 @@ class WallPage extends StatelessWidget {
                         borderRadius: BorderRadius.all(Radius.circular(30))),
                     child: Center(
                       child: Text(
-                        isActive == true ? 'Active' : 'Closed',
+                        controller.votesData[index].activeStatus == true
+                            ? 'Active'
+                            : 'Closed',
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold),
@@ -132,42 +126,56 @@ class WallPage extends StatelessWidget {
               SizedBox(
                 height: 10.h,
               ),
-              const Text("വോട്ടിന്റെ വിഷയം ഇവിടെ എഴുതുക",
-                  style: TextStyle(
+              Text(controller.votesData[index].title,
+                  style: const TextStyle(
                       color: Colors.black,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                       fontSize: 16)),
               Divider(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  optionButton(
-                      borderAvalable: false,
-                      buttonForegroundColor: Colors.white,
-                      buttonbackgroundColor: Colors.black,
-                      buttonText: 'Option one'),
-                  optionButton(
-                      borderAvalable: false,
-                      buttonForegroundColor: Colors.white,
-                      buttonbackgroundColor: Colors.black,
-                      buttonText: 'Option Two')
-                ],
+              Wrap(
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                spacing: 15.w,
+                runSpacing: 15.h,
+                children: controller.votesData[index].options
+                    .map(
+                      (i) => GestureDetector(
+                        onTap: () {
+                          // controller.selectedOption = i.option;
+                          // controller.update();
+                          controller.selectOption(i.option, index);
+                          controller.optionId = i.id;
+                        },
+                        child: optionButton(
+                            borderAvalable:
+                                controller.selectedOption[index] == i.option
+                                    ? true
+                                    : false,
+                            buttonForegroundColor: Colors.white,
+                            buttonbackgroundColor: Colors.black,
+                            buttonText: i.option),
+                      ),
+                    )
+                    .toList(),
               ),
               SizedBox(
-                height: 8.h,
+                height: 20.h,
               ),
-              optionButton(
-                  borderAvalable: true,
-                  buttonForegroundColor: Colors.white,
-                  buttonbackgroundColor: Colors.black,
-                  buttonText: 'Option Three Hire'),
-              SizedBox(
-                height: 10.h,
-              ),
-              submitedButton(
-                  borderAvalable: true,
+              Align(
+                alignment: Alignment.center,
+                child: submitedButton(
+                  submitStatus: controller.votesData[index].isVoted,
                   buttonForegroundColor: whiteColor,
-                  buttonbackgroundColor: Colors.blue)
+                  buttonbackgroundColor: Colors.blue,
+                  press: () {
+                    controller
+                        .submitVote(
+                            controller
+                                .votesData[index].options[0].voteQuestionId,
+                            controller.optionId!)
+                        .then((value) => controller.optionId = null);
+                  },
+                ),
+              )
             ],
           ),
         ),
@@ -176,7 +184,7 @@ class WallPage extends StatelessWidget {
   }
 
   SizedBox submitedButton({
-    bool? borderAvalable,
+    bool? submitStatus,
     Color? buttonForegroundColor,
     Color? buttonbackgroundColor,
     Function()? press,
@@ -188,12 +196,12 @@ class WallPage extends StatelessWidget {
             style: ButtonStyle(
                 foregroundColor:
                     MaterialStatePropertyAll(buttonForegroundColor),
-                backgroundColor: MaterialStatePropertyAll(borderAvalable == true
+                backgroundColor: MaterialStatePropertyAll(submitStatus != true
                     ? buttonbackgroundColor
                     : Colors.grey)),
-            onPressed: press,
+            onPressed: submitStatus != true ? press : null,
             child: Text(
-              borderAvalable == true ? 'Submit' : "submited",
+              submitStatus != true ? 'Submit' : "submited",
               style: const TextStyle(fontWeight: FontWeight.w700),
             )));
   }
@@ -233,44 +241,47 @@ class WallPage extends StatelessWidget {
             strokeWidth: 6,
             color: ThemeProvider.blackColor,
           ))
-        : Column(
-            // physics: const NeverScrollableScrollPhysics(),
-            children: [
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 5.h),
-                    child: controller.data!.data.isNotEmpty
-                        ? ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: controller.data!.data.length,
-                            itemBuilder: (context, index) {
-                              return Column(
-                                children: [
-                                  feedDate(controller
-                                      .data!.data[index].user.createdAt
-                                      .toString()),
-                                  feedActiveData(controller, index),
-                                  SizedBox(
-                                    height: 10.h,
-                                  ),
-                                ],
-                              );
-                            })
-                        : const Center(
-                            child: Text('Feed is Empty'),
+        : Column(mainAxisSize: MainAxisSize.max, children: [
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(top: 5.h),
+                child: controller.error == true
+                    ? ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        // shrinkWrap: true,
+                        itemCount: controller.data!.data.length,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              feedDate(controller
+                                  .data!.data[index].user.createdAt
+                                  .toString()),
+                              feedActiveData(controller, index),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                            ],
+                          );
+                        })
+                    : Column(
+                        children: [
+                          SizedBox(
+                            height: 270.h,
                           ),
-                  ),
-                ),
+                          const Text('Feed is Empty'),
+                        ],
+                      ),
+              ),
+            ),
 
-                // feedDate('19/10/2023'),
-                // ListView.builder(
-                //   shrinkWrap: true,
-                //   physics: const NeverScrollableScrollPhysics(),
-                //   itemCount: 1,
-                //   itemBuilder: (context, index) => feedActiveData(false, "481"),
-                // ),
-              ]);
+            // feedDate('19/10/2023'),
+            // ListView.builder(
+            //   shrinkWrap: true,
+            //   physics: const NeverScrollableScrollPhysics(),
+            //   itemCount: 1,
+            //   itemBuilder: (context, index) => feedActiveData(false, "481"),
+            // ),
+          ]);
   }
 
   Container feedDate(String date) {

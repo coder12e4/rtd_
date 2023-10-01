@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:convert';
 
 LoanRequestData loanRequestDataFromJson(String str) =>
@@ -79,7 +81,7 @@ class LoanData {
 
 class Surety {
   int userId;
-  Name name;
+  Name? name;
   String profileImage;
   int status;
   StatusText statusText;
@@ -94,7 +96,7 @@ class Surety {
 
   factory Surety.fromJson(Map<String, dynamic> json) => Surety(
         userId: json["user_id"],
-        name: nameValues.map[json["name"]]!,
+        name: nameValues.map[json["name"]],
         profileImage: json["profile_image"],
         status: json["status"],
         statusText: statusTextValues.map[json["status_text"]]!,

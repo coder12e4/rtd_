@@ -43,9 +43,10 @@ class Surties {
 
 class SuretiesData {
   int id;
+  String memberId;
   String name;
   String email;
-  dynamic profileImage;
+  String profileImage;
   dynamic emailVerifiedAt;
   int verificationStatus;
   String indiaMobileNumber;
@@ -55,20 +56,21 @@ class SuretiesData {
   String indianAddress2;
   String indiaState;
   String indiaPin;
-  String? documentProofIndia;
+  String documentProofIndia;
   String ksaAddress1;
   String ksaAddress2;
   int ksaState;
   String ksaPin;
   String documentProofKsa;
-  dynamic vehicleTypeId;
-  dynamic vehicleNumber;
+  int vehicleTypeId;
+  String vehicleNumber;
   DateTime createdAt;
   DateTime updatedAt;
   dynamic deletedAt;
 
   SuretiesData({
     required this.id,
+    required this.memberId,
     required this.name,
     required this.email,
     required this.profileImage,
@@ -96,6 +98,7 @@ class SuretiesData {
 
   factory SuretiesData.fromJson(Map<String, dynamic> json) => SuretiesData(
         id: json["id"],
+        memberId: json["member_id"],
         name: json["name"],
         email: json["email"],
         profileImage: json["profile_image"],
@@ -123,6 +126,7 @@ class SuretiesData {
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "member_id": memberId,
         "name": name,
         "email": email,
         "profile_image": profileImage,

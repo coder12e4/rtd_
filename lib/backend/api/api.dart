@@ -185,13 +185,12 @@ class ApiService extends GetxService {
     log(uri);
     try {
       final requestBodyJson = jsonEncode(body);
-      http.Response response = await http.post(Uri.parse(uri),
-          body: requestBodyJson,
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "Authorization": "Bearer $token"
-          }).timeout(Duration(seconds: timeoutInSeconds));
+      http.Response response =
+          await http.post(Uri.parse(uri), body: requestBodyJson, headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token"
+      }).timeout(Duration(seconds: timeoutInSeconds));
 
       log(response.body);
 

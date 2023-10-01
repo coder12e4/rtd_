@@ -12,7 +12,7 @@ class EditProfileParser {
 
   Future<Response> getStates() async {
     return await apiService
-        .getPublic(Constants.baseUrl + Constants.getAllStates);
+        .getPublic(Constants.baseUrl + Constants.getKeralaStates);
   }
 
   Future<Response> getBloodGroup() async {

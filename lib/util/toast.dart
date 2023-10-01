@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 void showToast(String message, {bool isError = true}) {
+  Get.closeAllSnackbars();
   HapticFeedback.lightImpact();
   Get.showSnackbar(GetSnackBar(
     backgroundColor: isError ? Colors.red : Colors.black,
@@ -17,6 +18,7 @@ void showToast(String message, {bool isError = true}) {
 }
 
 void successToast(String message) {
+  Get.closeAllSnackbars();
   HapticFeedback.lightImpact();
   Get.showSnackbar(GetSnackBar(
     backgroundColor: Colors.green,

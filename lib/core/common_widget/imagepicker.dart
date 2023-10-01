@@ -3,12 +3,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
 
 class Imagepiker extends StatefulWidget {
-  Imagepiker({
+  const Imagepiker({
     super.key,
     required this.onImageSelected,
   });
@@ -24,9 +25,12 @@ class _ImagepikerState extends State<Imagepiker> {
   // final RegisterController imagePickerService = Get.find();
 
   final picker = ImagePicker();
-  dynamic image;
+  XFile? image;
+  int fileSize = 0;
   Future pickImage(ImageSource source) async {
     image = await picker.pickImage(source: source);
+    fileSize = await image!.length();
+
     // log('image************${image.path}');
     return image;
   }
@@ -100,31 +104,35 @@ class _ImagepikerState extends State<Imagepiker> {
                           ],
                         ),
                       )
-                    : Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Image.file(
-                              File(image.path),
-                              height: 80.h,
-                              width: 121.w,
-                              fit: BoxFit.contain,
+                    : fileSize <= 2 * 1024 * 1024
+                        ? Container(
+                            width: 116,
+                            height: 121,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(36),
+                                color: const Color(0xfff3f3f3)),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.check_circle,
+                                ),
+                                SizedBox(
+                                  height: 5.h,
+                                ),
+                                const Text("Document Selected",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ))
+                              ],
                             ),
-                            SizedBox(
-                              height: 5.h,
-                            ),
-                            const Text(
-                              'Selected Image',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.green,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text('Choose image less than 2 MB'.tr),
+                          ),
               ),
               GestureDetector(
                 onTap: () async {
@@ -163,7 +171,7 @@ class _ImagepikerState extends State<Imagepiker> {
                         child: Column(
                           children: [
                             Image.file(
-                              File(image.path),
+                              File(image!.path),
                               height: 80.h,
                               width: 121.w,
                               fit: BoxFit.contain,

@@ -55,9 +55,8 @@ class SignUpParser {
     );
   }
 
-  Future<Response> getStates() async {
-    return await apiService
-        .getPublic(Constants.baseUrl + Constants.getAllStates);
+  Future<Response> getStates(states) async {
+    return await apiService.getPublic(Constants.baseUrl + states);
   }
 
   Future<Response> getBloodGroup() async {

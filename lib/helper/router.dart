@@ -103,12 +103,14 @@ import 'package:rtd_project/backend/binding/elected_member_binding.dart';
 import 'package:rtd_project/backend/binding/loan_screen_binding.dart';
 import 'package:rtd_project/backend/binding/login_binding.dart';
 import 'package:rtd_project/backend/binding/register_binding.dart';
+import 'package:rtd_project/backend/binding/search_screen_binding.dart';
 import 'package:rtd_project/backend/binding/splash_binding.dart';
 import 'package:rtd_project/view/book_screen/elected_member_screen/elected_member_screen.dart';
 import 'package:rtd_project/view/login_screen/login_page.dart';
 import 'package:rtd_project/view/profile_screen/profile_edit_screen/profile_edit_screen.dart';
 import 'package:rtd_project/view/profile_screen/profile_page.dart';
 import 'package:rtd_project/view/register_screen/register_screen.dart';
+import 'package:rtd_project/view/search_page/search_screen.dart';
 import 'package:rtd_project/view/splash_screen/splash_page.dart';
 
 import '../backend/binding/edit_profile_binding.dart';
@@ -129,7 +131,7 @@ class AppRouter {
   static const String userProfileRoutes = '/userProfile';
   static const String inboxRoutes = '/inbox';
   static const String profileRoutes = '/profile';
-  static const String orderDetailsRoutes = '/order_details';
+  static const String searchScreenRoutes = '/search';
   static const String loanEditRoutes = '/loanEdit';
   static const String loanRoutes = '/loan';
   static const String stylistRoutes = '/stylist';
@@ -178,7 +180,7 @@ class AppRouter {
   static String getUserProfileRoute() => userProfileRoutes;
   static String getInboxRoute() => inboxRoutes;
   static String getProfileRoute() => profileRoutes;
-  static String getOrderDetailsRoute() => orderDetailsRoutes;
+  static String getSearchScreenRoute() => searchScreenRoutes;
   static String getLoanEditRoute() => loanEditRoutes;
   static String getLoanRoute() => loanRoutes;
   static String getStylistRoute() => stylistRoutes;
@@ -259,10 +261,10 @@ class AppRouter {
     //     name: profileRoutes,
     //     page: () => const ProfileScreen(),
     //     binding: ProfileBinding()),
-    // GetPage(
-    //     name: orderDetailsRoutes,
-    //     page: () => const OrderDetailsScreen(),
-    //     binding: OrderDetailsBinding()),
+    GetPage(
+        name: searchScreenRoutes,
+        page: () => const SearchScreen(),
+        binding: SearchScreenBinding()),
     GetPage(
         name: loanEditRoutes,
         page: () => const LoanEditScreen(),

@@ -71,6 +71,7 @@ import 'package:rtd_project/backend/parser/elected_member_parser.dart';
 import 'package:rtd_project/backend/parser/home_parser.dart';
 import 'package:rtd_project/backend/parser/loan/loan_edit_parser.dart';
 import 'package:rtd_project/backend/parser/profile/profile_parser.dart';
+import 'package:rtd_project/backend/parser/search_parser.dart';
 import 'package:rtd_project/core/constraints/api_urls.dart';
 import 'package:rtd_project/helper/shared_pref.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -146,10 +147,10 @@ class MainBinding extends Bindings {
         () => LoanEditParser(
             apiService: Get.find(), sharedPreferencesManager: Get.find()),
         fenix: true);
-    //   Get.lazyPut(
-    //       () => OrderDetailsParser(
-    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-    //       fenix: true);
+    Get.lazyPut(
+        () => SearchScreenParser(
+            apiService: Get.find(), sharedPreferencesManager: Get.find()),
+        fenix: true);
 
     //   Get.lazyPut(
     //       () => ChatParser(

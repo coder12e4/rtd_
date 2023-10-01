@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class FirebaseApi {
@@ -13,9 +14,9 @@ class FirebaseApi {
   );
   final _localNotications = FlutterLocalNotificationsPlugin();
   Future<void> handleBackgroudMessage(RemoteMessage message) async {
-    print("Title:${message.notification?.title}");
-    print("body:${message.notification?.body}");
-    print("Payload:${message.data}");
+    debugPrint("Title:${message.notification?.title}");
+    debugPrint("body:${message.notification?.body}");
+    debugPrint("Payload:${message.data}");
   }
 
   Future initPushNotifications() async {
@@ -59,7 +60,7 @@ class FirebaseApi {
   Future<void> initNotifications() async {
     await _firebasemessageing.requestPermission();
     final fcmToken = await _firebasemessageing.getToken();
-    print("fcm token --  $fcmToken");
+    debugPrint("fcm token --  $fcmToken");
     initPushNotifications();
     initLocalNotifications();
     // FirebaseMessaging.onBackgroundMessage(handleBackgroudMessage);

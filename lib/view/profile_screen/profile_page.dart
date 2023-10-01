@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:rtd_project/controller/profile/profile_controller.dart';
+import 'package:rtd_project/controller/profile/profile_edit_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/helper/router.dart';
@@ -208,6 +209,8 @@ class ProfilePage extends StatelessWidget {
                 backgroundColor:
                     MaterialStateColor.resolveWith((states) => baseColor)),
             onPressed: () {
+              Get.delete<ProfileController>(force: true);
+              Get.delete<EditProfileController>(force: true);
               Get.toNamed(AppRouter.getEditProfileRoute());
             },
             child: const Padding(

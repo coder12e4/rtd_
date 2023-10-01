@@ -34,10 +34,15 @@ class _NavigationBarpageState extends State<NavigationBarpage> {
             child: DefaultTabController(
           length: _tablist.length,
           child: Scaffold(
-            body: TabBarView(
-              physics: const NeverScrollableScrollPhysics(),
-              controller: value.tabController,
-              children: _tablist,
+            extendBody: true,
+            body: Stack(
+              children: [
+                TabBarView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: value.tabController,
+                  children: _tablist,
+                ),
+              ],
             ),
             bottomNavigationBar: Padding(
               padding: const EdgeInsets.all(8).r,
@@ -49,7 +54,7 @@ class _NavigationBarpageState extends State<NavigationBarpage> {
                     showSelectedLabels: true,
                     showUnselectedLabels: true,
                     // backgroundColor: Colors.amber,
-                    currentIndex: value.tabId!,
+                    currentIndex: value.tabId,
                     onTap: (int index) {
                       // value.updateTabId(index);
                       switch (index) {

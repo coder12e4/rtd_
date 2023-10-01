@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages, deprecated_member_use
+
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -26,7 +28,8 @@ class LoanEditController extends GetxController implements GetxService {
   @override
   void onInit() {
     loanId = Get.arguments[0].toString();
-    getSurties();
+    _addedSurties = [-1, -1, -1];
+    surties = [null, null, null];
     getLoanType();
     getLoanDetails(loanId);
 
@@ -37,7 +40,8 @@ class LoanEditController extends GetxController implements GetxService {
   XFile? loanDocument;
   Data? loan;
   String? purpose;
-  List<SuretiesData>? surties;
+  List<bool> isSelected = [false, false, false];
+  List<dynamic> surties = <dynamic>[];
   List<int> _addedSurties = <int>[];
   List<int> get addedSurties => _addedSurties;
   List<DropdownMenuItem<Data>> _dropdownMenuLoanType =
@@ -72,36 +76,56 @@ class LoanEditController extends GetxController implements GetxService {
     update();
   }
 
-  Future<void> getSurties() async {
-    Response response = await parser.getSurties();
-    if (response.statusCode == 200) {
-      try {
-        Map<String, dynamic> data = Map<String, dynamic>.from(response.body);
-        var allLoan = data['data'];
-        surties = [];
-        allLoan.forEach((data) {
-          SuretiesData individual = SuretiesData.fromJson(data);
-          surties!.add(individual);
-        });
-
-        log(surties.toString());
-      } catch (e) {
-        log(e.toString());
-      }
+  void addSurties(SuretiesData surety, int index) {
+    if (addedSurties.contains(surety.id)) {
+      showToast('Surety already selected');
+      return;
     }
-
-    update();
+    if (!addedSurties.contains(surety.id)) {
+      isSelected[index] = !isSelected[index];
+      addedSurties[index] = surety.id;
+      surties[index] = surety;
+      log(addedSurties.toString());
+      log('selected surty$surties');
+      Get.back();
+      successToast('Surety selected');
+      update();
+    }
   }
+  // Future<void> getSurties() async {
+  //   Response response = await parser.getSurties();
+  //   if (response.statusCode == 200) {
+  //     try {
+  //       Map<String, dynamic> data = Map<String, dynamic>.from(response.body);
+  //       var allLoan = data['data'];
+  //       surties = [];
+  //       allLoan.forEach((data) {
+  //         SuretiesData individual = SuretiesData.fromJson(data);
+  //         surties!.add(individual);
+  //       });
+  //
+  //       log(surties.toString());
+  //     } catch (e) {
+  //       log(e.toString());
+  //     }
+  //   }
+  //
+  //   update();
+  // }
 
   Future<void> getLoanDetails(id) async {
     final body = {"loan_request_id": id};
     Response response = await parser.getLoanDetails(body);
     addedSurties.clear();
+    surties.clear();
+    isSelected.clear();
     if (response.statusCode == 200) {
       Map<String, dynamic> jsonData = Map<String, dynamic>.from(response.body);
       loanData = LoanData.fromJson(jsonData);
       for (var element in loanData!.data.sureties) {
         addedSurties.add(element.userId);
+        isSelected.add(true);
+        surties.add(element);
       }
       final imagePath = await parser.urlToFile(loanData!.data.loanDocument);
       loanDocument = XFile(imagePath.path);
@@ -109,6 +133,13 @@ class LoanEditController extends GetxController implements GetxService {
       loading = false;
     }
     log(loanData!.toString());
+    update();
+  }
+
+  void deleteSurety(int index) {
+    addedSurties[index] = -1;
+    surties[index] = null;
+    isSelected[index] = !isSelected[index];
     update();
   }
 
@@ -201,7 +232,7 @@ class LoanEditController extends GetxController implements GetxService {
 
       if (message.status!) {
         successToast(message.message.toString());
-        onProfileEditSuccess();
+        onLoanEditSuccess();
       } else {
         showToast(k['message'].toString());
         // onLogin();
@@ -209,18 +240,7 @@ class LoanEditController extends GetxController implements GetxService {
     });
   }
 
-  addSurties(id) {
-    if (addedSurties.contains(id)) {
-      addedSurties.remove(id);
-    } else {
-      addedSurties.add(id);
-    }
-    update();
-  }
-
-  void onProfileEditSuccess() {
-    final LoanScreenController loanScreenController = Get.find();
-    loanScreenController.getLoanRequestData();
+  void onLoanEditSuccess() async {
     Get.delete<LoanScreenController>(force: true);
     Get.offNamed(AppRouter.getBottomNavRoute(), arguments: [2]);
   }
@@ -235,9 +255,9 @@ class eror {
     status = json['status'];
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['message'] = this.message;
-    data['status'] = this.status;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['message'] = message;
+    data['status'] = status;
     return data;
   }
 }

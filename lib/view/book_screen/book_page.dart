@@ -30,6 +30,7 @@ class BookPage extends StatelessWidget {
             appbar(context),
             Container(
               // height: 1200.h,
+              height: MediaQuery.sizeOf(context).height,
               decoration: const BoxDecoration(
                   color: whiteColor,
                   borderRadius: BorderRadius.only(
@@ -68,14 +69,18 @@ class BookPage extends StatelessWidget {
                               builder: (context) => const BookEditPage(),
                             ));
                           },
-                          child: const MemberistTileWidget(),
+                          child: const MemberistTileWidget(
+                            name: 'Shanavas Kolangattil',
+                            image: '',
+                            memberid: '',
+                          ),
                         ),
                       );
                     },
                     separatorBuilder: (context, index) => const Divider(
                       color: Color.fromARGB(255, 227, 224, 224),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

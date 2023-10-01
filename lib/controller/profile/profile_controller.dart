@@ -17,7 +17,7 @@ class ProfileController extends GetxController implements GetxService {
     super.onInit();
   }
 
-  void getUserDatas() async {
+  Future<void> getUserDatas() async {
     final response = await parser.getUserData();
 
     if (response.statusCode == 200) {
