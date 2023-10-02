@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rtd_project/backend/parser/login_parser.dart';
+import 'package:rtd_project/backend/parser/authentication/login_parser.dart';
 import 'package:rtd_project/controller/authentication/regitration.dart';
 import 'package:rtd_project/helper/router.dart';
 
@@ -8,6 +8,7 @@ import '../../backend/api/handler.dart';
 import '../../backend/model/user_data_model.dart';
 import '../../util/theme.dart';
 import '../../util/toast.dart';
+import '../../view/register_screen/widgets/register_success.dart';
 
 class LoginController extends GetxController implements GetxService {
   final LoginParser parser;
@@ -54,9 +55,9 @@ class LoginController extends GetxController implements GetxService {
               ),
               SizedBox(
                   child: Text(
-                    "Please wait".tr,
-                    style: const TextStyle(fontFamily: 'bold'),
-                  )),
+                "Please wait".tr,
+                style: const TextStyle(fontFamily: 'bold'),
+              )),
             ],
           )
         ],
@@ -76,7 +77,7 @@ class LoginController extends GetxController implements GetxService {
       }
       if (myMap['data']['name'] != '' && myMap['access_token'] != '') {
         debugPrint(myMap['data']['id'].toString());
-        parser.saveToken('access_token', myMap['access_token']);
+        await parser.saveToken('access_token', myMap['access_token']);
         parser.saveInfo(UserData(
           id: myMap['data']['id'],
           name: myMap['data']['name'],
@@ -106,7 +107,7 @@ class LoginController extends GetxController implements GetxService {
         //
         // log('userData***********${userData!.name}');
 
-        onLoginSuccess();
+        onLoginSuccess(myMap['data']['verification_status'], myMap);
       } else {
         showToast('Access denied'.tr);
       }
@@ -139,7 +140,13 @@ class LoginController extends GetxController implements GetxService {
     Get.toNamed(AppRouter.getSignUpRoute());
   }
 
-  void onLoginSuccess() {
-    Get.offAllNamed(AppRouter.getBottomNavRoute());
+  void onLoginSuccess(status, myMap) async {
+    if (status == 0) {
+      Get.bottomSheet(const RegisterComplited(text: 'Close'),
+          isDismissible: false);
+    } else {
+      // await parser.saveToken('access_token', myMap['access_token']);
+      Get.offAllNamed(AppRouter.getBottomNavRoute());
+    }
   }
 }

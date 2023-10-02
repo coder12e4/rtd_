@@ -36,12 +36,29 @@ class SplashScreen extends StatelessWidget {
           width: 400.w,
           child: Stack(
             alignment: Alignment.topCenter,
-            children: <Widget>[logoAndText(), greenContaner(), roadWidget()],
+            children: <Widget>[
+              logoAndText(),
+              greenContaner(),
+              roadWidget(),
+              version()
+            ],
           ),
         )
       ],
     );
   }
+
+  Positioned version() => Positioned(
+        bottom: 60.h,
+        child: const Text(
+          'Version: 1.0',
+          style: TextStyle(
+            fontSize: 17,
+            color: Colors.grey,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      );
 
   Positioned roadWidget() {
     return Positioned(

@@ -60,7 +60,6 @@ void logOutDialog() {
               ElevatedButton(
                 onPressed: () {
                   logOut();
-                  Get.offAllNamed(AppRouter.getInitialRoute());
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: ThemeProvider.blackColor,
@@ -83,5 +82,7 @@ void logOutDialog() {
 logOut() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.remove('profile_data');
+  prefs.remove('access_token');
   prefs.clear();
+  Get.offAllNamed(AppRouter.getInitialRoute());
 }

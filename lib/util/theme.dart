@@ -11,7 +11,7 @@ class ThemeProvider {
   static const backgroundColor = Color(0xFFF3F3F3);
   static const orangeColor = Color(0xFFFF9900);
   static const greenColor = Colors.black;
-  static const redColor = Colors.grey;
+  static const redColor = Colors.red;
   static const transparent = Color.fromARGB(0, 0, 0, 0);
   static const titleStyle = TextStyle(
       fontFamily: 'bold', fontSize: 14, color: ThemeProvider.whiteColor);

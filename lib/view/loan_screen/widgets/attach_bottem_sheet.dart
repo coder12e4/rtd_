@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
-import 'package:rtd_project/core/common_widget/imagepicker.dart';
 
 class AttachBottemSheet extends StatelessWidget {
   const AttachBottemSheet({super.key});
@@ -24,14 +23,15 @@ class AttachBottemSheet extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
+            const Text(
+
               "Upload Documents",
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
               ),
             ),
-            Text(
+            const Text(
                 "Small description about what kind of documents are needed can be shown here.",
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -45,7 +45,7 @@ class AttachBottemSheet extends StatelessWidget {
                   minRadius: 35.r,
                   backgroundColor: textFormBase,
                   backgroundImage:
-                      AssetImage('assets/images/pexels-pixabay-220453 1.png'),
+                      const AssetImage('assets/images/pexels-pixabay-220453 1.png'),
                 ),
                 CircleAvatar(
                   minRadius: 35.r,
@@ -57,7 +57,7 @@ class AttachBottemSheet extends StatelessWidget {
                         //   builder: (context) => Imagepiker(),
                         // );
                       },
-                      icon: Icon(Icons.add)),
+                      icon: const Icon(Icons.add)),
                 ),
                 CircleAvatar(
                   minRadius: 35.r,
@@ -69,7 +69,7 @@ class AttachBottemSheet extends StatelessWidget {
                         //   builder: (context) => Imagepiker(),
                         // );
                       },
-                      icon: Icon(Icons.add)),
+                      icon: const Icon(Icons.add)),
                 ),
               ],
             ),

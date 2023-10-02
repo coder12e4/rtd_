@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "942046873397",
+    "project_id": "rtd-project-e8770",
+    "storage_bucket": "rtd-project-e8770.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:942046873397:android:0f76e53e5e7ee99edb2e7c",
+        "android_client_info": {
+          "package_name": "rtd.canisostudio.com"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBO9F-phNYVob2X5Dwc5SsuLY7atU2lh2Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

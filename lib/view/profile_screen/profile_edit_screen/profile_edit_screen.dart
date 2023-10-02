@@ -1,15 +1,21 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
+import 'package:rtd_project/util/theme.dart';
 import 'package:rtd_project/util/toast.dart';
 
 import '../../../backend/model/bloodgroup_model.dart';
 import '../../../backend/model/profile_model.dart';
 import '../../../backend/model/states_model.dart';
-import '../../../controller/profile_edit_controller.dart';
+import '../../../backend/model/vehicle_type_model.dart';
+import '../../../controller/profile/profile_edit_controller.dart';
+import '../../../core/common_widget/imagepicker.dart';
 import '../../../util/validators.dart';
 
 class ProfileEditScreen extends StatefulWidget {
@@ -20,6 +26,11 @@ class ProfileEditScreen extends StatefulWidget {
 }
 
 Data? userData;
+bool selectProfileImage = false;
+XFile? _profileImage;
+XFile? _docProf1;
+XFile? _docProf2;
+
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 class _ProfileEditScreenState extends State<ProfileEditScreen> {
@@ -55,7 +66,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         ),
                       )
                     : Container(
-                        height: 1300.h,
+                        height: 1550.h,
                         width: 390.w,
                         decoration: const BoxDecoration(
                             color: whiteColor,
@@ -71,9 +82,14 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                             children: [
                               imageContainer(value),
                               kSizedBoxH,
-                              nameText(value),
-                              kSizedBoxH,
-                              dividerWidget(),
+                              // nameText(value),
+                              // kSizedBoxH,
+                              ProfileEditScreenTextField(
+                                  validator: Rtd_Validators.noneEmptyValidator,
+                                  controller: value.nameController,
+                                  hinttext: value.userData!.data.name,
+                                  labelText: "Name"),
+
                               kSizedBoxH,
 
                               ProfileEditScreenTextField(
@@ -101,10 +117,46 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                   labelText: "Mail Address"),
                               kSizedBoxH,
                               ProfileEditScreenTextField(
-                                  validator: Rtd_Validators.emailValidator,
+                                  validator: Rtd_Validators.noneEmptyValidator,
                                   controller: value.vehicleNumberContoller,
                                   hinttext: 'Eg: KL-04-AB-2214',
                                   labelText: "Vehicle Number"),
+                              kSizedBoxH,
+
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 45, right: 45),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton<VehicleData>(
+                                      isExpanded: true,
+                                      hint: const Text(
+                                        "Select Your Vehicle Model ",
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                            letterSpacing: .1,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      icon: const Icon(
+                                          Icons.keyboard_arrow_down_outlined),
+                                      value: value.vehicleType,
+                                      items:
+                                          value.dropdownMenuItemsVehicleModel,
+                                      onChanged: (newValue) {
+                                        setState(() {
+                                          value.vehicleType = newValue;
+
+                                          value.vehicleTypeName =
+                                              newValue!.name.toString();
+
+                                          //   newStateList.clear();
+                                          //  newStateList=[];
+                                          //_dropdownMenuItemsStates.clear();
+                                        });
+                                      }),
+                                ),
+                              ),
+                              dividerWidget(),
                               kSizedBoxH,
                               Padding(
                                 padding:
@@ -194,6 +246,11 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                   hinttext: value.userData!.data.indiaPin,
                                   labelText: "Pin"),
                               kSizedBoxH20,
+                              documentContainer(
+                                  value.userData!.data.documentProofIndia,
+                                  _docProf1,
+                                  true),
+                              dividerWidget(),
                               Padding(
                                 padding:
                                     EdgeInsets.symmetric(horizontal: 38.0.w),
@@ -246,11 +303,17 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                   controller: value.ksaAddressContoller2,
                                   hinttext: value.ksaAddressContoller2.text,
                                   labelText: "Address 2"),
+
                               ProfileEditScreenTextField(
                                   validator: Rtd_Validators.pincodeValidator,
                                   controller: value.saudiAddPinContoller,
                                   hinttext: '677743',
                                   labelText: "Pin"),
+                              kSizedBoxH20,
+                              documentContainer(
+                                  value.userData!.data.documentProofKsa,
+                                  _docProf2,
+                                  false),
 
                               Padding(
                                 padding: EdgeInsets.symmetric(
@@ -265,6 +328,10 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                                 (states) => baseColor)),
                                     onPressed: () {
                                       if (_formKey.currentState!.validate()) {
+                                        if (value.vehicleTypeName == null) {
+                                          showToast('Select Vehicle Model');
+                                          return;
+                                        }
                                         if (value.bloodGroupName == null) {
                                           showToast('Select blood group');
                                           return;
@@ -274,7 +341,14 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                           showToast('Select States');
                                           return;
                                         }
-                                        value.updateProfileData();
+                                        value
+                                            .upload(_profileImage, _docProf1,
+                                                _docProf2)
+                                            .then((value) {
+                                          _profileImage == null;
+                                          _docProf1 = null;
+                                          _docProf2 = null;
+                                        });
                                       }
                                     },
                                     child: const Padding(
@@ -308,17 +382,6 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
           }),
         ),
       ),
-    );
-  }
-
-  Container documentContainer() {
-    return Container(
-      margin: EdgeInsets.only(left: 36.w),
-      height: 130.h,
-      width: 280.w,
-      decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 223, 220, 220),
-          borderRadius: BorderRadius.circular(20)),
     );
   }
 
@@ -421,54 +484,110 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     );
   }
 
-  imageContainer(EditProfileController value) {
-    return Center(
-      child: Container(
-        margin: EdgeInsets.only(top: 30.h),
-        child: Stack(
-          children: [
-            SizedBox(
-              // color: baseColor,
-              height: 110.h,
-              width: 110.w,
-              child: Center(
-                child: Container(
-                  // margin: EdgeInsets.only(top: 30.h),
-                  height: 100.h,
-                  width: 100.w,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      fit: BoxFit.contain,
-                      image: AssetImage(
-                          'assets/images/pexels-pixabay-220453 1.png'),
-                    ),
-                  ),
-                ),
+  Stack documentContainer(documentProof, XFile? image, bool select) {
+    return Stack(
+      alignment: AlignmentDirectional.center,
+      children: [
+        Container(
+          height: 130.h,
+          width: 280.w,
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.contain,
+                image: image == null
+                    ? NetworkImage(documentProof) as ImageProvider
+                    : FileImage(File(image.path)),
+              ),
+              color: const Color.fromARGB(255, 223, 220, 220),
+              borderRadius: BorderRadius.circular(20)),
+        ),
+        Positioned(
+          top: 0,
+          right: 55.w,
+          child: IconButton(
+            onPressed: () => showModalBottomSheet(
+              context: context,
+              builder: (context) => Imagepiker(
+                onImageSelected: select == true
+                    ? _updateSelectedImage1
+                    : _updateSelectedImage2,
               ),
             ),
-            Positioned(
-                left: 40.w,
-                bottom: 0.h,
-                // top: 80.h,
-                child: Container(
-                    height: 28.h,
-                    width: 28.w,
-                    decoration: const BoxDecoration(
-                        shape: BoxShape.circle, color: baseColor),
-                    child: Center(
-                      child: IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.edit,
-                            color: whiteColor,
-                            size: 15,
-                          )),
-                    )))
-          ],
-        ),
+            icon: const Icon(Icons.edit_outlined),
+          ),
+        )
+      ],
+    );
+  }
+
+  imageContainer(EditProfileController value) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20).r,
+      child: Stack(
+        alignment: AlignmentDirectional.topCenter,
+        children: [
+          Container(
+            height: 120.h,
+            width: 120.w,
+            decoration: BoxDecoration(
+              border: Border.all(width: .3),
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: selectProfileImage == false
+                    ? NetworkImage(value.userData!.data.profileImage)
+                        as ImageProvider
+                    : FileImage(File(_profileImage!.path)),
+              ),
+            ),
+          ),
+          Positioned(
+              right: 145.w,
+              bottom: 10.h,
+              // top: 80.h,
+              child: CircleAvatar(
+                maxRadius: 15.r,
+                backgroundColor: ThemeProvider.blackColor,
+                child: IconButton(
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) =>
+                            Imagepiker(onImageSelected: _updateProfileImage),
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.edit,
+                      color: whiteColor,
+                      size: 15,
+                    )),
+              ))
+        ],
       ),
     );
+  }
+
+  void _updateProfileImage(XFile? profileImage) {
+    setState(() {
+      _profileImage = profileImage;
+      selectProfileImage = true;
+    });
+  }
+
+  void _updateSelectedImage2(XFile? newImage) {
+    setState(() {
+      _docProf2 = newImage;
+      // image1 = true;
+    });
+  }
+
+  void _updateSelectedImage1(XFile? newImage) {
+    Get.find<EditProfileController>().uploadImage(newImage!.path);
+    setState(() {
+      _docProf1 = newImage;
+
+      // image1 = true;
+    });
   }
 
   Container appbar(BuildContext context) {
@@ -481,7 +600,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
-                  onPressed: () => Get.back(),
+                  onPressed: Get.back,
                   icon: const Icon(
                     Icons.arrow_back,
                     color: whiteColor,

@@ -16,14 +16,14 @@ class BottomNavController extends GetxController
     try {
       tabId = int.parse(Get.arguments[0].toString());
     } catch (e) {
-      print("Exception from tabs");
-      print(e);
+      debugPrint("Exception from tabs");
+      debugPrint(e.toString());
     }
     tabController = TabController(length: 5, vsync: this, initialIndex: tabId);
     super.onInit();
 
-    print("tabid");
-    print(tabId);
+    debugPrint("tabid");
+    debugPrint(tabId.toString());
   }
 
   // @override

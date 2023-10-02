@@ -7,8 +7,8 @@ import '../../../core/color/colors.dart';
 import '../../../core/common_widget/commen_botten.dart';
 
 class RegisterComplited extends StatelessWidget {
-  const RegisterComplited({super.key});
-
+  const RegisterComplited({super.key, required this.text});
+  final String text;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -50,7 +50,7 @@ class RegisterComplited extends StatelessWidget {
               },
               buttonBackgroundColor: buttenBlue,
               buttonForegroundColor: whiteColor,
-              buttonText: 'Continue!',
+              buttonText: text,
               borderAvalable: true)
         ],
       ),

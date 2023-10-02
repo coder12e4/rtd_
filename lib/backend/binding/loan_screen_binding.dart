@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-import '../../controller/loan_screen_controller.dart';
+import '../../controller/loan/loan_screen_controller.dart';
 
 class LoanScreenBinding extends Bindings {
   @override

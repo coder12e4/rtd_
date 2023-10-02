@@ -5,7 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:rtd_project/controller/loan_screen_controller.dart';
+import 'package:rtd_project/controller/loan/loan_edit_controller.dart';
+import 'package:rtd_project/controller/loan/loan_screen_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
 import 'package:rtd_project/core/common_widget/textformfield_widget.dart';
@@ -15,6 +16,7 @@ import 'package:rtd_project/view/loan_screen/widgets/cancel_popup.dart';
 
 import '../../backend/model/loan/loan_type_model.dart';
 import '../../core/common_widget/imagepicker.dart';
+import '../../helper/router.dart';
 import '../../util/validators.dart';
 
 class LoanPage extends StatefulWidget {
@@ -98,33 +100,37 @@ class _LoanPageState extends State<LoanPage> {
                 topStart: Radius.circular(40),
               ),
             ),
-            child: TabBarView(
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  NewRequestView(context, value),
-                  requestView(context, value),
-                ]),
+            child: TabBarView(children: [
+              NewRequestView(context, value),
+              requestView(context, value),
+            ]),
           );
   }
 
   Padding requestView(BuildContext context, LoanScreenController value) {
     return Padding(
       padding: EdgeInsets.only(top: 2.5.h),
-      child: ListView.builder(
-        physics: const BouncingScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: value.loanData.length,
-        itemBuilder: (context, index) => Column(children: [
-          SizedBox(
-            height: 10.h,
-          ),
-          requestDate(value.loanData[index].createdAt.toString()),
-          SizedBox(
-            height: 10.h,
-          ),
-          requestData(context, value, index)
-        ]),
-      ),
+      child: value.loanData.isNotEmpty
+          ? ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: value.loanData.length,
+              itemBuilder: (context, index) => Column(children: [
+                SizedBox(
+                  height: 10.h,
+                ),
+                requestDate(value.loanData[index].createdAt.toString()),
+                SizedBox(
+                  height: 10.h,
+                ),
+                requestData(context, value, index)
+              ]),
+            )
+          : const Center(
+              child: Text(
+              'No request Found',
+              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+            )),
     );
   }
 
@@ -148,18 +154,25 @@ class _LoanPageState extends State<LoanPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   loanStatusContainer(value, index),
-                  Container(
-                    height: 40.h,
-                    width: 110.w,
-                    decoration: const BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.all(Radius.circular(30))),
-                    child: const Center(
-                      child: Text(
-                        'Edit Request',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: whiteColor, fontWeight: FontWeight.bold),
+                  GestureDetector(
+                    onTap: () {
+                      Get.delete<LoanEditController>(force: true);
+                      Get.toNamed(AppRouter.getLoanEditRoute(),
+                          arguments: [value.loanData[index].id]);
+                    },
+                    child: Container(
+                      height: 40.h,
+                      width: 110.w,
+                      decoration: const BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.all(Radius.circular(30))),
+                      child: const Center(
+                        child: Text(
+                          'Edit Request',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: whiteColor, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   )
@@ -176,19 +189,28 @@ class _LoanPageState extends State<LoanPage> {
               ),
 
               ButtonWidget(
-                  buttonBackgroundColor: whiteColor,
-                  buttonForegroundColor: buttenBlue,
-                  buttonText: 'Cancel Request',
-                  borderAvalable: true,
+                  buttonBackgroundColor: value.loanData[index].status != 3
+                      ? whiteColor
+                      : Colors.grey,
+                  buttonForegroundColor: value.loanData[index].status != 3
+                      ? buttenBlue
+                      : whiteColor,
+                  buttonText: value.loanData[index].status != 3
+                      ? 'Cancel Request'
+                      : 'cancelled',
+                  borderAvalable:
+                      value.loanData[index].status == 0 ? true : false,
                   controller: value,
                   press: () {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (context) => CancelPopup(
-                        controller: value,
-                        index: index,
-                      ),
-                    );
+                    value.loanData[index].status != 3
+                        ? showModalBottomSheet(
+                            context: context,
+                            builder: (context) => CancelPopup(
+                              controller: value,
+                              index: index,
+                            ),
+                          )
+                        : null;
                   })
               // : Column(
               //     crossAxisAlignment: CrossAxisAlignment.start,
@@ -327,7 +349,7 @@ class _LoanPageState extends State<LoanPage> {
           ),
         ),
         Positioned(
-          bottom: 0,
+          bottom: 4.h,
           right: 0,
           child: surtieStatus(controller, index, imageIndex),
         )
@@ -493,52 +515,43 @@ class _LoanPageState extends State<LoanPage> {
             child: ListView.separated(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
-              itemCount: value.surties!.length,
-              itemBuilder: (context, index) => GestureDetector(
-                onTap: () {
-                  log(value.surties![index].id.toString());
-                  value.addSurties(value.surties![index].id);
-                  log(value.addedSurties.toString());
-                },
-                child: Stack(
-                  children: [
-                    CircleAvatar(
-                      minRadius: 35.r,
-                      backgroundColor: textFormBase,
-                      backgroundImage: NetworkImage(value
-                              .surties![index].profileImage ??
-                          'http://rtd.canisostudio.com/assets/images/dummy-user.jpg'),
-                    ),
-                    Positioned(
-                      bottom: 10.h,
-                      right: 0,
-                      child: Container(
-                        width: 20.w,
-                        height: 18.h,
-                        decoration: BoxDecoration(
-                            color: value.addedSurties
-                                    .contains(value.surties![index].id)
-                                ? Colors.green
-                                : Colors.black,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(50.r))),
-                        child: value.addedSurties
-                                .contains(value.surties![index].id)
-                            ? const Icon(
-                                Icons.check,
-                                color: Colors.white,
-                                size: 16,
-                              )
-                            : const Icon(
-                                Icons.add,
-                                color: Colors.white,
-                                size: 16,
-                              ),
+              itemCount: 3,
+              itemBuilder: (context, index) => value.isSelected[index] == false
+                  ? GestureDetector(
+                      onTap: () => Get.toNamed(AppRouter.getSearchScreenRoute(),
+                          arguments: [index, false]),
+                      child: CircleAvatar(
+                        minRadius: 35.r,
+                        backgroundColor: textFormBase,
+                        child: const Icon(Icons.add),
                       ),
                     )
-                  ],
-                ),
-              ),
+                  : Stack(
+                      children: [
+                        CircleAvatar(
+                          minRadius: 35.r,
+                          backgroundColor: textFormBase,
+                          backgroundImage:
+                              NetworkImage(value.surties[index]!.profileImage),
+                        ),
+                        Positioned(
+                          bottom: 9.h,
+                          right: 0,
+                          child: GestureDetector(
+                            onTap: () => value.deleteSurety(index),
+                            child: CircleAvatar(
+                              minRadius: 15.r,
+                              backgroundColor: ThemeProvider.blackColor,
+                              child: const Icon(
+                                Icons.delete_outline,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
               separatorBuilder: (context, index) => const SizedBox(
                 width: 15,
               ),
@@ -657,18 +670,11 @@ class _LoanPageState extends State<LoanPage> {
 
   Container wallTextWidget(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(
-        top: 10.h,
-      ),
+      margin: EdgeInsets.only(top: 10.h, right: 10.w),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.arrow_back,
-                color: whiteColor,
-              )),
+          SizedBox(width: 70.w),
           Text(
             'Loan Request',
             style: Theme.of(context).textTheme.displaySmall!.copyWith(

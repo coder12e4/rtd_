@@ -3,10 +3,10 @@ import 'dart:developer';
 
 import 'package:get/get.dart';
 
-import '../../core/constraints/api_urls.dart';
-import '../../helper/shared_pref.dart';
-import '../api/api.dart';
-import '../model/profile_model.dart';
+import '../../../core/constraints/api_urls.dart';
+import '../../../helper/shared_pref.dart';
+import '../../api/api.dart';
+import '../../model/profile_model.dart';
 
 class ProfileParser {
   final SharedPreferencesManager sharedPreferencesManager;

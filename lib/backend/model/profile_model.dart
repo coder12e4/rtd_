@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final profile = profileFromJson(jsonString);
-
 import 'dart:convert';
 
 Profile profileFromJson(String str) => Profile.fromJson(json.decode(str));
@@ -9,18 +5,34 @@ Profile profileFromJson(String str) => Profile.fromJson(json.decode(str));
 String profileToJson(Profile data) => json.encode(data.toJson());
 
 class Profile {
+  bool status;
   Data data;
+  String message;
+  String accessToken;
+  String tokenType;
 
   Profile({
+    required this.status,
     required this.data,
+    required this.message,
+    required this.accessToken,
+    required this.tokenType,
   });
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
+        status: json["status"],
         data: Data.fromJson(json["data"]),
+        message: json["message"],
+        accessToken: json["access_token"],
+        tokenType: json["token_type"],
       );
 
   Map<String, dynamic> toJson() => {
+        "status": status,
         "data": data.toJson(),
+        "message": message,
+        "access_token": accessToken,
+        "token_type": tokenType,
       };
 }
 
@@ -28,6 +40,7 @@ class Data {
   int id;
   String name;
   String email;
+  String profileImage;
   dynamic emailVerifiedAt;
   int verificationStatus;
   String indiaMobileNumber;
@@ -35,22 +48,25 @@ class Data {
   int bloodGroup;
   String indianAddress1;
   String indianAddress2;
-  dynamic indiaState;
+  AState indiaState;
   String indiaPin;
   String documentProofIndia;
   String ksaAddress1;
   String ksaAddress2;
-  dynamic ksaState;
+  AState ksaState;
   String ksaPin;
   String documentProofKsa;
-  String createdAt;
-  String updatedAt;
+  dynamic vehicleTypeId;
+  dynamic vehicleNumber;
+  DateTime createdAt;
+  DateTime updatedAt;
   dynamic deletedAt;
 
   Data({
     required this.id,
     required this.name,
     required this.email,
+    required this.profileImage,
     required this.emailVerifiedAt,
     required this.verificationStatus,
     required this.indiaMobileNumber,
@@ -66,6 +82,8 @@ class Data {
     required this.ksaState,
     required this.ksaPin,
     required this.documentProofKsa,
+    required this.vehicleTypeId,
+    required this.vehicleNumber,
     required this.createdAt,
     required this.updatedAt,
     required this.deletedAt,
@@ -75,6 +93,7 @@ class Data {
         id: json["id"],
         name: json["name"],
         email: json["email"],
+        profileImage: json["profile_image"],
         emailVerifiedAt: json["email_verified_at"],
         verificationStatus: json["verification_status"],
         indiaMobileNumber: json["india_mobile_number"],
@@ -90,8 +109,10 @@ class Data {
         ksaState: AState.fromJson(json["ksa_state"]),
         ksaPin: json["ksa_pin"],
         documentProofKsa: json["document_proof_ksa"],
-        createdAt: json["created_at"],
-        updatedAt: json["updated_at"],
+        vehicleTypeId: json["vehicle_type_id"],
+        vehicleNumber: json["vehicle_number"],
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
         deletedAt: json["deleted_at"],
       );
 
@@ -99,6 +120,7 @@ class Data {
         "id": id,
         "name": name,
         "email": email,
+        "profile_image": profileImage,
         "email_verified_at": emailVerifiedAt,
         "verification_status": verificationStatus,
         "india_mobile_number": indiaMobileNumber,
@@ -106,16 +128,18 @@ class Data {
         "blood_group": bloodGroup,
         "indian_address_1": indianAddress1,
         "indian_address_2": indianAddress2,
-        "india_state": indiaState,
+        "india_state": indiaState.toJson(),
         "india_pin": indiaPin,
         "document_proof_india": documentProofIndia,
         "ksa_address_1": ksaAddress1,
         "ksa_address_2": ksaAddress2,
-        "ksa_state": ksaState,
+        "ksa_state": ksaState.toJson(),
         "ksa_pin": ksaPin,
         "document_proof_ksa": documentProofKsa,
-        "created_at": createdAt,
-        "updated_at": updatedAt,
+        "vehicle_type_id": vehicleTypeId,
+        "vehicle_number": vehicleNumber,
+        "created_at": createdAt.toIso8601String(),
+        "updated_at": updatedAt.toIso8601String(),
         "deleted_at": deletedAt,
       };
 }

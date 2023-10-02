@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:rtd_project/controller/wall_screen_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
+import 'package:rtd_project/core/constraints/conatrints.dart';
+import 'package:rtd_project/util/theme.dart';
 
 class WallPage extends StatelessWidget {
   const WallPage({super.key});
@@ -10,9 +15,9 @@ class WallPage extends StatelessWidget {
     return SafeArea(
         child: Scaffold(
             backgroundColor: baseColor,
-            body: SingleChildScrollView(
-              child: DefaultTabController(
-                length: 2,
+            body: DefaultTabController(
+              length: 2,
+              child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
@@ -21,16 +26,16 @@ class WallPage extends StatelessWidget {
                       height: 10.h,
                     ),
                     tabBar(),
-                    tabBarView(),
+                    tabBarView(context),
                   ],
                 ),
               ),
             )));
   }
 
-  Container tabBarView() {
+  Container tabBarView(BuildContext context) {
     return Container(
-      height: 1050.h,
+      height: 800.h,
       //hallo
       decoration: const BoxDecoration(
         color: whiteColor,
@@ -39,40 +44,35 @@ class WallPage extends StatelessWidget {
           topStart: Radius.circular(40),
         ),
       ),
-      child: TabBarView(children: [
-        feedView(),
-        votesView(),
-      ]),
+      child: GetBuilder<WallScreenController>(builder: (value) {
+        return Padding(
+          padding: EdgeInsets.only(top: 5.h),
+          child: TabBarView(children: [
+            feedView(value),
+            votesView(value),
+          ]),
+        );
+      }),
     );
   }
 
-  Column votesView() {
-    return Column(
-        // physics: const NeverScrollableScrollPhysics(),
-        children: [
-          SizedBox(
-            height: 10.h,
-          ),
-          feedDate('19/10/2023'),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: 2,
-            itemBuilder: (context, index) => VoteData(true, '07'),
-          ),
-          SizedBox(
-            height: 10.h,
-          ),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: 1,
-            itemBuilder: (context, index) => VoteData(false, "08"),
-          ),
-        ]);
+  ListView votesView(WallScreenController controller) {
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: controller.votesData.length,
+      itemBuilder: (context, index) {
+        return Column(
+          children: [
+            kSizedBoxH,
+            feedDate(controller.votesData[index].createdAt.toString()),
+            VoteData(index, controller)
+          ],
+        );
+      },
+    );
   }
 
-  Padding VoteData(bool isActive, String filenumber) {
+  Padding VoteData(int index, WallScreenController controller) {
     return Padding(
       padding: EdgeInsets.only(top: 10.h, left: 18.w, right: 18.w),
       child: Container(
@@ -97,7 +97,7 @@ class WallPage extends StatelessWidget {
                     width: 160.w,
                     child: Center(
                       child: Text(
-                        'Pole Number:$filenumber',
+                        'Pole Number: ${controller.votesData[index].id}',
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold),
@@ -112,7 +112,9 @@ class WallPage extends StatelessWidget {
                         borderRadius: BorderRadius.all(Radius.circular(30))),
                     child: Center(
                       child: Text(
-                        isActive == true ? 'Active' : 'Closed',
+                        controller.votesData[index].activeStatus == true
+                            ? 'Active'
+                            : 'Closed',
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold),
@@ -124,42 +126,56 @@ class WallPage extends StatelessWidget {
               SizedBox(
                 height: 10.h,
               ),
-              const Text("വോട്ടിന്റെ വിഷയം ഇവിടെ എഴുതുക",
-                  style: TextStyle(
+              Text(controller.votesData[index].title,
+                  style: const TextStyle(
                       color: Colors.black,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                       fontSize: 16)),
               Divider(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  optionButton(
-                      borderAvalable: false,
-                      buttonForegroundColor: Colors.white,
-                      buttonbackgroundColor: Colors.black,
-                      buttonText: 'Option one'),
-                  optionButton(
-                      borderAvalable: false,
-                      buttonForegroundColor: Colors.white,
-                      buttonbackgroundColor: Colors.black,
-                      buttonText: 'Option Two')
-                ],
+              Wrap(
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                spacing: 15.w,
+                runSpacing: 15.h,
+                children: controller.votesData[index].options
+                    .map(
+                      (i) => GestureDetector(
+                        onTap: () {
+                          // controller.selectedOption = i.option;
+                          // controller.update();
+                          controller.selectOption(i.option, index);
+                          controller.optionId = i.id;
+                        },
+                        child: optionButton(
+                            borderAvalable:
+                                controller.selectedOption[index] == i.option
+                                    ? true
+                                    : false,
+                            buttonForegroundColor: Colors.white,
+                            buttonbackgroundColor: Colors.black,
+                            buttonText: i.option),
+                      ),
+                    )
+                    .toList(),
               ),
               SizedBox(
-                height: 8.h,
+                height: 20.h,
               ),
-              optionButton(
-                  borderAvalable: true,
-                  buttonForegroundColor: Colors.white,
-                  buttonbackgroundColor: Colors.black,
-                  buttonText: 'Option Three Hire'),
-              SizedBox(
-                height: 10.h,
-              ),
-              submitedButton(
-                  borderAvalable: true,
+              Align(
+                alignment: Alignment.center,
+                child: submitedButton(
+                  submitStatus: controller.votesData[index].isVoted,
                   buttonForegroundColor: whiteColor,
-                  buttonbackgroundColor: Colors.blue)
+                  buttonbackgroundColor: Colors.blue,
+                  press: () {
+                    controller
+                        .submitVote(
+                            controller
+                                .votesData[index].options[0].voteQuestionId,
+                            controller.optionId!)
+                        .then((value) => controller.optionId = null);
+                  },
+                ),
+              )
             ],
           ),
         ),
@@ -168,7 +184,7 @@ class WallPage extends StatelessWidget {
   }
 
   SizedBox submitedButton({
-    bool? borderAvalable,
+    bool? submitStatus,
     Color? buttonForegroundColor,
     Color? buttonbackgroundColor,
     Function()? press,
@@ -180,12 +196,12 @@ class WallPage extends StatelessWidget {
             style: ButtonStyle(
                 foregroundColor:
                     MaterialStatePropertyAll(buttonForegroundColor),
-                backgroundColor: MaterialStatePropertyAll(borderAvalable == true
+                backgroundColor: MaterialStatePropertyAll(submitStatus != true
                     ? buttonbackgroundColor
                     : Colors.grey)),
-            onPressed: press,
+            onPressed: submitStatus != true ? press : null,
             child: Text(
-              borderAvalable == true ? 'Submit' : "submited",
+              submitStatus != true ? 'Submit' : "submited",
               style: const TextStyle(fontWeight: FontWeight.w700),
             )));
   }
@@ -218,34 +234,59 @@ class WallPage extends StatelessWidget {
             )));
   }
 
-  Column feedView() {
-    return Column(
-        // physics: const NeverScrollableScrollPhysics(),
-        children: [
-          SizedBox(
-            height: 10.h,
-          ),
-          feedDate('19/10/2023'),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: 2,
-            itemBuilder: (context, index) => feedActiveData(true, '418'),
-          ),
-          SizedBox(
-            height: 10.h,
-          ),
-          feedDate('19/10/2023'),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: 1,
-            itemBuilder: (context, index) => feedActiveData(false, "481"),
-          ),
-        ]);
+  Widget feedView(WallScreenController controller) {
+    return controller.loading == true
+        ? const Center(
+            child: CircularProgressIndicator(
+            strokeWidth: 6,
+            color: ThemeProvider.blackColor,
+          ))
+        : Column(mainAxisSize: MainAxisSize.max, children: [
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(top: 5.h),
+                child: controller.error == true
+                    ? ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        // shrinkWrap: true,
+                        itemCount: controller.data!.data.length,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              feedDate(controller
+                                  .data!.data[index].user.createdAt
+                                  .toString()),
+                              feedActiveData(controller, index),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                            ],
+                          );
+                        })
+                    : Column(
+                        children: [
+                          SizedBox(
+                            height: 270.h,
+                          ),
+                          const Text('Feed is Empty'),
+                        ],
+                      ),
+              ),
+            ),
+
+            // feedDate('19/10/2023'),
+            // ListView.builder(
+            //   shrinkWrap: true,
+            //   physics: const NeverScrollableScrollPhysics(),
+            //   itemCount: 1,
+            //   itemBuilder: (context, index) => feedActiveData(false, "481"),
+            // ),
+          ]);
   }
 
   Container feedDate(String date) {
+    String formattedDate =
+        DateFormat('dd/MM/yyyy').format(DateTime.parse(date));
     return Container(
       height: 30.h,
       width: 120.w,
@@ -253,12 +294,12 @@ class WallPage extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(30)),
           color: textFormBase),
       child: Center(
-        child: Text(date, textAlign: TextAlign.center),
+        child: Text(formattedDate, textAlign: TextAlign.center),
       ),
     );
   }
 
-  Padding feedActiveData(bool isActive, String filenumber) {
+  Padding feedActiveData(WallScreenController controller, int index) {
     return Padding(
       padding: EdgeInsets.only(top: 10.h, left: 18.w, right: 18.w),
       child: Container(
@@ -282,7 +323,7 @@ class WallPage extends StatelessWidget {
                     width: 160.w,
                     child: Center(
                       child: Text(
-                        'File Number:${filenumber}',
+                        'File Number: ${controller.data!.data[index].fileNumber}',
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold),
@@ -292,20 +333,20 @@ class WallPage extends StatelessWidget {
                   Container(
                     height: 40.h,
                     width: 100.w,
+                    decoration: BoxDecoration(
+                        color: controller.data!.data[index].status == 1
+                            ? const Color.fromARGB(255, 91, 207, 95)
+                            : Colors.red,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(30))),
                     child: Center(
                       child: Text(
-                        isActive == true ? 'FB:Active' : 'FB:Closed',
+                        'FB: ${controller.data!.data[index].statusText}',
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                             color: whiteColor, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    decoration: BoxDecoration(
-                        color: isActive == true
-                            ? const Color.fromARGB(255, 91, 207, 95)
-                            : Colors.red,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(30))),
                   )
                 ],
               ),
@@ -314,29 +355,31 @@ class WallPage extends StatelessWidget {
               ),
               Row(
                 children: [
-                  ClipRRect(
-                      child: Image.asset(
-                        'assets/images/pexels-pixabay-220453 1.png',
-                        height: 40.h,
-                      ),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(60))),
-                  SizedBox(
-                    width: 8.w,
+                  CircleAvatar(
+                    radius: 25.r,
+                    backgroundImage: NetworkImage(
+                        controller.data!.data[index].user.profileImage),
                   ),
-                  const Text('ഷഫീഖ് കൊല്ലം (M.107)',
-                      style: TextStyle(
+                  SizedBox(
+                    width: 10.w,
+                  ),
+                  Text(controller.data!.data[index].user.name,
+                      style: const TextStyle(
                           color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16))
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18))
                 ],
               ),
               Divider(),
-              loanAmount(title: 'കൊടുത്തത്:', price: '200 INR'),
+              loanAmount(
+                  title: 'കൊടുത്തത്:',
+                  price: '${controller.data!.data[index].loanAmount} INR'),
               SizedBox(
                 height: 10.h,
               ),
-              reternDate(title: 'തിരിച്ചടവ്:', date: "26.05.2023")
+              reternDate(
+                  title: 'തിരിച്ചടവ്:',
+                  date: controller.data!.data[index].dueDate.toString())
             ],
           ),
         ),
@@ -370,6 +413,8 @@ class WallPage extends StatelessWidget {
   }
 
   Padding reternDate({String? title, String? date}) {
+    String formattedDate =
+        DateFormat('dd/MM/yyyy').format(DateTime.parse(date!));
     return Padding(
       padding: EdgeInsets.only(top: 5.h),
       child: Row(
@@ -386,7 +431,7 @@ class WallPage extends StatelessWidget {
             ],
           ),
           Text(
-            date!,
+            formattedDate,
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           )
         ],
@@ -394,8 +439,8 @@ class WallPage extends StatelessWidget {
     );
   }
 
-  Container Divider() {
-    return Container(
+  SizedBox Divider() {
+    return SizedBox(
       width: 270.w,
       child: const Text(
         '-------------------',

@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 
-import '../../core/constraints/api_urls.dart';
-import '../../helper/shared_pref.dart';
-import '../api/api.dart';
+import '../../../core/constraints/api_urls.dart';
+import '../../../helper/shared_pref.dart';
+import '../../api/api.dart';
 
 class EditProfileParser {
   final SharedPreferencesManager sharedPreferencesManager;
@@ -12,7 +12,7 @@ class EditProfileParser {
 
   Future<Response> getStates() async {
     return await apiService
-        .getPublic(Constants.baseUrl + Constants.getAllStates);
+        .getPublic(Constants.baseUrl + Constants.getKeralaStates);
   }
 
   Future<Response> getBloodGroup() async {
@@ -27,12 +27,18 @@ class EditProfileParser {
         Constants.baseUrl + Constants.getUserDetails, accessToken!);
   }
 
+  Future<Response> getVehicleType() async {
+    return await apiService
+        .getPublic(Constants.baseUrl + Constants.getVehicleType);
+  }
+
   Future<String> getToken() async {
-    String accessToken =  sharedPreferencesManager.getString('access_token')!;
+    String accessToken = sharedPreferencesManager.getString('access_token')!;
     return accessToken;
   }
+
   Future<Response> updateUserData(body) async {
-    String accessToken =  sharedPreferencesManager.getString('access_token')!;
+    String accessToken = sharedPreferencesManager.getString('access_token')!;
     return await apiService.postPrivate(
         Constants.baseUrl + Constants.updateProfile, body, accessToken);
   }

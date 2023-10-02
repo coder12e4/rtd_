@@ -10,21 +10,23 @@ import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
-import '../backend/model/loan/loan_request_model.dart';
-import '../backend/model/loan/loan_type_model.dart';
-import '../backend/model/loan/surties_model.dart';
-import '../backend/parser/loan_screen_parser.dart';
-import '../util/theme.dart';
-import '../util/toast.dart';
+import '../../backend/model/loan/loan_request_model.dart';
+import '../../backend/model/loan/loan_type_model.dart';
+import '../../backend/model/loan/surties_model.dart';
+import '../../backend/parser/loan/loan_screen_parser.dart';
+import '../../util/theme.dart';
+import '../../util/toast.dart';
 
 class LoanScreenController extends GetxController {
   final LoanScreenParser parser;
   LoanScreenController({required this.parser});
   @override
   void onInit() {
-    getLoanRequestData();
+    _addedSurties = [-1, -1, -1];
+    surties = [null, null, null];
     getLoanType();
-    getSurties();
+
+    getLoanRequestData();
 
     super.onInit();
   }
@@ -34,7 +36,7 @@ class LoanScreenController extends GetxController {
   TextEditingController loanAmountController = TextEditingController();
   List<LoanData> _loanData = <LoanData>[];
   List<LoanData> get loanData => _loanData;
-  List<SuretiesData>? surties;
+  List<SuretiesData?> surties = <SuretiesData?>[];
   List<int> _addedSurties = <int>[];
   List<int> get addedSurties => _addedSurties;
   List<Data> _getLoanTypes = <Data>[];
@@ -43,6 +45,7 @@ class LoanScreenController extends GetxController {
       <DropdownMenuItem<Data>>[];
   List<DropdownMenuItem<Data>> get dropdownMenuLoanType =>
       _dropdownMenuLoanType;
+  List<bool> isSelected = [false, false, false];
   LoanType? loanType;
   String? purpose;
   Future<void> getLoanType() async {
@@ -129,41 +132,36 @@ class LoanScreenController extends GetxController {
     return items;
   }
 
-  Future<void> getSurties() async {
-    Response response = await parser.getSurties();
-    if (response.statusCode == 200) {
-      try {
-        Map<String, dynamic> data = Map<String, dynamic>.from(response.body);
-        var allLoan = data['data'];
-        surties = [];
-        allLoan.forEach((data) {
-          SuretiesData individual = SuretiesData.fromJson(data);
-          surties!.add(individual);
-        });
-
-        log(surties.toString());
-      } catch (e) {
-        log(e.toString());
-      }
-    }
-    loading = false;
+  void deleteSurety(int index) {
+    addedSurties[index] = -1;
+    surties[index] = null;
+    isSelected[index] = !isSelected[index];
     update();
   }
 
-  addSurties(id) {
-    if (addedSurties.contains(id)) {
-      addedSurties.remove(id);
-    } else {
-      addedSurties.add(id);
+  addSurties(SuretiesData surety, int index) {
+    if (addedSurties.contains(surety.id)) {
+      showToast('Surety already selected');
+      return;
     }
-    update();
+    if (!addedSurties.contains(surety.id)) {
+      isSelected[index] = !isSelected[index];
+      addedSurties[index] = surety.id;
+      surties[index] = surety;
+      log(addedSurties.toString());
+      log('selected surty$surties');
+      Get.back();
+      successToast('Surety selected');
+
+      update();
+    }
   }
 
   Future<void> upload(
     XFile data1,
     loanTypeId,
     loanPurpose,
-    surties,
+    sureties,
   ) async {
     Get.dialog(
       SimpleDialog(
@@ -190,6 +188,7 @@ class LoanScreenController extends GetxController {
       ),
       barrierDismissible: false,
     );
+    log('surties$sureties');
     File file1 = File(data1.path);
 
     var stream3 = http.ByteStream(DelegatingStream.typed(file1.openRead()));
@@ -206,7 +205,7 @@ class LoanScreenController extends GetxController {
         parser.sharedPreferencesManager.getString('access_token');
     request.files.add(loanDocument);
 
-    request.fields['sureties'] = surties.toString();
+    request.fields['sureties'] = sureties.toString();
     request.fields['loan_purpose'] = loanPurpose.toString();
     request.fields['loan_amount'] = loanAmountController.text;
     request.fields['loan_type'] = loanTypeId.toString();
@@ -227,8 +226,9 @@ class LoanScreenController extends GetxController {
       Get.back();
 
       if (message.status!) {
-        _addedSurties.clear();
-
+        _addedSurties = [-1, -1, -1];
+        surties = [null, null, null];
+        isSelected = [false, false, false];
         successToast(message.message.toString());
         getLoanRequestData();
       } else {
