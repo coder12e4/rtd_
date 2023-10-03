@@ -285,6 +285,7 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
               context: context,
               builder: (context) => Imagepiker(
                 onImageSelected: _updateSelectedImage,
+                press: () => Get.back(),
               ),
             ),
             icon: const Icon(Icons.edit_outlined),

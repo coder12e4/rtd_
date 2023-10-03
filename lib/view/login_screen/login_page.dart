@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rtd_project/controller/authentication/login_contoller.dart';
+import 'package:rtd_project/controller/authentication/regitration.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
 import 'package:rtd_project/util/validators.dart';
 
 import '../../core/common_widget/textformfield_widget.dart';
+import '../../helper/router.dart';
 
 class LOginPage extends StatelessWidget {
   const LOginPage({super.key});
@@ -147,7 +149,8 @@ class LOginPage extends StatelessWidget {
                         ),
                         ButtonWidget(
                           press: () {
-                            value.onSignUp();
+                            Get.delete<RegisterController>(force: true);
+                            Get.toNamed(AppRouter.getSignUpRoute());
                           },
                           borderAvalable: true,
                           buttonText: 'Register',

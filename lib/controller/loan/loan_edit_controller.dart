@@ -221,23 +221,43 @@ class LoanEditController extends GetxController implements GetxService {
     });
     var response = await request.send();
     debugPrint(response.statusCode.toString());
-
-    // final respStr = await response.stream.bytesToString();
-    response.stream.transform(utf8.decoder).listen((value) {
-      debugPrint(value);
-      var k = json.decode(value);
-
-      eror message = eror.fromJson(k);
+    var parsedData;
+    final responceData = await response.stream.bytesToString();
+    parsedData = json.decode(responceData);
+    log(parsedData.toString());
+    if (parsedData['status'] == true) {
       Get.back();
-
-      if (message.status!) {
-        successToast(message.message.toString());
-        onLoanEditSuccess();
-      } else {
-        showToast(k['message'].toString());
-        // onLogin();
+      _addedSurties = [-1, -1, -1];
+      surties = [null, null, null];
+      isSelected = [false, false, false];
+      successToast(parsedData['message'].toString());
+      onLoanEditSuccess();
+    } else {
+      Get.back();
+      String errorMessage = '';
+      for (var error in parsedData['errors']) {
+        errorMessage = errorMessage + error['error_name'] + "\n ";
+        log(errorMessage.toString());
+        // error += error;
       }
-    });
+      showToast(errorMessage);
+    }
+    // final respStr = await response.stream.bytesToString();
+    // response.stream.transform(utf8.decoder).listen((value) {
+    //   debugPrint(value);
+    //   var k = json.decode(value);
+    //
+    //   eror message = eror.fromJson(k);
+    //   Get.back();
+    //
+    //   if (message.status!) {
+    //     successToast(message.message.toString());
+    //     onLoanEditSuccess();
+    //   } else {
+    //     showToast(k['message'].toString());
+    //     // onLogin();
+    //   }
+    // });
   }
 
   void onLoanEditSuccess() async {

@@ -2,8 +2,8 @@ class Constants {
   static const String baseUrl = 'http://rtd.canisostudio.com/';
   static const String register = 'api/register';
   static const String login = 'api/user/login';
-  static const String getKeralaStates = 'api/get_states?country_id=1';
-  static const String getKsaStates = 'api/get_states?country_id=2';
+  static const String getStates = 'api/get_states?country_id=';
+  // static const String getKsaStates = 'api/get_states?country_id=2';
   static const String getAllBloodGroup = 'api/get_blood_groups';
   static const String getAllElectedMembers = 'api/user/board-members/list';
   static const String getUserDetails = 'api/user/details';
@@ -18,6 +18,7 @@ class Constants {
   static const String getWallFeedData = 'api/user/wall/feeds';
   static const String getWallVotesData = 'api/user/vote/list/questions';
   static const String submitVote = 'api/user/vote/submit/option';
+  static const String searchBookMember = 'api/user/search';
   static const String uploadIndianDocument =
       'api/user/profile/ind-document/update';
   static const String uploadKsaDocument =

@@ -3,21 +3,24 @@ import 'package:get/get.dart';
 import 'package:rtd_project/backend/parser/authentication/login_parser.dart';
 import 'package:rtd_project/controller/authentication/regitration.dart';
 import 'package:rtd_project/helper/router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../backend/api/handler.dart';
 import '../../backend/model/user_data_model.dart';
 import '../../util/theme.dart';
 import '../../util/toast.dart';
+import '../../view/login_screen/widgets/document_not_attached.dart';
 import '../../view/register_screen/widgets/register_success.dart';
 
 class LoginController extends GetxController implements GetxService {
   final LoginParser parser;
   LoginController({required this.parser});
-
+  @override
   final mobileNumberController = TextEditingController();
   final passwordController = TextEditingController();
   RegisterController? registerController;
-
+  bool? indiadoc;
+  bool? ksasdoc;
   bool passwordVisible = true;
   // UserData? userData;
   void visibiltyValueChange() {
@@ -67,9 +70,10 @@ class LoginController extends GetxController implements GetxService {
 
     var response = await parser.login(body);
     Get.back();
-
+    Map<String, dynamic> myMap = {};
+    myMap.clear();
     if (response.statusCode == 200) {
-      Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
+      myMap = Map<String, dynamic>.from(response.body);
 
       if (myMap['status'] != true) {
         showToast(myMap['message']);
@@ -77,7 +81,7 @@ class LoginController extends GetxController implements GetxService {
       }
       if (myMap['data']['name'] != '' && myMap['access_token'] != '') {
         debugPrint(myMap['data']['id'].toString());
-        await parser.saveToken('access_token', myMap['access_token']);
+
         parser.saveInfo(UserData(
           id: myMap['data']['id'],
           name: myMap['data']['name'],
@@ -107,7 +111,14 @@ class LoginController extends GetxController implements GetxService {
         //
         // log('userData***********${userData!.name}');
 
-        onLoginSuccess(myMap['data']['verification_status'], myMap);
+        if (myMap['data']['document_proof_india'] != null &&
+            myMap['data']['document_proof_ksa'] != null) {
+          onLoginSuccess(myMap['data']['verification_status'], myMap);
+        } else {
+          await parser.sharedPreferencesManager
+              .putString('register_token', myMap['access_token']);
+          Get.bottomSheet(const RegisterDocPending());
+        }
       } else {
         showToast('Access denied'.tr);
       }
@@ -135,17 +146,14 @@ class LoginController extends GetxController implements GetxService {
     }
   }
 
-  void onSignUp() {
-    // Get.delete<RegisterController>(force: true);
-    Get.toNamed(AppRouter.getSignUpRoute());
-  }
-
   void onLoginSuccess(status, myMap) async {
     if (status == 0) {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
       Get.bottomSheet(const RegisterComplited(text: 'Close'),
           isDismissible: false);
+      prefs.remove('register_token');
     } else {
-      // await parser.saveToken('access_token', myMap['access_token']);
+      await parser.saveToken('access_token', myMap['access_token']);
       Get.offAllNamed(AppRouter.getBottomNavRoute());
     }
   }

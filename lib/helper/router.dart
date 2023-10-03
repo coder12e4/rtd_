@@ -129,7 +129,7 @@ class AppRouter {
   static const String tabRoutes = '/tabs';
   static const String editProfileRoutes = '/editProfile';
   static const String userProfileRoutes = '/userProfile';
-  static const String inboxRoutes = '/inbox';
+  static const String memberProfileRoutes = '/memberProfile';
   static const String profileRoutes = '/profile';
   static const String searchScreenRoutes = '/search';
   static const String loanEditRoutes = '/loanEdit';
@@ -178,7 +178,7 @@ class AppRouter {
   static String getTabRoute() => tabRoutes;
   static String getEditProfileRoute() => editProfileRoutes;
   static String getUserProfileRoute() => userProfileRoutes;
-  static String getInboxRoute() => inboxRoutes;
+  static String getMemberProfileRoutesRoute() => memberProfileRoutes;
   static String getProfileRoute() => profileRoutes;
   static String getSearchScreenRoute() => searchScreenRoutes;
   static String getLoanEditRoute() => loanEditRoutes;
@@ -254,7 +254,7 @@ class AppRouter {
         page: () => const ProfilePage(),
         binding: ProfileBinding()),
     // GetPage(
-    //     name: inboxRoutes,
+    //     name: memberProfileRoutes,
     //     page: () => const InboxScreen(),
     //     binding: InboxBinding()),
     // GetPage(

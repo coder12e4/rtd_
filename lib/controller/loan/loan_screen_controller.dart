@@ -1,14 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 
-import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
 
 import '../../backend/model/loan/loan_request_model.dart';
 import '../../backend/model/loan/loan_type_model.dart';
@@ -158,11 +154,15 @@ class LoanScreenController extends GetxController {
   }
 
   Future<void> upload(
-    XFile data1,
+    XFile? data1,
     loanTypeId,
     loanPurpose,
     sureties,
   ) async {
+    if (data1 == null) {
+      showToast('Select document');
+      return;
+    }
     Get.dialog(
       SimpleDialog(
         children: [
@@ -188,22 +188,15 @@ class LoanScreenController extends GetxController {
       ),
       barrierDismissible: false,
     );
-    log('surties$sureties');
-    File file1 = File(data1.path);
-
-    var stream3 = http.ByteStream(DelegatingStream.typed(file1.openRead()));
-    var length3 = await file1.length();
-
     var uri =
         Uri.parse("http://rtd.canisostudio.com/api/user/loan/request/create");
-
     var request = http.MultipartRequest("POST", uri);
+    var file1 =
+        await http.MultipartFile.fromPath('loan_document', data1?.path ?? '');
+    request.files.add(file1);
 
-    var loanDocument = http.MultipartFile('loan_document', stream3, length3,
-        filename: basename(file1.path), contentType: MediaType('image', 'png'));
     String? accessToken =
         parser.sharedPreferencesManager.getString('access_token');
-    request.files.add(loanDocument);
 
     request.fields['sureties'] = sureties.toString();
     request.fields['loan_purpose'] = loanPurpose.toString();
@@ -216,26 +209,29 @@ class LoanScreenController extends GetxController {
     });
     var response = await request.send();
     log(response.statusCode.toString());
-    log(response.statusCode.toString());
+
     // final respStr = await response.stream.bytesToString();
-    response.stream.transform(utf8.decoder).listen((value) {
-      log(value);
-      var k = json.decode(value);
-
-      eror message = eror.fromJson(k);
+    var parsedData;
+    final responceData = await response.stream.bytesToString();
+    parsedData = json.decode(responceData);
+    log(parsedData.toString());
+    if (parsedData['status'] == true) {
       Get.back();
-
-      if (message.status!) {
-        _addedSurties = [-1, -1, -1];
-        surties = [null, null, null];
-        isSelected = [false, false, false];
-        successToast(message.message.toString());
-        getLoanRequestData();
-      } else {
-        showToast(k['message'].toString());
-        // onLogin();
+      _addedSurties = [-1, -1, -1];
+      surties = [null, null, null];
+      isSelected = [false, false, false];
+      successToast(parsedData['message'].toString());
+      getLoanRequestData();
+    } else {
+      Get.back();
+      String errorMessage = '';
+      for (var error in parsedData['errors']) {
+        errorMessage = errorMessage + error['error_name'] + "\n ";
+        log(errorMessage.toString());
+        // error += error;
       }
-    });
+      showToast(errorMessage);
+    }
   }
 }
 

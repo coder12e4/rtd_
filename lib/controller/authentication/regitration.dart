@@ -27,6 +27,11 @@ class RegisterController extends GetxController implements GetxService {
 
   @override
   void onInit() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      documentsAttached();
+      _scrollToSection();
+    });
+
     getStates();
     getKsaStates();
     getAllBloodGroup();
@@ -95,6 +100,8 @@ class RegisterController extends GetxController implements GetxService {
   // XFile? _selectedImage;
   String? cover;
   bool isSubmitted = false;
+  bool ksaDocSubmitted = false;
+  bool indianDocSubmitted = false;
   final gallery = [];
   bool passwordVisible = true;
   bool confirmPasswordVisible = true;
@@ -116,6 +123,9 @@ class RegisterController extends GetxController implements GetxService {
 
   AllStatesModel? stateKsa;
   String? statesksa;
+
+  final ScrollController _scrollController = ScrollController();
+  ScrollController get scrollController => _scrollController;
 
   String? bloodgroupname;
   List<BloodGroup>? bloodgrouplist;
@@ -171,7 +181,7 @@ class RegisterController extends GetxController implements GetxService {
     update();
   }
 
-  Future<void> onRegister(XFile file1, XFile file2) async {
+  Future<void> onRegister() async {
     try {
       /*if (emailRegController.text == '' ||
           emailRegController.text.isEmpty ||
@@ -202,7 +212,6 @@ class RegisterController extends GetxController implements GetxService {
         showToast('Email is not valid'.tr);
         return;
       }
-
       Get.dialog(
         SimpleDialog(
           children: [
@@ -228,13 +237,7 @@ class RegisterController extends GetxController implements GetxService {
         ),
         barrierDismissible: false,
       );
-      log("state 1${selectedItem!.id.toString()}");
-      log('state2${stateKsa!.id.toString()}');
-      log('blood group${bloodGroup!.id.toString()}');
-      if (file1 == null || file2 == null) {
-        showToast('Select Docutterments');
-        return;
-      }
+
       await upload(
         nameRegController.text,
         emailRegController.text,
@@ -242,36 +245,25 @@ class RegisterController extends GetxController implements GetxService {
         confirmpasswordRegController.text,
         indianMobNumContoller.text,
         ksaMobileNumRegController.text,
-        bloodGroup!.id.toString(),
+        bloodGroup?.id.toString(),
         indianAddressLine1Controller.text,
         indianAddressLine2Controller.text,
-        selectedItem!.id.toString(),
+        selectedItem?.id.toString(),
         pinController1.text,
         resAddressLine1Controller.text,
         resAddressLine2Controller.text,
-        stateKsa!.id.toString(),
+        stateKsa?.id.toString(),
         vehicleNumContoller.text,
-        vehicleType!.id.toString(),
+        vehicleType?.id.toString(),
         pinController2.text,
-      ).then((value) {
-        log('file 1 :${file1.path}');
-        log('file 1 :${file2.path}');
-        uploadFile(
-            Constants.uploadIndianDocument, file1.path, 'document_proof_india');
-        uploadFile(
-            Constants.uploadKsaDocument, file2.path, 'document_proof_ksa');
-      }).onError((error, stackTrace) {
-        showToast(error.toString());
-      });
-    } catch (e) {
-      // Handle any exceptions that occur during the execution of the function.
-      log('An error occurred: $e');
-      // You can display an error message to the user or take any necessary actions.
+      );
+    } catch (e, stackTrace) {
+      log('An error occurred: $e', stackTrace: stackTrace, error: e);
     }
   }
 
   void getStates() async {
-    var response = await parser.getStates(Constants.getKeralaStates);
+    var response = await parser.getStates('${Constants.getStates}1');
     if (response.statusCode == 200) {
       Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
       log(myMap.toString());
@@ -292,7 +284,7 @@ class RegisterController extends GetxController implements GetxService {
   }
 
   void getKsaStates() async {
-    var response = await parser.getStates(Constants.getKsaStates);
+    var response = await parser.getStates('${Constants.getStates}2');
     if (response.statusCode == 200) {
       Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
       log(myMap.toString());
@@ -424,155 +416,96 @@ class RegisterController extends GetxController implements GetxService {
     return items;
   }
 
-  // Future<void> uploadImage(path) async {
-  //   uploadFile(
-  //       "http://rtd.canisostudio.com/api/user/profile/ind-document/update",
-  //       path,
-  //       'document_proof_india');
-  // }
+  void documentsAttached() {
+    ksaDocSubmitted =
+        parser.sharedPreferencesManager.getBool('ksaDocSubmitted');
+    indianDocSubmitted =
+        parser.sharedPreferencesManager.getBool('indianDocSubmitted');
+    log(ksaDocSubmitted.toString());
+    log(indianDocSubmitted.toString());
+  }
 
-  // Future<void> upload(
-  //   XFile data1,
-  //   XFile data2,
-  //   name,
-  //   email,
-  //   password,
-  //   conPassword,
-  //   inum,
-  //   ksanum,
-  //   bloodgroup,
-  //   iaddress1,
-  //   iaddress2,
-  //   iState,
-  //   iPin,
-  //   kAddress1,
-  //   kAddress2,
-  //   kState,
-  //   vehicleNum,
-  //   vehicletype,
-  //   kPin,
-  // ) async {
-  //   log('Vehicle data  ${vehicleType!.id}');
-  //   log('$inum: $ksanum');
-  //   // File file1 = File(data1.path);
-  //   // File file2 = File(data2.path);
-  //   // File profileImage = File(data3.path);
-  //   // var stream3 = http.ByteStream(DelegatingStream.typed(file1.openRead()));
-  //   // var length3 = await file1.length();
-  //   //
-  //   // var stream4 = http.ByteStream(DelegatingStream.typed(file2.openRead()));
-  //   // var length4 = await file2.length();
-  //   // var stream5 =
-  //   // //     http.ByteStream(DelegatingStream.typed(profileImage.openRead()));
-  //   // // var length5 = await profileImage.length();
-  //   var uri = Uri.parse("http://rtd.canisostudio.com/api/register");
-  //
-  //   var request = http.MultipartRequest("POST", uri);
-  //   //
-  //   // var representativeDrivingLiesenceImage = http.MultipartFile(
-  //   //     'document_proof_india', stream3, length3,
-  //   //     filename: basename(file1.path), contentType: MediaType('image', 'png'));
-  //   // var representativeCompanyIdcardImage = http.MultipartFile(
-  //   //     'document_proof_ksa', stream4, length4,
-  //   //     filename: basename(file2.path), contentType: MediaType('image', 'png'));
-  //   // var representativeProfileImage = http.MultipartFile(
-  //   //     'profile_image', stream5, length5,
-  //   //     filename: basename(profileImage.path),
-  //   //     contentType: MediaType('image', 'png'));
-  //
-  //   // request.files.add(representativeDrivingLiesenceImage);
-  //   // request.files.add(representativeCompanyIdcardImage);
-  //   // request.files.add(representativeProfileImage);
-  //
-  //   request.fields['name'] = name;
-  //   request.fields['email'] = email;
-  //   request.fields['password'] = password;
-  //   request.fields['c_password'] = conPassword;
-  //   request.fields['india_mobile_number'] = inum;
-  //   request.fields['ksa_mobile_number'] = ksanum;
-  //   request.fields['blood_group'] = bloodgroup;
-  //   request.fields['indian_address_1'] = iaddress1;
-  //   request.fields['indian_address_2'] = iaddress2;
-  //   request.fields['india_state'] = iState;
-  //   request.fields['india_pin'] = iPin;
-  //   request.fields['ksa_address_1'] = kAddress1;
-  //   request.fields['ksa_address_2'] = kAddress2;
-  //   request.fields['ksa_state'] = kState;
-  //   request.fields['vehicle_number'] = vehicleNum;
-  //   request.fields['vehicle_type_id'] = vehicletype;
-  //   request.fields['ksa_pin'] = kPin;
-  //   request.headers.addAll({"Accept": "application/json"});
-  //   var response = await request.send();
-  //   log(response.statusCode.toString());
-  //   log(response.statusCode.toString());
-  //   // final respStr = await response.stream.bytesToString();
-  //   response.stream.transform(utf8.decoder).listen((value) {
-  //     log(value);
-  //     var k = json.decode(value);
-  //
-  //     Eror message = Eror.fromJson(k);
-  //     Get.back();
-  //
-  //     if (message.status!) {
-  //       successToast(message.message.toString());
-  //       Get.bottomSheet(const RegisterComplited(text: 'Continue'),
-  //           isDismissible: false);
-  //     } else {
-  //       showToast(k['message'].toString());
-  //       // onLogin();
-  //     }
-  //
-  //     //
-  //     /*if(k['status']==true){
-  //       var message= k['message'];
-  //       (response.statusCode != 200) {
-  //         showToast('Server error ${response.statusCode}'.tr);
-  //       }
-  //       log('got response');
-  //       log('Status Code ${response.statusCode}');
-  //       if (response.statusCode == 200) {
-  //         log(response.statusCode.toString());
-  //         Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
-  //         debugPrint(myMap['user_details']['id'].toString());
-  //         if (myMap['user_details'] != '' && myMap['access_token'] != '') {
-  //           debugPrint(myMap['user']['id'].toString());
-  //           parser.saveToken('access_token', myMap['token']);
-  //         } else {
-  //           showToast('Access denied'.tr);
-  //         }
-  //       } else {
-  //         if (response.statusCode == 401) {
-  //           Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
-  //           if (myMap['error'] != '') {
-  //             showToast(myMap['error'.tr]);
-  //           } else {
-  //             showToast('Something went wrong'.tr);
-  //           }
-  //           update();
-  //         } else if (response.statusCode == 500) {
-  //           Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
-  //           if (myMap['error'] != '') {
-  //             showToast(myMap['error'.tr]);
-  //           } else {
-  //             showToast('Something went wrong'.tr);
-  //           }
-  //           update();
-  //         } else {
-  //           ApiChecker.checkApi(response);
-  //           update();
-  //         }
-  //       }
-  //     }else{
-  //     }*/
-  //   });
-  // }
+  void _scrollToSection() {
+    String? registerToken =
+        parser.sharedPreferencesManager.getString('register_token');
+    if (ksaDocSubmitted == true && indianDocSubmitted == true) {
+      return;
+    }
 
-  Future<void> uploadFile(String url, String path, String fileName) async {
+    if (registerToken != null) {
+      isSubmitted = !isSubmitted;
+      double offset = 1500.0;
+      _scrollController.animateTo(
+        offset,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
+    update();
+  }
+
+  Future<void> uploadKsaDoc(imagePath) async {
+    if (imagePath != null) {
+      log('ksa************** $ksaDocSubmitted');
+      final bool status = await uploadFile(
+          Constants.uploadKsaDocument, imagePath, 'document_proof_ksa');
+      await parser.sharedPreferencesManager.putBool('ksaDocSubmitted', status);
+      ksaDocSubmitted = status;
+      log('ksa doc uploaded $ksaDocSubmitted');
+    } else {
+      showToast('Select Document to Upload');
+    }
+    registerSuccess();
+    update();
+  }
+
+  Future<void> uploadIndianDoc(imagePath) async {
+    if (imagePath != null) {
+      final bool status = await uploadFile(
+          Constants.uploadIndianDocument, imagePath, 'document_proof_india');
+      log('upload status$status');
+      await parser.sharedPreferencesManager
+          .putBool('indianDocSubmitted', status)!;
+      indianDocSubmitted = status;
+      log('india doc uploaded$indianDocSubmitted');
+    } else {
+      showToast('Select Document to Upload');
+    }
+    registerSuccess();
+    update();
+  }
+
+  Future<dynamic> uploadFile(String url, String path, String fileName) async {
+    Get.dialog(
+      SimpleDialog(
+        children: [
+          Row(
+            children: [
+              const SizedBox(
+                width: 30,
+              ),
+              const CircularProgressIndicator(
+                color: ThemeProvider.appColor,
+              ),
+              const SizedBox(
+                width: 30,
+              ),
+              SizedBox(
+                  child: Text(
+                "Please wait".tr,
+                style: const TextStyle(fontFamily: 'bold'),
+              )),
+            ],
+          )
+        ],
+      ),
+      barrierDismissible: false,
+    );
     var uri = Uri.parse(Constants.baseUrl + url);
 
     try {
       final accessToken =
-          parser.sharedPreferencesManager.getString('access_token');
+          parser.sharedPreferencesManager.getString('register_token');
       var request = http.MultipartRequest('POST', uri);
       debugPrint('url $uri');
       var file1 = await http.MultipartFile.fromPath(fileName, path);
@@ -585,15 +518,28 @@ class RegisterController extends GetxController implements GetxService {
       debugPrint(response.statusCode.toString());
       var responseData = await response.stream.bytesToString();
       var parsedData = json.decode(responseData);
-      debugPrint(' message Data: ${parsedData['message']}');
-      if (response.statusCode == 200) {
-        // Print the response data.
+      debugPrint(' message Data: $parsedData');
+      if (parsedData['status'] == true) {
+        Get.back();
+        successToast(parsedData['message']);
         debugPrint(' Response Data: $responseData');
-      } else {
-        debugPrint('Error uploading file: ${responseData}');
       }
+      if (parsedData['status'] != true) {
+        Get.back();
+        String errorMessage = '';
+
+        for (var error in parsedData['errors']) {
+          errorMessage = "${errorMessage + error['error_name']}\n ";
+          log(errorMessage.toString());
+          // error += error;
+        }
+
+        longToast(errorMessage.toString());
+      }
+
+      return parsedData['status'];
     } catch (e) {
-      print('File upload error: $e');
+      debugPrint('File upload error: $e');
     }
   }
 // Example usage:
@@ -617,7 +563,7 @@ class RegisterController extends GetxController implements GetxService {
     vehicletype,
     kPin,
   ) async {
-    log('Vehicle data  ${vehicleType!.id}');
+    log('Vehicle data  ${vehicleType?.id}');
     log('$inum: $ksanum');
 
     var uri = Uri.parse("http://rtd.canisostudio.com/api/register");
@@ -630,16 +576,16 @@ class RegisterController extends GetxController implements GetxService {
     request.fields['c_password'] = conPassword;
     request.fields['india_mobile_number'] = inum;
     request.fields['ksa_mobile_number'] = ksanum;
-    request.fields['blood_group'] = bloodgroup;
+    request.fields['blood_group'] = bloodgroup ?? '';
     request.fields['indian_address_1'] = iaddress1;
     request.fields['indian_address_2'] = iaddress2;
-    request.fields['india_state'] = iState;
+    request.fields['india_state'] = iState ?? '';
     request.fields['india_pin'] = iPin;
     request.fields['ksa_address_1'] = kAddress1;
     request.fields['ksa_address_2'] = kAddress2;
-    request.fields['ksa_state'] = kState;
+    request.fields['ksa_state'] = kState ?? '';
     request.fields['vehicle_number'] = vehicleNum;
-    request.fields['vehicle_type_id'] = vehicletype;
+    request.fields['vehicle_type_id'] = vehicletype ?? '';
     request.fields['ksa_pin'] = kPin;
     request.headers.addAll({"Accept": "application/json"});
     var parsedData;
@@ -651,41 +597,36 @@ class RegisterController extends GetxController implements GetxService {
       final responceData = await response.stream.bytesToString();
       parsedData = json.decode(responceData);
 
-      debugPrint(' message Data: ${parsedData}');
+      debugPrint(' message Data: $parsedData');
       if (parsedData['status'] == true) {
         Get.back();
+        isSubmitted = !isSubmitted;
         await parser.sharedPreferencesManager
-            .putString('access_token', parsedData['access_token']);
+            .putString('register_token', parsedData['access_token']);
         successToast(parsedData['message']);
-        Get.bottomSheet(const RegisterComplited(text: 'Continue'),
-            isDismissible: false);
       }
       if (parsedData['status'] != true) {
         Get.back();
-        showToast(parsedData['message']);
+        String errorMessage = '';
+
+        for (var error in parsedData['errors']) {
+          errorMessage = "${errorMessage + error['error_name']}\n ";
+          log(errorMessage.toString());
+        }
+
+        longToast(errorMessage.toString());
       }
     } catch (e) {
       debugPrint('Error updating  Data: ${parsedData['message']}');
     }
+    update();
   }
 
-  // void gotoLogin() {
-  //   Get.offNamed(AppRouter.getInitialRoute());
-  // }
-}
-
-class Eror {
-  String? message;
-  bool? status;
-  Eror({this.message, this.status});
-  Eror.fromJson(Map<String, dynamic> json) {
-    message = json['message'];
-    status = json['status'];
-  }
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['message'] = message;
-    data['status'] = status;
-    return data;
+  Future<void> registerSuccess() async {
+    if (indianDocSubmitted == true && ksaDocSubmitted == true) {
+      await Future.delayed(const Duration(seconds: 1));
+      Get.bottomSheet(const RegisterComplited(text: 'Continue'),
+          isDismissible: false);
+    }
   }
 }

@@ -2,16 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart ' as http;
-import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:rtd_project/controller/profile/profile_controller.dart';
-import 'package:rtd_project/core/constraints/api_urls.dart';
 import 'package:rtd_project/helper/router.dart';
 import 'package:rtd_project/util/toast.dart';
 
@@ -371,33 +367,20 @@ class EditProfileController extends GetxController implements GetxService {
       ),
       barrierDismissible: false,
     );
-
-    File file1 = File(data1 == null ? profileImageFile!.path : data1.path);
-    File file2 = File(data2 == null ? docProofIndia!.path : data2.path);
-    File file3 = File(data3 == null ? docProofKsa!.path : data3.path);
-
-    var stream3 = http.ByteStream(DelegatingStream.typed(file1.openRead()));
-    var stream4 = http.ByteStream(DelegatingStream.typed(file2.openRead()));
-    var stream5 = http.ByteStream(DelegatingStream.typed(file3.openRead()));
-    var length3 = await file1.length();
-    var length4 = await file2.length();
-    var length5 = await file3.length();
-
-    var uri = Uri.parse("http://rtd.canisostudio.com/api/user/update");
-
-    var request = http.MultipartRequest("POST", uri);
-
-    var profileImage = http.MultipartFile('profile_image', stream3, length3,
-        filename: basename(file1.path), contentType: MediaType('image', 'png'));
-    var docImage1 = http.MultipartFile('in_document', stream4, length4,
-        filename: basename(file1.path), contentType: MediaType('image', 'png'));
-    var docImage2 = http.MultipartFile('ksa_document', stream5, length5,
-        filename: basename(file1.path), contentType: MediaType('image', 'png'));
     String? accessToken =
         parser.sharedPreferencesManager.getString('access_token');
-    request.files.add(profileImage);
-    request.files.add(docImage1);
-    request.files.add(docImage2);
+    final file1 = data1 == null ? profileImageFile!.path : data1.path;
+    final file2 = data2 == null ? docProofIndia!.path : data2.path;
+    final file3 = data3 == null ? docProofKsa!.path : data3.path;
+    var uri = Uri.parse("http://rtd.canisostudio.com/api/user/update");
+    var request = http.MultipartRequest("POST", uri);
+    var image1 = await http.MultipartFile.fromPath('profile_image', file1);
+    var image2 = await http.MultipartFile.fromPath('in_document', file2);
+    var image3 = await http.MultipartFile.fromPath('ksa_document', file3);
+
+    request.files.add(image1);
+    request.files.add(image2);
+    request.files.add(image3);
 
     request.fields['name'] = nameController.text;
     request.fields['email'] = mailContoller.text;
@@ -421,58 +404,25 @@ class EditProfileController extends GetxController implements GetxService {
     });
     var response = await request.send();
     debugPrint(response.statusCode.toString());
-
-    // final respStr = await response.stream.bytesToString();
-    response.stream.transform(utf8.decoder).listen((value) {
-      debugPrint(value);
-      var k = json.decode(value);
-
-      eror message = eror.fromJson(k);
+    debugPrint(response.statusCode.toString());
+    var responseData = await response.stream.bytesToString();
+    var parsedData = json.decode(responseData);
+    debugPrint(' Response Data:: $parsedData');
+    if (parsedData['status'] == true) {
       Get.back();
+      successToast(parsedData['message']);
+      onProfileEditSuccess();
+    }
+    if (parsedData['status'] != true) {
+      Get.back();
+      String errorMessage = '';
 
-      if (message.status!) {
-        successToast(message.message.toString());
-        onProfileEditSuccess();
-      } else {
-        showToast(k['message'].toString());
-        // onLogin();
+      for (var error in parsedData['errors']) {
+        errorMessage = "${errorMessage + error['error_name']}\n ";
+        debugPrint(errorMessage.toString());
       }
-    });
-  }
 
-  void uploadImage(data1) {
-    uploadFile(
-        'api/user/profile/ind-document/update', data1, 'document_proof_india');
-  }
-
-  Future<void> uploadFile(String url, String path, String fileName) async {
-    var uri = Uri.parse(Constants.baseUrl + url);
-
-    try {
-      final accessToken =
-          parser.sharedPreferencesManager.getString('access_token');
-      var request = http.MultipartRequest('POST', uri);
-      debugPrint('url $uri');
-      var file1 =
-          await http.MultipartFile.fromPath('document_proof_india', path);
-      request.files.add(file1);
-      request.headers.addAll({
-        "Accept": "application/json",
-        "Authorization": "Bearer $accessToken"
-      });
-      var response = await request.send();
-      debugPrint(response.statusCode.toString());
-      var responseData = await response.stream.bytesToString();
-      var parsedData = json.decode(responseData);
-      debugPrint(' message Data: ${parsedData['message']}');
-      if (response.statusCode == 200) {
-        // Print the response data.
-        debugPrint('File uploaded successfully. Response Data: $responseData');
-      } else {
-        debugPrint('Error uploading file: ${responseData}');
-      }
-    } catch (e) {
-      print('File upload error: $e');
+      longToast(errorMessage.toString());
     }
   }
 
@@ -481,20 +431,35 @@ class EditProfileController extends GetxController implements GetxService {
     Get.delete<ProfileController>(force: true);
     Get.offNamed(AppRouter.getBottomNavRoute(), arguments: [4]);
   }
-}
 
-class eror {
-  String? message;
-  bool? status;
-  eror({this.message, this.status});
-  eror.fromJson(Map<String, dynamic> json) {
-    message = json['message'];
-    status = json['status'];
-  }
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['message'] = this.message;
-    data['status'] = this.status;
-    return data;
-  }
+  // Future<void> uploadFile(String url, String path, String fileName) async {
+  //   var uri = Uri.parse(Constants.baseUrl + url);
+  //
+  //   try {
+  //     final accessToken =
+  //         parser.sharedPreferencesManager.getString('access_token');
+  //     var request = http.MultipartRequest('POST', uri);
+  //     debugPrint('url $uri');
+  //     var file1 =
+  //         await http.MultipartFile.fromPath('document_proof_india', path);
+  //     request.files.add(file1);
+  //     request.headers.addAll({
+  //       "Accept": "application/json",
+  //       "Authorization": "Bearer $accessToken"
+  //     });
+  //     var response = await request.send();
+  //     debugPrint(response.statusCode.toString());
+  //     var responseData = await response.stream.bytesToString();
+  //     var parsedData = json.decode(responseData);
+  //     debugPrint(' message Data: ${parsedData['message']}');
+  //     if (response.statusCode == 200) {
+  //       // Print the response data.
+  //       debugPrint('File uploaded successfully. Response Data: $responseData');
+  //     } else {
+  //       debugPrint('Error uploading file: ${responseData}');
+  //     }
+  //   } catch (e) {
+  //     print('File upload error: $e');
+  //   }
+  // }
 }

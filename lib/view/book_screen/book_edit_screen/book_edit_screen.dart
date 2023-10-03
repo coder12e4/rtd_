@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class BookEditPage extends StatelessWidget {
-  const BookEditPage({super.key});
+import '../../../backend/model/elected_member_model.dart';
 
+class BookProfilePage extends StatelessWidget {
+  const BookProfilePage({super.key, this.data});
+  final ElectedMemberData? data;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -28,7 +31,8 @@ class BookEditPage extends StatelessWidget {
                 children: [
                   imageContainer(),
                   kSizedBoxH,
-                  nameText(),
+                  nameText(data?.name ?? 'Shanavas Kolangattil',
+                      data?.id.toString() ?? '108'),
                   kSizedBoxH,
                   dividerWidget(),
                   kSizedBoxH,
@@ -36,7 +40,7 @@ class BookEditPage extends StatelessWidget {
                   kSizedBoxH,
                   dividerWidget(),
                   kSizedBoxH,
-                  detailsText('India', '+91 9745123456'),
+                  detailsText('India', data?.mobile ?? '+91 689454399'),
                   kSizedBoxH,
                   dividerWidget(),
                   kSizedBoxH,
@@ -148,7 +152,9 @@ class BookEditPage extends StatelessWidget {
                     (states) => const Size(60, 50)),
                 backgroundColor:
                     MaterialStateColor.resolveWith((states) => Colors.green)),
-            onPressed: () {},
+            onPressed: () {
+              launch("tel:${data?.mobile}");
+            },
             child: const Padding(
               padding:
                   EdgeInsets.only(left: 18.0, right: 18, top: 8, bottom: 8),
@@ -200,15 +206,15 @@ class BookEditPage extends StatelessWidget {
     );
   }
 
-  Column nameText() {
-    return const Column(
+  Column nameText(String? name, String? id) {
+    return Column(
       children: [
         Text(
-          'Shanavas Kolangattil',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          name!,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
-        Text('(M.109)',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+        Text('(M.$id)',
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
       ],
     );
   }

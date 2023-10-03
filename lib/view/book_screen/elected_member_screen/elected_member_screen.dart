@@ -5,18 +5,12 @@ import 'package:get/get.dart';
 import 'package:rtd_project/controller/elected_member_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/helper/router.dart';
+import 'package:rtd_project/view/book_screen/book_edit_screen/book_edit_screen.dart';
 import 'package:rtd_project/view/book_screen/widgets/electedmembers_list_tile.dart';
 
 class ElectedMemberScreen extends StatelessWidget {
   ElectedMemberScreen({super.key});
-  final List imageList = [
-    'assets/images/Group 5 (1).png',
-    'assets/images/Group 5 (2).png',
-    'assets/images/Group 5.png',
-    'assets/images/Group 6 (1).png',
-    'assets/images/Group 6 (2).png',
-    'assets/images/Group 6.png'
-  ];
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -61,9 +55,13 @@ class ElectedMemberScreen extends StatelessWidget {
                                     mainAxisSpacing: 10,
                                   ),
                                   itemBuilder: (context, index) {
-                                    return ElectedMemberListTileWidget(
-                                      image: imageList[index],
-                                      data: electedMembers[index],
+                                    return GestureDetector(
+                                      onTap: () => Get.to(BookProfilePage(
+                                        data: electedMembers[index],
+                                      )),
+                                      child: ElectedMemberListTileWidget(
+                                        data: electedMembers[index],
+                                      ),
                                     );
                                   },
                                 );
