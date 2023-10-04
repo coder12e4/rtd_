@@ -40,6 +40,7 @@ class _LoanPageState extends State<LoanPage> {
                 length: 2,
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     wallTextWidget(context),
                     SizedBox(
@@ -73,7 +74,7 @@ class _LoanPageState extends State<LoanPage> {
   Widget tabBarView(BuildContext context, LoanScreenController value) {
     return value.loading == true
         ? Container(
-            height: 465.h,
+            height: 485.h,
             // width: 100,
             decoration: const BoxDecoration(
               color: whiteColor,
@@ -90,7 +91,7 @@ class _LoanPageState extends State<LoanPage> {
             ),
           )
         : Container(
-            height: 462.h,
+            height: 482.h,
             //hallo
             decoration: const BoxDecoration(
               color: whiteColor,
@@ -664,22 +665,10 @@ class _LoanPageState extends State<LoanPage> {
   Container wallTextWidget(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 10.h, right: 10.w),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox(width: 70.w),
-          Text(
-            'Loan Request',
-            style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
-          ),
-          IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.notifications_none,
-                color: whiteColor,
-              ))
-        ],
+      child: Text(
+        'Loan Request',
+        style: Theme.of(context).textTheme.displaySmall!.copyWith(
+            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
       ),
     );
   }

@@ -477,33 +477,10 @@ class WallPage extends StatelessWidget {
       margin: EdgeInsets.only(
         top: 10.h,
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.arrow_back,
-                color: whiteColor,
-              )),
-          SizedBox(
-            width: 70.w,
-          ),
-          Text(
-            'Wall',
-            style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
-          ),
-          SizedBox(
-            width: 70.w,
-          ),
-          IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.notifications_none,
-                color: whiteColor,
-              ))
-        ],
+      child: Text(
+        'Wall',
+        style: Theme.of(context).textTheme.displaySmall!.copyWith(
+            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
       ),
     );
   }

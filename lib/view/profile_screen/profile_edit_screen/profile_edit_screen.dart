@@ -279,13 +279,13 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                     ),
                                     icon: const Icon(
                                         Icons.keyboard_arrow_down_outlined),
-                                    value: value.stateKsa,
-                                    items: value.dropdownMenuItems,
+                                    value: value.selectedKsaItem,
+                                    items: value.dropdownKsaItems,
                                     onChanged: (valuee) {
                                       setState(() {
-                                        value.stateKsa = valuee;
+                                        value.selectedKsaItem = valuee;
                                         value.statesName =
-                                            value.stateKsa!.stateName;
+                                            value.selectedKsaItem!.stateName;
                                       });
                                     },
                                   ),

@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:rtd_project/controller/book_screen_controller.dart';
+import 'package:rtd_project/controller/book/book_screen_controller.dart';
 
 class BookScreenBinding extends Bindings {
   @override

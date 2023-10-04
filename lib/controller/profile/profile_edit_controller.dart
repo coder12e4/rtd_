@@ -24,7 +24,9 @@ class EditProfileController extends GetxController implements GetxService {
   @override
   void onInit() {
     super.onInit();
+
     getUserDatas();
+    getKsaStates();
     getStates();
     getVehicleType();
     getAllBloodGroup();
@@ -34,11 +36,20 @@ class EditProfileController extends GetxController implements GetxService {
   List<AllStatesModel> _allStates = <AllStatesModel>[];
   List<AllStatesModel> get allStates => _allStates;
 
+  List<AllStatesModel> _ksaStates = <AllStatesModel>[];
+  List<AllStatesModel> get ksaStates => _ksaStates;
+
   List<DropdownMenuItem<AllStatesModel>> _dropdownMenuItems =
       <DropdownMenuItem<AllStatesModel>>[];
 
   List<DropdownMenuItem<AllStatesModel>> get dropdownMenuItems =>
       _dropdownMenuItems;
+
+  List<DropdownMenuItem<AllStatesModel>> _dropdownKsaItems =
+      <DropdownMenuItem<AllStatesModel>>[];
+
+  List<DropdownMenuItem<AllStatesModel>> get dropdownKsaItems =>
+      _dropdownKsaItems;
 
   List<BloodGroup> _getAllbloodGroup = <BloodGroup>[];
   List<BloodGroup> get getAllbloodGroup => _getAllbloodGroup;
@@ -69,6 +80,7 @@ class EditProfileController extends GetxController implements GetxService {
 
   String? statesName;
   AllStatesModel? selectedItem;
+  AllStatesModel? selectedKsaItem;
   bool loading = true;
   TextEditingController indianMobNumContoller = TextEditingController();
   TextEditingController saudiMobNumContoller = TextEditingController();
@@ -85,7 +97,7 @@ class EditProfileController extends GetxController implements GetxService {
   TextEditingController nameController = TextEditingController();
 
   void getStates() async {
-    var response = await parser.getStates();
+    var response = await parser.getStates('1');
     if (response.statusCode == 200) {
       Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
       // log(myMap.toString());
@@ -102,6 +114,27 @@ class EditProfileController extends GetxController implements GetxService {
       selectedItem != null ? _dropdownMenuItems[0].value : null;
     }
     // log(_allStates.toString());
+    update();
+  }
+
+  void getKsaStates() async {
+    var response = await parser.getStates('2');
+    if (response.statusCode == 200) {
+      Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
+      debugPrint(myMap.toString());
+      var allStates = myMap['data'];
+
+      _ksaStates = [];
+
+      allStates.forEach((data) {
+        AllStatesModel individual = AllStatesModel.fromJson(data);
+        _ksaStates.add(individual);
+      });
+
+      _dropdownKsaItems = buildDropDownMenuItems(_ksaStates);
+      selectedKsaItem != null ? _dropdownMenuItems[0].value : null;
+    }
+    debugPrint(_ksaStates.toString());
     update();
   }
 
@@ -393,7 +426,7 @@ class EditProfileController extends GetxController implements GetxService {
     request.fields['in_pin'] = indiaAddPinContoller.text;
     request.fields['ksa_address_1'] = ksaAddressContoller1.text;
     request.fields['ksa_address_2'] = ksaAddressContoller2.text;
-    request.fields['ksa_state'] = stateKsa!.id.toString();
+    request.fields['ksa_state'] = selectedKsaItem!.id.toString();
     request.fields['vehicle_number'] = vehicleNumberContoller.text;
     request.fields['vehicle_type_id'] = vehicleType!.id.toString();
     request.fields['ksa_pin'] = saudiAddPinContoller.text;

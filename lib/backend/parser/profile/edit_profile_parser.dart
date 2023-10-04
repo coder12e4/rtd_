@@ -10,9 +10,9 @@ class EditProfileParser {
   EditProfileParser(
       {required this.sharedPreferencesManager, required this.apiService});
 
-  Future<Response> getStates() async {
+  Future<Response> getStates(state) async {
     return await apiService
-        .getPublic('${Constants.baseUrl}${Constants.getStates}1');
+        .getPublic('${Constants.baseUrl}${Constants.getStates}$state');
   }
 
   Future<Response> getBloodGroup() async {
