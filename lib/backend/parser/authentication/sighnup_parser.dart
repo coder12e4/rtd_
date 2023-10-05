@@ -72,6 +72,10 @@ class SignUpParser {
   Future<void> saveToken(key, token) async {
     sharedPreferencesManager.putString(key, token);
   }
+
+  Future<void> removeKey(key) async {
+    await sharedPreferencesManager.putString(key, '');
+  }
   // Future<Response> verifyEmail(dynamic body) async {
   //   var response = await apiService.postPublic(AppConstants.verifyEmail, body);
   //   return response;

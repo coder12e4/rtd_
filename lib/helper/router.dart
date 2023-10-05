@@ -98,6 +98,7 @@
 // import 'package:ultimate_salon_owner_flutter/app/view/verify.dart';
 
 import 'package:get/get.dart';
+import 'package:rtd_project/backend/binding/book/service_member_details_bindig.dart';
 import 'package:rtd_project/backend/binding/bottom_navigation_binding.dart';
 import 'package:rtd_project/backend/binding/elected_member_binding.dart';
 import 'package:rtd_project/backend/binding/loan_screen_binding.dart';
@@ -116,6 +117,7 @@ import 'package:rtd_project/view/splash_screen/splash_page.dart';
 import '../backend/binding/edit_profile_binding.dart';
 import '../backend/binding/loan_edit_binding.dart';
 import '../backend/binding/profile_binding.dart';
+import '../view/book_screen/service_member_profile/service_member_profile.dart';
 import '../view/home_screen/home_page.dart';
 import '../view/loan_screen/loan_edit_screen/loan_edit_screen.dart';
 import '../view/loan_screen/loan_page.dart';
@@ -129,12 +131,12 @@ class AppRouter {
   static const String tabRoutes = '/tabs';
   static const String editProfileRoutes = '/editProfile';
   static const String userProfileRoutes = '/userProfile';
-  static const String inboxRoutes = '/inbox';
+  static const String memberProfileRoutes = '/memberProfile';
   static const String profileRoutes = '/profile';
   static const String searchScreenRoutes = '/search';
   static const String loanEditRoutes = '/loanEdit';
   static const String loanRoutes = '/loan';
-  static const String stylistRoutes = '/stylist';
+  static const String serviceMemberProfileRoutes = '/serviceMemberProfile';
   static const String addStylistRoutes = '/add_stylist';
   static const String stylistCategoriesRoutes = '/select_stylist';
   static const String profileCategoriesRoutes = '/profile_categories';
@@ -178,12 +180,13 @@ class AppRouter {
   static String getTabRoute() => tabRoutes;
   static String getEditProfileRoute() => editProfileRoutes;
   static String getUserProfileRoute() => userProfileRoutes;
-  static String getInboxRoute() => inboxRoutes;
+  static String getMemberProfileRoutesRoute() => memberProfileRoutes;
   static String getProfileRoute() => profileRoutes;
   static String getSearchScreenRoute() => searchScreenRoutes;
   static String getLoanEditRoute() => loanEditRoutes;
   static String getLoanRoute() => loanRoutes;
-  static String getStylistRoute() => stylistRoutes;
+  static String getServiceMemberProfileRoutesRoute() =>
+      serviceMemberProfileRoutes;
   static String getAddStylistRoute() => addStylistRoutes;
   static String getStylistCategoriesRoute() => stylistCategoriesRoutes;
   static String getProfileCategoriesRoute() => profileCategoriesRoutes;
@@ -254,7 +257,7 @@ class AppRouter {
         page: () => const ProfilePage(),
         binding: ProfileBinding()),
     // GetPage(
-    //     name: inboxRoutes,
+    //     name: memberProfileRoutes,
     //     page: () => const InboxScreen(),
     //     binding: InboxBinding()),
     // GetPage(
@@ -273,10 +276,10 @@ class AppRouter {
         name: loanRoutes,
         page: () => const LoanPage(),
         binding: LoanScreenBinding()),
-    // GetPage(
-    //     name: stylistRoutes,
-    //     page: () => const StylistScreen(),
-    //     binding: StylistBinding()),
+    GetPage(
+        name: serviceMemberProfileRoutes,
+        page: () => const ServiceMemberProfile(),
+        binding: ServiceMemberDetailsBinding()),
     // GetPage(
     //     name: addStylistRoutes,
     //     page: () => const AddStylistScreen(),

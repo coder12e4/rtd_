@@ -11,7 +11,9 @@ import 'package:rtd_project/core/common_widget/commen_botten.dart';
 import 'package:rtd_project/core/common_widget/imagepicker.dart';
 import 'package:rtd_project/core/common_widget/textformfield_widget.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
+import 'package:rtd_project/util/theme.dart';
 
+import '../../util/toast.dart';
 import '../../util/validators.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -22,11 +24,9 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  XFile? _selectedImage;
   XFile? _selectedImage1;
-  XFile? _profileImage;
-  bool image1 = false;
-  bool image2 = false;
+  XFile? _selectedImage2;
+
   bool selectProfileImage = false;
   // void _updateProfileImage(XFile? profileImage) {
   //   setState(() {
@@ -36,8 +36,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   // }
 
   void _updateSelectedImage(XFile? newImage) async {
-    _selectedImage = newImage;
-    image1 = true;
+    _selectedImage1 = newImage;
+
     // if (newImage != null) {
     //   auth.uploadImage(newImage.path);
     // }
@@ -46,8 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void _updateSelectedImage1(XFile? newImage) {
     setState(() {
-      _selectedImage1 = newImage;
-      image2 = true;
+      _selectedImage2 = newImage;
     });
   }
 
@@ -57,17 +56,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: baseColor,
-      body: SingleChildScrollView(
-          child: GetBuilder<RegisterController>(builder: (value) {
-        return Column(children: [
-          memberShipRegWidget(context),
-          nochBarAboveLoginContainer(),
-          SizedBox(
-            height: 5.h,
+      body: GetBuilder<RegisterController>(builder: (value) {
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              memberShipRegWidget(context),
+              nochBarAboveLoginContainer(),
+              SizedBox(
+                height: 5.h,
+              ),
+              textFieldContainer(context, value),
+            ],
           ),
-          textFieldContainer(context, value),
-        ]);
-      })),
+        );
+      }),
     );
   }
 
@@ -77,7 +79,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Form(
       key: _formKey,
       child: Container(
-          height: 1850.h,
+          height: value.isSubmitted ? 400.h : 1650.h,
           width: 390.w,
           decoration: const BoxDecoration(
             color: whiteColor,
@@ -86,477 +88,486 @@ class _RegisterScreenState extends State<RegisterScreen> {
               topStart: Radius.circular(50),
             ),
           ),
-          child: Container(
-            child: ListView(
-              padding: const EdgeInsets.all(45).r,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                // profileImage(context),
-                const Text('Registration Step 1'),
-                textFieldHeight,
-                TextFormFieldWidget(
-                    validator: Rtd_Validators.noneEmptyValidator,
-                    controller: value.nameRegController,
-                    textInputType: TextInputType.text,
-                    hitText: 'Name'),
-                textFieldHeight,
+          child: ListView(
+            padding: const EdgeInsets.all(45).r,
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
+              // profileImage(context),
+              Visibility(
+                visible: !value.isSubmitted,
+                child: Column(
+                  children: <Widget>[
+                    registerStepContainer('1'),
 
-                TextFormFieldWidget(
-                    validator: Rtd_Validators.emailValidator,
-                    controller: value.emailRegController,
-                    textInputType: TextInputType.emailAddress,
-                    hitText: 'email'),
+                    textFieldHeight,
+                    TextFormFieldWidget(
+                        validator: Rtd_Validators.noneEmptyValidator,
+                        controller: value.nameRegController,
+                        textInputType: TextInputType.text,
+                        hitText: 'Name'),
+                    textFieldHeight,
 
-                textFieldHeight,
-                SizedBox(
-                  width: 290.w,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      focusNode: FocusNode(),
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      validator: Rtd_Validators.passwordValidator,
-                      controller: value.passwordRegController,
-                      obscureText: value.passwordVisible,
-                      decoration: InputDecoration(
-                          border: InputBorder.none, // Removes the underline
+                    TextFormFieldWidget(
+                        validator: Rtd_Validators.emailValidator,
+                        controller: value.emailRegController,
+                        textInputType: TextInputType.emailAddress,
+                        hitText: 'email'),
 
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              // Based on passwordVisible state choose the icon
-                              value.passwordVisible
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: Theme.of(context).primaryColorDark,
-                            ),
-                            onPressed: () {
-                              // Update the state i.e. toogle the state of passwordVisible variable
-                              value.visibityPasswordChange();
-                            },
-                          ),
-                          hintText: " Password",
-                          fillColor: textFormBase,
-                          filled: true,
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(color: textFormBase),
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          focusedErrorBorder: UnderlineInputBorder(
-                            borderSide: const BorderSide(color: textFormBase),
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: const BorderSide(color: textFormBase),
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          errorBorder: UnderlineInputBorder(
-                            borderSide: const BorderSide(color: textFormBase),
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          hintStyle: const TextStyle(
-                              color: Color.fromARGB(255, 112, 111, 111),
-                              fontWeight: FontWeight.bold)),
-                      textAlign:
-                          TextAlign.center, // Centers the text inside the field
-                    ),
-                  ),
-                ),
+                    textFieldHeight,
+                    SizedBox(
+                      width: 290.w,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          focusNode: FocusNode(),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          validator: Rtd_Validators.passwordValidator,
+                          controller: value.passwordRegController,
+                          obscureText: value.passwordVisible,
+                          decoration: InputDecoration(
+                              border: InputBorder.none, // Removes the underline
 
-                textFieldHeight,
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    focusNode: FocusNode(),
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    validator: (valuee) {
-                      if (valuee!.isEmpty) {
-                        return "Please Re-Enter New Password";
-                      } else if (valuee.length < 5) {
-                        return "Password must be atleast 5 characters long";
-                      } else if (valuee != value.passwordRegController.text) {
-                        return "Password must be same as above";
-                      } else {
-                        return null;
-                      }
-                    },
-                    controller: value.confirmpasswordRegController,
-                    obscureText: value.confirmPasswordVisible,
-                    decoration: InputDecoration(
-                        border: InputBorder.none, // Removes the underline
-
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            // Based on passwordVisible state choose the icon
-                            value.confirmPasswordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                            color: Theme.of(context).primaryColorDark,
-                          ),
-                          onPressed: () {
-                            // Update the state i.e. toogle the state of passwordVisible variable
-                            value.visibityConfirmPasswordChange();
-                          },
-                        ),
-                        hintText: "Confirm Password",
-                        fillColor: textFormBase,
-                        filled: true,
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: textFormBase),
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        focusedErrorBorder: UnderlineInputBorder(
-                          borderSide: const BorderSide(color: textFormBase),
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: const BorderSide(color: textFormBase),
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        errorBorder: UnderlineInputBorder(
-                          borderSide: const BorderSide(color: textFormBase),
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        hintStyle: const TextStyle(
-                            color: Color.fromARGB(255, 112, 111, 111),
-                            fontWeight: FontWeight.bold)),
-                    textAlign:
-                        TextAlign.center, // Centers the text inside the field
-                  ),
-                ),
-                textFieldHeight,
-                TextFormFieldWidget(
-                    validator: Rtd_Validators.mobileNumberValidator,
-                    controller: value.indianMobNumContoller,
-                    textInputType: TextInputType.phone,
-                    hitText: 'Indian Mobile Number'),
-                textFieldHeight,
-                TextFormFieldWidget(
-                    validator: Rtd_Validators.mobileNumberValidator,
-                    controller: value.ksaMobileNumRegController,
-                    textInputType: TextInputType.phone,
-                    hitText: 'KSA Mobile Number'),
-
-                textFieldHeight,
-
-                Container(
-                  margin: const EdgeInsets.only(left: 5, right: 5),
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: textFormBase),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<BloodGroup>(
-                        isExpanded: true,
-                        alignment: AlignmentDirectional.centerEnd,
-                        hint: Center(
-                          child: Text(
-                            "Select Your blood group",
-                            style: TextStyle(
-                                color: Colors.black.withOpacity(.55),
-                                fontSize: 17,
-                                letterSpacing: .1,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                        icon: const Icon(Icons.keyboard_arrow_down_outlined),
-                        value: value.bloodGroup,
-                        items: value.dropdownMenuItemsBloodgroup,
-                        onChanged: (value) {
-                          setState(() {
-                            auth.bloodGroup = value;
-
-                            auth.bloodgroupname = value!.groupName.toString();
-
-                            //   newStateList.clear();
-                            //  newStateList=[];
-                            //_dropdownMenuItemsStates.clear();
-                          });
-                        }),
-                  ),
-                ),
-
-                textFieldHeight,
-
-                //////////////////////////End of Fourth Section?///////////////////////////////////////////////////////////
-                textFieldHeight,
-                dividerAndHeadingWidget(
-                    heading: 'Indian Address', width: 140.w),
-                textFieldHeight,
-                TextFormFieldWidget(
-                    validator: Rtd_Validators.noneEmptyValidator,
-                    controller: value.indianAddressLine1Controller,
-                    hitText: 'Address Line 1'),
-                textFieldHeight,
-                TextFormFieldWidget(
-                    validator: Rtd_Validators.noneEmptyValidator,
-                    controller: value.indianAddressLine2Controller,
-                    hitText: 'Address Line 2'),
-                textFieldHeight,
-
-                Container(
-                  margin: const EdgeInsets.only(left: 5, right: 5),
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: textFormBase),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<AllStatesModel>(
-                        isExpanded: true,
-                        hint: Center(
-                          child: Text(
-                            "Select States",
-                            style: TextStyle(
-                                color: Colors.black.withOpacity(.55),
-                                fontSize: 17,
-                                letterSpacing: .1,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                        icon: const Icon(Icons.keyboard_arrow_down_outlined),
-                        value: value.selectedItem,
-                        items: value.dropdownMenuItems,
-                        onChanged: (value) {
-                          setState(() {
-                            auth.selectedItem = value;
-                            auth.statesName = auth.selectedItem!.stateName;
-                          });
-                        }),
-                  ),
-                ),
-
-                //////////////////////////End first Section?///////////////////////////////////////////////////////////
-
-                textFieldHeight,
-                TextFormFieldWidget(
-                    validator: Rtd_Validators.pincodeValidator,
-                    controller: value.pinController1,
-                    textInputType: TextInputType.number,
-                    hitText: 'pin'),
-
-                // textFieldHeight,
-                // Center(
-                //   child: Text(
-                //     !image1 ? 'No Documents attached' : 'Document is selected',
-                //     style: TextStyle(
-                //         fontWeight: FontWeight.bold,
-                //         color: !image1 ? Colors.red : Colors.green),
-                //   ),
-                // ),
-                // textFieldHeight,
-                // ButtonWidget(
-                //     press: () {
-                //       showModalBottomSheet(
-                //         context: context,
-                //         builder: (context) => Imagepiker(
-                //           onImageSelected: _updateSelectedImage,
-                //         ),
-                //       );
-                //     },
-                //     buttonBackgroundColor: whiteColor,
-                //     buttonForegroundColor: Colors.blue,
-                //     buttonText: 'Attach Address Proof',
-                //     borderAvalable: true),
-                textFieldHeight,
-
-                dividerAndHeadingWidget(
-                    heading: 'Residence Address in KSA', width: 80.w),
-                textFieldHeight,
-                TextFormFieldWidget(
-                    validator: Rtd_Validators.noneEmptyValidator,
-                    controller: value.resAddressLine1Controller,
-                    hitText: 'Address Line 1'),
-                textFieldHeight,
-                TextFormFieldWidget(
-                    validator: Rtd_Validators.noneEmptyValidator,
-                    controller: value.resAddressLine2Controller,
-                    hitText: 'Address Line 2'),
-
-                textFieldHeight,
-                TextFormFieldWidget(
-                    validator: Rtd_Validators.pincodeValidator,
-                    controller: value.pinController2,
-                    textInputType: TextInputType.number,
-                    hitText: 'pin'),
-                textFieldHeight,
-
-                Container(
-                  margin: const EdgeInsets.only(left: 5, right: 5),
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: textFormBase),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<AllStatesModel>(
-                        isExpanded: true,
-                        hint: Center(
-                          child: Text(
-                            "Select States",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.black.withOpacity(.55),
-                                fontSize: 17,
-                                letterSpacing: .1,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                        icon: const Icon(Icons.keyboard_arrow_down_outlined),
-                        value: value.stateKsa,
-                        items: value.dropdownKsaItems,
-                        onChanged: (value) {
-                          setState(() {
-                            auth.stateKsa = value;
-                            auth.statesName = auth.stateKsa!.stateName;
-                          });
-                        }),
-                  ),
-                ),
-                textFieldHeight,
-                TextFormFieldWidget(
-                    validator: Rtd_Validators.noneEmptyValidator,
-                    controller: value.vehicleNumContoller,
-                    hitText: 'Vehicle Number'),
-                textFieldHeight,
-
-                Container(
-                  margin: const EdgeInsets.only(left: 5, right: 5),
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: textFormBase),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<VehicleData>(
-                        isExpanded: true,
-                        hint: Center(
-                          child: Text(
-                            "Select Your Vehicle Model ",
-                            style: TextStyle(
-                                color: Colors.black.withOpacity(.55),
-                                fontSize: 17,
-                                letterSpacing: .1,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                        icon: const Icon(Icons.keyboard_arrow_down_outlined),
-                        value: value.vehicleType,
-                        items: value.dropdownMenuItemsVehicleModel,
-                        onChanged: (value) {
-                          setState(() {
-                            auth.vehicleType = value;
-
-                            auth.vehicleTypeName = value!.name.toString();
-
-                            //   newStateList.clear();
-                            //  newStateList=[];
-                            //_dropdownMenuItemsStates.clear();
-                          });
-                        }),
-                  ),
-                ),
-
-                // textFieldHeight,
-                // Center(
-                //   child: Text(
-                //     !image2 ? 'No Documents attached' : 'Document is selected',
-                //     style: TextStyle(
-                //         fontWeight: FontWeight.bold,
-                //         color: !image2 ? Colors.red : Colors.green),
-                //   ),
-                // ),
-                // textFieldHeight,
-                // Container(
-                //   decoration: BoxDecoration(
-                //       border: Border.all(color: Colors.blue),
-                //       borderRadius: BorderRadius.circular(20)),
-                //   child: ButtonWidget(
-                //       press: () {
-                //         showModalBottomSheet(
-                //           context: context,
-                //           builder: (context) => Imagepiker(
-                //             onImageSelected: _updateSelectedImage1,
-                //           ),
-                //         );
-                //       },
-                //       buttonBackgroundColor: whiteColor,
-                //       buttonForegroundColor: Colors.blue,
-                //       buttonText: 'Attach Address Proof',
-                //       borderAvalable: false),
-                // ),
-
-                textFieldHeight,
-                const RadioButtonWidget(),
-                textFieldHeight,
-
-                value.isSubmitted != true
-                    ? ButtonWidget(
-                        buttonBackgroundColor: buttenBlue,
-                        buttonForegroundColor: whiteColor,
-                        buttonText: 'Submit',
-                        borderAvalable: false,
-                        press: () {
-                          value.isSubmitted = !value.isSubmitted;
-
-                          // if (auth.isSelected.value) {
-                          //   if (_formKey.currentState!.validate()) {
-                          //     value.onRegister(
-                          //         _selectedImage!, _selectedImage1!);
-                          //   }
-                          // } else {
-                          //   showToast('Please Agree the Terms and Conditions');
-                          // }
-                          // log("first image ${_selectedImage!.path.toString()}");
-                          // log("Second image ${_selectedImage1!.path.toString()}");
-
-                          // Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          //   builder: (context) => const NavigationBarpage(),
-                          // ));
-                        })
-                    : const Text('Registration step 2'),
-                // textFieldHeight,
-                // textFieldHeight,
-                textFieldHeight,
-
-                Visibility(
-                  visible: value.isSubmitted,
-                  child: Column(
-                    children: [
-                      ButtonWidget(
-                          press: () {
-                            showModalBottomSheet(
-                              context: context,
-                              builder: (context) => Imagepiker(
-                                onImageSelected: _updateSelectedImage,
-                              ),
-                            );
-                          },
-                          buttonBackgroundColor: whiteColor,
-                          buttonForegroundColor: Colors.blue,
-                          buttonText: 'Attach Address Proof',
-                          borderAvalable: true),
-                      textFieldHeight,
-                      Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.blue),
-                            borderRadius: BorderRadius.circular(20)),
-                        child: ButtonWidget(
-                            press: () {
-                              showModalBottomSheet(
-                                context: context,
-                                builder: (context) => Imagepiker(
-                                  onImageSelected: _updateSelectedImage1,
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  // Based on passwordVisible state choose the icon
+                                  value.passwordVisible
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: Theme.of(context).primaryColorDark,
                                 ),
-                              );
-                            },
-                            buttonBackgroundColor: whiteColor,
-                            buttonForegroundColor: Colors.blue,
-                            buttonText: 'Attach Address Proof',
-                            borderAvalable: false),
+                                onPressed: () {
+                                  // Update the state i.e. toogle the state of passwordVisible variable
+                                  value.visibityPasswordChange();
+                                },
+                              ),
+                              hintText: " Password",
+                              fillColor: textFormBase,
+                              filled: true,
+                              focusedBorder: OutlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: textFormBase),
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              focusedErrorBorder: UnderlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: textFormBase),
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: textFormBase),
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              errorBorder: UnderlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: textFormBase),
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              hintStyle: const TextStyle(
+                                  color: Color.fromARGB(255, 112, 111, 111),
+                                  fontWeight: FontWeight.bold)),
+                          textAlign: TextAlign
+                              .center, // Centers the text inside the field
+                        ),
                       ),
-                    ],
-                  ),
+                    ),
+
+                    textFieldHeight,
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        focusNode: FocusNode(),
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (valuee) {
+                          if (valuee!.isEmpty) {
+                            return "Please Re-Enter New Password";
+                          } else if (valuee.length < 5) {
+                            return "Password must be atleast 5 characters long";
+                          } else if (valuee !=
+                              value.passwordRegController.text) {
+                            return "Password must be same as above";
+                          } else {
+                            return null;
+                          }
+                        },
+                        controller: value.confirmpasswordRegController,
+                        obscureText: value.confirmPasswordVisible,
+                        decoration: InputDecoration(
+                            border: InputBorder.none, // Removes the underline
+
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                // Based on passwordVisible state choose the icon
+                                value.confirmPasswordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: Theme.of(context).primaryColorDark,
+                              ),
+                              onPressed: () {
+                                // Update the state i.e. toogle the state of passwordVisible variable
+                                value.visibityConfirmPasswordChange();
+                              },
+                            ),
+                            hintText: "Confirm Password",
+                            fillColor: textFormBase,
+                            filled: true,
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: textFormBase),
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            focusedErrorBorder: UnderlineInputBorder(
+                              borderSide: const BorderSide(color: textFormBase),
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: const BorderSide(color: textFormBase),
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            errorBorder: UnderlineInputBorder(
+                              borderSide: const BorderSide(color: textFormBase),
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            hintStyle: const TextStyle(
+                                color: Color.fromARGB(255, 112, 111, 111),
+                                fontWeight: FontWeight.bold)),
+                        textAlign: TextAlign
+                            .center, // Centers the text inside the field
+                      ),
+                    ),
+                    textFieldHeight,
+                    TextFormFieldWidget(
+                        validator: Rtd_Validators.mobileNumberValidator,
+                        controller: value.indianMobNumContoller,
+                        textInputType: TextInputType.phone,
+                        hitText: 'Indian Mobile Number'),
+                    textFieldHeight,
+                    TextFormFieldWidget(
+                        validator: Rtd_Validators.mobileNumberValidator,
+                        controller: value.ksaMobileNumRegController,
+                        textInputType: TextInputType.phone,
+                        hitText: 'KSA Mobile Number'),
+
+                    textFieldHeight,
+
+                    Container(
+                      margin: const EdgeInsets.only(left: 5, right: 5),
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: textFormBase),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<BloodGroup>(
+                            isExpanded: true,
+                            alignment: AlignmentDirectional.centerEnd,
+                            hint: Center(
+                              child: Text(
+                                "Select Your blood group",
+                                style: TextStyle(
+                                    color: Colors.black.withOpacity(.55),
+                                    fontSize: 17,
+                                    letterSpacing: .1,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                            icon:
+                                const Icon(Icons.keyboard_arrow_down_outlined),
+                            value: value.bloodGroup,
+                            items: value.dropdownMenuItemsBloodgroup,
+                            onChanged: (value) {
+                              setState(() {
+                                auth.bloodGroup = value;
+
+                                auth.bloodgroupname =
+                                    value!.groupName.toString();
+
+                                //   newStateList.clear();
+                                //  newStateList=[];
+                                //_dropdownMenuItemsStates.clear();
+                              });
+                            }),
+                      ),
+                    ),
+
+                    textFieldHeight,
+
+                    //////////////////////////End of Fourth Section?///////////////////////////////////////////////////////////
+                    textFieldHeight,
+                    dividerAndHeadingWidget(
+                        heading: 'Indian Address', width: 140.w),
+                    textFieldHeight,
+                    TextFormFieldWidget(
+                        validator: Rtd_Validators.noneEmptyValidator,
+                        controller: value.indianAddressLine1Controller,
+                        hitText: 'Address Line 1'),
+                    textFieldHeight,
+                    TextFormFieldWidget(
+                        validator: Rtd_Validators.noneEmptyValidator,
+                        controller: value.indianAddressLine2Controller,
+                        hitText: 'Address Line 2'),
+                    textFieldHeight,
+
+                    Container(
+                      margin: const EdgeInsets.only(left: 5, right: 5),
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: textFormBase),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<AllStatesModel>(
+                            isExpanded: true,
+                            hint: Center(
+                              child: Text(
+                                "Select States",
+                                style: TextStyle(
+                                    color: Colors.black.withOpacity(.55),
+                                    fontSize: 17,
+                                    letterSpacing: .1,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                            icon:
+                                const Icon(Icons.keyboard_arrow_down_outlined),
+                            value: value.selectedItem,
+                            items: value.dropdownMenuItems,
+                            onChanged: (value) {
+                              setState(() {
+                                auth.selectedItem = value;
+                                auth.statesName = auth.selectedItem!.stateName;
+                              });
+                            }),
+                      ),
+                    ),
+
+                    //////////////////////////End first Section?///////////////////////////////////////////////////////////
+
+                    textFieldHeight,
+                    TextFormFieldWidget(
+                        validator: Rtd_Validators.pincodeValidator,
+                        controller: value.pinController1,
+                        textInputType: TextInputType.number,
+                        hitText: 'pin'),
+
+                    textFieldHeight,
+
+                    dividerAndHeadingWidget(
+                        heading: 'Residence Address in KSA', width: 80.w),
+                    textFieldHeight,
+                    TextFormFieldWidget(
+                        validator: Rtd_Validators.noneEmptyValidator,
+                        controller: value.resAddressLine1Controller,
+                        hitText: 'Address Line 1'),
+                    textFieldHeight,
+                    TextFormFieldWidget(
+                        validator: Rtd_Validators.noneEmptyValidator,
+                        controller: value.resAddressLine2Controller,
+                        hitText: 'Address Line 2'),
+
+                    textFieldHeight,
+                    TextFormFieldWidget(
+                        validator: Rtd_Validators.pincodeValidator,
+                        controller: value.pinController2,
+                        textInputType: TextInputType.number,
+                        hitText: 'pin'),
+                    textFieldHeight,
+
+                    Container(
+                      margin: const EdgeInsets.only(left: 5, right: 5),
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: textFormBase),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<AllStatesModel>(
+                            isExpanded: true,
+                            hint: Center(
+                              child: Text(
+                                "Select States",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.black.withOpacity(.55),
+                                    fontSize: 17,
+                                    letterSpacing: .1,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                            icon:
+                                const Icon(Icons.keyboard_arrow_down_outlined),
+                            value: value.stateKsa,
+                            items: value.dropdownKsaItems,
+                            onChanged: (value) {
+                              setState(() {
+                                auth.stateKsa = value;
+                                auth.statesName = auth.stateKsa!.stateName;
+                              });
+                            }),
+                      ),
+                    ),
+                    textFieldHeight,
+                    TextFormFieldWidget(
+                        validator: Rtd_Validators.noneEmptyValidator,
+                        controller: value.vehicleNumContoller,
+                        hitText: 'Vehicle Number'),
+                    textFieldHeight,
+
+                    Container(
+                      margin: const EdgeInsets.only(left: 5, right: 5),
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: textFormBase),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<VehicleData>(
+                            isExpanded: true,
+                            hint: Center(
+                              child: Text(
+                                "Select Your Vehicle Model ",
+                                style: TextStyle(
+                                    color: Colors.black.withOpacity(.55),
+                                    fontSize: 17,
+                                    letterSpacing: .1,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                            icon:
+                                const Icon(Icons.keyboard_arrow_down_outlined),
+                            value: value.vehicleType,
+                            items: value.dropdownMenuItemsVehicleModel,
+                            onChanged: (value) {
+                              setState(() {
+                                auth.vehicleType = value;
+
+                                auth.vehicleTypeName = value!.name.toString();
+
+                                //   newStateList.clear();
+                                //  newStateList=[];
+                                //_dropdownMenuItemsStates.clear();
+                              });
+                            }),
+                      ),
+                    ),
+
+                    textFieldHeight,
+                    const RadioButtonWidget(),
+                    textFieldHeight,
+                  ],
                 ),
-              ],
-            ),
+              ),
+              value.isSubmitted != true
+                  ? ButtonWidget(
+                      buttonBackgroundColor: buttenBlue,
+                      buttonForegroundColor: whiteColor,
+                      buttonText: 'Submit',
+                      borderAvalable: false,
+                      press: () {
+                        if (auth.isSelected.value) {
+                          if (_formKey.currentState!.validate()) {
+                            value.onRegister();
+                          }
+                        } else {
+                          showToast('Please Agree the Terms and Conditions');
+                        }
+                      })
+                  : registerStepContainer('2'),
+              // textFieldHeight,
+              // textFieldHeight,
+
+              Visibility(
+                visible: value.isSubmitted,
+                child: Column(
+                  children: [
+                    textFieldHeight,
+                    Center(
+                      child: Text(
+                        !value.indianDocSubmitted
+                            ? 'No Documents attached'
+                            : 'Document is selected',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: !value.indianDocSubmitted
+                                ? Colors.red
+                                : Colors.green),
+                      ),
+                    ),
+                    textFieldHeight,
+                    ButtonWidget(
+                        press: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) => Imagepiker(
+                              onImageSelected: _updateSelectedImage,
+                              press: () {
+                                Get.back();
+
+                                value.uploadIndianDoc(_selectedImage1!.path);
+                              },
+                            ),
+                          );
+                        },
+                        buttonBackgroundColor: whiteColor,
+                        buttonForegroundColor: Colors.blue,
+                        buttonText: 'Attach Indian Proof',
+                        borderAvalable: true),
+                    textFieldHeight,
+                    Center(
+                      child: Text(
+                        !value.ksaDocSubmitted!
+                            ? 'No Documents attached'
+                            : 'Document is selected',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: !value.ksaDocSubmitted!
+                                ? Colors.red
+                                : Colors.green),
+                      ),
+                    ),
+                    textFieldHeight,
+                    ButtonWidget(
+                        press: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) => Imagepiker(
+                                onImageSelected: _updateSelectedImage1,
+                                press: () {
+                                  Get.back();
+                                  value.uploadKsaDoc(_selectedImage2!.path);
+                                }),
+                          );
+                        },
+                        buttonBackgroundColor: whiteColor,
+                        buttonForegroundColor: Colors.blue,
+                        buttonText: 'Attach Ksa Proof',
+                        borderAvalable: true),
+                  ],
+                ),
+              ),
+            ],
           )),
+    );
+  }
+
+  Row registerStepContainer(String stepCount) {
+    return Row(
+      children: [
+        const Text(
+          'Registration Step',
+          style: TextStyle(color: ThemeProvider.blackColor),
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        Container(
+          height: 20,
+          width: 20,
+          decoration: const BoxDecoration(
+              shape: BoxShape.circle, color: ThemeProvider.blackColor),
+          child: Center(
+              child: Text(
+            stepCount,
+            style: const TextStyle(
+                color: Colors.white, fontWeight: FontWeight.bold),
+          )),
+        ),
+      ],
     );
   }
 

@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 
 import '../backend/parser/splash_screen_parser.dart';
@@ -8,8 +11,12 @@ class SplashScreenController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    FirebaseMessaging.instance.getToken().then((value) {
+      log('fcm token from splash$value');
+      parser.saveDeviceToken(value.toString());
+    });
+
     splashDelay();
-    // onLogin();
   }
 
   Future splashDelay() async {
@@ -17,8 +24,6 @@ class SplashScreenController extends GetxController {
   }
 
   void onLogin() {
-    // Get.delete<LoginController>(force: true);
     parser.getPage();
-    // final token = Get.offNamed(AppRouter.getInitialRoute());
   }
 }

@@ -67,6 +67,7 @@ import 'package:get/get.dart';
 import 'package:rtd_project/backend/api/api.dart';
 import 'package:rtd_project/backend/parser/authentication/login_parser.dart';
 import 'package:rtd_project/backend/parser/authentication/sighnup_parser.dart';
+import 'package:rtd_project/backend/parser/book/service_member_parser.dart';
 import 'package:rtd_project/backend/parser/elected_member_parser.dart';
 import 'package:rtd_project/backend/parser/home_parser.dart';
 import 'package:rtd_project/backend/parser/loan/loan_edit_parser.dart';
@@ -76,7 +77,7 @@ import 'package:rtd_project/core/constraints/api_urls.dart';
 import 'package:rtd_project/helper/shared_pref.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../backend/parser/books_parser.dart';
+import '../backend/parser/book/books_parser.dart';
 import '../backend/parser/bottom_navigation_parser.dart';
 import '../backend/parser/loan/loan_screen_parser.dart';
 import '../backend/parser/profile/edit_profile_parser.dart';
@@ -152,10 +153,10 @@ class MainBinding extends Bindings {
             apiService: Get.find(), sharedPreferencesManager: Get.find()),
         fenix: true);
 
-    //   Get.lazyPut(
-    //       () => ChatParser(
-    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-    //       fenix: true);
+    Get.lazyPut(
+        () => ServiceMemberDetailsParser(
+            apiService: Get.find(), sharedPreferencesManager: Get.find()),
+        fenix: true);
 
     //   Get.lazyPut(
     //       () => HistoryParser(

@@ -279,13 +279,13 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                     ),
                                     icon: const Icon(
                                         Icons.keyboard_arrow_down_outlined),
-                                    value: value.stateKsa,
-                                    items: value.dropdownMenuItems,
+                                    value: value.selectedKsaItem,
+                                    items: value.dropdownKsaItems,
                                     onChanged: (valuee) {
                                       setState(() {
-                                        value.stateKsa = valuee;
+                                        value.selectedKsaItem = valuee;
                                         value.statesName =
-                                            value.stateKsa!.stateName;
+                                            value.selectedKsaItem!.stateName;
                                       });
                                     },
                                   ),
@@ -511,6 +511,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 onImageSelected: select == true
                     ? _updateSelectedImage1
                     : _updateSelectedImage2,
+                press: () => Get.back(),
               ),
             ),
             icon: const Icon(Icons.edit_outlined),
@@ -552,8 +553,9 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                     onPressed: () {
                       showModalBottomSheet(
                         context: context,
-                        builder: (context) =>
-                            Imagepiker(onImageSelected: _updateProfileImage),
+                        builder: (context) => Imagepiker(
+                            onImageSelected: _updateProfileImage,
+                            press: () => Get.back()),
                       );
                     },
                     icon: const Icon(
@@ -574,18 +576,16 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     });
   }
 
-  void _updateSelectedImage2(XFile? newImage) {
+  void _updateSelectedImage1(XFile? newImage) {
     setState(() {
-      _docProf2 = newImage;
+      _docProf1 = newImage;
       // image1 = true;
     });
   }
 
-  void _updateSelectedImage1(XFile? newImage) {
-    Get.find<EditProfileController>().uploadImage(newImage!.path);
+  void _updateSelectedImage2(XFile? newImage) {
     setState(() {
-      _docProf1 = newImage;
-
+      _docProf2 = newImage;
       // image1 = true;
     });
   }

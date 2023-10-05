@@ -27,7 +27,8 @@ class ButtonWidget extends StatelessWidget {
         child: ElevatedButton(
             style: ButtonStyle(
                 side: borderAvalable
-                    ? MaterialStatePropertyAll(BorderSide(color: buttenBlue))
+                    ? const MaterialStatePropertyAll(
+                        BorderSide(color: buttenBlue))
                     : null,
                 foregroundColor:
                     MaterialStatePropertyAll(buttonForegroundColor),

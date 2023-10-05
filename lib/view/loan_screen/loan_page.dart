@@ -11,7 +11,6 @@ import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
 import 'package:rtd_project/core/common_widget/textformfield_widget.dart';
 import 'package:rtd_project/util/theme.dart';
-import 'package:rtd_project/util/toast.dart';
 import 'package:rtd_project/view/loan_screen/widgets/cancel_popup.dart';
 
 import '../../backend/model/loan/loan_type_model.dart';
@@ -41,6 +40,7 @@ class _LoanPageState extends State<LoanPage> {
                 length: 2,
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     wallTextWidget(context),
                     SizedBox(
@@ -74,7 +74,7 @@ class _LoanPageState extends State<LoanPage> {
   Widget tabBarView(BuildContext context, LoanScreenController value) {
     return value.loading == true
         ? Container(
-            height: 465.h,
+            height: 485.h,
             // width: 100,
             decoration: const BoxDecoration(
               color: whiteColor,
@@ -91,7 +91,7 @@ class _LoanPageState extends State<LoanPage> {
             ),
           )
         : Container(
-            height: 462.h,
+            height: 482.h,
             //hallo
             decoration: const BoxDecoration(
               color: whiteColor,
@@ -596,6 +596,7 @@ class _LoanPageState extends State<LoanPage> {
                   context: context,
                   builder: (context) => Imagepiker(
                     onImageSelected: _updateSelectedImage,
+                    press: () => Get.back(),
                   ),
                 );
               }),
@@ -608,21 +609,14 @@ class _LoanPageState extends State<LoanPage> {
             buttonText: 'submit',
             borderAvalable: false,
             press: () {
-              if (value.loanAmountController.text.isEmpty ||
-                  value.loanAmountController.text == '') {
-                showToast('Enter Amount');
-                return;
-              }
-              if (value.purpose == null) {
-                showToast('Select Loan Type and Purpose');
-                return;
-              }
-              if (_selectedImage == null) {
-                showToast('Select Document');
-                return;
-              }
-              value.upload(_selectedImage!, value.loan!.id, value.loan!.id,
-                  value.addedSurties);
+              // if (value.loanAmountController.text.isEmpty ||
+              //     value.loanAmountController.text == '') {
+              //   showToast('Enter Amount');
+              //   return;
+              // }
+
+              value.upload(_selectedImage ?? null, value.loan!.id,
+                  value.loan!.id, value.addedSurties);
               value.getLoanRequestData();
               _selectedImage = null;
             },
@@ -671,22 +665,10 @@ class _LoanPageState extends State<LoanPage> {
   Container wallTextWidget(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 10.h, right: 10.w),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox(width: 70.w),
-          Text(
-            'Loan Request',
-            style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
-          ),
-          IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.notifications_none,
-                color: whiteColor,
-              ))
-        ],
+      child: Text(
+        'Loan Request',
+        style: Theme.of(context).textTheme.displaySmall!.copyWith(
+            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
       ),
     );
   }

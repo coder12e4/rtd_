@@ -43,7 +43,7 @@ class ProfilePage extends StatelessWidget {
                           ),
                         )
                       : Container(
-                          height: 1050.h,
+                          height: 1090.h,
                           decoration: const BoxDecoration(
                               color: whiteColor,
                               borderRadius: BorderRadiusDirectional.only(
@@ -94,35 +94,32 @@ class ProfilePage extends StatelessWidget {
                               kSizedBoxH,
                               dividerWidget(),
                               kSizedBoxH,
-                              detailsText('Saudi Arabia Address',
+                              detailsText('Ksa Address',
                                   '${value.userData!.data.ksaAddress1}\n${value.userData!.data.ksaAddress2}'),
                               dividerWidget(),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 45.0.w, right: 8.0.w),
-                                    child: const Text(
-                                      'Documents',
-                                      style: TextStyle(
-                                          color:
-                                              Color.fromARGB(255, 97, 95, 95),
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
+                                  kSizedBoxH,
+                                  headingText('Indian Address Proof'),
                                   const SizedBox(
                                     height: 4,
                                   ),
                                   documentContainer(
                                       value.userData!.data.documentProofIndia),
+                                  // const SizedBox(
+                                  //   height: 15,
+                                  // ),
+                                  kSizedBoxH,
+                                  dividerWidget(),
+                                  kSizedBoxH,
+                                  headingText('Ksa Address Proof'),
                                   const SizedBox(
-                                    height: 15,
+                                    height: 4,
                                   ),
                                   documentContainer(
                                       value.userData!.data.documentProofKsa),
                                   kSizedBoxH,
-                                  dividerWidget(),
                                 ],
                               ),
                             ],
@@ -133,6 +130,18 @@ class ProfilePage extends StatelessWidget {
             },
           ),
         ),
+      ),
+    );
+  }
+
+  Padding headingText(String heading) {
+    return Padding(
+      padding: EdgeInsets.only(left: 45.w),
+      child: Text(
+        heading,
+        style: const TextStyle(
+            color: Color.fromARGB(255, 97, 95, 95),
+            fontWeight: FontWeight.bold),
       ),
     );
   }
