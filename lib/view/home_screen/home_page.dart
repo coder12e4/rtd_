@@ -20,10 +20,10 @@ class NavigationBarpage extends StatefulWidget {
 
 class _NavigationBarpageState extends State<NavigationBarpage> {
   final List<Widget> _tablist = [
-    HomePage(),
+    const HomePage(),
     const WallPage(),
     const LoanPage(),
-    BookPage(),
+    const BookPage(),
     const ProfilePage(),
   ];
   @override
@@ -45,8 +45,9 @@ class _NavigationBarpageState extends State<NavigationBarpage> {
               ],
             ),
             bottomNavigationBar: Padding(
-              padding: const EdgeInsets.all(8).r,
+              padding: const EdgeInsets.all(7).r,
               child: ClipRRect(
+                clipBehavior: Clip.antiAliasWithSaveLayer,
                 borderRadius: const BorderRadius.all(Radius.circular(30)),
                 child: BottomNavigationBar(
                     selectedItemColor: whiteColor,

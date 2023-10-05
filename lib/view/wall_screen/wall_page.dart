@@ -18,6 +18,7 @@ class WallPage extends StatelessWidget {
             body: DefaultTabController(
               length: 2,
               child: SingleChildScrollView(
+                physics: NeverScrollableScrollPhysics(),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
@@ -35,8 +36,10 @@ class WallPage extends StatelessWidget {
 
   Container tabBarView(BuildContext context) {
     return Container(
-      height: 800.h,
+      // margin: const EdgeInsets.only(bottom: 10),
+      height: 540.h,
       //hallo
+      padding: EdgeInsets.only(bottom: 6.h),
       decoration: const BoxDecoration(
         color: whiteColor,
         borderRadius: BorderRadiusDirectional.only(
@@ -58,7 +61,7 @@ class WallPage extends StatelessWidget {
 
   ListView votesView(WallScreenController controller) {
     return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       itemCount: controller.votesData.length,
       itemBuilder: (context, index) {
         return Column(

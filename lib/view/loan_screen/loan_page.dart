@@ -154,28 +154,34 @@ class _LoanPageState extends State<LoanPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   loanStatusContainer(value, index),
-                  GestureDetector(
-                    onTap: () {
-                      Get.delete<LoanEditController>(force: true);
-                      Get.toNamed(AppRouter.getLoanEditRoute(),
-                          arguments: [value.loanData[index].id]);
-                    },
-                    child: Container(
-                      height: 40.h,
-                      width: 110.w,
-                      decoration: const BoxDecoration(
-                          color: Colors.grey,
-                          borderRadius: BorderRadius.all(Radius.circular(30))),
-                      child: const Center(
-                        child: Text(
-                          'Edit Request',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: whiteColor, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                  )
+                  value.loanData[index].status == 0
+                      ? GestureDetector(
+                          onTap: () {
+                            Get.delete<LoanEditController>(force: true);
+                            Get.toNamed(AppRouter.getLoanEditRoute(),
+                                arguments: [value.loanData[index].id]);
+                          },
+                          child: Container(
+                            height: 40.h,
+                            width: 110.w,
+                            decoration: const BoxDecoration(
+                                color: Colors.grey,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(30))),
+                            child: const Center(
+                              child: Text(
+                                'Edit Request',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: whiteColor,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        )
+                      : SizedBox(
+                          width: 50.w,
+                        )
                 ],
               ),
               const Divider(),
@@ -187,65 +193,65 @@ class _LoanPageState extends State<LoanPage> {
               SizedBox(
                 height: 8.h,
               ),
-
-              ButtonWidget(
-                  buttonBackgroundColor: value.loanData[index].status != 3
-                      ? whiteColor
-                      : Colors.grey,
-                  buttonForegroundColor: value.loanData[index].status != 3
-                      ? buttenBlue
-                      : whiteColor,
-                  buttonText: value.loanData[index].status != 3
-                      ? 'Cancel Request'
-                      : 'cancelled',
-                  borderAvalable:
-                      value.loanData[index].status == 0 ? true : false,
-                  controller: value,
-                  press: () {
-                    value.loanData[index].status != 3
-                        ? showModalBottomSheet(
-                            context: context,
-                            builder: (context) => CancelPopup(
-                              controller: value,
-                              index: index,
-                            ),
-                          )
-                        : null;
-                  })
-              // : Column(
-              //     crossAxisAlignment: CrossAxisAlignment.start,
-              //     children: [
-              //       const Text(
-              //         'Reasons for rejection:',
-              //         style: TextStyle(
-              //             color: Colors.black54,
-              //             fontWeight: FontWeight.w600),
-              //       ),
-              //       SizedBox(
-              //         height: 8.h,
-              //       ),
-              //       const Text(
-              //         'Here reasons for the rejection can be shown',
-              //         style: TextStyle(
-              //             color: Colors.black, fontWeight: FontWeight.w600),
-              //       ),
-              //       const Text(
-              //         ' \ . First reason for rejection',
-              //         style: TextStyle(
-              //             color: Colors.black, fontWeight: FontWeight.w600),
-              //       ),
-              //       const Text(
-              //         ' \. Second reason for rejection',
-              //         style: TextStyle(
-              //             color: Colors.black, fontWeight: FontWeight.w600),
-              //       ),
-              //       const Text(
-              //         ' \. Third reason for rejection',
-              //         style: TextStyle(
-              //             color: Colors.black, fontWeight: FontWeight.w600),
-              //       )
-              //     ],
-              //   )
+              value.loanData[index].status != 2
+                  ? ButtonWidget(
+                      buttonBackgroundColor: value.loanData[index].status != 3
+                          ? whiteColor
+                          : Colors.grey,
+                      buttonForegroundColor: value.loanData[index].status != 3
+                          ? buttenBlue
+                          : whiteColor,
+                      buttonText: value.loanData[index].status != 3
+                          ? 'Cancel Request'
+                          : 'cancelled',
+                      borderAvalable:
+                          value.loanData[index].status == 0 ? true : false,
+                      controller: value,
+                      press: () {
+                        value.loanData[index].status != 3
+                            ? showModalBottomSheet(
+                                context: context,
+                                builder: (context) => CancelPopup(
+                                  controller: value,
+                                  index: index,
+                                ),
+                              )
+                            : null;
+                      })
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Reasons for rejection:',
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        SizedBox(
+                          height: 8.h,
+                        ),
+                        const Text(
+                          'Here reasons for the rejection can be shown',
+                          style: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.w600),
+                        ),
+                        const Text(
+                          ' \ . First reason for rejection',
+                          style: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.w600),
+                        ),
+                        const Text(
+                          ' \. Second reason for rejection',
+                          style: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.w600),
+                        ),
+                        const Text(
+                          ' \. Third reason for rejection',
+                          style: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.w600),
+                        )
+                      ],
+                    ),
             ],
           ),
         ),

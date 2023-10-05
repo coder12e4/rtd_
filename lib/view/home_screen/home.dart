@@ -77,61 +77,52 @@ class _HomePageState extends State<HomePage> {
                                             child: Stack(
                                               children: [
                                                 Positioned(
-                                                  child: Container(
-                                                    child:
-                                                        AnimatedCircularChart(
-                                                      holeRadius: 70.r,
-                                                      key: _chartKey,
-                                                      size: Size(350.w, 100.h),
-                                                      initialChartData: <CircularStackEntry>[
-                                                        CircularStackEntry(
-                                                          <CircularSegmentEntry>[
-                                                            CircularSegmentEntry(
-                                                              homeData
-                                                                  .totalCollectionAmount
-                                                                  .toDouble(),
-                                                              const Color
-                                                                  .fromARGB(255,
-                                                                  147, 8, 96),
-                                                              rankKey:
-                                                                  'remaining',
-                                                            ),
-                                                            CircularSegmentEntry(
-                                                              100 -
-                                                                  homeData
-                                                                      .totalAmountBalance
-                                                                      .toDouble(),
-                                                              const Color
-                                                                  .fromARGB(
-                                                                  255,
-                                                                  207,
-                                                                  200,
-                                                                  200),
-                                                              rankKey:
-                                                                  'completed',
-                                                            ),
-                                                          ],
-                                                          rankKey: 'progress',
-                                                        ),
-                                                      ],
-                                                      chartType:
-                                                          CircularChartType
-                                                              .Radial,
-                                                      percentageValues: true,
-                                                      // holeLabel: 'Total Collection',
-                                                      labelStyle:
-                                                          const TextStyle(
-                                                        color: baseColor,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 24.0,
+                                                  child: AnimatedCircularChart(
+                                                    holeRadius: 70.r,
+                                                    key: _chartKey,
+                                                    size: Size(350.w, 100.h),
+                                                    initialChartData: <CircularStackEntry>[
+                                                      CircularStackEntry(
+                                                        <CircularSegmentEntry>[
+                                                          CircularSegmentEntry(
+                                                            homeData
+                                                                .totalCollectionAmount
+                                                                .toDouble(),
+                                                            const Color
+                                                                .fromARGB(255,
+                                                                147, 8, 96),
+                                                            rankKey:
+                                                                'remaining',
+                                                          ),
+                                                          CircularSegmentEntry(
+                                                            100 -
+                                                                homeData
+                                                                    .totalAmountBalance
+                                                                    .toDouble(),
+                                                            const Color
+                                                                .fromARGB(255,
+                                                                207, 200, 200),
+                                                            rankKey:
+                                                                'completed',
+                                                          ),
+                                                        ],
+                                                        rankKey: 'progress',
                                                       ),
-                                                      edgeStyle:
-                                                          SegmentEdgeStyle
-                                                              .round,
-                                                      startAngle: BorderSide
-                                                          .strokeAlignOutside,
+                                                    ],
+                                                    chartType: CircularChartType
+                                                        .Radial,
+                                                    percentageValues: true,
+                                                    // holeLabel: 'Total Collection',
+                                                    labelStyle: const TextStyle(
+                                                      color: baseColor,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 24.0,
                                                     ),
+                                                    edgeStyle:
+                                                        SegmentEdgeStyle.round,
+                                                    startAngle: BorderSide
+                                                        .strokeAlignOutside,
                                                   ),
                                                 ),
                                                 Positioned(
@@ -345,15 +336,19 @@ class _HomePageState extends State<HomePage> {
             width: 90.w,
           ),
           IconButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
                   builder: (context) => const NotificationScreen(),
-                ));
-              },
-              icon: const Icon(
-                Icons.notifications_none,
-                color: whiteColor,
-              ))
+                ),
+              );
+            },
+            icon: const Icon(
+              Icons.notifications_none,
+              color: whiteColor,
+              size: 35,
+            ),
+          ),
         ],
       ),
     );

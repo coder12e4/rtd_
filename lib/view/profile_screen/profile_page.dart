@@ -7,8 +7,9 @@ import 'package:rtd_project/controller/profile/profile_edit_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/helper/router.dart';
-import 'package:rtd_project/util/alert_dialog.dart';
 import 'package:rtd_project/view/profile_screen/profile_loan_screen/profile_loan_screen.dart';
+
+import '../../util/alert_dialog.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -304,55 +305,38 @@ class ProfilePage extends StatelessWidget {
 
   Container appbar(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 10.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+      margin: EdgeInsets.only(top: 10.h, bottom: 10.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: 145.w,
-              ),
-              Text(
-                'Profile',
-                style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24),
-              ),
-              SizedBox(
-                width: 30.w,
-              ),
-              IconButton(
-                onPressed: () {},
-                icon: SvgPicture.asset(
-                  'assets/fonts/icons/three-dots-svgrepo-com (1).svg',
-                ),
-                color: whiteColor,
-              ),
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.notifications_none,
-                    color: whiteColor,
-                    size: 35,
-                  ))
-            ],
+          SizedBox(
+            width: 160.w,
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 38.0),
-            child: TextButton(
-              style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateColor.resolveWith((states) => whiteColor)),
-              onPressed: () => logOutDialog(),
-              child: const Text(
-                'Log Out',
-                style: TextStyle(color: baseColor),
-              ),
+          Text(
+            'Profile',
+            style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
+          ),
+          SizedBox(
+            width: 30.w,
+          ),
+          TextButton(
+            style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateColor.resolveWith((states) => whiteColor)),
+            onPressed: () => logOutDialog(),
+            child: const Text(
+              'Log Out',
+              style: TextStyle(color: baseColor),
             ),
-          )
+          ),
+          IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.notifications_none,
+                color: whiteColor,
+                size: 35,
+              ))
         ],
       ),
     );
