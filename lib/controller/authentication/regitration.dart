@@ -13,6 +13,7 @@ import 'package:rtd_project/backend/model/vehicle_type_model.dart';
 import 'package:rtd_project/backend/parser/authentication/sighnup_parser.dart';
 import 'package:rtd_project/core/constraints/api_urls.dart';
 import 'package:rtd_project/util/toast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../util/theme.dart';
 import '../../view/register_screen/widgets/register_success.dart';
@@ -123,9 +124,6 @@ class RegisterController extends GetxController implements GetxService {
 
   AllStatesModel? stateKsa;
   String? statesksa;
-
-  final ScrollController _scrollController = ScrollController();
-  ScrollController get scrollController => _scrollController;
 
   String? bloodgroupname;
   List<BloodGroup>? bloodgrouplist;
@@ -434,12 +432,12 @@ class RegisterController extends GetxController implements GetxService {
 
     if (registerToken != null) {
       isSubmitted = !isSubmitted;
-      double offset = 1500.0;
-      _scrollController.animateTo(
-        offset,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
+      //   double offset = 1500.0;
+      //   _scrollController.animateTo(
+      //     offset,
+      //     duration: const Duration(milliseconds: 500),
+      //     curve: Curves.easeInOut,
+      //   );
     }
     update();
   }
@@ -624,7 +622,11 @@ class RegisterController extends GetxController implements GetxService {
 
   Future<void> registerSuccess() async {
     if (indianDocSubmitted == true && ksaDocSubmitted == true) {
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 2));
+      final pref = await SharedPreferences.getInstance();
+      await pref.remove('indianDocSubmitted');
+      await pref.remove('ksaDocSubmitted');
+      await pref.remove('register_token');
       Get.bottomSheet(const RegisterComplited(text: 'Continue'),
           isDismissible: false);
     }

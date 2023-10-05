@@ -56,7 +56,7 @@ class RegisterDocPending extends StatelessWidget {
               },
               buttonBackgroundColor: buttenBlue,
               buttonForegroundColor: whiteColor,
-              buttonText: 'Complete',
+              buttonText: 'Attach',
               borderAvalable: true)
         ],
       ),

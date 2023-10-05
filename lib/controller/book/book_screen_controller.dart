@@ -21,6 +21,8 @@ class BookScreenController extends GetxController {
     super.onInit();
   }
 
+  TextEditingController memberSearchController = TextEditingController();
+  TextEditingController serviceSearchController = TextEditingController();
   AllStatesModel? selectedItem;
   ServiceData? selectedService;
   AllStatesModel? selectedState;
@@ -140,13 +142,13 @@ class BookScreenController extends GetxController {
     log(_allStates.toString());
   }
 
-  void searchServiceList() {
+  void searchServiceList(String? query) {
     if (selectedState?.id != null && selectedService?.id != null) {
-      getServiceMemberList();
+      getServiceMemberList(query);
     }
   }
 
-  Future<void> getServiceMemberList() async {
+  Future<void> getServiceMemberList(String? query) async {
     serviceLoading = true;
     update();
     log('selected state id ${selectedState!.id}');
@@ -156,7 +158,7 @@ class BookScreenController extends GetxController {
       var response = await parser.getServiceMemberList(
         stateId: selectedState!.id,
         serviceId: selectedService!.id,
-        query: '',
+        query: query ?? '',
       );
       if (response.statusCode == 200) {
         // Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);

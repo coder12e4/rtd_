@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rtd_project/backend/parser/authentication/login_parser.dart';
@@ -15,7 +17,13 @@ import '../../view/register_screen/widgets/register_success.dart';
 class LoginController extends GetxController implements GetxService {
   final LoginParser parser;
   LoginController({required this.parser});
+
   @override
+  void onInit() {
+    log("getting fcm token from shared pref ${parser.getFcmToken()}");
+    super.onInit();
+  }
+
   final mobileNumberController = TextEditingController();
   final passwordController = TextEditingController();
   RegisterController? registerController;

@@ -58,11 +58,12 @@ class FirebaseApi {
   }
 
   Future<void> initNotifications() async {
+    // final pref = await SharedPreferences.getInstance();
     await _firebasemessageing.requestPermission();
-    final fcmToken = await _firebasemessageing.getToken();
-    debugPrint("fcm token --  $fcmToken");
+    // final fcmToken = await _firebasemessageing.getToken();
+    // debugPrint("fcm token --  $fcmToken");
+    // await pref.setString('fcm_token', fcmToken!);
     initPushNotifications();
     initLocalNotifications();
-    // FirebaseMessaging.onBackgroundMessage(handleBackgroudMessage);
   }
 }

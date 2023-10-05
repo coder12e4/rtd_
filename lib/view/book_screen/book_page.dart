@@ -120,7 +120,7 @@ class _BookPageState extends State<BookPage> {
                           value.selectedState = valuee;
                           value.serviceStateName =
                               value.selectedState!.stateName;
-                          value.searchServiceList();
+                          value.searchServiceList('');
                         });
                       }),
                 ),
@@ -149,14 +149,22 @@ class _BookPageState extends State<BookPage> {
                         setState(() {
                           value.selectedService = valuee;
                           value.serviceName = value.selectedService!.title;
-                          value.searchServiceList();
+                          value.searchServiceList('');
                         });
                       }),
                 ),
               ),
             ],
           ),
-          kSizedBoxH20,
+          kSizedBoxH,
+          searchField(
+            value: value,
+            controller: value.serviceSearchController,
+            onChanged: (query) {
+              value.searchServiceList(query);
+            },
+          ),
+          kSizedBoxH,
           value.servicesMemberList?.data.length != 0
               ? ListView.separated(
                   shrinkWrap: true,
@@ -229,7 +237,13 @@ class _BookPageState extends State<BookPage> {
               ),
             ),
           ),
-          kSizedBoxH20,
+          kSizedBoxH,
+          searchField(
+            value: value,
+            controller: value.memberSearchController,
+            onChanged: (p0) {},
+          ),
+          kSizedBoxH,
           value.memberEmpty == true
               ? Text(
                   '${value.memberList.length} Members',
@@ -286,6 +300,25 @@ class _BookPageState extends State<BookPage> {
                   ),
                 ),
         ],
+      ),
+    );
+  }
+
+  SizedBox searchField({
+    BookScreenController? value,
+    TextEditingController? controller,
+    Function(String)? onChanged,
+  }) {
+    return SizedBox(
+      height: 40.h,
+      child: SearchBar(
+        controller: controller,
+        backgroundColor: const MaterialStatePropertyAll(textFormBase),
+        surfaceTintColor: const MaterialStatePropertyAll(Colors.transparent),
+        elevation: const MaterialStatePropertyAll(0),
+        trailing: const [Icon(Icons.search)],
+        hintText: 'Search',
+        onChanged: onChanged,
       ),
     );
   }

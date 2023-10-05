@@ -15,4 +15,8 @@ class SplashScreenParser {
       Get.offNamed(AppRouter.getInitialRoute());
     }
   }
+
+  void saveDeviceToken(String token) {
+    sharedPreferencesManager.putString('fcm_token', token);
+  }
 }

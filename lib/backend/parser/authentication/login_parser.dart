@@ -25,6 +25,10 @@ class LoginParser {
     sharedPreferencesManager.putString(key, token);
   }
 
+  String getFcmToken() {
+    return sharedPreferencesManager.getString('fcm_token') ?? 'NA';
+  }
+
   Future<void> saveInfo(UserData userData) async {
     final jsonData = userData.toJson();
     final data = jsonEncode(jsonData);
