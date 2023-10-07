@@ -44,7 +44,7 @@ class ProfilePage extends StatelessWidget {
                           ),
                         )
                       : Container(
-                          height: 1090.h,
+                          height: 1150.h,
                           decoration: const BoxDecoration(
                               color: whiteColor,
                               borderRadius: BorderRadiusDirectional.only(
@@ -147,34 +147,36 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Container documentContainer(documentProof) {
-    return Container(
-      margin: EdgeInsets.only(left: 36.w),
-      height: 130.h,
-      width: 280.w,
-      decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.contain,
-            image: NetworkImage(documentProof),
-          ),
-          color: const Color.fromARGB(255, 223, 220, 220),
-          borderRadius: BorderRadius.circular(20)),
-      // child: Image.network(
-      //   documentProof,
-      //   height: 130.h,
-      //   width: 280.w,
-      //   errorBuilder: (context, error, stackTrace) => Padding(
-      //     padding: const EdgeInsets.all(10.0).r,
-      //     child: Column(
-      //       mainAxisAlignment: MainAxisAlignment.center,
-      //       children: [
-      //         const Icon(Icons.error_outline),
-      //         kSizedBoxH,
-      //         Text(error.toString()),
-      //       ],
-      //     ),
-      //   ),
-      // ),
+  Align documentContainer(documentProof) {
+    return Align(
+      child: Container(
+        // margin: EdgeInsets.only(left: 36.w),
+        height: 130.h,
+        width: 280.w,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.contain,
+              image: NetworkImage(documentProof),
+            ),
+            color: const Color.fromARGB(255, 223, 220, 220),
+            borderRadius: BorderRadius.circular(20)),
+        // child: Image.network(
+        //   documentProof,
+        //   height: 130.h,
+        //   width: 280.w,
+        //   errorBuilder: (context, error, stackTrace) => Padding(
+        //     padding: const EdgeInsets.all(10.0).r,
+        //     child: Column(
+        //       mainAxisAlignment: MainAxisAlignment.center,
+        //       children: [
+        //         const Icon(Icons.error_outline),
+        //         kSizedBoxH,
+        //         Text(error.toString()),
+        //       ],
+        //     ),
+        //   ),
+        // ),
+      ),
     );
   }
 

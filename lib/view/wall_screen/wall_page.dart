@@ -37,7 +37,7 @@ class WallPage extends StatelessWidget {
   Container tabBarView(BuildContext context) {
     return Container(
       // margin: const EdgeInsets.only(bottom: 10),
-      height: 540.h,
+      height: 550.h,
       //hallo
       padding: EdgeInsets.only(bottom: 6.h),
       decoration: const BoxDecoration(

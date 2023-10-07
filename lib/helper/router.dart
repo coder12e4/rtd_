@@ -116,11 +116,13 @@ import 'package:rtd_project/view/splash_screen/splash_page.dart';
 
 import '../backend/binding/edit_profile_binding.dart';
 import '../backend/binding/loan_edit_binding.dart';
+import '../backend/binding/notification/notification_binding.dart';
 import '../backend/binding/profile_binding.dart';
 import '../view/book_screen/service_member_profile/service_member_profile.dart';
 import '../view/home_screen/home_page.dart';
 import '../view/loan_screen/loan_edit_screen/loan_edit_screen.dart';
 import '../view/loan_screen/loan_page.dart';
+import '../view/notification/notification.dart';
 
 class AppRouter {
   static const String initial = '/';
@@ -137,7 +139,7 @@ class AppRouter {
   static const String loanEditRoutes = '/loanEdit';
   static const String loanRoutes = '/loan';
   static const String serviceMemberProfileRoutes = '/serviceMemberProfile';
-  static const String addStylistRoutes = '/add_stylist';
+  static const String notificationPageRoutes = '/notificationPage';
   static const String stylistCategoriesRoutes = '/select_stylist';
   static const String profileCategoriesRoutes = '/profile_categories';
   static const String addTimingRoutes = '/timing';
@@ -187,7 +189,7 @@ class AppRouter {
   static String getLoanRoute() => loanRoutes;
   static String getServiceMemberProfileRoutesRoute() =>
       serviceMemberProfileRoutes;
-  static String getAddStylistRoute() => addStylistRoutes;
+  static String getNotificationPageRoute() => notificationPageRoutes;
   static String getStylistCategoriesRoute() => stylistCategoriesRoutes;
   static String getProfileCategoriesRoute() => profileCategoriesRoutes;
   static String getAddTimingRoute() => addTimingRoutes;
@@ -280,10 +282,11 @@ class AppRouter {
         name: serviceMemberProfileRoutes,
         page: () => const ServiceMemberProfile(),
         binding: ServiceMemberDetailsBinding()),
-    // GetPage(
-    //     name: addStylistRoutes,
-    //     page: () => const AddStylistScreen(),
-    //     binding: AddStylistBinding()),
+    GetPage(
+      name: notificationPageRoutes,
+      page: () => const NotificationScreen(),
+      binding: NotificationBinding(),
+    ),
     // GetPage(
     //     name: stylistCategoriesRoutes,
     //     page: () => const StylistCategoriesScreen(),

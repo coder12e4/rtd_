@@ -5,7 +5,9 @@ import 'package:get/get.dart';
 import 'package:rtd_project/backend/model/home_data_model.dart';
 import 'package:rtd_project/controller/home_screen_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
-import 'package:rtd_project/view/notification/notification.dart';
+
+import '../../controller/notification/notification_controller.dart';
+import '../../helper/router.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -40,111 +42,120 @@ class _HomePageState extends State<HomePage> {
                     }
 
                     final HomeData homeData = snapshot.data!;
-                    return Column(
-                      children: [
-                        homeTextWidget(context),
-                        Container(
-                          // height: 1050.h,
-                          //hallo
-                          height: MediaQuery.sizeOf(context).height,
-                          decoration: const BoxDecoration(
-                            color: whiteColor,
-                            borderRadius: BorderRadiusDirectional.only(
-                              topEnd: Radius.circular(40),
-                              topStart: Radius.circular(40),
+                    return GetBuilder<HomeController>(builder: (value) {
+                      return Column(
+                        children: [
+                          homeTextWidget(context, value),
+                          Container(
+                            // height: 1050.h,
+                            //hallo
+                            height: MediaQuery.sizeOf(context).height,
+                            decoration: const BoxDecoration(
+                              color: whiteColor,
+                              borderRadius: BorderRadiusDirectional.only(
+                                topEnd: Radius.circular(40),
+                                topStart: Radius.circular(40),
+                              ),
                             ),
-                          ),
-                          child: Column(
-                              // physics: const NeverScrollableScrollPhysics(),
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(18.0),
-                                  child: Container(
-                                    height: 450.h,
-                                    // width: 100.w,
-                                    decoration: BoxDecoration(
-                                        color: textFormBase,
-                                        borderRadius:
-                                            BorderRadius.circular(30)),
-                                    child: Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 68.h,
-                                                vertical: 68.w),
-                                            child: Stack(
-                                              children: [
-                                                Positioned(
-                                                  child: AnimatedCircularChart(
-                                                    holeRadius: 70.r,
-                                                    key: _chartKey,
-                                                    size: Size(350.w, 100.h),
-                                                    initialChartData: <CircularStackEntry>[
-                                                      CircularStackEntry(
-                                                        <CircularSegmentEntry>[
-                                                          CircularSegmentEntry(
-                                                            homeData
-                                                                .totalCollectionAmount
-                                                                .toDouble(),
-                                                            const Color
-                                                                .fromARGB(255,
-                                                                147, 8, 96),
-                                                            rankKey:
-                                                                'remaining',
-                                                          ),
-                                                          CircularSegmentEntry(
-                                                            100 -
-                                                                homeData
-                                                                    .totalAmountBalance
-                                                                    .toDouble(),
-                                                            const Color
-                                                                .fromARGB(255,
-                                                                207, 200, 200),
-                                                            rankKey:
-                                                                'completed',
-                                                          ),
-                                                        ],
-                                                        rankKey: 'progress',
+                            child: Column(
+                                // physics: const NeverScrollableScrollPhysics(),
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(18.0),
+                                    child: Container(
+                                      height: 450.h,
+                                      // width: 100.w,
+                                      decoration: BoxDecoration(
+                                          color: textFormBase,
+                                          borderRadius:
+                                              BorderRadius.circular(30)),
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 68.h,
+                                                  vertical: 68.w),
+                                              child: Stack(
+                                                children: [
+                                                  Positioned(
+                                                    child:
+                                                        AnimatedCircularChart(
+                                                      holeRadius: 70.r,
+                                                      key: _chartKey,
+                                                      size: Size(350.w, 100.h),
+                                                      initialChartData: <CircularStackEntry>[
+                                                        CircularStackEntry(
+                                                          <CircularSegmentEntry>[
+                                                            CircularSegmentEntry(
+                                                              homeData
+                                                                  .totalCollectionAmount
+                                                                  .toDouble(),
+                                                              const Color
+                                                                  .fromARGB(255,
+                                                                  147, 8, 96),
+                                                              rankKey:
+                                                                  'remaining',
+                                                            ),
+                                                            CircularSegmentEntry(
+                                                              100 -
+                                                                  homeData
+                                                                      .totalAmountBalance
+                                                                      .toDouble(),
+                                                              const Color
+                                                                  .fromARGB(
+                                                                  255,
+                                                                  207,
+                                                                  200,
+                                                                  200),
+                                                              rankKey:
+                                                                  'completed',
+                                                            ),
+                                                          ],
+                                                          rankKey: 'progress',
+                                                        ),
+                                                      ],
+                                                      chartType:
+                                                          CircularChartType
+                                                              .Radial,
+                                                      percentageValues: true,
+                                                      // holeLabel: 'Total Collection',
+                                                      labelStyle:
+                                                          const TextStyle(
+                                                        color: baseColor,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 24.0,
                                                       ),
-                                                    ],
-                                                    chartType: CircularChartType
-                                                        .Radial,
-                                                    percentageValues: true,
-                                                    // holeLabel: 'Total Collection',
-                                                    labelStyle: const TextStyle(
-                                                      color: baseColor,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 24.0,
+                                                      edgeStyle:
+                                                          SegmentEdgeStyle
+                                                              .round,
+                                                      startAngle: BorderSide
+                                                          .strokeAlignOutside,
                                                     ),
-                                                    edgeStyle:
-                                                        SegmentEdgeStyle.round,
-                                                    startAngle: BorderSide
-                                                        .strokeAlignOutside,
                                                   ),
-                                                ),
-                                                Positioned(
-                                                  top: 5.h,
-                                                  left: 25.w,
-                                                  child: graphCenterText(
-                                                      context, homeData),
-                                                ),
-                                              ],
+                                                  Positioned(
+                                                    top: 5.h,
+                                                    left: 25.w,
+                                                    child: graphCenterText(
+                                                        context, homeData),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        incomBreakdown(homeData),
-                                      ],
+                                          incomBreakdown(homeData),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                                activeLoan(homeData),
-                              ]),
-                        ),
-                      ],
-                    );
+                                  activeLoan(homeData),
+                                ]),
+                          ),
+                        ],
+                      );
+                    });
                   }),
             )));
   }
@@ -181,24 +192,21 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Container activeLoan(HomeData homeData) {
-    return Container(
-      // height: 200.h,
-      child: Padding(
-        padding: EdgeInsets.only(left: 18.w, right: 18.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 20.w, bottom: 10.h),
-              child: const Text(
-                'Active Loan',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
-              ),
+  Padding activeLoan(HomeData homeData) {
+    return Padding(
+      padding: EdgeInsets.only(left: 18.w, right: 18.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: 20.w, bottom: 10.h),
+            child: const Text(
+              'Active Loan',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
             ),
-            activeLoanData(homeData),
-          ],
-        ),
+          ),
+          activeLoanData(homeData),
+        ],
       ),
     );
   }
@@ -220,10 +228,9 @@ class _HomePageState extends State<HomePage> {
                   title: 'Loan Amount'),
               const Divider(),
               activeLoanRow(
-                  title: 'Start Date', date: '${data.activeLoan.startDate}'),
+                  title: 'Start Date', date: data.activeLoan.startDate),
               // activeLoanRow(title: 'End Date', date: '${data.activeLoan.}'),
-              activeLoanRow(
-                  title: 'Loan Type', date: '${data.activeLoan.loanType}')
+              activeLoanRow(title: 'Loan Type', date: data.activeLoan.loanType)
             ],
           ),
         ),
@@ -316,7 +323,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Container homeTextWidget(BuildContext context) {
+  Container homeTextWidget(BuildContext context, HomeController controller) {
     return Container(
       margin: EdgeInsets.only(
         top: 10.h,
@@ -335,18 +342,41 @@ class _HomePageState extends State<HomePage> {
           SizedBox(
             width: 90.w,
           ),
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const NotificationScreen(),
-                ),
-              );
+          GestureDetector(
+            onTap: () {
+              Get.delete<NotificationController>(force: true);
+              Get.toNamed(AppRouter.getNotificationPageRoute());
             },
-            icon: const Icon(
-              Icons.notifications_none,
-              color: whiteColor,
-              size: 35,
+            child: Stack(
+              alignment: AlignmentDirectional.center,
+              children: [
+                const IconButton(
+                  onPressed: null,
+                  icon: Icon(
+                    Icons.notifications_none,
+                    color: whiteColor,
+                    size: 35,
+                  ),
+                ),
+                contoller.controllerN?.notificationCount != 0
+                    ? Positioned(
+                        top: 3.h,
+                        right: 4.w,
+                        child: Container(
+                          height: 20.h,
+                          width: 20.w,
+                          decoration: const BoxDecoration(
+                              color: Colors.red, shape: BoxShape.circle),
+                          child: Center(
+                              child: Text(
+                            '${contoller.controllerN?.notificationCount ?? 0}',
+                            style: const TextStyle(
+                                color: whiteColor, fontWeight: FontWeight.bold),
+                          )),
+                        ),
+                      )
+                    : const SizedBox(),
+              ],
             ),
           ),
         ],
