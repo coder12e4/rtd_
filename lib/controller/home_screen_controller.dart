@@ -12,32 +12,32 @@ class HomeController extends GetxController implements GetxService {
   final HomeParser parser;
   HomeController({required this.parser});
   @override
-  void onInit() async {
+  void onInit() {
     InternetConnectionChecker();
     controllerN = Get.put(NotificationController(parser: Get.find()));
 
-    await getHomeDatas();
+    getHomeDatas();
     getNotificaion();
     super.onInit();
   }
 
+  bool? loading = true;
   NotificationController? controllerN;
   HomeData? homeData;
-  final _homeDataController = StreamController<HomeData>();
 
-  Stream<HomeData> get homeDataStream => _homeDataController.stream;
-
-  Future<HomeData> getHomeDatas() async {
+  Future<void> getHomeDatas() async {
     Response response = await parser.getHomeData();
+    try {
+      if (response.statusCode == 200) {
+        homeData = HomeData.fromJson(response.body);
 
-    if (response.statusCode == 200) {
-      HomeData data = HomeData.fromJson(response.body);
-      homeData = data;
-      log(data.activeLoan.toString());
-
-      _homeDataController.add(data); // Emit data to the stream
+        log(homeData!.activeLoan.toString());
+      }
+    } catch (e, stackTrace) {
+      log("home data catch error :$e,", error: e, stackTrace: stackTrace);
     }
-    return homeData!;
+    loading = false;
+    update();
   }
 
   Future<void> getNotificaion() async {

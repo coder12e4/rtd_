@@ -96,7 +96,8 @@ class MainBinding extends Bindings {
 
     Get.lazyPut(() => ApiService(appBaseUrl: Constants.baseUrl));
 
-    // // Parser LazyLoad
+    Get.lazyPut(() => SplashScreenParser(sharedPreferencesManager: Get.find()),
+        fenix: true);
 
     Get.lazyPut(
         () => LoginParser(
@@ -163,11 +164,6 @@ class MainBinding extends Bindings {
         () => NotificationParser(
             apiService: Get.find(), sharedPreferencesManager: Get.find()),
         fenix: true);
-
-    //   Get.lazyPut(
-    //       () => StylistParser(
-    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-    //       fenix: true);
 
     //   Get.lazyPut(
     //       () => AddStylistParser(
@@ -303,35 +299,5 @@ class MainBinding extends Bindings {
     //       () => IndividualCitiesParser(
     //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
     //       fenix: true);
-
-    Get.lazyPut(() => SplashScreenParser(sharedPreferencesManager: Get.find()),
-        fenix: true);
-
-    //   Get.lazyPut(
-    //       () => AnalyticsParser(
-    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-    //       fenix: true);
-
-    //   Get.lazyPut(
-    //       () => FirebaseParser(
-    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-    //       fenix: true);
-
-    //   Get.lazyPut(
-    //       () => ProductOrderDetailsParse(
-    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-    //       fenix: true);
-
-    //   Get.lazyPut(
-    //       () => RegisterCategoriesParser(
-    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-    //       fenix: true);
-
-    //   Get.lazyPut(() => TabsController(parser: Get.find()));
-    //   Get.lazyPut(() => AppointmentController(parser: Get.find()));
-    //   Get.lazyPut(() => HistoryController(parser: Get.find()));
-    //   Get.lazyPut(() => AnalyticsController(parser: Get.find()));
-    //   Get.lazyPut(() => CalendarsController(parser: Get.find()));
-    //   Get.lazyPut(() => ProfileController(parser: Get.find()));
   }
 }

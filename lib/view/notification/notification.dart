@@ -8,7 +8,8 @@ import 'package:rtd_project/controller/notification/notification_controller.dart
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/util/theme.dart';
-import 'package:rtd_project/view/notification/notificatoin_view/notification_view_screen.dart';
+
+import '../../helper/router.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -63,13 +64,15 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                           .notification?.data[index].type ==
                                       2) {
                                     return textContainer(
-                                      150.h,
+                                      110.h,
                                       controller
                                           .notification?.data[index].message,
-                                      text1: 'Loan Number : 0123',
-                                      text2: 'Loan Amount : 200SR',
-                                      text3: 'Purpose : Loan Purpose',
-                                      text4: 'Repayment Date : 20/12/2023',
+                                      // text1: 'Loan Number : 0123',
+                                      text2:
+                                          'Loan Amount :  ${controller.notification?.data[index].details!.amount}',
+                                      text3:
+                                          'Purpose : ${controller.notification?.data[index].details!.purpose}',
+                                      // text4: 'Repayment Date : 20/12/2023',
                                       controller: controller,
                                       index: index,
                                     );
@@ -82,9 +85,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                           .notification?.data[index].message,
                                       // text1: 'Loan Number : 0123',
                                       text2:
-                                          'Loan Amount : ${controller.notification?.data[index].details.amount}',
+                                          'Loan Amount : ${controller.notification?.data[index].details!.amount}',
                                       text3:
-                                          'Purpose :  ${controller.notification?.data[index].details.purpose}',
+                                          'Purpose :  ${controller.notification?.data[index].details!.purpose}',
                                       controller: controller,
                                       index: index,
                                     );
@@ -92,7 +95,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                           .notification?.data[index].type ==
                                       3) {
                                     final inputFormat = controller.notification!
-                                        .data[index].details.endDate
+                                        .data[index].details!.endDate
                                         .toString();
                                     String formattedDate =
                                         DateFormat('dd/MM/yyyy').format(
@@ -106,7 +109,15 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                         endDate: formattedDate,
                                         clickable: 'View Details');
                                   }
-                                  return const Text('Broadcast');
+                                  return textContainer(
+                                    40.h,
+                                    controller
+                                        .notification?.data[index].message,
+                                    // text1: 'Loan Number : 0123',
+
+                                    controller: controller,
+                                    index: index,
+                                  );
                                 },
                                 // children: [
                                 //   SizedBox(
@@ -254,9 +265,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             text3,
                           )
                         : const SizedBox(),
-                    Text(
-                      text4 ?? '',
-                    ),
+                    text4 != null
+                        ? Text(
+                            text4,
+                          )
+                        : const SizedBox(),
                   ],
                 ),
               )
@@ -267,104 +280,104 @@ class _NotificationScreenState extends State<NotificationScreen> {
     );
   }
 
-  Padding textContainerWithDots(height, title, title2,
-      {text1, text2, text3, text4}) {
-    return Padding(
-      padding: EdgeInsets.only(left: 22.0.w, right: 22.0),
-      child: Container(
-        height: height,
-        width: 300.w,
-        decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 223, 220, 220),
-            borderRadius: BorderRadiusDirectional.circular(20)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                    child: Padding(
-                  padding:
-                      EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h),
-                  child: Text(
-                    title,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                )),
-                Container(
-                  margin: EdgeInsets.only(right: 20.w),
-                  height: 7.h,
-                  width: 7.w,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.red,
-                  ),
-                )
-              ],
-            ),
-            kSizedBoxH,
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 28.0.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    text1,
-                  ),
-                  Text(
-                    text2,
-                  ),
-                  Text(
-                    text3,
-                  ),
-                  Text(
-                    text4 ?? '',
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.only(left: 5.0.w, right: 15.w, top: 10.h),
-                    child: Text(
-                      title2,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  kSizedBoxH,
-                  DottedText('First reason for rejection'),
-                  DottedText('Second reason for rejection'),
-                  DottedText('Third reason for rejection'),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
+  // Padding textContainerWithDots(height, title, title2,
+  //     {text1, text2, text3, text4}) {
+  //   return Padding(
+  //     padding: EdgeInsets.only(left: 22.0.w, right: 22.0),
+  //     child: Container(
+  //       height: height,
+  //       width: 300.w,
+  //       decoration: BoxDecoration(
+  //           color: const Color.fromARGB(255, 223, 220, 220),
+  //           borderRadius: BorderRadiusDirectional.circular(20)),
+  //       child: Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           Row(
+  //             children: [
+  //               Expanded(
+  //                   child: Padding(
+  //                 padding:
+  //                     EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h),
+  //                 child: Text(
+  //                   title,
+  //                   style: const TextStyle(fontWeight: FontWeight.bold),
+  //                 ),
+  //               )),
+  //               Container(
+  //                 margin: EdgeInsets.only(right: 20.w),
+  //                 height: 7.h,
+  //                 width: 7.w,
+  //                 decoration: const BoxDecoration(
+  //                   shape: BoxShape.circle,
+  //                   color: Colors.red,
+  //                 ),
+  //               )
+  //             ],
+  //           ),
+  //           kSizedBoxH,
+  //           Padding(
+  //             padding: EdgeInsets.symmetric(horizontal: 28.0.w),
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 Text(
+  //                   text1,
+  //                 ),
+  //                 Text(
+  //                   text2,
+  //                 ),
+  //                 Text(
+  //                   text3,
+  //                 ),
+  //                 Text(
+  //                   text4 ?? '',
+  //                 ),
+  //                 Padding(
+  //                   padding:
+  //                       EdgeInsets.only(left: 5.0.w, right: 15.w, top: 10.h),
+  //                   child: Text(
+  //                     title2,
+  //                     style: const TextStyle(fontWeight: FontWeight.bold),
+  //                   ),
+  //                 ),
+  //                 kSizedBoxH,
+  //                 DottedText('First reason for rejection'),
+  //                 DottedText('Second reason for rejection'),
+  //                 DottedText('Third reason for rejection'),
+  //               ],
+  //             ),
+  //           )
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  Padding DottedText(text) {
-    return Padding(
-      padding: EdgeInsets.only(left: 5.w),
-      child: Row(
-        children: [
-          Container(
-            height: 5.h,
-            width: 5.w,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: baseColor,
-            ),
-          ),
-          SizedBox(
-            width: 5.w,
-          ),
-          Text(
-            text ?? '',
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-    );
-  }
+  // Padding DottedText(text) {
+  //   return Padding(
+  //     padding: EdgeInsets.only(left: 5.w),
+  //     child: Row(
+  //       children: [
+  //         Container(
+  //           height: 5.h,
+  //           width: 5.w,
+  //           decoration: const BoxDecoration(
+  //             shape: BoxShape.circle,
+  //             color: baseColor,
+  //           ),
+  //         ),
+  //         SizedBox(
+  //           width: 5.w,
+  //         ),
+  //         Text(
+  //           text ?? '',
+  //           style: const TextStyle(fontWeight: FontWeight.bold),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   containerWithClickable(height, title,
       {text1,
@@ -374,7 +387,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       clikable,
       required NotificationController controller,
       required int index}) {
-    if (controller.notification!.data[index].details.status == 0) {
+    if (controller.notification!.data[index].details!.status == 0) {
       return Padding(
         padding: EdgeInsets.only(left: 22.0.w, right: 22.0),
         child: Container(
@@ -417,7 +430,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     InkWell(
-                      onTap: () => Get.to(const NotificationViewScreen()),
+                      onTap: () =>
+                          Get.toNamed(AppRouter.getSuretyRequestDetailsRoute()),
                       child: Text(
                         clikable ?? '',
                         style: const TextStyle(color: Colors.blue),
@@ -430,7 +444,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           ),
         ),
       );
-    } else if (controller.notification!.data[index].details.status == 2) {
+    } else if (controller.notification!.data[index].details!.status == 2) {
       return Padding(
         padding: EdgeInsets.only(left: 22.0.w, right: 22.0),
         child: Container(
@@ -473,9 +487,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                        'Loan Amount: ${controller.notification!.data[index].details.amount}'),
+                        'Loan Amount: ${controller.notification!.data[index].details!.amount}'),
                     Text(
-                        'Purpose: ${controller.notification!.data[index].details.purpose}'),
+                        'Purpose: ${controller.notification!.data[index].details!.purpose}'),
                     kSizedBoxH,
                     const Text(
                       'Reason for rejection',
@@ -489,7 +503,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           ),
         ),
       );
-    } else if (controller.notification!.data[index].details.status == 1) {
+    } else if (controller.notification!.data[index].details!.status == 1) {
       return Padding(
         padding: EdgeInsets.only(left: 22.0.w, right: 22.0),
         child: Container(
@@ -532,9 +546,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                        'Loan Amount: ${controller.notification!.data[index].details.amount}'),
+                        'Loan Amount: ${controller.notification!.data[index].details!.amount}'),
                     Text(
-                        'Purpose: ${controller.notification!.data[index].details.purpose}')
+                        'Purpose: ${controller.notification!.data[index].details!.purpose}')
                   ],
                 ),
               )
@@ -595,7 +609,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
             alignment: AlignmentDirectional.center,
             children: [
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Get.toNamed(AppRouter.getSuretyRequestDetailsRoute());
+                },
                 icon: const Icon(
                   Icons.notifications_none,
                   color: whiteColor,

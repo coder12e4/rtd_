@@ -18,7 +18,7 @@ class WallPage extends StatelessWidget {
             body: DefaultTabController(
               length: 2,
               child: SingleChildScrollView(
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
@@ -248,11 +248,12 @@ class WallPage extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: EdgeInsets.only(top: 5.h),
-                child: controller.error == true
+                child: controller.data?.data.length != 0 ||
+                        controller.data?.data == null
                     ? ListView.builder(
                         physics: const BouncingScrollPhysics(),
                         // shrinkWrap: true,
-                        itemCount: controller.data!.data.length,
+                        itemCount: controller.data?.data.length ?? 0,
                         itemBuilder: (context, index) {
                           return Column(
                             children: [
@@ -266,14 +267,7 @@ class WallPage extends StatelessWidget {
                             ],
                           );
                         })
-                    : Column(
-                        children: [
-                          SizedBox(
-                            height: 270.h,
-                          ),
-                          const Text('Feed is Empty'),
-                        ],
-                      ),
+                    : Center(child: const Text("Feed is empty")),
               ),
             ),
 

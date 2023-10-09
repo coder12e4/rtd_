@@ -103,6 +103,7 @@ import 'package:rtd_project/backend/binding/bottom_navigation_binding.dart';
 import 'package:rtd_project/backend/binding/elected_member_binding.dart';
 import 'package:rtd_project/backend/binding/loan_screen_binding.dart';
 import 'package:rtd_project/backend/binding/login_binding.dart';
+import 'package:rtd_project/backend/binding/notification/surety_view_binding.dart';
 import 'package:rtd_project/backend/binding/register_binding.dart';
 import 'package:rtd_project/backend/binding/search_screen_binding.dart';
 import 'package:rtd_project/backend/binding/splash_binding.dart';
@@ -123,6 +124,7 @@ import '../view/home_screen/home_page.dart';
 import '../view/loan_screen/loan_edit_screen/loan_edit_screen.dart';
 import '../view/loan_screen/loan_page.dart';
 import '../view/notification/notification.dart';
+import '../view/notification/notificatoin_view/notification_view_screen.dart';
 
 class AppRouter {
   static const String initial = '/';
@@ -140,7 +142,7 @@ class AppRouter {
   static const String loanRoutes = '/loan';
   static const String serviceMemberProfileRoutes = '/serviceMemberProfile';
   static const String notificationPageRoutes = '/notificationPage';
-  static const String stylistCategoriesRoutes = '/select_stylist';
+  static const String suretyRequestDetailsRoutes = '/suretyRequestDetails';
   static const String profileCategoriesRoutes = '/profile_categories';
   static const String addTimingRoutes = '/timing';
   static const String gallaryRoutes = '/gallary';
@@ -190,7 +192,7 @@ class AppRouter {
   static String getServiceMemberProfileRoutesRoute() =>
       serviceMemberProfileRoutes;
   static String getNotificationPageRoute() => notificationPageRoutes;
-  static String getStylistCategoriesRoute() => stylistCategoriesRoutes;
+  static String getSuretyRequestDetailsRoute() => suretyRequestDetailsRoutes;
   static String getProfileCategoriesRoute() => profileCategoriesRoutes;
   static String getAddTimingRoute() => addTimingRoutes;
   static String getGallaryRoute() => gallaryRoutes;
@@ -230,10 +232,6 @@ class AppRouter {
       page: () => const LOginPage(),
       binding: LoginBinding(),
     ),
-    // GetPage(
-    //     name: verifyRoutes,
-    //     page: () => const VerifyScreen(),
-    //     binding: VerifyBinding()),
 
     GetPage(
         name: signUpRoutes,
@@ -248,8 +246,7 @@ class AppRouter {
         name: electedMemberRoutes,
         page: () => ElectedMemberScreen(),
         binding: ElectedMemberBinding()),
-    // GetPage(
-    //     name: tabRoutes, page: () => const TabScreen(), binding: TabsBinding()),
+
     GetPage(
         name: editProfileRoutes,
         page: () => const ProfileEditScreen(),
@@ -258,14 +255,7 @@ class AppRouter {
         name: userProfileRoutes,
         page: () => const ProfilePage(),
         binding: ProfileBinding()),
-    // GetPage(
-    //     name: memberProfileRoutes,
-    //     page: () => const InboxScreen(),
-    //     binding: InboxBinding()),
-    // GetPage(
-    //     name: profileRoutes,
-    //     page: () => const ProfileScreen(),
-    //     binding: ProfileBinding()),
+
     GetPage(
         name: searchScreenRoutes,
         page: () => const SearchScreen(),
@@ -287,10 +277,11 @@ class AppRouter {
       page: () => const NotificationScreen(),
       binding: NotificationBinding(),
     ),
-    // GetPage(
-    //     name: stylistCategoriesRoutes,
-    //     page: () => const StylistCategoriesScreen(),
-    //     binding: StylistCategoriesBinding()),
+
+    GetPage(
+        name: suretyRequestDetailsRoutes,
+        page: () => const NotificationViewScreen(),
+        binding: SuretyViewBinding()),
     // GetPage(
     //     name: profileCategoriesRoutes,
     //     page: () => const ProfileCategoriesScreen(),

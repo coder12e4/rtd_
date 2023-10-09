@@ -26,22 +26,25 @@ class WallScreenController extends GetxController {
   List<String> selectedOption = [];
   Future<void> getFeedData() async {
     Response response = await parser.getFeedData();
+    log('feed status code ${response.statusCode}');
     if (response.statusCode == 200) {
       try {
-        loading = false;
         Map<String, dynamic> jsonData =
             Map<String, dynamic>.from(response.body);
-        data = FeedData.fromJson(jsonData['data']);
+        log('feed responce*******${response.body}');
+        data = FeedData.fromJson(jsonData);
+
         if (data!.data.isEmpty) {
           error = true;
         }
         log('data$data');
-      } catch (e) {
-        log('wall catch $e');
+      } catch (e, stackTrace) {
+        log('wall catch $e', error: e, stackTrace: stackTrace);
       }
       log('responce${response.body}');
-      update();
     }
+    loading = false;
+    update();
   }
 
   void selectOption(String option, int index) {

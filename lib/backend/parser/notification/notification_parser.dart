@@ -22,4 +22,16 @@ class NotificationParser {
     return await apiService.postPrivate(
         Constants.baseUrl + Constants.seenNotification, body, accessToken!);
   }
+
+  Future<Response> suretyAccept(body) async {
+    final accessToken = sharedPreferencesManager.getString('access_token');
+    return await apiService.postPrivate(
+        Constants.baseUrl + Constants.acceptSuretyRequest, body, accessToken!);
+  }
+
+  Future<Response> suretyReject(body) async {
+    final accessToken = sharedPreferencesManager.getString('access_token');
+    return await apiService.postPrivate(
+        Constants.baseUrl + Constants.rejectSuretyRequest, body, accessToken!);
+  }
 }

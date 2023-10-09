@@ -10,8 +10,6 @@ import 'package:rtd_project/helper/init.dart';
 import 'package:rtd_project/helper/router.dart';
 import 'package:rtd_project/util/theme.dart';
 
-import 'backend/notification/push_notification.dart';
-
 Future<void> main() async {
   // Get.put(Athentication())
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
@@ -20,7 +18,7 @@ Future<void> main() async {
   ));
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await FirebaseApi().initNotifications();
+  // await FirebaseApi().initNotifications();
   await MainBinding().dependencies();
   HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());

@@ -22,6 +22,10 @@ class Constants {
   static const String getServices = 'api/user/service/list';
   static const String getNotification = 'api/user/notification/list';
   static const String seenNotification = 'api/user/notification/mark/seen';
+  static const String acceptSuretyRequest =
+      'api/user/loan/request/surety/accept';
+  static const String rejectSuretyRequest =
+      'api/user/loan/request/surety/reject';
   static const String getServiceMemberDetails =
       'api/user/service/member/show?service_member_id=';
   static const String uploadIndianDocument =

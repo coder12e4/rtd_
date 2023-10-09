@@ -44,7 +44,7 @@ class ProfilePage extends StatelessWidget {
                           ),
                         )
                       : Container(
-                          height: 1150.h,
+                          height: 1450.h,
                           decoration: const BoxDecoration(
                               color: whiteColor,
                               borderRadius: BorderRadiusDirectional.only(
@@ -64,18 +64,45 @@ class ProfilePage extends StatelessWidget {
                               kSizedBoxH,
                               dividerWidget(),
                               kSizedBoxH,
-                              detailsText('India',
+                              detailsText('Indian Mobile Number',
                                   " ${value.userData!.data.indiaMobileNumber}"),
                               kSizedBoxH,
                               dividerWidget(),
                               kSizedBoxH,
-                              detailsText(
-                                  'KSA', value.userData!.data.ksaMobileNumber),
+                              detailsText('KSA  Mobile Number',
+                                  value.userData!.data.ksaMobileNumber),
                               kSizedBoxH,
                               dividerWidget(),
                               kSizedBoxH,
                               detailsText(
                                   'Mail Address', value.userData!.data.email),
+                              kSizedBoxH,
+                              dividerWidget(),
+                              kSizedBoxH,
+                              detailsText('India State',
+                                  value.userData!.data.indiaState.stateName),
+                              kSizedBoxH,
+                              dividerWidget(),
+                              kSizedBoxH,
+                              detailsText('KSA State',
+                                  value.userData!.data.ksaState.stateName),
+                              kSizedBoxH,
+                              dividerWidget(),
+                              kSizedBoxH,
+                              detailsText(
+                                  'India Pin', value.userData!.data.indiaPin),
+                              kSizedBoxH,
+                              dividerWidget(),
+                              kSizedBoxH,
+                              detailsText(
+                                  'KSA Pin', value.userData!.data.ksaPin),
+                              kSizedBoxH,
+                              dividerWidget(),
+                              kSizedBoxH,
+                              detailsText(
+                                  'Vehicle Model',
+                                  value.userData!.data.vehicleTypeId
+                                      .toString()),
                               kSizedBoxH,
                               dividerWidget(),
                               kSizedBoxH,

@@ -49,7 +49,7 @@ class NotificationDetails {
   int type;
   String sender;
   String receiver;
-  Details details;
+  Details? details;
   int seen;
 
   NotificationDetails({
@@ -71,7 +71,7 @@ class NotificationDetails {
         type: json["type"],
         sender: json["sender"],
         receiver: json["receiver"],
-        details: Details.fromJson(json["details"]),
+        details: json["type"] != 5 ? Details.fromJson(json["details"]) : null,
         seen: json["seen"],
       );
 
@@ -82,7 +82,7 @@ class NotificationDetails {
         "type": type,
         "sender": sender,
         "receiver": receiver,
-        "details": details.toJson(),
+        "details": type != 5 ? details?.toJson() : null,
         "seen": seen,
       };
 }
