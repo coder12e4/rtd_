@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:rtd_project/controller/notification/notification_controller.dart';
 import 'package:rtd_project/controller/profile/profile_controller.dart';
 import 'package:rtd_project/controller/profile/profile_edit_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/helper/router.dart';
-import 'package:rtd_project/view/profile_screen/profile_loan_screen/profile_loan_screen.dart';
 
 import '../../util/alert_dialog.dart';
 
@@ -24,7 +24,7 @@ class ProfilePage extends StatelessWidget {
             builder: (value) {
               return Column(
                 children: [
-                  appbar(context),
+                  appbar(context, value),
                   value.loading || value.userData == null
                       ? Container(
                           height: 550.h,
@@ -44,7 +44,7 @@ class ProfilePage extends StatelessWidget {
                           ),
                         )
                       : Container(
-                          height: 1450.h,
+                          height: 1550.h,
                           decoration: const BoxDecoration(
                               color: whiteColor,
                               borderRadius: BorderRadiusDirectional.only(
@@ -274,11 +274,7 @@ class ProfilePage extends StatelessWidget {
                     (states) => const Size(60, 50)),
                 backgroundColor:
                     MaterialStateColor.resolveWith((states) => baseColor)),
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const ProfileLoanScreen(),
-              ));
-            },
+            onPressed: () => Get.toNamed(AppRouter.getLoanDetailsRoute()),
             child: Padding(
               padding: const EdgeInsets.only(
                   left: 18.0, right: 18, top: 5, bottom: 5),
@@ -332,7 +328,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Container appbar(BuildContext context) {
+  Container appbar(BuildContext context, ProfileController ProController) {
     return Container(
       margin: EdgeInsets.only(top: 10.h, bottom: 10.h),
       child: Row(
@@ -347,7 +343,7 @@ class ProfilePage extends StatelessWidget {
                 color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
           ),
           SizedBox(
-            width: 30.w,
+            width: 10.w,
           ),
           TextButton(
             style: ButtonStyle(
@@ -359,13 +355,48 @@ class ProfilePage extends StatelessWidget {
               style: TextStyle(color: baseColor),
             ),
           ),
-          IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.notifications_none,
-                color: whiteColor,
-                size: 35,
-              ))
+          GetBuilder<NotificationController>(
+            builder: (controller) {
+              return GestureDetector(
+                onTap: () {
+                  // Get.delete<NotificationController>(force: true);
+                  Get.toNamed(AppRouter.getNotificationPageRoute());
+                },
+                child: Stack(
+                  alignment: AlignmentDirectional.center,
+                  children: [
+                    const IconButton(
+                      onPressed: null,
+                      icon: Icon(
+                        Icons.notifications_none,
+                        color: whiteColor,
+                        size: 35,
+                      ),
+                    ),
+                    controller.notificationCount != 0
+                        ? Positioned(
+                            top: 3.h,
+                            right: 4.w,
+                            child: Container(
+                              height: 20.h,
+                              width: 20.w,
+                              decoration: const BoxDecoration(
+                                  color: Colors.red, shape: BoxShape.circle),
+                              child: Center(
+                                  child: Text(
+                                '${controller.notificationCount ?? 0}',
+                                style: const TextStyle(
+                                    color: whiteColor,
+                                    fontWeight: FontWeight.bold),
+                              )),
+                            ),
+                          )
+                        : const SizedBox(),
+                  ],
+                ),
+              );
+            },
+          ),
         ],
       ),
     );

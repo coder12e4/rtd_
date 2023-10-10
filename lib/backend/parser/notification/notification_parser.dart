@@ -34,4 +34,19 @@ class NotificationParser {
     return await apiService.postPrivate(
         Constants.baseUrl + Constants.rejectSuretyRequest, body, accessToken!);
   }
+
+  Future<Response> getPollDetails(body) async {
+    final accessToken = sharedPreferencesManager.getString('access_token');
+    return await apiService.postPrivate(
+        Constants.baseUrl + Constants.getNotificationPollDetails,
+        body,
+        accessToken!);
+  }
+
+  Future<Response> submitVote(body) async {
+    final accessToken = sharedPreferencesManager.getString('access_token');
+
+    return await apiService.postPrivate(
+        Constants.baseUrl + Constants.submitVote, body, accessToken!);
+  }
 }

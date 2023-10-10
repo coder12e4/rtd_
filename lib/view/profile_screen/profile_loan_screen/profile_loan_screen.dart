@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:rtd_project/controller/loan/loan_details_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/view/profile_screen/loan_detailes_screen/activelone_details_screen.dart';
 import 'package:rtd_project/view/profile_screen/loan_detailes_screen/rejected_loan.dart';
+
+import '../../../backend/model/loan/active_loan_model.dart';
 
 class ProfileLoanScreen extends StatelessWidget {
   const ProfileLoanScreen({super.key});
@@ -15,22 +20,24 @@ class ProfileLoanScreen extends StatelessWidget {
             body: SingleChildScrollView(
               child: DefaultTabController(
                 length: 2,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    wallTextWidget(context),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    tabBar(),
-                    tabBarView(),
-                  ],
-                ),
+                child: GetBuilder<LoanDetailsController>(builder: (value) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      wallTextWidget(context),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      tabBar(),
+                      tabBarView(value),
+                    ],
+                  );
+                }),
               ),
             )));
   }
 
-  Container tabBarView() {
+  Container tabBarView(LoanDetailsController controller) {
     return Container(
       height: 1050.h,
       //hallo
@@ -42,13 +49,13 @@ class ProfileLoanScreen extends StatelessWidget {
         ),
       ),
       child: TabBarView(children: [
-        activeLoan(),
-        closedLoan(),
+        activeLoan(controller),
+        closedLoan(controller),
       ]),
     );
   }
 
-  Column closedLoan() {
+  Column closedLoan(LoanDetailsController controller) {
     return Column(
         // physics: const NeverScrollableScrollPhysics(),
         children: [
@@ -59,14 +66,15 @@ class ProfileLoanScreen extends StatelessWidget {
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: 2,
+            itemCount: controller.closedLoans?.data.data.length ?? 0,
             itemBuilder: (context, index) => GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => RejectedLoanScreen(),
+                    builder: (context) => const RejectedLoanScreen(),
                   ));
                 },
-                child: activeAndClosedLoans(false, '418')),
+                child: activeAndClosedLoans(
+                    false, '418', controller, index, controller.closedLoans!)),
           ),
           SizedBox(
             height: 10.h,
@@ -220,7 +228,8 @@ class ProfileLoanScreen extends StatelessWidget {
             )));
   }
 
-  Column activeLoan() {
+  Column activeLoan(LoanDetailsController controller) {
+    final data = controller.activeLoans?.data.data;
     return Column(
         // physics: const NeverScrollableScrollPhysics(),
         children: [
@@ -231,14 +240,21 @@ class ProfileLoanScreen extends StatelessWidget {
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: 2,
+            itemCount: data?.length ?? 0,
             itemBuilder: (context, index) => GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ActiveLoanDetailsScreen(),
-                  ));
-                },
-                child: activeAndClosedLoans(true, '418')),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ActiveLoanDetailsScreen(
+                      controller: controller,
+                      index: index,
+                    ),
+                  ),
+                );
+              },
+              child: activeAndClosedLoans(
+                  true, '418', controller, index, controller.activeLoans!),
+            ),
           ),
           SizedBox(
             height: 10.h,
@@ -259,7 +275,11 @@ class ProfileLoanScreen extends StatelessWidget {
     );
   }
 
-  Padding activeAndClosedLoans(bool isActive, String filenumber) {
+  Padding activeAndClosedLoans(bool isActive, String filenumber,
+      LoanDetailsController controller, int index, ActiveLoans loanData) {
+    final data = loanData.data.data[index];
+    String formattedDate = DateFormat('dd/MM/yyyy')
+        .format(DateTime.parse(data.dueDate.toString()));
     return Padding(
       padding: EdgeInsets.only(top: 10.h, left: 18.w, right: 18.w),
       child: Container(
@@ -283,7 +303,7 @@ class ProfileLoanScreen extends StatelessWidget {
                     width: 160.w,
                     child: Center(
                       child: Text(
-                        'File Number:${filenumber}',
+                        'File Number: ${data.fileNumber}',
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold),
@@ -315,28 +335,31 @@ class ProfileLoanScreen extends StatelessWidget {
               ),
               Row(
                 children: [
-                  ClipRRect(
-                      borderRadius: const BorderRadius.all(Radius.circular(60)),
-                      child: Image.asset(
-                        'assets/images/pexels-pixabay-220453 1.png',
-                        height: 40.h,
-                      )),
+                  ClipOval(
+                    child: Image.network(
+                      data.user.profileImage,
+                      height: 40.h,
+                      width: 40.w,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                   SizedBox(
                     width: 8.w,
                   ),
-                  const Text('ഷഫീഖ് കൊല്ലം (M.107)',
-                      style: TextStyle(
+                  Text('${data.user.name} (${data.user.memberId})',
+                      style: const TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.w500,
                           fontSize: 16))
                 ],
               ),
               Divider(),
-              loanAmount(title: 'കൊടുത്തത്:', price: '200SR'),
-              SizedBox(
-                height: 10.h,
-              ),
-              reternDate(title: 'തിരിച്ചടവ്:', date: "26.05.2023")
+              loanAmount(title: 'കിട്ടിയത്:', price: data.loanAmount),
+              loanAmount(title: 'കൊടുത്തത്:', price: data.paidAmount),
+              // SizedBox(
+              //   height: 10.h,
+              // ),
+              reternDate(title: 'തിരിച്ചടവ്:', date: formattedDate)
             ],
           ),
         ),
@@ -452,14 +475,8 @@ class ProfileLoanScreen extends StatelessWidget {
                 color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
           ),
           SizedBox(
-            width: 70.w,
-          ),
-          IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.notifications_none,
-                color: whiteColor,
-              ))
+            width: 105.w,
+          )
         ],
       ),
     );

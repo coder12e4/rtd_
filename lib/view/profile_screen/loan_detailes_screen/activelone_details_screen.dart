@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rtd_project/controller/loan/loan_details_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 // import 'package:flutter_rounded_progress_bar/flutter_rounded_progress_bar.dart';
 // import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
 
 class ActiveLoanDetailsScreen extends StatelessWidget {
-  const ActiveLoanDetailsScreen({super.key});
-
+  const ActiveLoanDetailsScreen(
+      {super.key, required this.controller, required this.index});
+  final LoanDetailsController controller;
+  final int index;
   @override
   Widget build(BuildContext context) {
+    final data = controller.activeLoans!.data.data[index];
     return SafeArea(
       child: Scaffold(
         backgroundColor: baseColor,
@@ -34,7 +38,7 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
                     Padding(
                       padding:
                           EdgeInsets.only(left: 18.0.h, right: 18, top: 28),
-                      child: filenumAndActiveloan('418', true),
+                      child: filenumAndActiveloan(data.fileNumber, true),
                     ),
                     dashText(),
                     kSizedBoxH,
@@ -52,7 +56,7 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
                               Padding(
                                 padding: EdgeInsets.only(left: 12.0.w),
                                 child: const Text(
-                                  'Lorem Ipsum',
+                                  'NA',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ),
@@ -67,7 +71,7 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
                               Padding(
                                 padding: EdgeInsets.only(right: 18.0.w),
                                 child: const Text(
-                                  'Lorem Ipsum',
+                                  'NA',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ),
@@ -82,13 +86,13 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
                     kSizedBoxH,
                     dashText(),
                     kSizedBoxH,
-                    malayalamTextWidget('തുക :', Icons.money, '2000SR'),
+                    malayalamTextWidget('തുക :', Icons.money, data.loanAmount),
                     kSizedBoxH20,
                     malayalamTextWidget(
-                        'തുടങ്ങിയത് :', Icons.calendar_month, '26.05.2023'),
+                        'തുടങ്ങിയത് :', Icons.calendar_month, 'NA'),
                     kSizedBoxH20,
-                    malayalamTextWidget(
-                        'തുടങ്ങിയത് :', Icons.calendar_month, '26.05.2023'),
+                    malayalamTextWidget('തിരിച്ചടവ്  :', Icons.calendar_month,
+                        data.dueDate.toString()),
                     kSizedBoxH,
                     // Padding(
                     //   padding: const EdgeInsets.symmetric(horizontal: 8.0),

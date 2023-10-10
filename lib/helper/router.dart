@@ -98,13 +98,13 @@
 // import 'package:ultimate_salon_owner_flutter/app/view/verify.dart';
 
 import 'package:get/get.dart';
+import 'package:rtd_project/backend/binding/auth/login_binding.dart';
+import 'package:rtd_project/backend/binding/auth/register_binding.dart';
 import 'package:rtd_project/backend/binding/book/service_member_details_bindig.dart';
 import 'package:rtd_project/backend/binding/bottom_navigation_binding.dart';
 import 'package:rtd_project/backend/binding/elected_member_binding.dart';
-import 'package:rtd_project/backend/binding/loan_screen_binding.dart';
-import 'package:rtd_project/backend/binding/login_binding.dart';
+import 'package:rtd_project/backend/binding/loan/loan_screen_binding.dart';
 import 'package:rtd_project/backend/binding/notification/surety_view_binding.dart';
-import 'package:rtd_project/backend/binding/register_binding.dart';
 import 'package:rtd_project/backend/binding/search_screen_binding.dart';
 import 'package:rtd_project/backend/binding/splash_binding.dart';
 import 'package:rtd_project/view/book_screen/elected_member_screen/elected_member_screen.dart';
@@ -116,7 +116,8 @@ import 'package:rtd_project/view/search_page/search_screen.dart';
 import 'package:rtd_project/view/splash_screen/splash_page.dart';
 
 import '../backend/binding/edit_profile_binding.dart';
-import '../backend/binding/loan_edit_binding.dart';
+import '../backend/binding/loan/loan_details_binding.dart';
+import '../backend/binding/loan/loan_edit_binding.dart';
 import '../backend/binding/notification/notification_binding.dart';
 import '../backend/binding/profile_binding.dart';
 import '../view/book_screen/service_member_profile/service_member_profile.dart';
@@ -125,6 +126,8 @@ import '../view/loan_screen/loan_edit_screen/loan_edit_screen.dart';
 import '../view/loan_screen/loan_page.dart';
 import '../view/notification/notification.dart';
 import '../view/notification/notificatoin_view/notification_view_screen.dart';
+import '../view/notification/poll_details/poll_notification.dart';
+import '../view/profile_screen/profile_loan_screen/profile_loan_screen.dart';
 
 class AppRouter {
   static const String initial = '/';
@@ -143,8 +146,8 @@ class AppRouter {
   static const String serviceMemberProfileRoutes = '/serviceMemberProfile';
   static const String notificationPageRoutes = '/notificationPage';
   static const String suretyRequestDetailsRoutes = '/suretyRequestDetails';
-  static const String profileCategoriesRoutes = '/profile_categories';
-  static const String addTimingRoutes = '/timing';
+  static const String loanDetailsRoutes = '/loanDetails';
+  static const String notificationPollRoutes = '/notificationPoll';
   static const String gallaryRoutes = '/gallary';
   static const String reviewRoutes = '/review';
   static const String languagesRoutes = '/languages';
@@ -193,8 +196,8 @@ class AppRouter {
       serviceMemberProfileRoutes;
   static String getNotificationPageRoute() => notificationPageRoutes;
   static String getSuretyRequestDetailsRoute() => suretyRequestDetailsRoutes;
-  static String getProfileCategoriesRoute() => profileCategoriesRoutes;
-  static String getAddTimingRoute() => addTimingRoutes;
+  static String getLoanDetailsRoute() => loanDetailsRoutes;
+  static String getNotificationPollRoute() => notificationPollRoutes;
   static String getGallaryRoute() => gallaryRoutes;
   static String getReviewRoute() => reviewRoutes;
   static String getLanguagesRoute() => languagesRoutes;
@@ -282,15 +285,15 @@ class AppRouter {
         name: suretyRequestDetailsRoutes,
         page: () => const NotificationViewScreen(),
         binding: SuretyViewBinding()),
-    // GetPage(
-    //     name: profileCategoriesRoutes,
-    //     page: () => const ProfileCategoriesScreen(),
-    //     binding: ProfileCategoriesBinding()),
-    // GetPage(
-    //     name: addTimingRoutes,
-    //     page: () => const AddTimingScreen(),
-    //     binding: AddTimingBinding(),
-    //     fullscreenDialog: true),
+    GetPage(
+        name: loanDetailsRoutes,
+        page: () => const ProfileLoanScreen(),
+        binding: LoanDetailsBinding()),
+    GetPage(
+      name: notificationPollRoutes,
+      page: () => const VoteViewScreen(),
+      binding: SuretyViewBinding(),
+    ),
     // GetPage(
     //     name: gallaryRoutes,
     //     page: () => const GallaryScreen(),

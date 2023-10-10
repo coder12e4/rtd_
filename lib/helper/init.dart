@@ -80,6 +80,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../backend/parser/book/books_parser.dart';
 import '../backend/parser/bottom_navigation_parser.dart';
+import '../backend/parser/loan/loan_details_parser.dart';
 import '../backend/parser/loan/loan_screen_parser.dart';
 import '../backend/parser/profile/edit_profile_parser.dart';
 import '../backend/parser/splash_screen_parser.dart';
@@ -165,10 +166,10 @@ class MainBinding extends Bindings {
             apiService: Get.find(), sharedPreferencesManager: Get.find()),
         fenix: true);
 
-    //   Get.lazyPut(
-    //       () => AddStylistParser(
-    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-    //       fenix: true);
+    Get.lazyPut(
+        () => LoanDetailsParser(
+            apiService: Get.find(), sharedPreferencesManager: Get.find()),
+        fenix: true);
 
     //   Get.lazyPut(
     //       () => StylistCategoriesParser(

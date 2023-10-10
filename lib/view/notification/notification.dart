@@ -49,74 +49,109 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 separatorBuilder: (context, index) =>
                                     kSizedBoxH20,
                                 itemBuilder: (context, index) {
-                                  if (controller
-                                          .notification?.data[index].type ==
-                                      4) {
-                                    return containerWithClickable(
-                                      100.h,
-                                      controller
-                                          .notification?.data[index].message,
-                                      clikable: 'View Details',
-                                      index: index,
-                                      controller: controller,
+                                  final type =
+                                      controller.notification?.data[index].type;
+                                  if (type == 4) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        controller.markNotificationSeen(
+                                            controller
+                                                .notification!.data[index].id);
+                                      },
+                                      child: containerWithClickable(
+                                        100.h,
+                                        controller
+                                            .notification?.data[index].message,
+                                        clikable: 'View Details',
+                                        index: index,
+                                        controller: controller,
+                                      ),
                                     );
-                                  } else if (controller
-                                          .notification?.data[index].type ==
-                                      2) {
-                                    return textContainer(
-                                      110.h,
-                                      controller
-                                          .notification?.data[index].message,
-                                      // text1: 'Loan Number : 0123',
-                                      text2:
-                                          'Loan Amount :  ${controller.notification?.data[index].details!.amount}',
-                                      text3:
-                                          'Purpose : ${controller.notification?.data[index].details!.purpose}',
-                                      // text4: 'Repayment Date : 20/12/2023',
-                                      controller: controller,
-                                      index: index,
+                                  } else if (type == 2) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        controller.markNotificationSeen(
+                                            controller
+                                                .notification!.data[index].id);
+                                      },
+                                      child: textContainer(
+                                        110.h,
+                                        controller
+                                            .notification?.data[index].message,
+                                        // text1: 'Loan Number : 0123',
+                                        text2:
+                                            'Loan Amount :  ${controller.notification?.data[index].details!.amount}',
+                                        text3:
+                                            'Purpose : ${controller.notification?.data[index].details!.purpose}',
+                                        // text4: 'Repayment Date : 20/12/2023',
+                                        controller: controller,
+                                        index: index,
+                                      ),
                                     );
-                                  } else if (controller
-                                          .notification?.data[index].type ==
-                                      1) {
-                                    return textContainer(
-                                      90.h,
-                                      controller
-                                          .notification?.data[index].message,
-                                      // text1: 'Loan Number : 0123',
-                                      text2:
-                                          'Loan Amount : ${controller.notification?.data[index].details!.amount}',
-                                      text3:
-                                          'Purpose :  ${controller.notification?.data[index].details!.purpose}',
-                                      controller: controller,
-                                      index: index,
+                                  } else if (type == 1) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        controller.markNotificationSeen(
+                                            controller
+                                                .notification!.data[index].id);
+                                      },
+                                      child: textContainer(
+                                        90.h,
+                                        controller
+                                            .notification?.data[index].message,
+                                        // text1: 'Loan Number : 0123',
+                                        text2:
+                                            'Loan Amount : ${controller.notification?.data[index].details!.amount}',
+                                        text3:
+                                            'Purpose :  ${controller.notification?.data[index].details!.purpose}',
+                                        controller: controller,
+                                        index: index,
+                                      ),
                                     );
-                                  } else if (controller
-                                          .notification?.data[index].type ==
-                                      3) {
+                                  } else if (type == 3) {
                                     final inputFormat = controller.notification!
                                         .data[index].details!.endDate
                                         .toString();
                                     String formattedDate =
                                         DateFormat('dd/MM/yyyy').format(
                                             DateTime.parse(inputFormat));
-                                    return textContainer(
-                                        100.h,
-                                        controller
-                                            .notification?.data[index].message,
-                                        controller: controller,
-                                        index: index,
-                                        endDate: formattedDate,
-                                        clickable: 'View Details');
+                                    return GestureDetector(
+                                      onTap: () {
+                                        controller.markNotificationSeen(
+                                            controller
+                                                .notification!.data[index].id);
+                                        Get.toNamed(
+                                            AppRouter
+                                                .getNotificationPollRoute(),
+                                            arguments: [
+                                              controller.notification!
+                                                  .data[index].details!.id
+                                            ]);
+                                      },
+                                      child: textContainer(
+                                          100.h,
+                                          controller.notification?.data[index]
+                                              .message,
+                                          controller: controller,
+                                          index: index,
+                                          endDate: formattedDate,
+                                          clickable: 'View Details'),
+                                    );
                                   }
-                                  return textContainer(
-                                    40.h,
-                                    controller
-                                        .notification?.data[index].message,
-                                    // text1: 'Loan Number : 0123',
+                                  return GestureDetector(
+                                    onTap: () {
+                                      controller.markNotificationSeen(controller
+                                          .notification!.data[index].id);
+                                    },
+                                    child: textContainer(
+                                      40.h,
+                                      controller
+                                          .notification?.data[index].message,
+                                      // text1: 'Loan Number : 0123',
 
-                                    controller: controller,
-                                    index: index,
+                                      controller: controller,
+                                      index: index,
+                                    ),
                                   );
                                 },
                                 // children: [
@@ -178,7 +213,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     );
   }
 
-  GestureDetector textContainer(
+  Padding textContainer(
     height,
     title, {
     String? text1,
@@ -190,91 +225,85 @@ class _NotificationScreenState extends State<NotificationScreen> {
     required NotificationController controller,
     required int index,
   }) {
-    return GestureDetector(
-      onTap: () {
-        controller
-            .markNotificationSeen(controller.notification!.data[index].id);
-      },
-      child: Padding(
-        padding: EdgeInsets.only(left: 22.0.w, right: 22.0),
-        child: Container(
-          height: height,
-          width: 300.w,
-          decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 223, 220, 220),
-              borderRadius: BorderRadiusDirectional.circular(20)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+    return Padding(
+      padding: EdgeInsets.only(left: 22.0.w, right: 22.0),
+      child: Container(
+        height: height,
+        width: 300.w,
+        decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 223, 220, 220),
+            borderRadius: BorderRadiusDirectional.circular(20)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                    child: Padding(
+                  padding:
+                      EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h),
+                  child: Text(
+                    title,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                )),
+                Container(
+                  margin: EdgeInsets.only(right: 20.w),
+                  height: 7.h,
+                  width: 7.w,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: controller.notification?.data[index].seen == 1
+                        ? Colors.grey
+                        : Colors.red,
+                  ),
+                )
+              ],
+            ),
+            kSizedBoxH,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 28.0.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                      child: Padding(
-                    padding:
-                        EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h),
-                    child: Text(
-                      title,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  )),
-                  Container(
-                    margin: EdgeInsets.only(right: 20.w),
-                    height: 7.h,
-                    width: 7.w,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: controller.notification?.data[index].seen == 1
-                          ? Colors.grey
-                          : Colors.red,
-                    ),
-                  )
+                  endDate != null
+                      ? Text("End Date: $endDate")
+                      : const SizedBox(),
+                  clickable != null
+                      ? const SizedBox(
+                          height: 20,
+                        )
+                      : const SizedBox(),
+                  clickable != null
+                      ? Text(
+                          clickable,
+                          style: const TextStyle(color: Colors.blue),
+                        )
+                      : const SizedBox(),
+                  text1 != null
+                      ? Text(
+                          text1,
+                        )
+                      : const SizedBox(),
+                  text2 != null
+                      ? Text(
+                          text2,
+                        )
+                      : const SizedBox(),
+                  text3 != null
+                      ? Text(
+                          text3,
+                        )
+                      : const SizedBox(),
+                  text4 != null
+                      ? Text(
+                          text4,
+                        )
+                      : const SizedBox(),
                 ],
               ),
-              kSizedBoxH,
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 28.0.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    endDate != null
-                        ? Text("End Date: $endDate")
-                        : const SizedBox(),
-                    clickable != null
-                        ? const SizedBox(
-                            height: 20,
-                          )
-                        : const SizedBox(),
-                    clickable != null
-                        ? Text(
-                            clickable,
-                            style: const TextStyle(color: Colors.blue),
-                          )
-                        : const SizedBox(),
-                    text1 != null
-                        ? Text(
-                            text1,
-                          )
-                        : const SizedBox(),
-                    text2 != null
-                        ? Text(
-                            text2,
-                          )
-                        : const SizedBox(),
-                    text3 != null
-                        ? Text(
-                            text3,
-                          )
-                        : const SizedBox(),
-                    text4 != null
-                        ? Text(
-                            text4,
-                          )
-                        : const SizedBox(),
-                  ],
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
@@ -610,7 +639,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             children: [
               IconButton(
                 onPressed: () {
-                  Get.toNamed(AppRouter.getSuretyRequestDetailsRoute());
+                  // Get.toNamed(AppRouter.getSuretyRequestDetailsRoute());
                 },
                 icon: const Icon(
                   Icons.notifications_none,

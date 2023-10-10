@@ -336,7 +336,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                           showToast('Select blood group');
                                           return;
                                         }
-                                        if (value.stateKsa == null ||
+                                        if (value.selectedKsaItem == null ||
                                             value.selectedItem == null) {
                                           showToast('Select States');
                                           return;
