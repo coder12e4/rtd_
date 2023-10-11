@@ -1,22 +1,21 @@
 // To parse this JSON data, do
 //
-//     final wallFeedData = wallFeedDataFromJson(jsonString);
+//     final loanData = loanDataFromJson(jsonString);
 
 import 'dart:convert';
 
-WallFeedData wallFeedDataFromJson(String str) =>
-    WallFeedData.fromJson(json.decode(str));
+LoanData loanDataFromJson(String str) => LoanData.fromJson(json.decode(str));
 
-String wallFeedDataToJson(WallFeedData data) => json.encode(data.toJson());
+String loanDataToJson(LoanData data) => json.encode(data.toJson());
 
-class WallFeedData {
+class LoanData {
   bool status;
-  FeedData data;
+  Data data;
   String message;
   String accessToken;
   String tokenType;
 
-  WallFeedData({
+  LoanData({
     required this.status,
     required this.data,
     required this.message,
@@ -24,9 +23,9 @@ class WallFeedData {
     required this.tokenType,
   });
 
-  factory WallFeedData.fromJson(Map<String, dynamic> json) => WallFeedData(
+  factory LoanData.fromJson(Map<String, dynamic> json) => LoanData(
         status: json["status"],
-        data: FeedData.fromJson(json["data"]),
+        data: Data.fromJson(json["data"]),
         message: json["message"],
         accessToken: json["access_token"],
         tokenType: json["token_type"],
@@ -41,111 +40,112 @@ class WallFeedData {
       };
 }
 
-class FeedData {
-  int? currentPage;
-  List<Datum> data;
-  String firstPageUrl;
-  int from;
-  int lastPage;
-  String lastPageUrl;
-  List<Link> links;
-  dynamic nextPageUrl;
-  String path;
-  int perPage;
-  dynamic prevPageUrl;
-  int to;
-  int total;
-
-  FeedData({
-    required this.currentPage,
-    required this.data,
-    required this.firstPageUrl,
-    required this.from,
-    required this.lastPage,
-    required this.lastPageUrl,
-    required this.links,
-    required this.nextPageUrl,
-    required this.path,
-    required this.perPage,
-    required this.prevPageUrl,
-    required this.to,
-    required this.total,
-  });
-
-  factory FeedData.fromJson(Map<String, dynamic> json) => FeedData(
-        currentPage: json["current_page"],
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
-        firstPageUrl: json["first_page_url"],
-        from: json["from"],
-        lastPage: json["last_page"],
-        lastPageUrl: json["last_page_url"],
-        links: List<Link>.from(json["links"].map((x) => Link.fromJson(x))),
-        nextPageUrl: json["next_page_url"],
-        path: json["path"],
-        perPage: json["per_page"],
-        prevPageUrl: json["prev_page_url"],
-        to: json["to"],
-        total: json["total"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "current_page": currentPage,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
-        "first_page_url": firstPageUrl,
-        "from": from,
-        "last_page": lastPage,
-        "last_page_url": lastPageUrl,
-        "links": List<dynamic>.from(links.map((x) => x.toJson())),
-        "next_page_url": nextPageUrl,
-        "path": path,
-        "per_page": perPage,
-        "prev_page_url": prevPageUrl,
-        "to": to,
-        "total": total,
-      };
-}
-
-class Datum {
+class Data {
+  int id;
+  int loanRequestId;
   String fileNumber;
   int userId;
   String loanAmount;
   String paidAmount;
   DateTime dueDate;
+  DateTime createdAt;
+  String loanDocument;
   int status;
+  String loanType;
+  String purpose;
   User user;
   String statusText;
+  String startDate;
+  List<Surety> sureties;
 
-  Datum({
+  Data({
+    required this.id,
+    required this.loanRequestId,
     required this.fileNumber,
     required this.userId,
     required this.loanAmount,
     required this.paidAmount,
     required this.dueDate,
+    required this.createdAt,
+    required this.loanDocument,
     required this.status,
+    required this.loanType,
+    required this.purpose,
     required this.user,
     required this.statusText,
+    required this.startDate,
+    required this.sureties,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
+        id: json["id"],
+        loanRequestId: json["loan_request_id"],
         fileNumber: json["file_number"],
         userId: json["user_id"],
         loanAmount: json["loan_amount"],
         paidAmount: json["paid_amount"],
         dueDate: DateTime.parse(json["due_date"]),
+        createdAt: DateTime.parse(json["created_at"]),
+        loanDocument: json["loan_document"],
         status: json["status"],
+        loanType: json["loan_type"],
+        purpose: json["purpose"],
         user: User.fromJson(json["user"]),
         statusText: json["status_text"],
+        startDate: json["start_date"],
+        sureties:
+            List<Surety>.from(json["sureties"].map((x) => Surety.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
+        "id": id,
+        "loan_request_id": loanRequestId,
         "file_number": fileNumber,
         "user_id": userId,
         "loan_amount": loanAmount,
         "paid_amount": paidAmount,
         "due_date":
             "${dueDate.year.toString().padLeft(4, '0')}-${dueDate.month.toString().padLeft(2, '0')}-${dueDate.day.toString().padLeft(2, '0')}",
+        "created_at": createdAt.toIso8601String(),
+        "loan_document": loanDocument,
         "status": status,
+        "loan_type": loanType,
+        "purpose": purpose,
         "user": user.toJson(),
+        "status_text": statusText,
+        "start_date": startDate,
+        "sureties": List<dynamic>.from(sureties.map((x) => x.toJson())),
+      };
+}
+
+class Surety {
+  int userId;
+  String name;
+  String profileImage;
+  int status;
+  String statusText;
+
+  Surety({
+    required this.userId,
+    required this.name,
+    required this.profileImage,
+    required this.status,
+    required this.statusText,
+  });
+
+  factory Surety.fromJson(Map<String, dynamic> json) => Surety(
+        userId: json["user_id"],
+        name: json["name"],
+        profileImage: json["profile_image"],
+        status: json["status"],
+        statusText: json["status_text"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "user_id": userId,
+        "name": name,
+        "profile_image": profileImage,
+        "status": status,
         "status_text": statusText,
       };
 }
@@ -173,7 +173,7 @@ class User {
   String documentProofKsa;
   int vehicleTypeId;
   String vehicleNumber;
-  String? fcmToken;
+  dynamic fcmToken;
   DateTime createdAt;
   DateTime updatedAt;
   dynamic deletedAt;
@@ -263,29 +263,5 @@ class User {
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
         "deleted_at": deletedAt,
-      };
-}
-
-class Link {
-  String? url;
-  String label;
-  bool active;
-
-  Link({
-    required this.url,
-    required this.label,
-    required this.active,
-  });
-
-  factory Link.fromJson(Map<String, dynamic> json) => Link(
-        url: json["url"],
-        label: json["label"],
-        active: json["active"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "url": url,
-        "label": label,
-        "active": active,
       };
 }

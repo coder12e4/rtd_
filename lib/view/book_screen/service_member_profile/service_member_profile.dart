@@ -39,7 +39,7 @@ class ServiceMemberProfile extends StatelessWidget {
                           kSizedBoxH,
                           dividerWidget(),
                           kSizedBoxH,
-                          textButton(controller),
+                          textButton(controller, context),
                           kSizedBoxH,
                           dividerWidget(),
                           kSizedBoxH,
@@ -111,7 +111,7 @@ class ServiceMemberProfile extends StatelessWidget {
     );
   }
 
-  textButton(ServiceMemberDetailsController controller) {
+  textButton(ServiceMemberDetailsController controller, BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -122,7 +122,10 @@ class ServiceMemberProfile extends StatelessWidget {
                 backgroundColor:
                     MaterialStateColor.resolveWith((states) => Colors.green)),
             onPressed: () {
-              launch("tel:${controller.memberDetails!.data.ksaMobileNumber}");
+              showModalBottomSheet(
+                context: context,
+                builder: (context) => callDetailsBottomSheet(controller),
+              );
             },
             child: const Padding(
               padding:
@@ -164,6 +167,67 @@ class ServiceMemberProfile extends StatelessWidget {
               ),
             )),
       ],
+    );
+  }
+
+  Container callDetailsBottomSheet(ServiceMemberDetailsController controller) {
+    return Container(
+      height: 210.h,
+      width: 390.w,
+      decoration: const BoxDecoration(
+        color: whiteColor,
+        borderRadius: BorderRadiusDirectional.only(
+          topEnd: Radius.circular(50),
+          topStart: Radius.circular(50),
+        ),
+      ),
+      child: Column(
+        children: [
+          kSizedBoxH20,
+          SizedBox(
+              width: 290.w,
+              child: Text(
+                'You can reach ${controller.memberDetails!.data.name} from the below numbers.',
+                textAlign: TextAlign.center,
+                style:
+                    const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+              )),
+          kSizedBoxH20,
+          Padding(
+            padding: EdgeInsets.only(right: 20.w),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                detailsText('Indian Number',
+                    controller.memberDetails!.data.indiaMobileNumber),
+                IconButton(
+                  onPressed: () => launch(
+                      "tel:${controller.memberDetails!.data.indiaMobileNumber}"),
+                  icon: const Icon(Icons.call),
+                ),
+              ],
+            ),
+          ),
+          kSizedBoxH,
+          dividerWidget(),
+          kSizedBoxH,
+          Padding(
+            padding: EdgeInsets.only(right: 20.w),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                detailsText('Ksa Number',
+                    controller.memberDetails!.data.ksaMobileNumber),
+                IconButton(
+                  onPressed: () => launch(
+                      "tel:${controller.memberDetails!.data.ksaMobileNumber}"),
+                  icon: const Icon(Icons.call),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 

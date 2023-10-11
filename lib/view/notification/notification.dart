@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
@@ -616,24 +615,24 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 color: whiteColor,
                 size: 30,
               )),
-          SizedBox(
-            width: 90.w,
-          ),
+          // SizedBox(
+          //   width: 90.w,
+          // ),
           Text(
             'Notification',
             style: Theme.of(context).textTheme.displaySmall!.copyWith(
                 color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
           ),
-          SizedBox(
-            width: 30.w,
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: SvgPicture.asset(
-              'assets/fonts/icons/three-dots-svgrepo-com (1).svg',
-            ),
-            color: whiteColor,
-          ),
+          // SizedBox(
+          //   width: 30.w,
+          // ),
+          // IconButton(
+          //   onPressed: () {},
+          //   icon: SvgPicture.asset(
+          //     'assets/fonts/icons/three-dots-svgrepo-com (1).svg',
+          //   ),
+          //   color: whiteColor,
+          // ),
           Stack(
             alignment: AlignmentDirectional.center,
             children: [

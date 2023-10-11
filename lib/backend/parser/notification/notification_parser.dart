@@ -12,9 +12,10 @@ class NotificationParser {
     required this.apiService,
   });
   Future<Response> getNotification() async {
-    final accessToken = sharedPreferencesManager.getString('access_token');
+    final accessToken =
+        sharedPreferencesManager.getString('access_token') ?? 'NA';
     return await apiService.getPrivate(
-        Constants.baseUrl + Constants.getNotification, accessToken!);
+        Constants.baseUrl + Constants.getNotification, accessToken);
   }
 
   Future<Response> markNotificationSeen(body) async {

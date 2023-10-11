@@ -25,6 +25,7 @@ class Constants {
   static const String getActiveLoan = 'api/user/loan/list/active-loans';
   static const String getClosedLoan = 'api/user/loan/list/closed-loans';
   static const String getNotificationPollDetails = 'api/user/vote/view/poll';
+  static const String getProfileLoanData = 'api/user/loan/details/show';
   static const String acceptSuretyRequest =
       'api/user/loan/request/surety/accept';
   static const String rejectSuretyRequest =

@@ -186,28 +186,24 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Padding activeLoanData(HomeData data) {
-    return Padding(
-      padding: EdgeInsets.only(top: 10.h),
-      child: Container(
-        height: 120.h,
-        decoration: BoxDecoration(
-            color: textFormBase,
-            borderRadius: BorderRadius.all(Radius.circular(30.r))),
-        child: Padding(
-          padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 20.h),
-          child: Column(
-            children: [
-              IncomRow(
-                  price: '${data.activeLoan.loanAmount} INR',
-                  title: 'Loan Amount'),
-              const Divider(),
-              activeLoanRow(
-                  title: 'Start Date', date: data.activeLoan.startDate),
-              // activeLoanRow(title: 'End Date', date: '${data.activeLoan.}'),
-              activeLoanRow(title: 'Loan Type', date: data.activeLoan.loanType)
-            ],
-          ),
+  Container activeLoanData(HomeData data) {
+    return Container(
+      height: 120.h,
+      decoration: BoxDecoration(
+          color: textFormBase,
+          borderRadius: BorderRadius.all(Radius.circular(30.r))),
+      child: Padding(
+        padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 20.h),
+        child: Column(
+          children: [
+            IncomRow(
+                price: '${data.activeLoan.loanAmount} INR',
+                title: 'Loan Amount'),
+            const Divider(),
+            activeLoanRow(title: 'Start Date', date: data.activeLoan.startDate),
+            // activeLoanRow(title: 'End Date', date: '${data.activeLoan.}'),
+            activeLoanRow(title: 'Loan Type', date: data.activeLoan.loanType)
+          ],
         ),
       ),
     );

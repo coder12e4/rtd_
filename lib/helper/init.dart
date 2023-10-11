@@ -171,10 +171,10 @@ class MainBinding extends Bindings {
             apiService: Get.find(), sharedPreferencesManager: Get.find()),
         fenix: true);
 
-    //   Get.lazyPut(
-    //       () => StylistCategoriesParser(
-    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-    //       fenix: true);
+    // Get.lazyPut(
+    //     () => StylistCategoriesParser(
+    //         apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //     fenix: true);
 
     //   Get.lazyPut(
     //       () => ProfileCategoriesParse(

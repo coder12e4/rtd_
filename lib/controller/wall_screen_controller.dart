@@ -32,7 +32,7 @@ class WallScreenController extends GetxController {
         Map<String, dynamic> jsonData =
             Map<String, dynamic>.from(response.body);
         log('feed responce*******${response.body}');
-        data = FeedData.fromJson(jsonData);
+        data = FeedData.fromJson(jsonData['data']);
 
         if (data!.data.isEmpty) {
           error = true;

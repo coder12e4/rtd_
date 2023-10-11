@@ -118,6 +118,7 @@ import 'package:rtd_project/view/splash_screen/splash_page.dart';
 import '../backend/binding/edit_profile_binding.dart';
 import '../backend/binding/loan/loan_details_binding.dart';
 import '../backend/binding/loan/loan_edit_binding.dart';
+import '../backend/binding/loan/profie_loan_data_binding.dart';
 import '../backend/binding/notification/notification_binding.dart';
 import '../backend/binding/profile_binding.dart';
 import '../view/book_screen/service_member_profile/service_member_profile.dart';
@@ -127,6 +128,7 @@ import '../view/loan_screen/loan_page.dart';
 import '../view/notification/notification.dart';
 import '../view/notification/notificatoin_view/notification_view_screen.dart';
 import '../view/notification/poll_details/poll_notification.dart';
+import '../view/profile_screen/loan_detailes_screen/activelone_details_screen.dart';
 import '../view/profile_screen/profile_loan_screen/profile_loan_screen.dart';
 
 class AppRouter {
@@ -148,7 +150,7 @@ class AppRouter {
   static const String suretyRequestDetailsRoutes = '/suretyRequestDetails';
   static const String loanDetailsRoutes = '/loanDetails';
   static const String notificationPollRoutes = '/notificationPoll';
-  static const String gallaryRoutes = '/gallary';
+  static const String profileLoanDetailsRoutes = '/profileLoanDetails';
   static const String reviewRoutes = '/review';
   static const String languagesRoutes = '/languages';
   static const String contactUsRoutes = '/contact_us';
@@ -198,7 +200,7 @@ class AppRouter {
   static String getSuretyRequestDetailsRoute() => suretyRequestDetailsRoutes;
   static String getLoanDetailsRoute() => loanDetailsRoutes;
   static String getNotificationPollRoute() => notificationPollRoutes;
-  static String getGallaryRoute() => gallaryRoutes;
+  static String getProfileLoanDetailsRoute() => profileLoanDetailsRoutes;
   static String getReviewRoute() => reviewRoutes;
   static String getLanguagesRoute() => languagesRoutes;
   static String getContactUsRoute() => contactUsRoutes;
@@ -235,7 +237,11 @@ class AppRouter {
       page: () => const LOginPage(),
       binding: LoginBinding(),
     ),
-
+    GetPage(
+      name: splash,
+      page: () => const SplashScreen(),
+      binding: SplashBinding(),
+    ),
     GetPage(
         name: signUpRoutes,
         page: () => const RegisterScreen(),
@@ -294,10 +300,10 @@ class AppRouter {
       page: () => const VoteViewScreen(),
       binding: SuretyViewBinding(),
     ),
-    // GetPage(
-    //     name: gallaryRoutes,
-    //     page: () => const GallaryScreen(),
-    //     binding: GallaryBinding()),
+    GetPage(
+        name: profileLoanDetailsRoutes,
+        page: () => const ActiveLoanDetailsScreen(),
+        binding: ProfileLoanDataBinding()),
     // GetPage(
     //     name: reviewRoutes,
     //     page: () => const ReviewScreen(),
@@ -391,7 +397,7 @@ class AppRouter {
     //     page: () => const IndividualCitiesScreen(),
     //     binding: IndividualCitiesBinding()),
     // GetPage(name: errorRoutes, page: () => const ErrorScreen()),
-    GetPage(name: splash, page: () => SplashScreen(), binding: SplashBinding()),
+
     // GetPage(
     //     name: analyticsRoutes,
     //     page: () => const AnalyticScreen(),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:rtd_project/controller/notification/notification_controller.dart';
 import 'package:rtd_project/controller/profile/profile_controller.dart';
 import 'package:rtd_project/controller/profile/profile_edit_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
@@ -355,47 +354,41 @@ class ProfilePage extends StatelessWidget {
               style: TextStyle(color: baseColor),
             ),
           ),
-          GetBuilder<NotificationController>(
-            builder: (controller) {
-              return GestureDetector(
-                onTap: () {
-                  // Get.delete<NotificationController>(force: true);
-                  Get.toNamed(AppRouter.getNotificationPageRoute());
-                },
-                child: Stack(
-                  alignment: AlignmentDirectional.center,
-                  children: [
-                    const IconButton(
-                      onPressed: null,
-                      icon: Icon(
-                        Icons.notifications_none,
-                        color: whiteColor,
-                        size: 35,
-                      ),
-                    ),
-                    controller.notificationCount != 0
-                        ? Positioned(
-                            top: 3.h,
-                            right: 4.w,
-                            child: Container(
-                              height: 20.h,
-                              width: 20.w,
-                              decoration: const BoxDecoration(
-                                  color: Colors.red, shape: BoxShape.circle),
-                              child: Center(
-                                  child: Text(
-                                '${controller.notificationCount ?? 0}',
-                                style: const TextStyle(
-                                    color: whiteColor,
-                                    fontWeight: FontWeight.bold),
-                              )),
-                            ),
-                          )
-                        : const SizedBox(),
-                  ],
-                ),
-              );
+          GestureDetector(
+            onTap: () {
+              // Get.delete<NotificationController>(force: true);
+              Get.toNamed(AppRouter.getNotificationPageRoute());
             },
+            child: const Stack(
+              alignment: AlignmentDirectional.center,
+              children: [
+                IconButton(
+                  onPressed: null,
+                  icon: Icon(
+                    Icons.notifications_none,
+                    color: whiteColor,
+                    size: 35,
+                  ),
+                ),
+                // Positioned(
+                //         top: 3.h,
+                //         right: 4.w,
+                //         child: Container(
+                //           height: 20.h,
+                //           width: 20.w,
+                //           decoration: const BoxDecoration(
+                //               color: Colors.red, shape: BoxShape.circle),
+                //           child: const Center(
+                //               child: Text(
+                //             '${ 0}',
+                //             style: TextStyle(
+                //                 color: whiteColor,
+                //                 fontWeight: FontWeight.bold),
+                //           )),
+                //         ),
+                //       )
+              ],
+            ),
           ),
         ],
       ),

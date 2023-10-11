@@ -4,10 +4,9 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:rtd_project/controller/loan/loan_details_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
-import 'package:rtd_project/view/profile_screen/loan_detailes_screen/activelone_details_screen.dart';
-import 'package:rtd_project/view/profile_screen/loan_detailes_screen/rejected_loan.dart';
 
 import '../../../backend/model/loan/active_loan_model.dart';
+import '../../../helper/router.dart';
 
 class ProfileLoanScreen extends StatelessWidget {
   const ProfileLoanScreen({super.key});
@@ -68,11 +67,10 @@ class ProfileLoanScreen extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: controller.closedLoans?.data.data.length ?? 0,
             itemBuilder: (context, index) => GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const RejectedLoanScreen(),
-                  ));
-                },
+                onTap: () => Get.toNamed(AppRouter.getProfileLoanDetailsRoute(),
+                        arguments: [
+                          controller.closedLoans?.data.data[index].userId
+                        ]),
                 child: activeAndClosedLoans(
                     false, '418', controller, index, controller.closedLoans!)),
           ),
@@ -243,14 +241,8 @@ class ProfileLoanScreen extends StatelessWidget {
             itemCount: data?.length ?? 0,
             itemBuilder: (context, index) => GestureDetector(
               onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => ActiveLoanDetailsScreen(
-                      controller: controller,
-                      index: index,
-                    ),
-                  ),
-                );
+                Get.toNamed(AppRouter.getProfileLoanDetailsRoute(),
+                    arguments: [data![index].userId]);
               },
               child: activeAndClosedLoans(
                   true, '418', controller, index, controller.activeLoans!),

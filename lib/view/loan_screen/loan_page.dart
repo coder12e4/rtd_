@@ -670,7 +670,7 @@ class _LoanPageState extends State<LoanPage> {
 
   Container wallTextWidget(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 10.h, right: 10.w),
+      margin: EdgeInsets.only(top: 10.h),
       child: Text(
         'Loan Request',
         style: Theme.of(context).textTheme.displaySmall!.copyWith(
