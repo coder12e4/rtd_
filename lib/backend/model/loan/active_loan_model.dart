@@ -1,22 +1,22 @@
 // To parse this JSON data, do
 //
-//     final wallFeedData = wallFeedDataFromJson(jsonString);
+//     final activeLoans = activeLoansFromJson(jsonString);
 
 import 'dart:convert';
 
-WallFeedData wallFeedDataFromJson(String str) =>
-    WallFeedData.fromJson(json.decode(str));
+ActiveLoans activeLoansFromJson(String str) =>
+    ActiveLoans.fromJson(json.decode(str));
 
-String wallFeedDataToJson(WallFeedData data) => json.encode(data.toJson());
+String activeLoansToJson(ActiveLoans data) => json.encode(data.toJson());
 
-class WallFeedData {
+class ActiveLoans {
   bool status;
-  FeedData data;
+  ALoanData data;
   String message;
   String accessToken;
   String tokenType;
 
-  WallFeedData({
+  ActiveLoans({
     required this.status,
     required this.data,
     required this.message,
@@ -24,9 +24,9 @@ class WallFeedData {
     required this.tokenType,
   });
 
-  factory WallFeedData.fromJson(Map<String, dynamic> json) => WallFeedData(
+  factory ActiveLoans.fromJson(Map<String, dynamic> json) => ActiveLoans(
         status: json["status"],
-        data: FeedData.fromJson(json["data"]),
+        data: ALoanData.fromJson(json["data"]),
         message: json["message"],
         accessToken: json["access_token"],
         tokenType: json["token_type"],
@@ -41,8 +41,8 @@ class WallFeedData {
       };
 }
 
-class FeedData {
-  int? currentPage;
+class ALoanData {
+  int currentPage;
   List<Datum> data;
   String firstPageUrl;
   int from;
@@ -56,7 +56,7 @@ class FeedData {
   int to;
   int total;
 
-  FeedData({
+  ALoanData({
     required this.currentPage,
     required this.data,
     required this.firstPageUrl,
@@ -72,7 +72,7 @@ class FeedData {
     required this.total,
   });
 
-  factory FeedData.fromJson(Map<String, dynamic> json) => FeedData(
+  factory ALoanData.fromJson(Map<String, dynamic> json) => ALoanData(
         currentPage: json["current_page"],
         data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
         firstPageUrl: json["first_page_url"],

@@ -24,6 +24,7 @@ class TextFormFieldWidget extends StatelessWidget {
           validator: validator,
           controller: controller,
           keyboardType: textInputType,
+
           autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: InputDecoration(
               border: InputBorder.none, // Removes the underline

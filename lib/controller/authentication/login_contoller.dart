@@ -20,13 +20,14 @@ class LoginController extends GetxController implements GetxService {
 
   @override
   void onInit() {
-    log("getting fcm token from shared pref ${parser.getFcmToken()}");
+    log("getting fcm token from shared pref ${fcmToken = parser.getFcmToken()}");
     super.onInit();
   }
 
   final mobileNumberController = TextEditingController();
   final passwordController = TextEditingController();
   RegisterController? registerController;
+  String? fcmToken;
   bool? indiadoc;
   bool? ksasdoc;
   bool passwordVisible = true;
@@ -48,6 +49,7 @@ class LoginController extends GetxController implements GetxService {
     var body = {
       "ksa_mobile_number": mobileNumberController.text,
       "password": passwordController.text,
+      "fcm_token": fcmToken
     };
 
     Get.dialog(

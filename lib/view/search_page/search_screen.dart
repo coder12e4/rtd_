@@ -15,73 +15,106 @@ class SearchScreen extends StatelessWidget {
     return Scaffold(
         backgroundColor: baseColor,
         body: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.only(top: 90.h),
-            child: Container(
-              height: MediaQuery.sizeOf(context).height,
-              decoration: const BoxDecoration(
-                color: whiteColor,
-                borderRadius: BorderRadiusDirectional.only(
-                  topEnd: Radius.circular(40),
-                  topStart: Radius.circular(40),
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: 40.h, bottom: 15.h),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment
+                      .start, // Align items to the start (left)
+                  children: [
+                    IconButton(
+                      onPressed: () => Get.back(),
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: whiteColor,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 105.w,
+                    ),
+                    Text(
+                      'Sureties',
+                      style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                          ),
+                    ),
+                  ],
                 ),
               ),
-              child: Padding(
-                padding: EdgeInsets.only(top: 35.h, left: 25.w, right: 25.w),
-                child: GetBuilder<SearchScreenController>(builder: (value) {
-                  return value.loading == false
-                      ? Column(children: [
-                          SearchBar(
-                            controller: value.serchController,
-                            backgroundColor:
-                                const MaterialStatePropertyAll(textFormBase),
-                            surfaceTintColor: const MaterialStatePropertyAll(
-                                Colors.transparent),
-                            elevation: const MaterialStatePropertyAll(0),
-                            trailing: const [Icon(Icons.search)],
-                            hintText: 'Search',
-                            onChanged: value.searchSurties,
-                          ),
-                          value.searchResult!.isNotEmpty
-                              ? Expanded(
-                                  child: ListView.separated(
-                                    shrinkWrap: true,
-                                    itemBuilder: (context, index) =>
-                                        GestureDetector(
-                                      onTap: () {
-                                        value.addSurties(
-                                            value.searchResult![index]);
-                                      },
-                                      child: MemberistTileWidget(
-                                          name: value.searchResult![index].name,
-                                          image: value.searchResult![index]
-                                              .profileImage,
-                                          memberid: value
-                                              .searchResult![index].memberId),
+              Container(
+                height: MediaQuery.sizeOf(context).height,
+                decoration: const BoxDecoration(
+                  color: whiteColor,
+                  borderRadius: BorderRadiusDirectional.only(
+                    topEnd: Radius.circular(40),
+                    topStart: Radius.circular(40),
+                  ),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.only(top: 35.h, left: 25.w, right: 25.w),
+                  child: GetBuilder<SearchScreenController>(builder: (value) {
+                    return value.loading == false
+                        ? Column(children: [
+                            SearchBar(
+                              controller: value.serchController,
+                              backgroundColor:
+                                  const MaterialStatePropertyAll(textFormBase),
+                              surfaceTintColor: const MaterialStatePropertyAll(
+                                  Colors.transparent),
+                              elevation: const MaterialStatePropertyAll(0),
+                              trailing: const [Icon(Icons.search)],
+                              hintText: 'Search',
+                              onChanged: value.searchSurties,
+                            ),
+                            value.searchResult!.isNotEmpty
+                                ? Expanded(
+                                    child: ListView.separated(
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemBuilder: (context, index) =>
+                                          GestureDetector(
+                                        onTap: () {
+                                          value.addSurties(
+                                              value.searchResult![index]);
+                                        },
+                                        child: MemberistTileWidget(
+                                            name:
+                                                value.searchResult![index].name,
+                                            image: value.searchResult![index]
+                                                .profileImage,
+                                            memberid: value
+                                                .searchResult![index].memberId),
+                                      ),
+                                      separatorBuilder: (context, index) =>
+                                          const Divider(
+                                        color:
+                                            Color.fromARGB(255, 227, 224, 224),
+                                      ),
+                                      itemCount:
+                                          value.searchResult?.length ?? 0,
                                     ),
-                                    separatorBuilder: (context, index) =>
-                                        const Divider(
-                                      color: Color.fromARGB(255, 227, 224, 224),
+                                  )
+                                : SizedBox(
+                                    height: 500.h,
+                                    child: const Center(
+                                      child: Text('No result Found'),
                                     ),
-                                    itemCount: value.searchResult?.length ?? 0,
                                   ),
-                                )
-                              : SizedBox(
-                                  height: 500.h,
-                                  child: const Center(
-                                    child: Text('No result Found'),
-                                  ),
-                                ),
-                        ])
-                      : const Center(
-                          child: CircularProgressIndicator(
-                            color: ThemeProvider.blackColor,
-                            strokeWidth: 6,
-                          ),
-                        );
-                }),
+                          ])
+                        : const Center(
+                            child: CircularProgressIndicator(
+                              color: ThemeProvider.blackColor,
+                              strokeWidth: 6,
+                            ),
+                          );
+                  }),
+                ),
               ),
-            ),
+            ],
           ),
         ));
   }

@@ -71,7 +71,7 @@ class EditProfileController extends GetxController implements GetxService {
   String? vehicleTypeName;
   BloodGroup? bloodGroup;
   String? bloodGroupName;
-  AllStatesModel? stateKsa;
+  // AllStatesModel? stateKsa;
   XFile? profileImageFile;
   XFile? docProofIndia;
   XFile? docProofKsa;

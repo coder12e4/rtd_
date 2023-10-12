@@ -336,7 +336,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                           showToast('Select blood group');
                                           return;
                                         }
-                                        if (value.stateKsa == null ||
+                                        if (value.selectedKsaItem == null ||
                                             value.selectedItem == null) {
                                           showToast('Select States');
                                           return;
@@ -597,7 +597,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               IconButton(
                   onPressed: Get.back,
@@ -607,7 +607,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                     size: 30,
                   )),
               SizedBox(
-                width: 58.w,
+                width: 95.w,
               ),
               Text(
                 'Edit Profile',
@@ -616,16 +616,14 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                     fontWeight: FontWeight.bold,
                     fontSize: 24),
               ),
-              SizedBox(
-                width: 30.w,
-              ),
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.notifications_none,
-                    color: whiteColor,
-                    size: 35,
-                  ))
+
+              // IconButton(
+              //     onPressed: () {},
+              //     icon: const Icon(
+              //       Icons.notifications_none,
+              //       color: whiteColor,
+              //       size: 35,
+              //     ))
             ],
           ),
         ],

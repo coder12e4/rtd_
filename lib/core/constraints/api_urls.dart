@@ -20,6 +20,16 @@ class Constants {
   static const String submitVote = 'api/user/vote/submit/option';
   static const String searchBookMember = 'api/user/search';
   static const String getServices = 'api/user/service/list';
+  static const String getNotification = 'api/user/notification/list';
+  static const String seenNotification = 'api/user/notification/mark/seen';
+  static const String getActiveLoan = 'api/user/loan/list/active-loans';
+  static const String getClosedLoan = 'api/user/loan/list/closed-loans';
+  static const String getNotificationPollDetails = 'api/user/vote/view/poll';
+  static const String getProfileLoanData = 'api/user/loan/details/show';
+  static const String acceptSuretyRequest =
+      'api/user/loan/request/surety/accept';
+  static const String rejectSuretyRequest =
+      'api/user/loan/request/surety/reject';
   static const String getServiceMemberDetails =
       'api/user/service/member/show?service_member_id=';
   static const String uploadIndianDocument =

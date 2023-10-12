@@ -7,8 +7,8 @@ import 'package:rtd_project/controller/profile/profile_edit_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/helper/router.dart';
-import 'package:rtd_project/util/alert_dialog.dart';
-import 'package:rtd_project/view/profile_screen/profile_loan_screen/profile_loan_screen.dart';
+
+import '../../util/alert_dialog.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -23,7 +23,7 @@ class ProfilePage extends StatelessWidget {
             builder: (value) {
               return Column(
                 children: [
-                  appbar(context),
+                  appbar(context, value),
                   value.loading || value.userData == null
                       ? Container(
                           height: 550.h,
@@ -43,7 +43,7 @@ class ProfilePage extends StatelessWidget {
                           ),
                         )
                       : Container(
-                          height: 1090.h,
+                          height: 1550.h,
                           decoration: const BoxDecoration(
                               color: whiteColor,
                               borderRadius: BorderRadiusDirectional.only(
@@ -63,18 +63,45 @@ class ProfilePage extends StatelessWidget {
                               kSizedBoxH,
                               dividerWidget(),
                               kSizedBoxH,
-                              detailsText('India',
+                              detailsText('Indian Mobile Number',
                                   " ${value.userData!.data.indiaMobileNumber}"),
                               kSizedBoxH,
                               dividerWidget(),
                               kSizedBoxH,
-                              detailsText(
-                                  'KSA', value.userData!.data.ksaMobileNumber),
+                              detailsText('KSA  Mobile Number',
+                                  value.userData!.data.ksaMobileNumber),
                               kSizedBoxH,
                               dividerWidget(),
                               kSizedBoxH,
                               detailsText(
                                   'Mail Address', value.userData!.data.email),
+                              kSizedBoxH,
+                              dividerWidget(),
+                              kSizedBoxH,
+                              detailsText('India State',
+                                  value.userData!.data.indiaState.stateName),
+                              kSizedBoxH,
+                              dividerWidget(),
+                              kSizedBoxH,
+                              detailsText('KSA State',
+                                  value.userData!.data.ksaState.stateName),
+                              kSizedBoxH,
+                              dividerWidget(),
+                              kSizedBoxH,
+                              detailsText(
+                                  'India Pin', value.userData!.data.indiaPin),
+                              kSizedBoxH,
+                              dividerWidget(),
+                              kSizedBoxH,
+                              detailsText(
+                                  'KSA Pin', value.userData!.data.ksaPin),
+                              kSizedBoxH,
+                              dividerWidget(),
+                              kSizedBoxH,
+                              detailsText(
+                                  'Vehicle Model',
+                                  value.userData!.data.vehicleTypeId
+                                      .toString()),
                               kSizedBoxH,
                               dividerWidget(),
                               kSizedBoxH,
@@ -146,34 +173,36 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Container documentContainer(documentProof) {
-    return Container(
-      margin: EdgeInsets.only(left: 36.w),
-      height: 130.h,
-      width: 280.w,
-      decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.contain,
-            image: NetworkImage(documentProof),
-          ),
-          color: const Color.fromARGB(255, 223, 220, 220),
-          borderRadius: BorderRadius.circular(20)),
-      // child: Image.network(
-      //   documentProof,
-      //   height: 130.h,
-      //   width: 280.w,
-      //   errorBuilder: (context, error, stackTrace) => Padding(
-      //     padding: const EdgeInsets.all(10.0).r,
-      //     child: Column(
-      //       mainAxisAlignment: MainAxisAlignment.center,
-      //       children: [
-      //         const Icon(Icons.error_outline),
-      //         kSizedBoxH,
-      //         Text(error.toString()),
-      //       ],
-      //     ),
-      //   ),
-      // ),
+  Align documentContainer(documentProof) {
+    return Align(
+      child: Container(
+        // margin: EdgeInsets.only(left: 36.w),
+        height: 130.h,
+        width: 280.w,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.contain,
+              image: NetworkImage(documentProof),
+            ),
+            color: const Color.fromARGB(255, 223, 220, 220),
+            borderRadius: BorderRadius.circular(20)),
+        // child: Image.network(
+        //   documentProof,
+        //   height: 130.h,
+        //   width: 280.w,
+        //   errorBuilder: (context, error, stackTrace) => Padding(
+        //     padding: const EdgeInsets.all(10.0).r,
+        //     child: Column(
+        //       mainAxisAlignment: MainAxisAlignment.center,
+        //       children: [
+        //         const Icon(Icons.error_outline),
+        //         kSizedBoxH,
+        //         Text(error.toString()),
+        //       ],
+        //     ),
+        //   ),
+        // ),
+      ),
     );
   }
 
@@ -244,11 +273,7 @@ class ProfilePage extends StatelessWidget {
                     (states) => const Size(60, 50)),
                 backgroundColor:
                     MaterialStateColor.resolveWith((states) => baseColor)),
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const ProfileLoanScreen(),
-              ));
-            },
+            onPressed: () => Get.toNamed(AppRouter.getLoanDetailsRoute()),
             child: Padding(
               padding: const EdgeInsets.only(
                   left: 18.0, right: 18, top: 5, bottom: 5),
@@ -302,57 +327,69 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Container appbar(BuildContext context) {
+  Container appbar(BuildContext context, ProfileController ProController) {
     return Container(
-      margin: EdgeInsets.only(top: 10.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+      margin: EdgeInsets.only(top: 10.h, bottom: 10.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: 145.w,
-              ),
-              Text(
-                'Profile',
-                style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24),
-              ),
-              SizedBox(
-                width: 30.w,
-              ),
-              IconButton(
-                onPressed: () {},
-                icon: SvgPicture.asset(
-                  'assets/fonts/icons/three-dots-svgrepo-com (1).svg',
-                ),
-                color: whiteColor,
-              ),
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
+          SizedBox(
+            width: 160.w,
+          ),
+          Text(
+            'Profile',
+            style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
+          ),
+          SizedBox(
+            width: 10.w,
+          ),
+          TextButton(
+            style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateColor.resolveWith((states) => whiteColor)),
+            onPressed: () => logOutDialog(),
+            child: const Text(
+              'Log Out',
+              style: TextStyle(color: baseColor),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              // Get.delete<NotificationController>(force: true);
+              Get.toNamed(AppRouter.getNotificationPageRoute());
+            },
+            child: const Stack(
+              alignment: AlignmentDirectional.center,
+              children: [
+                IconButton(
+                  onPressed: null,
+                  icon: Icon(
                     Icons.notifications_none,
                     color: whiteColor,
                     size: 35,
-                  ))
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 38.0),
-            child: TextButton(
-              style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateColor.resolveWith((states) => whiteColor)),
-              onPressed: () => logOutDialog(),
-              child: const Text(
-                'Log Out',
-                style: TextStyle(color: baseColor),
-              ),
+                  ),
+                ),
+                // Positioned(
+                //         top: 3.h,
+                //         right: 4.w,
+                //         child: Container(
+                //           height: 20.h,
+                //           width: 20.w,
+                //           decoration: const BoxDecoration(
+                //               color: Colors.red, shape: BoxShape.circle),
+                //           child: const Center(
+                //               child: Text(
+                //             '${ 0}',
+                //             style: TextStyle(
+                //                 color: whiteColor,
+                //                 fontWeight: FontWeight.bold),
+                //           )),
+                //         ),
+                //       )
+              ],
             ),
-          )
+          ),
         ],
       ),
     );

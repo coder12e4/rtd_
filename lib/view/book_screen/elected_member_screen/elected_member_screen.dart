@@ -4,12 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rtd_project/controller/elected_member_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
-import 'package:rtd_project/helper/router.dart';
 import 'package:rtd_project/view/book_screen/book_edit_screen/book_edit_screen.dart';
 import 'package:rtd_project/view/book_screen/widgets/electedmembers_list_tile.dart';
 
 class ElectedMemberScreen extends StatelessWidget {
-  ElectedMemberScreen({super.key});
+  const ElectedMemberScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +88,7 @@ class ElectedMemberScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               IconButton(
                   onPressed: () {
@@ -100,7 +99,7 @@ class ElectedMemberScreen extends StatelessWidget {
                     color: whiteColor,
                   )),
               SizedBox(
-                width: 50.w,
+                width: 90.w,
               ),
               Text(
                 'Elected Members',
@@ -109,25 +108,23 @@ class ElectedMemberScreen extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     fontSize: 18),
               ),
-              SizedBox(
-                width: 30.w,
-              ),
-              IconButton(
-                onPressed: () {
-                  Get.toNamed(AppRouter.getElectedMemberRoute());
-                },
-                icon: const Icon(
-                  Icons.people_alt_rounded,
-                ),
-                color: whiteColor,
-              ),
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.notifications_none,
-                    color: whiteColor,
-                    size: 28,
-                  ))
+
+              // IconButton(
+              //   onPressed: () {
+              //     Get.toNamed(AppRouter.getElectedMemberRoute());
+              //   },
+              //   icon: const Icon(
+              //     Icons.people_alt_rounded,
+              //   ),
+              //   color: whiteColor,
+              // ),
+              // IconButton(
+              //     onPressed: () {},
+              //     icon: const Icon(
+              //       Icons.notifications_none,
+              //       color: whiteColor,
+              //       size: 28,
+              //     ))
             ],
           ),
         ],

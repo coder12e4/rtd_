@@ -71,6 +71,7 @@ import 'package:rtd_project/backend/parser/book/service_member_parser.dart';
 import 'package:rtd_project/backend/parser/elected_member_parser.dart';
 import 'package:rtd_project/backend/parser/home_parser.dart';
 import 'package:rtd_project/backend/parser/loan/loan_edit_parser.dart';
+import 'package:rtd_project/backend/parser/notification/notification_parser.dart';
 import 'package:rtd_project/backend/parser/profile/profile_parser.dart';
 import 'package:rtd_project/backend/parser/search_parser.dart';
 import 'package:rtd_project/core/constraints/api_urls.dart';
@@ -79,6 +80,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../backend/parser/book/books_parser.dart';
 import '../backend/parser/bottom_navigation_parser.dart';
+import '../backend/parser/loan/loan_details_parser.dart';
 import '../backend/parser/loan/loan_screen_parser.dart';
 import '../backend/parser/profile/edit_profile_parser.dart';
 import '../backend/parser/splash_screen_parser.dart';
@@ -95,7 +97,8 @@ class MainBinding extends Bindings {
 
     Get.lazyPut(() => ApiService(appBaseUrl: Constants.baseUrl));
 
-    // // Parser LazyLoad
+    Get.lazyPut(() => SplashScreenParser(sharedPreferencesManager: Get.find()),
+        fenix: true);
 
     Get.lazyPut(
         () => LoginParser(
@@ -158,25 +161,20 @@ class MainBinding extends Bindings {
             apiService: Get.find(), sharedPreferencesManager: Get.find()),
         fenix: true);
 
-    //   Get.lazyPut(
-    //       () => HistoryParser(
-    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-    //       fenix: true);
+    Get.lazyPut(
+        () => NotificationParser(
+            apiService: Get.find(), sharedPreferencesManager: Get.find()),
+        fenix: true);
 
-    //   Get.lazyPut(
-    //       () => StylistParser(
-    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-    //       fenix: true);
+    Get.lazyPut(
+        () => LoanDetailsParser(
+            apiService: Get.find(), sharedPreferencesManager: Get.find()),
+        fenix: true);
 
-    //   Get.lazyPut(
-    //       () => AddStylistParser(
-    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-    //       fenix: true);
-
-    //   Get.lazyPut(
-    //       () => StylistCategoriesParser(
-    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-    //       fenix: true);
+    // Get.lazyPut(
+    //     () => StylistCategoriesParser(
+    //         apiService: Get.find(), sharedPreferencesManager: Get.find()),
+    //     fenix: true);
 
     //   Get.lazyPut(
     //       () => ProfileCategoriesParse(
@@ -302,35 +300,5 @@ class MainBinding extends Bindings {
     //       () => IndividualCitiesParser(
     //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
     //       fenix: true);
-
-    Get.lazyPut(() => SplashScreenParser(sharedPreferencesManager: Get.find()),
-        fenix: true);
-
-    //   Get.lazyPut(
-    //       () => AnalyticsParser(
-    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-    //       fenix: true);
-
-    //   Get.lazyPut(
-    //       () => FirebaseParser(
-    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-    //       fenix: true);
-
-    //   Get.lazyPut(
-    //       () => ProductOrderDetailsParse(
-    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-    //       fenix: true);
-
-    //   Get.lazyPut(
-    //       () => RegisterCategoriesParser(
-    //           apiService: Get.find(), sharedPreferencesManager: Get.find()),
-    //       fenix: true);
-
-    //   Get.lazyPut(() => TabsController(parser: Get.find()));
-    //   Get.lazyPut(() => AppointmentController(parser: Get.find()));
-    //   Get.lazyPut(() => HistoryController(parser: Get.find()));
-    //   Get.lazyPut(() => AnalyticsController(parser: Get.find()));
-    //   Get.lazyPut(() => CalendarsController(parser: Get.find()));
-    //   Get.lazyPut(() => ProfileController(parser: Get.find()));
   }
 }

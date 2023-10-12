@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../backend/model/profile_model.dart';
 import '../../backend/parser/profile/profile_parser.dart';
+import '../notification/notification_controller.dart';
 
 class ProfileController extends GetxController implements GetxService {
   final ProfileParser parser;
@@ -13,10 +14,12 @@ class ProfileController extends GetxController implements GetxService {
   bool loading = true;
   @override
   void onInit() {
+    controllerN = Get.put(NotificationController(parser: Get.find()));
     getUserDatas();
     super.onInit();
   }
 
+  NotificationController? controllerN;
   Future<void> getUserDatas() async {
     final response = await parser.getUserData();
 

@@ -18,6 +18,7 @@ class WallPage extends StatelessWidget {
             body: DefaultTabController(
               length: 2,
               child: SingleChildScrollView(
+                physics: const NeverScrollableScrollPhysics(),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
@@ -35,8 +36,10 @@ class WallPage extends StatelessWidget {
 
   Container tabBarView(BuildContext context) {
     return Container(
-      height: 800.h,
+      // margin: const EdgeInsets.only(bottom: 10),
+      height: 550.h,
       //hallo
+      padding: EdgeInsets.only(bottom: 6.h),
       decoration: const BoxDecoration(
         color: whiteColor,
         borderRadius: BorderRadiusDirectional.only(
@@ -58,7 +61,7 @@ class WallPage extends StatelessWidget {
 
   ListView votesView(WallScreenController controller) {
     return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       itemCount: controller.votesData.length,
       itemBuilder: (context, index) {
         return Column(
@@ -245,11 +248,12 @@ class WallPage extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: EdgeInsets.only(top: 5.h),
-                child: controller.error == true
+                child: controller.data?.data.length != 0 ||
+                        controller.data?.data == null
                     ? ListView.builder(
                         physics: const BouncingScrollPhysics(),
                         // shrinkWrap: true,
-                        itemCount: controller.data!.data.length,
+                        itemCount: controller.data?.data.length ?? 0,
                         itemBuilder: (context, index) {
                           return Column(
                             children: [
@@ -263,14 +267,7 @@ class WallPage extends StatelessWidget {
                             ],
                           );
                         })
-                    : Column(
-                        children: [
-                          SizedBox(
-                            height: 270.h,
-                          ),
-                          const Text('Feed is Empty'),
-                        ],
-                      ),
+                    : Center(child: const Text("Feed is empty")),
               ),
             ),
 
