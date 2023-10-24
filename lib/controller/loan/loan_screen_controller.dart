@@ -226,27 +226,11 @@ class LoanScreenController extends GetxController {
       Get.back();
       String errorMessage = '';
       for (var error in parsedData['errors']) {
-        errorMessage = errorMessage + error['error_name'] + "\n ";
+        errorMessage = "${errorMessage + error['error_name']}\n ";
         log(errorMessage.toString());
         // error += error;
       }
       showToast(errorMessage);
     }
-  }
-}
-
-class eror {
-  String? message;
-  bool? status;
-  eror({this.message, this.status});
-  eror.fromJson(Map<String, dynamic> json) {
-    message = json['message'];
-    status = json['status'];
-  }
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['message'] = this.message;
-    data['status'] = this.status;
-    return data;
   }
 }

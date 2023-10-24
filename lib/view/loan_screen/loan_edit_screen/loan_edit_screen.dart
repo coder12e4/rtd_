@@ -199,8 +199,7 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
                                     alignment: Alignment.centerLeft,
                                     child: Text('Document')),
                                 kSizedBoxH,
-                                documentContainer(
-                                    value.loanData!.data.loanDocument),
+                                documentContainer(''),
 
                                 SizedBox(
                                   height: 20.h,

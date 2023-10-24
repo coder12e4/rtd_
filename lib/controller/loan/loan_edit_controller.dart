@@ -119,19 +119,26 @@ class LoanEditController extends GetxController implements GetxService {
     addedSurties.clear();
     surties.clear();
     isSelected.clear();
-    if (response.statusCode == 200) {
-      Map<String, dynamic> jsonData = Map<String, dynamic>.from(response.body);
-      loanData = LoanData.fromJson(jsonData);
-      for (var element in loanData!.data.sureties) {
-        addedSurties.add(element.userId);
-        isSelected.add(true);
-        surties.add(element);
+    try {
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonData =
+            Map<String, dynamic>.from(response.body);
+        loanData = LoanData.fromJson(jsonData);
+        for (var element in loanData!.data.sureties) {
+          addedSurties.add(element.userId);
+          isSelected.add(true);
+          surties.add(element);
+        }
+        // final imagePath =
+        //     await parser.urlToFile(loanData!.data.loanDocument[1].file);
+        // loanDocument = XFile(imagePath.path);
+        loanAmountController.text = loanData!.data.loanAmount;
+        loading = false;
       }
-      final imagePath = await parser.urlToFile(loanData!.data.loanDocument);
-      loanDocument = XFile(imagePath.path);
-      loanAmountController.text = loanData!.data.loanAmount;
-      loading = false;
+    } catch (e, stackTrace) {
+      log('loan details catch $e', error: e, stackTrace: stackTrace);
     }
+
     log(loanData!.toString());
     update();
   }

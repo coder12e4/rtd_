@@ -56,12 +56,12 @@ class SuretiesData {
   String indianAddress2;
   String indiaState;
   String indiaPin;
-  String documentProofIndia;
+  String? documentProofIndia;
   String ksaAddress1;
   String ksaAddress2;
   int ksaState;
   String ksaPin;
-  String documentProofKsa;
+  String? documentProofKsa;
   int vehicleTypeId;
   String vehicleNumber;
   DateTime createdAt;
