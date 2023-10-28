@@ -179,7 +179,7 @@ class RegisterController extends GetxController implements GetxService {
     update();
   }
 
-  Future<void> onRegister() async {
+  Future<void> onRegister(XFile? profileImage) async {
     try {
       /*if (emailRegController.text == '' ||
           emailRegController.text.isEmpty ||
@@ -237,6 +237,7 @@ class RegisterController extends GetxController implements GetxService {
       );
 
       await upload(
+        profileImage,
         nameRegController.text,
         emailRegController.text,
         passwordRegController.text,
@@ -543,6 +544,7 @@ class RegisterController extends GetxController implements GetxService {
 // Example usage:
 
   Future<void> upload(
+    XFile? data,
     name,
     email,
     password,
@@ -567,7 +569,9 @@ class RegisterController extends GetxController implements GetxService {
     var uri = Uri.parse("http://rtd.canisostudio.com/api/register");
 
     var request = http.MultipartRequest("POST", uri);
-
+    var file =
+        await http.MultipartFile.fromPath('profile_image', data?.path ?? '');
+    request.files.add(file);
     request.fields['name'] = name;
     request.fields['email'] = email;
     request.fields['password'] = password;

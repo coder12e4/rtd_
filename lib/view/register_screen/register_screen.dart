@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -26,14 +28,15 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   XFile? _selectedImage1;
   XFile? _selectedImage2;
+  XFile? _profileImage;
 
   bool selectProfileImage = false;
-  // void _updateProfileImage(XFile? profileImage) {
-  //   setState(() {
-  //     _profileImage = profileImage;
-  //     selectProfileImage = true;
-  //   });
-  // }
+  void _updateProfileImage(XFile? profileImage) {
+    setState(() {
+      _profileImage = profileImage;
+      selectProfileImage = true;
+    });
+  }
 
   void _updateSelectedImage(XFile? newImage) async {
     _selectedImage1 = newImage;
@@ -99,6 +102,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   children: <Widget>[
                     registerStepContainer('1'),
 
+                    imageContainer(value),
                     textFieldHeight,
                     TextFormFieldWidget(
                         validator: Rtd_Validators.noneEmptyValidator,
@@ -437,10 +441,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 auth.vehicleType = value;
 
                                 auth.vehicleTypeName = value!.name.toString();
-
-                                //   newStateList.clear();
-                                //  newStateList=[];
-                                //_dropdownMenuItemsStates.clear();
                               });
                             }),
                       ),
@@ -461,7 +461,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       press: () {
                         if (auth.isSelected.value) {
                           if (_formKey.currentState!.validate()) {
-                            value.onRegister();
+                            value.onRegister(_profileImage);
                           }
                         } else {
                           showToast('Please Agree the Terms and Conditions');
@@ -542,6 +542,54 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             ],
           )),
+    );
+  }
+
+  imageContainer(RegisterController value) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20).r,
+      child: Stack(
+        alignment: AlignmentDirectional.topCenter,
+        children: [
+          Container(
+            height: 100.h,
+            width: 100.w,
+            decoration: BoxDecoration(
+              // border: Border.all(width: .3),
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: selectProfileImage == false
+                    ? AssetImage('assets/images/defaultpic.webp')
+                        as ImageProvider
+                    : FileImage(File(_profileImage!.path)),
+              ),
+            ),
+          ),
+          Positioned(
+              right: 5.w,
+              bottom: 10.h,
+              // top: 80.h,
+              child: CircleAvatar(
+                maxRadius: 15.r,
+                backgroundColor: ThemeProvider.blackColor,
+                child: IconButton(
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) => Imagepiker(
+                            onImageSelected: _updateProfileImage,
+                            press: () => Get.back()),
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.camera_alt_outlined,
+                      color: whiteColor,
+                      size: 15,
+                    )),
+              ))
+        ],
+      ),
     );
   }
 

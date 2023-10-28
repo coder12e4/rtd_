@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:rtd_project/core/constraints/api_urls.dart';
 
 import '../../backend/model/loan/loan_request_model.dart';
 import '../../backend/model/loan/loan_type_model.dart';
 import '../../backend/model/loan/surties_model.dart';
 import '../../backend/parser/loan/loan_screen_parser.dart';
+import '../../core/common_widget/loane_documents.dart';
 import '../../util/theme.dart';
 import '../../util/toast.dart';
 
@@ -29,6 +31,10 @@ class LoanScreenController extends GetxController {
 
   bool loading = true;
   Data? loan;
+  bool image1 = false;
+  XFile? selectedImage1;
+  XFile? selectedImage2;
+  XFile? selectedImage3;
   TextEditingController loanAmountController = TextEditingController();
   List<LoanData> _loanData = <LoanData>[];
   List<LoanData> get loanData => _loanData;
@@ -153,16 +159,41 @@ class LoanScreenController extends GetxController {
     }
   }
 
-  Future<void> upload(
-    XFile? data1,
-    loanTypeId,
-    loanPurpose,
-    sureties,
-  ) async {
-    if (data1 == null) {
-      showToast('Select document');
-      return;
+  Future<void> uploadLoanDocument(XFile? data, loanId) async {
+    var uri = Uri.parse(Constants.baseUrl + Constants.uploadLoanDocument);
+    var request = http.MultipartRequest("POST", uri);
+    String? accessToken =
+        parser.sharedPreferencesManager.getString('access_token');
+    var file =
+        await http.MultipartFile.fromPath('loan_document', data?.path ?? '');
+    request.files.add(file);
+    request.fields['loan_request_id'] = loanId.toString();
+    request.headers.addAll({
+      "Accept": "application/json",
+      'Authorization': 'Bearer $accessToken',
+    });
+    var response = await request.send();
+    log(response.statusCode.toString());
+    var parsedData;
+    final responceData = await response.stream.bytesToString();
+    parsedData = json.decode(responceData);
+    if (parsedData['status'] == true) {
+      log(parsedData.toString());
+      Get.back();
+      successToast('Document uploaded');
     }
+  }
+
+  Future<void> upload(
+      // XFile? data1,
+      loanTypeId,
+      loanPurpose,
+      sureties,
+      BuildContext context) async {
+    // if (data1 == null) {
+    //   showToast('Select document');
+    //   return;
+    // }
     Get.dialog(
       SimpleDialog(
         children: [
@@ -191,9 +222,9 @@ class LoanScreenController extends GetxController {
     var uri =
         Uri.parse("http://rtd.canisostudio.com/api/user/loan/request/create");
     var request = http.MultipartRequest("POST", uri);
-    var file1 =
-        await http.MultipartFile.fromPath('loan_document', data1?.path ?? '');
-    request.files.add(file1);
+    // var file1 =
+    //     await http.MultipartFile.fromPath('loan_document', data1?.path ?? '');
+    // request.files.add(file1);
 
     String? accessToken =
         parser.sharedPreferencesManager.getString('access_token');
@@ -220,7 +251,21 @@ class LoanScreenController extends GetxController {
       _addedSurties = [-1, -1, -1];
       surties = [null, null, null];
       isSelected = [false, false, false];
-      successToast(parsedData['message'].toString());
+      // successToast(parsedData['message'].toString());
+      showModalBottomSheet(
+        context: context,
+        isDismissible: false,
+        builder: (context) => LoanDocumentsBottomSheet(
+          press: () {
+            Get.back();
+            selectedImage1 = null;
+            selectedImage2 = null;
+            selectedImage3 = null;
+            successToast('Loan Request created');
+          },
+          loanId: parsedData['data']['id'],
+        ),
+      );
       getLoanRequestData();
     } else {
       Get.back();
@@ -232,5 +277,23 @@ class LoanScreenController extends GetxController {
       }
       showToast(errorMessage);
     }
+  }
+
+  void updateSelectedImage1(XFile? newImage) {
+    selectedImage1 = newImage;
+    image1 = true;
+    update();
+  }
+
+  void updateSelectedImage2(XFile? newImage) {
+    selectedImage2 = newImage;
+    image1 = true;
+    update();
+  }
+
+  void updateSelectedImage3(XFile? newImage) {
+    selectedImage3 = newImage;
+    image1 = true;
+    update();
   }
 }

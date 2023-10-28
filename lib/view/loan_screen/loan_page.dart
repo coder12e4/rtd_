@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:rtd_project/controller/loan/loan_edit_controller.dart';
 import 'package:rtd_project/controller/loan/loan_screen_controller.dart';
@@ -14,8 +13,8 @@ import 'package:rtd_project/util/theme.dart';
 import 'package:rtd_project/view/loan_screen/widgets/cancel_popup.dart';
 
 import '../../backend/model/loan/loan_type_model.dart';
-import '../../core/common_widget/imagepicker.dart';
 import '../../helper/router.dart';
+import '../../util/toast.dart';
 import '../../util/validators.dart';
 
 class LoanPage extends StatefulWidget {
@@ -24,9 +23,6 @@ class LoanPage extends StatefulWidget {
   @override
   State<LoanPage> createState() => _LoanPageState();
 }
-
-XFile? _selectedImage;
-bool image1 = false;
 
 class _LoanPageState extends State<LoanPage> {
   @override
@@ -589,23 +585,23 @@ class _LoanPageState extends State<LoanPage> {
           //     child: Center(child: Text(value.purpose ?? 'purpose')),
           //   ),
           // ),
-          SizedBox(
-            height: 20.h,
-          ),
-          ButtonWidget(
-              buttonBackgroundColor: whiteColor,
-              buttonForegroundColor: buttenBlue,
-              buttonText: 'Attach Docements',
-              borderAvalable: true,
-              press: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (context) => Imagepiker(
-                    onImageSelected: _updateSelectedImage,
-                    press: () => Get.back(),
-                  ),
-                );
-              }),
+          // SizedBox(
+          //   height: 20.h,
+          // ),
+          // ButtonWidget(
+          //     buttonBackgroundColor: whiteColor,
+          //     buttonForegroundColor: buttenBlue,
+          //     buttonText: 'Attach Docements',
+          //     borderAvalable: true,
+          //     press: () {
+          //       showModalBottomSheet(
+          //         context: context,
+          //         builder: (context) => Imagepiker(
+          //           onImageSelected: _updateSelectedImage,
+          //           press: () => Get.back(),
+          //         ),
+          //       );
+          //     }),
           SizedBox(
             height: 20.h,
           ),
@@ -615,16 +611,16 @@ class _LoanPageState extends State<LoanPage> {
             buttonText: 'submit',
             borderAvalable: false,
             press: () {
-              // if (value.loanAmountController.text.isEmpty ||
-              //     value.loanAmountController.text == '') {
-              //   showToast('Enter Amount');
-              //   return;
-              // }
+              if (value.loanAmountController.text.isEmpty ||
+                  value.loanAmountController.text == '') {
+                showToast('Enter Amount');
+                return;
+              }
 
-              value.upload(_selectedImage ?? null, value.loan!.id,
-                  value.loan!.id, value.addedSurties);
+              value.upload(
+                  value.loan!.id, value.loan!.id, value.addedSurties, context);
               value.getLoanRequestData();
-              _selectedImage = null;
+              // _selectedImage = null;
             },
           )
         ],
@@ -677,12 +673,5 @@ class _LoanPageState extends State<LoanPage> {
             color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
       ),
     );
-  }
-
-  void _updateSelectedImage(XFile? newImage) {
-    setState(() {
-      _selectedImage = newImage;
-      image1 = true;
-    });
   }
 }
