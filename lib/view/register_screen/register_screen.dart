@@ -14,6 +14,7 @@ import 'package:rtd_project/core/common_widget/imagepicker.dart';
 import 'package:rtd_project/core/common_widget/textformfield_widget.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/util/theme.dart';
+import 'package:rtd_project/view/terms_and_conditions/terms_and_conditions.dart';
 
 import '../../util/toast.dart';
 import '../../util/validators.dart';
@@ -254,41 +255,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     textFieldHeight,
 
                     Container(
-                      margin: const EdgeInsets.only(left: 5, right: 5),
-                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      width: 268.w,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           color: textFormBase),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<BloodGroup>(
-                            isExpanded: true,
-                            alignment: AlignmentDirectional.centerEnd,
-                            hint: Center(
-                              child: Text(
-                                "Select Your blood group",
-                                style: TextStyle(
-                                    color: Colors.black.withOpacity(.55),
-                                    fontSize: 17,
-                                    letterSpacing: .1,
-                                    fontWeight: FontWeight.w600),
+                      child: Center(
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<BloodGroup>(
+                              alignment: AlignmentDirectional.center,
+                              hint: Center(
+                                child: Text(
+                                  "Select Your blood group",
+                                  style: TextStyle(
+                                      color: Colors.black.withOpacity(.55),
+                                      fontSize: 17,
+                                      letterSpacing: .1,
+                                      fontWeight: FontWeight.w600),
+                                ),
                               ),
-                            ),
-                            icon:
-                                const Icon(Icons.keyboard_arrow_down_outlined),
-                            value: value.bloodGroup,
-                            items: value.dropdownMenuItemsBloodgroup,
-                            onChanged: (value) {
-                              setState(() {
-                                auth.bloodGroup = value;
+                              icon: const Icon(
+                                  Icons.keyboard_arrow_down_outlined),
+                              value: value.bloodGroup,
+                              items: value.dropdownMenuItemsBloodgroup,
+                              onChanged: (value) {
+                                setState(() {
+                                  auth.bloodGroup = value;
 
-                                auth.bloodgroupname =
-                                    value!.groupName.toString();
+                                  auth.bloodgroupname =
+                                      value!.groupName.toString();
 
-                                //   newStateList.clear();
-                                //  newStateList=[];
-                                //_dropdownMenuItemsStates.clear();
-                              });
-                            }),
+                                  //   newStateList.clear();
+                                  //  newStateList=[];
+                                  //_dropdownMenuItemsStates.clear();
+                                });
+                              }),
+                        ),
                       ),
                     ),
 
@@ -311,14 +312,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     textFieldHeight,
 
                     Container(
-                      margin: const EdgeInsets.only(left: 5, right: 5),
-                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      width: 268.w,
+                      padding: EdgeInsets.only(left: 60.w, right: 10),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           color: textFormBase),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<AllStatesModel>(
-                            isExpanded: true,
+                            alignment: AlignmentDirectional.center,
+                            // isExpanded: true,
                             hint: Center(
                               child: Text(
                                 "Select States",
@@ -375,14 +377,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     textFieldHeight,
 
                     Container(
-                      margin: const EdgeInsets.only(left: 5, right: 5),
-                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      width: 268.w,
+                      padding: const EdgeInsets.only(left: 80, right: 10),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           color: textFormBase),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<AllStatesModel>(
-                            isExpanded: true,
+                            alignment: AlignmentDirectional.center,
+                            // isExpanded: true,
                             hint: Center(
                               child: Text(
                                 "Select States",
@@ -414,14 +417,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     textFieldHeight,
 
                     Container(
-                      margin: const EdgeInsets.only(left: 5, right: 5),
-                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      width: 268.w,
+                      // margin: const EdgeInsets.only(left: 5, right: 5),
+                      padding: const EdgeInsets.only(left: 30, right: 10),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           color: textFormBase),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<VehicleData>(
-                            isExpanded: true,
+                            alignment: AlignmentDirectional.center,
+                            // isExpanded: true,
                             hint: Center(
                               child: Text(
                                 "Select Your Vehicle Model ",
@@ -560,7 +565,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               image: DecorationImage(
                 fit: BoxFit.cover,
                 image: selectProfileImage == false
-                    ? AssetImage('assets/images/defaultpic.webp')
+                    ? const AssetImage('assets/images/defaultpic.webp')
                         as ImageProvider
                     : FileImage(File(_profileImage!.path)),
               ),
@@ -823,42 +828,42 @@ class _RadioButtonWidgetState extends State<RadioButtonWidget> {
   final RegisterController auth = Get.find();
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        auth.toggleSelection();
-      },
-      child: Row(
-        children: [
-          Obx(
-            () => Radio<String>(
-              value: 'accepted',
-              groupValue: auth.isSelected.value ? 'accepted' : '',
-              onChanged: (String? newValue) {
-                auth.toggleSelection();
-              },
-            ),
+    return Row(
+      children: [
+        Obx(
+          () => Radio<String>(
+            value: 'accepted',
+            groupValue: auth.isSelected.value ? 'accepted' : '',
+            onChanged: (String? newValue) {
+              auth.toggleSelection();
+            },
           ),
-          SizedBox(width: 2.w),
-          const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'I have read and agreed to the',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-                // Adjust the text styling as needed
+        ),
+        SizedBox(width: 2.w),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'I have read and agreed to the',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
               ),
-              Text(
+              // Adjust the text styling as needed
+            ),
+            InkWell(
+              onTap: () {
+                Get.to(const TermsAndConditions());
+              },
+              child: const Text(
                 'Terms and Conditions.',
                 style:
                     TextStyle(fontWeight: FontWeight.bold, color: buttenBlue),
                 // Adjust the text styling as needed
               ),
-            ],
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

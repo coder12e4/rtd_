@@ -50,6 +50,7 @@ dependencies:
   firebase_messaging: ^14.6.8
   flutter_local_notifications: ^15.1.1
   intl:
+  webview_flutter: ^4.4.1
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:

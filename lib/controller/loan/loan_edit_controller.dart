@@ -2,20 +2,17 @@
 
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 
-import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
 
 import '../../backend/model/loan/loan_edite_model.dart';
 import '../../backend/model/loan/loan_type_model.dart';
 import '../../backend/model/loan/surties_model.dart';
 import '../../backend/parser/loan/loan_edit_parser.dart';
+import '../../core/constraints/api_urls.dart';
 import '../../helper/router.dart';
 import '../../util/theme.dart';
 import '../../util/toast.dart';
@@ -37,7 +34,9 @@ class LoanEditController extends GetxController implements GetxService {
   }
 
   String? loanId;
-  XFile? loanDocument;
+  XFile? loanDocument1;
+  XFile? loanDocument2;
+  XFile? loanDocument3;
   Data? loan;
   String? purpose;
   List<bool> isSelected = [false, false, false];
@@ -171,7 +170,7 @@ class LoanEditController extends GetxController implements GetxService {
     return items;
   }
 
-  Future<void> upload(XFile? data1) async {
+  Future<void> upload() async {
     Get.dialog(
       SimpleDialog(
         children: [
@@ -198,23 +197,23 @@ class LoanEditController extends GetxController implements GetxService {
       barrierDismissible: false,
     );
 
-    File file1 = File(data1 == null ? loanDocument!.path : data1.path);
+    // File file1 = File(data1 == null ? loanDocument!.path : data1.path);
 
-    var stream3 = http.ByteStream(DelegatingStream.typed(file1.openRead()));
+    // var stream3 = http.ByteStream(DelegatingStream.typed(file1.openRead()));
 
-    var length3 = await file1.length();
+    // var length3 = await file1.length();
 
     var uri =
         Uri.parse("http://rtd.canisostudio.com/api/user/loan/request/update");
 
     var request = http.MultipartRequest("POST", uri);
 
-    var profileImage = http.MultipartFile('loan_document', stream3, length3,
-        filename: basename(file1.path), contentType: MediaType('image', 'png'));
+    // var profileImage = http.MultipartFile('loan_document', stream3, length3,
+    //     filename: basename(file1.path), contentType: MediaType('image', 'png'));
 
     String? accessToken =
         parser.sharedPreferencesManager.getString('access_token');
-    request.files.add(profileImage);
+    // request.files.add(profileImage);
 
     request.fields['loan_request_id'] = loanId!;
     request.fields['loan_type'] = loan!.id.toString();
@@ -243,7 +242,7 @@ class LoanEditController extends GetxController implements GetxService {
       Get.back();
       String errorMessage = '';
       for (var error in parsedData['errors']) {
-        errorMessage = errorMessage + error['error_name'] + "\n ";
+        errorMessage = "${errorMessage + error['error_name']}\n ";
         log(errorMessage.toString());
         // error += error;
       }
@@ -267,24 +266,51 @@ class LoanEditController extends GetxController implements GetxService {
     // });
   }
 
+  Future<void> uploadLoanDocument(XFile? data) async {
+    var uri = Uri.parse(Constants.baseUrl + Constants.uploadLoanDocument);
+    var request = http.MultipartRequest("POST", uri);
+    String? accessToken =
+        parser.sharedPreferencesManager.getString('access_token');
+    var file =
+        await http.MultipartFile.fromPath('loan_document', data?.path ?? '');
+    request.files.add(file);
+    request.fields['loan_request_id'] = loanId.toString();
+    request.headers.addAll({
+      "Accept": "application/json",
+      'Authorization': 'Bearer $accessToken',
+    });
+    var response = await request.send();
+    log(response.statusCode.toString());
+    var parsedData;
+    final responceData = await response.stream.bytesToString();
+    parsedData = json.decode(responceData);
+    if (parsedData['status'] == true) {
+      log(parsedData.toString());
+      Get.back();
+      successToast('Document uploaded');
+    }
+  }
+
+  void updateSelectedImage1(XFile? newImage) {
+    loanDocument1 = newImage;
+    // image1 = true;
+    update();
+  }
+
+  void updateSelectedImage2(XFile? newImage) {
+    loanDocument2 = newImage;
+    // image1 = true;
+    update();
+  }
+
+  void updateSelectedImage3(XFile? newImage) {
+    loanDocument3 = newImage;
+    // image1 = true;
+    update();
+  }
+
   void onLoanEditSuccess() async {
     Get.delete<LoanScreenController>(force: true);
     Get.offNamed(AppRouter.getBottomNavRoute(), arguments: [2]);
-  }
-}
-
-class eror {
-  String? message;
-  bool? status;
-  eror({this.message, this.status});
-  eror.fromJson(Map<String, dynamic> json) {
-    message = json['message'];
-    status = json['status'];
-  }
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['message'] = message;
-    data['status'] = status;
-    return data;
   }
 }

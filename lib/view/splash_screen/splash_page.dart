@@ -51,7 +51,7 @@ class SplashScreen extends StatelessWidget {
   Positioned version() => Positioned(
         bottom: 60.h,
         child: const Text(
-          'Version: 1.0.9',
+          'Version: 1.0.10',
           style: TextStyle(
             fontSize: 17,
             color: Colors.grey,

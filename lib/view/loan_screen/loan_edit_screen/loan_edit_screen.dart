@@ -194,32 +194,14 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
                                     textInputType: TextInputType.number,
                                     hitText: 'Loan Amount'),
                                 kSizedBoxH,
-
                                 const Align(
                                     alignment: Alignment.centerLeft,
-                                    child: Text('Document')),
+                                    child: Text('Documents')),
                                 kSizedBoxH,
-                                documentContainer(''),
-
+                                documentsRow(value),
                                 SizedBox(
                                   height: 20.h,
                                 ),
-                                // ButtonWidget(
-                                //     buttonBackgroundColor: whiteColor,
-                                //     buttonForegroundColor: buttenBlue,
-                                //     buttonText: 'Attach Docements',
-                                //     borderAvalable: true,
-                                //     press: () {
-                                //       showModalBottomSheet(
-                                //         context: context,
-                                //         builder: (context) => Imagepiker(
-                                //           onImageSelected: _updateSelectedImage,
-                                //         ),
-                                //       );
-                                //     }),
-                                // SizedBox(
-                                //   height: 20.h,
-                                // ),
                                 ButtonWidget(
                                   buttonBackgroundColor: buttenBlue,
                                   buttonForegroundColor: whiteColor,
@@ -241,7 +223,7 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
                                     //   return;
                                     // }
                                     value
-                                        .upload(_selectedImage)
+                                        .upload()
                                         .then((value) => _selectedImage = null);
                                     // value.getLoanRequestData();
                                     // _selectedImage = null;
@@ -260,17 +242,101 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
     );
   }
 
-  Stack documentContainer(documentProof) {
+  Widget documentsRow(LoanEditController value) {
+    if (value.loanData!.data.loanDocument.isEmpty) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          value.loanDocument1 == null
+              ? selectionContainer(
+                  onImageSelected: value.updateSelectedImage1,
+                  onPress: () {
+                    // Get.back();
+                    value.uploadLoanDocument(
+                      value.loanDocument1,
+                    );
+                  },
+                )
+              : Image.file(
+                  File(value.loanDocument1?.path ?? ''),
+                  height: 50.h,
+                  width: 50.w,
+                ),
+          value.loanDocument2 == null
+              ? selectionContainer(
+                  onPress: () {
+                    value.uploadLoanDocument(
+                      value.loanDocument2,
+                    );
+                    // Get.back();
+                  },
+                  onImageSelected: value.updateSelectedImage2,
+                )
+              : Image.file(
+                  File(value.loanDocument2?.path ?? ''),
+                  height: 50.h,
+                  width: 50.w,
+                ),
+          value.loanDocument3 == null
+              ? selectionContainer(
+                  onPress: () {
+                    value.uploadLoanDocument(
+                      value.loanDocument3,
+                    );
+                    // Get.back();
+                  },
+                  onImageSelected: value.updateSelectedImage3,
+                )
+              : Image.file(
+                  File(value.loanDocument3?.path ?? ''),
+                  height: 50.h,
+                  width: 50.w,
+                ),
+        ],
+      );
+    }
+    if (value.loanData!.data.loanDocument.length == 1) {
+      return documentContainer(value.loanData!.data.loanDocument[0].file);
+    }
+    if (value.loanData!.data.loanDocument.length == 2) {
+      return Row(
+        children: [
+          documentContainer(value.loanData!.data.loanDocument[0].file),
+          SizedBox(
+            width: 10.w,
+          ),
+          documentContainer(value.loanData!.data.loanDocument[1].file),
+        ],
+      );
+    }
+
+    return Row(
+      children: [
+        documentContainer(value.loanData!.data.loanDocument[0].file),
+        SizedBox(
+          width: 10.w,
+        ),
+        documentContainer(value.loanData!.data.loanDocument[1].file),
+        SizedBox(
+          width: 10.w,
+        ),
+        documentContainer(value.loanData!.data.loanDocument[2].file),
+      ],
+    );
+  }
+
+  Stack documentContainer(String? documentProof) {
     return Stack(
+      fit: StackFit.loose,
       children: [
         Container(
-          height: 130.h,
-          width: 280.w,
+          height: 100.h,
+          width: 90.w,
           decoration: BoxDecoration(
               image: DecorationImage(
                 fit: BoxFit.contain,
                 image: _selectedImage == null
-                    ? NetworkImage(documentProof) as ImageProvider
+                    ? NetworkImage(documentProof ?? '') as ImageProvider
                     : FileImage(File(_selectedImage!.path)),
               ),
               color: const Color.fromARGB(255, 223, 220, 220),
@@ -321,6 +387,33 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
             width: 80.w,
           ),
         ],
+      ),
+    );
+  }
+
+  GestureDetector selectionContainer(
+      {required Function() onPress, required onImageSelected}) {
+    return GestureDetector(
+      onTap: () => showModalBottomSheet(
+        context: context,
+        builder: (context) => Imagepiker(
+          press: onPress,
+          onImageSelected: onImageSelected,
+        ),
+      ),
+      child: Container(
+        width: 80.w,
+        height: 80.h,
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          color: Color(0xfff3f3f3),
+        ),
+        child: const Center(
+          child: Icon(
+            Icons.add,
+            size: 40,
+          ),
+        ),
       ),
     );
   }
