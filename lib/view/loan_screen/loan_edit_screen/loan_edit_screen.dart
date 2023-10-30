@@ -296,36 +296,68 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
       );
     }
     if (value.loanData!.data.loanDocument.length == 1) {
-      return documentContainer(value.loanData!.data.loanDocument[0].file);
+      return documentContainer(
+        documentProof: value.loanData!.data.loanDocument[0].file,
+        selectedDocument: value.loanDocument1,
+        onImageSelected: value.updateSelectedImage1,
+        value: value,
+      );
     }
     if (value.loanData!.data.loanDocument.length == 2) {
       return Row(
         children: [
-          documentContainer(value.loanData!.data.loanDocument[0].file),
+          documentContainer(
+            documentProof: value.loanData!.data.loanDocument[0].file,
+            selectedDocument: value.loanDocument1,
+            onImageSelected: value.updateSelectedImage1,
+            value: value,
+          ),
           SizedBox(
             width: 10.w,
           ),
-          documentContainer(value.loanData!.data.loanDocument[1].file),
+          documentContainer(
+            documentProof: value.loanData!.data.loanDocument[1].file,
+            selectedDocument: value.loanDocument2,
+            onImageSelected: value.updateSelectedImage2,
+            value: value,
+          ),
         ],
       );
     }
 
     return Row(
       children: [
-        documentContainer(value.loanData!.data.loanDocument[0].file),
+        documentContainer(
+            documentProof: value.loanData!.data.loanDocument[0].file,
+            selectedDocument: value.loanDocument1,
+            onImageSelected: value.updateSelectedImage1,
+            value: value),
         SizedBox(
           width: 10.w,
         ),
-        documentContainer(value.loanData!.data.loanDocument[1].file),
+        documentContainer(
+          documentProof: value.loanData!.data.loanDocument[1].file,
+          selectedDocument: value.loanDocument2,
+          onImageSelected: value.updateSelectedImage3,
+          value: value,
+        ),
         SizedBox(
           width: 10.w,
         ),
-        documentContainer(value.loanData!.data.loanDocument[2].file),
+        documentContainer(
+            documentProof: value.loanData!.data.loanDocument[2].file,
+            selectedDocument: value.loanDocument2,
+            onImageSelected: value.updateSelectedImage3,
+            value: value),
       ],
     );
   }
 
-  Stack documentContainer(String? documentProof) {
+  Stack documentContainer(
+      {String? documentProof,
+      XFile? selectedDocument,
+      required Function(XFile?) onImageSelected,
+      required LoanEditController value}) {
     return Stack(
       fit: StackFit.loose,
       children: [
@@ -335,9 +367,9 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
           decoration: BoxDecoration(
               image: DecorationImage(
                 fit: BoxFit.contain,
-                image: _selectedImage == null
+                image: selectedDocument == null
                     ? NetworkImage(documentProof ?? '') as ImageProvider
-                    : FileImage(File(_selectedImage!.path)),
+                    : FileImage(File(selectedDocument.path)),
               ),
               color: const Color.fromARGB(255, 223, 220, 220),
               borderRadius: BorderRadius.circular(20)),
@@ -349,8 +381,10 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
             onPressed: () => showModalBottomSheet(
               context: context,
               builder: (context) => Imagepiker(
-                onImageSelected: _updateSelectedImage,
-                press: () => Get.back(),
+                onImageSelected: onImageSelected,
+                press: () {
+                  value.uploadLoanDocument(selectedDocument);
+                },
               ),
             ),
             icon: const Icon(Icons.edit_outlined),
@@ -418,10 +452,10 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
     );
   }
 
-  void _updateSelectedImage(XFile? newImage) {
-    setState(() {
-      _selectedImage = newImage;
-      // image1 = true;
-    });
-  }
+  // void _updateSelectedImage(XFile? newImage) {
+  //   setState(() {
+  //     _selectedImage = newImage;
+  //     // image1 = true;
+  //   });
+  // }
 }

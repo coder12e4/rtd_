@@ -271,8 +271,7 @@ class LoanEditController extends GetxController implements GetxService {
     var request = http.MultipartRequest("POST", uri);
     String? accessToken =
         parser.sharedPreferencesManager.getString('access_token');
-    var file =
-        await http.MultipartFile.fromPath('loan_document', data?.path ?? '');
+    var file = await http.MultipartFile.fromPath('loan_document', data!.path);
     request.files.add(file);
     request.fields['loan_request_id'] = loanId.toString();
     request.headers.addAll({
