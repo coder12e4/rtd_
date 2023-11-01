@@ -63,7 +63,7 @@ class SearchScreenController extends GetxController {
       Get.find<LoanScreenController>().addSurties(surety, tappedIndex!);
     }
 
-    // update();
+    update();
   }
 
   searchSurties(String query) {

@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:rtd_project/core/constraints/api_urls.dart';
 
+import '../../backend/model/loan/loan_purpose.dart';
 import '../../backend/model/loan/loan_request_model.dart';
 import '../../backend/model/loan/loan_type_model.dart';
 import '../../backend/model/loan/surties_model.dart';
@@ -20,12 +21,11 @@ class LoanScreenController extends GetxController {
   LoanScreenController({required this.parser});
   @override
   void onInit() {
-    _addedSurties = [-1, -1, -1];
-    surties = [null, null, null];
+    // _addedSurties = [-1, -1, -1];
+    // surties = [null, null, null];
     getLoanType();
 
     getLoanRequestData();
-
     super.onInit();
   }
 
@@ -35,6 +35,8 @@ class LoanScreenController extends GetxController {
   XFile? selectedImage1;
   XFile? selectedImage2;
   XFile? selectedImage3;
+  LoanPurpose? loanPurpose;
+  List<int> noOfSurties = [];
   TextEditingController loanAmountController = TextEditingController();
   List<LoanData> _loanData = <LoanData>[];
   List<LoanData> get loanData => _loanData;
@@ -69,6 +71,32 @@ class LoanScreenController extends GetxController {
       }
     }
 
+    update();
+  }
+
+  Future<void> getLoanPurpose(id) async {
+    final body = {"loan_type": id};
+    Response response = await parser.getLoanPurpose(body);
+    if (response.statusCode == 200) {
+      log('Loan purpose :${response.body}');
+      try {
+        loanPurpose = LoanPurpose.fromJson(response.body);
+
+        _addedSurties.clear();
+        surties.clear();
+        isSelected.clear();
+        noOfSurties.clear();
+        for (int i = 1; i <= loanPurpose!.data[0].noOfSureties; i++) {
+          noOfSurties.add(1);
+          _addedSurties.add(-1);
+          surties.add(null);
+          isSelected.add(false);
+        }
+        log('loan purpose surety : ${noOfSurties}');
+      } catch (e, stackTrace) {
+        log('loanPurpose catch $e', error: e, stackTrace: stackTrace);
+      }
+    }
     update();
   }
 
@@ -138,10 +166,17 @@ class LoanScreenController extends GetxController {
     addedSurties[index] = -1;
     surties[index] = null;
     isSelected[index] = !isSelected[index];
+
+    if (noOfSurties.length < 5) {
+      addedSurties.removeLast();
+      surties.removeLast();
+      isSelected.removeLast();
+    }
+    noOfSurties.removeLast();
     update();
   }
 
-  addSurties(SuretiesData surety, int index) {
+  void addSurties(SuretiesData surety, int index) {
     if (addedSurties.contains(surety.id)) {
       showToast('Surety already selected');
       return;
@@ -150,13 +185,21 @@ class LoanScreenController extends GetxController {
       isSelected[index] = !isSelected[index];
       addedSurties[index] = surety.id;
       surties[index] = surety;
+      if (noOfSurties.length <= 4) {
+        noOfSurties.add(1);
+        _addedSurties.add(-1);
+        surties.add(null);
+        isSelected.add(false);
+        log('no of sureties after selection $noOfSurties');
+        update();
+      }
+
       log(addedSurties.toString());
       log('selected surty$surties');
       Get.back();
       successToast('Surety selected');
-
-      update();
     }
+    update();
   }
 
   Future<void> uploadLoanDocument(XFile? data, loanId) async {
@@ -182,18 +225,22 @@ class LoanScreenController extends GetxController {
       Get.back();
       successToast('Document uploaded');
     }
+    update();
   }
 
-  Future<void> upload(
-      // XFile? data1,
-      loanTypeId,
-      loanPurpose,
-      sureties,
-      BuildContext context) async {
-    // if (data1 == null) {
-    //   showToast('Select document');
-    //   return;
-    // }
+  Future<void> upload(loanTypeId, sureties, BuildContext context) async {
+    if (loan == null) {
+      showToast('Select loan type');
+      return;
+    }
+    if (loanAmountController.text.isEmpty || loanAmountController.text == '') {
+      showToast('Enter Amount');
+      return;
+    }
+    if (_addedSurties.length == loanPurpose!.data[0].noOfSureties) {
+      showToast('Add ${loanPurpose!.data[0].noOfSureties} sureties');
+      return;
+    }
     Get.dialog(
       SimpleDialog(
         children: [
@@ -230,7 +277,7 @@ class LoanScreenController extends GetxController {
         parser.sharedPreferencesManager.getString('access_token');
 
     request.fields['sureties'] = sureties.toString();
-    request.fields['loan_purpose'] = loanPurpose.toString();
+    request.fields['loan_purpose'] = loanPurpose!.data[0].id.toString();
     request.fields['loan_amount'] = loanAmountController.text;
     request.fields['loan_type'] = loanTypeId.toString();
 

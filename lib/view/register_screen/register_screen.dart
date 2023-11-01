@@ -83,7 +83,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Form(
       key: _formKey,
       child: Container(
-          height: value.isSubmitted ? 400.h : 1650.h,
+          height: value.isSubmitted ? 400.h : 1740.h,
           width: 390.w,
           decoration: const BoxDecoration(
             color: whiteColor,
@@ -101,7 +101,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 visible: !value.isSubmitted,
                 child: Column(
                   children: <Widget>[
-                    registerStepContainer('1'),
+                    // registerStepContainer('One'),
 
                     imageContainer(value),
                     textFieldHeight,
@@ -419,7 +419,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Container(
                       width: 268.w,
                       // margin: const EdgeInsets.only(left: 5, right: 5),
-                      padding: const EdgeInsets.only(left: 30, right: 10),
+                      padding: EdgeInsets.only(left: 17.w, right: 10.w),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           color: textFormBase),
@@ -472,7 +472,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           showToast('Please Agree the Terms and Conditions');
                         }
                       })
-                  : registerStepContainer('2'),
+                  : SizedBox(),
+              // registerStepContainer('2'),
               // textFieldHeight,
               // textFieldHeight,
 
@@ -601,25 +602,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Row registerStepContainer(String stepCount) {
     return Row(
       children: [
-        const Text(
-          'Registration Step',
-          style: TextStyle(color: ThemeProvider.blackColor),
+        Text(
+          'Registration Step $stepCount ',
+          style: const TextStyle(color: ThemeProvider.blackColor),
         ),
         const SizedBox(
           width: 10,
         ),
-        Container(
-          height: 20,
-          width: 20,
-          decoration: const BoxDecoration(
-              shape: BoxShape.circle, color: ThemeProvider.blackColor),
-          child: Center(
-              child: Text(
-            stepCount,
-            style: const TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold),
-          )),
-        ),
+        // Container(
+        //   height: 20,
+        //   width: 20,
+        //   decoration: const BoxDecoration(
+        //       shape: BoxShape.circle, color: ThemeProvider.blackColor),
+        //   child: Center(
+        //       child: Text(
+        //     stepCount,
+        //     style: const TextStyle(
+        //         color: Colors.white, fontWeight: FontWeight.bold),
+        //   )),
+        // ),
       ],
     );
   }

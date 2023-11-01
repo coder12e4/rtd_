@@ -25,8 +25,8 @@ class LoanEditController extends GetxController implements GetxService {
   @override
   void onInit() {
     loanId = Get.arguments[0].toString();
-    _addedSurties = [-1, -1, -1];
-    surties = [null, null, null];
+    // _addedSurties = [-1, -1, -1];
+    // surties = [null, null, null];
     getLoanType();
     getLoanDetails(loanId);
 
@@ -39,7 +39,7 @@ class LoanEditController extends GetxController implements GetxService {
   XFile? loanDocument3;
   Data? loan;
   String? purpose;
-  List<bool> isSelected = [false, false, false];
+  List<bool> isSelected = [];
   List<dynamic> surties = <dynamic>[];
   List<int> _addedSurties = <int>[];
   List<int> get addedSurties => _addedSurties;
@@ -113,17 +113,20 @@ class LoanEditController extends GetxController implements GetxService {
   // }
 
   Future<void> getLoanDetails(id) async {
-    final body = {"loan_request_id": id};
-    Response response = await parser.getLoanDetails(body);
+    _addedSurties.clear();
     addedSurties.clear();
     surties.clear();
     isSelected.clear();
+    final body = {"loan_request_id": id};
+    Response response = await parser.getLoanDetails(body);
+
     try {
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonData =
             Map<String, dynamic>.from(response.body);
         loanData = LoanData.fromJson(jsonData);
         for (var element in loanData!.data.sureties) {
+          _addedSurties.add(-1);
           addedSurties.add(element.userId);
           isSelected.add(true);
           surties.add(element);
@@ -197,23 +200,13 @@ class LoanEditController extends GetxController implements GetxService {
       barrierDismissible: false,
     );
 
-    // File file1 = File(data1 == null ? loanDocument!.path : data1.path);
-
-    // var stream3 = http.ByteStream(DelegatingStream.typed(file1.openRead()));
-
-    // var length3 = await file1.length();
-
     var uri =
         Uri.parse("http://rtd.canisostudio.com/api/user/loan/request/update");
 
     var request = http.MultipartRequest("POST", uri);
 
-    // var profileImage = http.MultipartFile('loan_document', stream3, length3,
-    //     filename: basename(file1.path), contentType: MediaType('image', 'png'));
-
     String? accessToken =
         parser.sharedPreferencesManager.getString('access_token');
-    // request.files.add(profileImage);
 
     request.fields['loan_request_id'] = loanId!;
     request.fields['loan_type'] = loan!.id.toString();
@@ -267,11 +260,13 @@ class LoanEditController extends GetxController implements GetxService {
   }
 
   Future<void> uploadLoanDocument(XFile? data) async {
+    log('image path : ${data?.path}');
     var uri = Uri.parse(Constants.baseUrl + Constants.uploadLoanDocument);
     var request = http.MultipartRequest("POST", uri);
     String? accessToken =
         parser.sharedPreferencesManager.getString('access_token');
-    var file = await http.MultipartFile.fromPath('loan_document', data!.path);
+    var file =
+        await http.MultipartFile.fromPath('loan_document', data?.path ?? '');
     request.files.add(file);
     request.fields['loan_request_id'] = loanId.toString();
     request.headers.addAll({

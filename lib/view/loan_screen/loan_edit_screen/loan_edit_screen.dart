@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rtd_project/backend/model/loan/loan_type_model.dart';
 import 'package:rtd_project/controller/loan/loan_edit_controller.dart';
+import 'package:rtd_project/controller/loan/loan_screen_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/util/theme.dart';
@@ -108,6 +109,8 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
 
                                         // Set the initial value (hint text)
                                         onChanged: (newValue) {
+                                          Get.find<LoanScreenController>()
+                                              .getLoanPurpose(newValue!.id);
                                           setState(() {});
                                           value.loan = newValue;
                                           value.purpose = newValue!.title;
@@ -133,7 +136,7 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
                                   child: ListView.separated(
                                     shrinkWrap: true,
                                     scrollDirection: Axis.horizontal,
-                                    itemCount: 3,
+                                    itemCount: value.surties.length,
                                     itemBuilder: (context, index) => value
                                                 .isSelected[index] ==
                                             false
@@ -252,8 +255,9 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
                   onImageSelected: value.updateSelectedImage1,
                   onPress: () {
                     // Get.back();
+                    log('selected document : ${value.loanDocument1!.path}');
                     value.uploadLoanDocument(
-                      value.loanDocument1,
+                      value.loanDocument1!,
                     );
                   },
                 )
@@ -266,7 +270,7 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
               ? selectionContainer(
                   onPress: () {
                     value.uploadLoanDocument(
-                      value.loanDocument2,
+                      value.loanDocument2!,
                     );
                     // Get.back();
                   },
@@ -281,7 +285,7 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
               ? selectionContainer(
                   onPress: () {
                     value.uploadLoanDocument(
-                      value.loanDocument3,
+                      value.loanDocument3!,
                     );
                     // Get.back();
                   },
@@ -299,7 +303,7 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
       return documentContainer(
         documentProof: value.loanData!.data.loanDocument[0].file,
         selectedDocument: value.loanDocument1,
-        onImageSelected: value.updateSelectedImage1,
+        onImageSelected: (p0) => value.updateSelectedImage1(p0),
         value: value,
       );
     }
@@ -309,7 +313,7 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
           documentContainer(
             documentProof: value.loanData!.data.loanDocument[0].file,
             selectedDocument: value.loanDocument1,
-            onImageSelected: value.updateSelectedImage1,
+            onImageSelected: (p0) => value.updateSelectedImage1(p0),
             value: value,
           ),
           SizedBox(
@@ -318,7 +322,7 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
           documentContainer(
             documentProof: value.loanData!.data.loanDocument[1].file,
             selectedDocument: value.loanDocument2,
-            onImageSelected: value.updateSelectedImage2,
+            onImageSelected: (p0) => value.updateSelectedImage2(p0),
             value: value,
           ),
         ],
@@ -330,7 +334,7 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
         documentContainer(
             documentProof: value.loanData!.data.loanDocument[0].file,
             selectedDocument: value.loanDocument1,
-            onImageSelected: value.updateSelectedImage1,
+            onImageSelected: (p0) => value.updateSelectedImage1(p0),
             value: value),
         SizedBox(
           width: 10.w,
@@ -338,7 +342,7 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
         documentContainer(
           documentProof: value.loanData!.data.loanDocument[1].file,
           selectedDocument: value.loanDocument2,
-          onImageSelected: value.updateSelectedImage3,
+          onImageSelected: (p0) => value.updateSelectedImage3(p0),
           value: value,
         ),
         SizedBox(
@@ -347,7 +351,11 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
         documentContainer(
             documentProof: value.loanData!.data.loanDocument[2].file,
             selectedDocument: value.loanDocument2,
-            onImageSelected: value.updateSelectedImage3,
+            onImageSelected: (p0) {
+              log("&&&&&&&&&&&&&&&&&&&& ${p0?.path}");
+              // value.updateSelectedImage3(p0);
+              value.uploadLoanDocument(p0);
+            },
             value: value),
       ],
     );
@@ -356,7 +364,7 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
   Stack documentContainer(
       {String? documentProof,
       XFile? selectedDocument,
-      required Function(XFile?) onImageSelected,
+      required ValueChanged<XFile?> onImageSelected,
       required LoanEditController value}) {
     return Stack(
       fit: StackFit.loose,
@@ -381,8 +389,12 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
             onPressed: () => showModalBottomSheet(
               context: context,
               builder: (context) => Imagepiker(
-                onImageSelected: onImageSelected,
+                onImageSelected: (value) {
+                  log('picked image : ${value?.path}');
+                  onImageSelected(value);
+                },
                 press: () {
+                  log('selected document : $selectedDocument');
                   value.uploadLoanDocument(selectedDocument);
                 },
               ),
@@ -426,7 +438,8 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
   }
 
   GestureDetector selectionContainer(
-      {required Function() onPress, required onImageSelected}) {
+      {required Function() onPress,
+      required Function(XFile?) onImageSelected}) {
     return GestureDetector(
       onTap: () => showModalBottomSheet(
         context: context,

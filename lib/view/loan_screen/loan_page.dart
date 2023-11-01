@@ -14,7 +14,6 @@ import 'package:rtd_project/view/loan_screen/widgets/cancel_popup.dart';
 
 import '../../backend/model/loan/loan_type_model.dart';
 import '../../helper/router.dart';
-import '../../util/toast.dart';
 import '../../util/validators.dart';
 
 class LoanPage extends StatefulWidget {
@@ -496,7 +495,7 @@ class _LoanPageState extends State<LoanPage> {
                     setState(() {});
                     value.loan = newValue;
                     value.purpose = newValue!.title;
-
+                    value.getLoanPurpose(newValue.id);
                     log(value.loan!.id.toString());
                   },
                   items: value.dropdownMenuLoanType,
@@ -514,50 +513,59 @@ class _LoanPageState extends State<LoanPage> {
           ),
           SizedBox(
             height: 80.h,
-            child: ListView.separated(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemCount: 3,
-              itemBuilder: (context, index) => value.isSelected[index] == false
-                  ? GestureDetector(
-                      onTap: () => Get.toNamed(AppRouter.getSearchScreenRoute(),
-                          arguments: [index, false]),
-                      child: CircleAvatar(
-                        minRadius: 35.r,
-                        backgroundColor: textFormBase,
-                        child: const Icon(Icons.add),
-                      ),
-                    )
-                  : Stack(
-                      children: [
-                        CircleAvatar(
-                          minRadius: 35.r,
-                          backgroundColor: textFormBase,
-                          backgroundImage:
-                              NetworkImage(value.surties[index]!.profileImage),
-                        ),
-                        Positioned(
-                          bottom: 9.h,
-                          right: 0,
-                          child: GestureDetector(
-                            onTap: () => value.deleteSurety(index),
+            child: value.noOfSurties.isNotEmpty
+                ? ListView.separated(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: value.noOfSurties.length,
+                    itemBuilder: (context, index) => value.isSelected[index] ==
+                            false
+                        ? GestureDetector(
+                            onTap: () => Get.toNamed(
+                                AppRouter.getSearchScreenRoute(),
+                                arguments: [index, false]),
                             child: CircleAvatar(
-                              minRadius: 15.r,
-                              backgroundColor: ThemeProvider.blackColor,
-                              child: const Icon(
-                                Icons.delete_outline,
-                                color: Colors.white,
-                                size: 20,
-                              ),
+                              minRadius: 35.r,
+                              backgroundColor: textFormBase,
+                              child: const Icon(Icons.add),
                             ),
+                          )
+                        : Stack(
+                            children: [
+                              CircleAvatar(
+                                minRadius: 35.r,
+                                backgroundColor: textFormBase,
+                                backgroundImage: NetworkImage(
+                                    value.surties[index]!.profileImage),
+                              ),
+                              Positioned(
+                                bottom: 9.h,
+                                right: 0,
+                                child: GestureDetector(
+                                  onTap: () => value.deleteSurety(index),
+                                  child: CircleAvatar(
+                                    minRadius: 15.r,
+                                    backgroundColor: ThemeProvider.blackColor,
+                                    child: const Icon(
+                                      Icons.delete_outline,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
-                        )
-                      ],
+                    separatorBuilder: (context, index) => const SizedBox(
+                      width: 15,
                     ),
-              separatorBuilder: (context, index) => const SizedBox(
-                width: 15,
-              ),
-            ),
+                  )
+                : const Center(
+                    child: Text(
+                      'Select loan type to choose surety',
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                  ),
           ),
           SizedBox(
             height: 10.h,
@@ -611,14 +619,7 @@ class _LoanPageState extends State<LoanPage> {
             buttonText: 'submit',
             borderAvalable: false,
             press: () {
-              if (value.loanAmountController.text.isEmpty ||
-                  value.loanAmountController.text == '') {
-                showToast('Enter Amount');
-                return;
-              }
-
-              value.upload(
-                  value.loan!.id, value.loan!.id, value.addedSurties, context);
+              value.upload(value.loan?.id ?? '', value.addedSurties, context);
               value.getLoanRequestData();
               // _selectedImage = null;
             },
