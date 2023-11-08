@@ -11,6 +11,7 @@ import 'package:rtd_project/core/common_widget/commen_botten.dart';
 import 'package:rtd_project/core/common_widget/textformfield_widget.dart';
 import 'package:rtd_project/util/theme.dart';
 import 'package:rtd_project/view/loan_screen/widgets/cancel_popup.dart';
+import 'package:rtd_project/view/loan_screen/widgets/porpose.dart';
 
 import '../../backend/model/loan/loan_type_model.dart';
 import '../../helper/router.dart';
@@ -575,24 +576,11 @@ class _LoanPageState extends State<LoanPage> {
               controller: value.loanAmountController,
               textInputType: TextInputType.number,
               hitText: 'Loan Amount'),
-          // SizedBox(
-          //   height: 20.h,
-          // ),
-          // GestureDetector(
-          //   onTap: () => showModalBottomSheet(
-          //     context: context,
-          //     builder: (context) => const PorposeWidget(),
-          //   ),
-          //   child: Container(
-          //     height: 50.h,
-          //     width: 290.w,
-          //     decoration: BoxDecoration(
-          //       color: textFormBase,
-          //       borderRadius: BorderRadius.circular(20),
-          //     ),
-          //     child: Center(child: Text(value.purpose ?? 'purpose')),
-          //   ),
-          // ),
+          SizedBox(
+            height: 20.h,
+          ),
+
+          PorposeWidget(value: value),
           // SizedBox(
           //   height: 20.h,
           // ),

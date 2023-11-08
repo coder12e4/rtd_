@@ -31,6 +31,7 @@ class LoanScreenController extends GetxController {
 
   bool loading = true;
   Data? loan;
+  PurposeData? purposeData;
   bool image1 = false;
   XFile? selectedImage1;
   XFile? selectedImage2;
@@ -45,10 +46,20 @@ class LoanScreenController extends GetxController {
   List<int> get addedSurties => _addedSurties;
   List<Data> _getLoanTypes = <Data>[];
   List<Data> get getLoanTypes => _getLoanTypes;
+  List<PurposeData> _getPurposeType = <PurposeData>[];
+  List<PurposeData> get getPurposeType => _getPurposeType;
+  List<PurposeData> _getPurpose = <PurposeData>[];
+  List<PurposeData> get getPurpose => _getPurpose;
   List<DropdownMenuItem<Data>> _dropdownMenuLoanType =
       <DropdownMenuItem<Data>>[];
   List<DropdownMenuItem<Data>> get dropdownMenuLoanType =>
       _dropdownMenuLoanType;
+
+  List<DropdownMenuItem<PurposeData>> _dropdownMenuPurpose =
+      <DropdownMenuItem<PurposeData>>[];
+  List<DropdownMenuItem<PurposeData>> get dropdownMenuPurpose =>
+      _dropdownMenuPurpose;
+
   List<bool> isSelected = [false, false, false];
   LoanType? loanType;
   String? purpose;
@@ -74,7 +85,34 @@ class LoanScreenController extends GetxController {
     update();
   }
 
+  // Future<void> selectPurpose(id) async {
+  //   final body = {
+  //     "loan_type": 1,
+  //   };
+  //   Response response = await parser.getLoanPurpose(body);
+  //   if (response.statusCode == 200) {
+  //     try {
+  //       Map<String, dynamic> data = Map<String, dynamic>.from(response.body);
+  //       var allLoan = data['data'];
+  //       _getLoanTypes = [];
+  //       allLoan.forEach((data) {
+  //         Data individual = Data.fromJson(data);
+  //         _getLoanTypes.add(individual);
+  //       });
+  //       _dropdownMenuLoanType = buildDropDownMenuItemsLoanType(_getLoanTypes);
+  //       loan != null ? _dropdownMenuLoanType[0].value : null;
+  //       log(_getLoanTypes.toString());
+  //     } catch (e) {
+  //       log(e.toString());
+  //     }
+  //   }
+  //
+  //   update();
+  // }
+
   Future<void> getLoanPurpose(id) async {
+    _getPurpose.clear();
+    _getPurposeType.clear();
     final body = {"loan_type": id};
     Response response = await parser.getLoanPurpose(body);
     if (response.statusCode == 200) {
@@ -92,6 +130,15 @@ class LoanScreenController extends GetxController {
           surties.add(null);
           isSelected.add(false);
         }
+        var allPurpose = response.body["data"];
+        _getPurpose = [];
+        allPurpose.forEach((data1) {
+          PurposeData individual = PurposeData.fromJson(data1);
+          _getPurposeType.add(individual);
+        });
+        _dropdownMenuPurpose = buildDropDownMenuItemsPurpose(_getPurposeType);
+        purpose != null ? _dropdownMenuPurpose[0].value : null;
+        log(_getPurposeType.toString());
         log('loan purpose surety : ${noOfSurties}');
       } catch (e, stackTrace) {
         log('loanPurpose catch $e', error: e, stackTrace: stackTrace);
@@ -162,17 +209,40 @@ class LoanScreenController extends GetxController {
     return items;
   }
 
+  List<DropdownMenuItem<PurposeData>> buildDropDownMenuItemsPurpose(
+      List listItems) {
+    List<DropdownMenuItem<PurposeData>> items = [];
+    items.clear();
+    for (PurposeData listItem in listItems) {
+      items.add(
+        DropdownMenuItem(
+          value: listItem,
+          child: Text(
+            listItem.purpose,
+            style: const TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                letterSpacing: .1,
+                fontWeight: FontWeight.w500),
+          ),
+        ),
+      );
+    }
+
+    return items;
+  }
+
   void deleteSurety(int index) {
     addedSurties[index] = -1;
     surties[index] = null;
     isSelected[index] = !isSelected[index];
 
-    if (noOfSurties.length < 5) {
-      addedSurties.removeLast();
-      surties.removeLast();
-      isSelected.removeLast();
-    }
-    noOfSurties.removeLast();
+    // if (noOfSurties.length < 5) {
+    //   addedSurties.removeLast();
+    //   surties.removeLast();
+    //   isSelected.removeLast();
+    // }
+    // noOfSurties.removeLast();
     update();
   }
 
@@ -186,14 +256,13 @@ class LoanScreenController extends GetxController {
       addedSurties[index] = surety.id;
       surties[index] = surety;
       if (noOfSurties.length <= 4) {
-        noOfSurties.add(1);
-        _addedSurties.add(-1);
-        surties.add(null);
-        isSelected.add(false);
+        // noOfSurties.add(1);
+        // _addedSurties.add(-1);
+        // surties.add(null);
+        // isSelected.add(false);
         log('no of sureties after selection $noOfSurties');
-        update();
       }
-
+      update();
       log(addedSurties.toString());
       log('selected surty$surties');
       Get.back();
@@ -295,9 +364,12 @@ class LoanScreenController extends GetxController {
     log(parsedData.toString());
     if (parsedData['status'] == true) {
       Get.back();
-      _addedSurties = [-1, -1, -1];
-      surties = [null, null, null];
-      isSelected = [false, false, false];
+      _addedSurties.clear();
+      surties.clear();
+      isSelected.clear();
+      noOfSurties.clear();
+      addedSurties.clear();
+      loanAmountController.clear();
       // successToast(parsedData['message'].toString());
       showModalBottomSheet(
         context: context,

@@ -5,6 +5,7 @@
         android:label="rtd_project"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        android:allowBackup="false"
 
 
         <activity
@@ -39,7 +40,9 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
         <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="high_importance_channel"/>
+
     </application>
 </manifest>
