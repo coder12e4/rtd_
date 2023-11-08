@@ -8,14 +8,12 @@ import 'package:rtd_project/controller/loan/loan_edit_controller.dart';
 import 'package:rtd_project/controller/loan/loan_screen_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
-import 'package:rtd_project/core/common_widget/textformfield_widget.dart';
 import 'package:rtd_project/util/theme.dart';
 import 'package:rtd_project/view/loan_screen/widgets/cancel_popup.dart';
 import 'package:rtd_project/view/loan_screen/widgets/porpose.dart';
 
 import '../../backend/model/loan/loan_type_model.dart';
 import '../../helper/router.dart';
-import '../../util/validators.dart';
 
 class LoanPage extends StatefulWidget {
   const LoanPage({super.key});
@@ -572,11 +570,25 @@ class _LoanPageState extends State<LoanPage> {
           SizedBox(
             height: 10.h,
           ),
-          TextFormFieldWidget(
-              validator: Rtd_Validators.noneEmptyValidator,
-              controller: value.loanAmountController,
-              textInputType: TextInputType.number,
-              hitText: 'Loan Amount'),
+          // TextFormFieldWidget(
+          //     validator: Rtd_Validators.noneEmptyValidator,
+          //     controller: value.loanAmountController,
+          //     textInputType: TextInputType.number,
+          //     hitText: 'Loan Amount'),
+          Container(
+            height: 50.h,
+            width: 290.w,
+            decoration: BoxDecoration(
+              color: textFormBase,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Center(
+              child: Text(
+                value.loanAmount ?? 'Loan Amount',
+                style: const TextStyle(fontSize: 18),
+              ),
+            ),
+          ),
           SizedBox(
             height: 20.h,
           ),

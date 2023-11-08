@@ -31,6 +31,7 @@ class LoanScreenController extends GetxController {
 
   bool loading = true;
   Data? loan;
+  String? loanAmount;
   PurposeData? purposeData;
   bool image1 = false;
   XFile? selectedImage1;
@@ -146,6 +147,7 @@ class LoanScreenController extends GetxController {
         });
         _dropdownMenuPurpose = buildDropDownMenuItemsPurpose(_getPurposeType);
         purposeData = _getPurposeType[0];
+        loanAmount = _getPurposeType[0].maxLimit;
 
         purpose != null ? _dropdownMenuPurpose[0].value : null;
         update();
@@ -282,6 +284,33 @@ class LoanScreenController extends GetxController {
   }
 
   Future<void> uploadLoanDocument(XFile? data, loanId) async {
+    // Get.back();
+
+    Get.dialog(
+      SimpleDialog(
+        children: [
+          Row(
+            children: [
+              const SizedBox(
+                width: 30,
+              ),
+              const CircularProgressIndicator(
+                color: ThemeProvider.appColor,
+              ),
+              const SizedBox(
+                width: 30,
+              ),
+              SizedBox(
+                  child: Text(
+                "Please wait".tr,
+                style: const TextStyle(fontFamily: 'bold'),
+              )),
+            ],
+          )
+        ],
+      ),
+      barrierDismissible: false,
+    );
     var uri = Uri.parse(Constants.baseUrl + Constants.uploadLoanDocument);
     var request = http.MultipartRequest("POST", uri);
     String? accessToken =
@@ -299,6 +328,7 @@ class LoanScreenController extends GetxController {
     var parsedData;
     final responceData = await response.stream.bytesToString();
     parsedData = json.decode(responceData);
+    Get.back();
     if (parsedData['status'] == true) {
       log(parsedData.toString());
       Get.back();
@@ -312,14 +342,11 @@ class LoanScreenController extends GetxController {
       showToast('Select loan type');
       return;
     }
-    if (loanAmountController.text.isEmpty || loanAmountController.text == '') {
-      showToast('Enter Amount');
+
+    if (addedSurties.length != loanPurpose!.data[0].noOfSureties) {
+      showToast('Add ${loanPurpose!.data[0].noOfSureties} sureties');
       return;
     }
-    // if (_addedSurties.length == loanPurpose!.data[0].noOfSureties) {
-    //   showToast('Add ${loanPurpose!.data[0].noOfSureties} sureties');
-    //   return;
-    // }
     Get.dialog(
       SimpleDialog(
         children: [
@@ -357,7 +384,7 @@ class LoanScreenController extends GetxController {
 
     request.fields['sureties'] = sureties.toString();
     request.fields['loan_purpose'] = loanPurpose!.data[0].id.toString();
-    request.fields['loan_amount'] = loanAmountController.text;
+    request.fields['loan_amount'] = loanAmount!;
     request.fields['loan_type'] = loanTypeId.toString();
 
     request.headers.addAll({
