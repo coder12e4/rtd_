@@ -496,7 +496,8 @@ class _LoanPageState extends State<LoanPage> {
                     setState(() {});
                     value.loan = newValue;
                     value.purpose = newValue!.title;
-                    value.getLoanPurpose(newValue.id);
+
+                    value.getLoanPurpose(newValue!.id);
                     log(value.loan!.id.toString());
                   },
                   items: value.dropdownMenuLoanType,

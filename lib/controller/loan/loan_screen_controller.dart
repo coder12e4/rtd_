@@ -111,8 +111,10 @@ class LoanScreenController extends GetxController {
   // }
 
   Future<void> getLoanPurpose(id) async {
-    _getPurpose.clear();
-    _getPurposeType.clear();
+    // _getPurpose.clear();
+    // _getPurposeType.clear();
+    // purpose = '';
+    // purpose != null ? _dropdownMenuPurpose[0].value : null;
     final body = {"loan_type": id};
     Response response = await parser.getLoanPurpose(body);
     if (response.statusCode == 200) {
@@ -131,20 +133,28 @@ class LoanScreenController extends GetxController {
           isSelected.add(false);
         }
         var allPurpose = response.body["data"];
-        _getPurpose = [];
+        // _getPurpose = [];
+        // purpose != response.body["data"][0]["title"];
+        if (_getPurposeType.isNotEmpty) {
+          _getPurposeType.clear();
+          _dropdownMenuPurpose.clear();
+        }
+
         allPurpose.forEach((data1) {
           PurposeData individual = PurposeData.fromJson(data1);
           _getPurposeType.add(individual);
         });
         _dropdownMenuPurpose = buildDropDownMenuItemsPurpose(_getPurposeType);
+        purposeData = _getPurposeType[0];
+
         purpose != null ? _dropdownMenuPurpose[0].value : null;
+        update();
         log(_getPurposeType.toString());
         log('loan purpose surety : ${noOfSurties}');
       } catch (e, stackTrace) {
         log('loanPurpose catch $e', error: e, stackTrace: stackTrace);
       }
     }
-    update();
   }
 
   Future<void> getLoanRequestData() async {
@@ -306,10 +316,10 @@ class LoanScreenController extends GetxController {
       showToast('Enter Amount');
       return;
     }
-    if (_addedSurties.length == loanPurpose!.data[0].noOfSureties) {
-      showToast('Add ${loanPurpose!.data[0].noOfSureties} sureties');
-      return;
-    }
+    // if (_addedSurties.length == loanPurpose!.data[0].noOfSureties) {
+    //   showToast('Add ${loanPurpose!.data[0].noOfSureties} sureties');
+    //   return;
+    // }
     Get.dialog(
       SimpleDialog(
         children: [
