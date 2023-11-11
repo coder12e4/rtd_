@@ -27,6 +27,11 @@ class Constants {
   static const String getNotificationPollDetails = 'api/user/vote/view/poll';
   static const String getProfileLoanData = 'api/user/loan/details/show';
   static const String getLonPurpose = 'api/user/purpose/list';
+  static const String updateLoanRequest = 'api/user/purpose/list';
+  static const String removeLoanDocument =
+      'api/user/loan/request/document/remove';
+  static const String loanRequestDocumentUpload =
+      'api/user/loan/request/document/upload';
 
   static const String uploadLoanDocument =
       'api/user/loan/request/document/upload';

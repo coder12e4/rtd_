@@ -4,19 +4,19 @@
 
 import 'dart:convert';
 
-LoanPurpose loanPurposeFromJson(String str) =>
-    LoanPurpose.fromJson(json.decode(str));
+LoanPurposeData loanPurposeFromJson(String str) =>
+    LoanPurposeData.fromJson(json.decode(str));
 
-String loanPurposeToJson(LoanPurpose data) => json.encode(data.toJson());
+String loanPurposeToJson(LoanPurposeData data) => json.encode(data.toJson());
 
-class LoanPurpose {
+class LoanPurposeData {
   bool status;
   List<PurposeData> data;
   String message;
   String accessToken;
   String tokenType;
 
-  LoanPurpose({
+  LoanPurposeData({
     required this.status,
     required this.data,
     required this.message,
@@ -24,7 +24,8 @@ class LoanPurpose {
     required this.tokenType,
   });
 
-  factory LoanPurpose.fromJson(Map<String, dynamic> json) => LoanPurpose(
+  factory LoanPurposeData.fromJson(Map<String, dynamic> json) =>
+      LoanPurposeData(
         status: json["status"],
         data: List<PurposeData>.from(
             json["data"].map((x) => PurposeData.fromJson(x))),

@@ -5,19 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:rtd_project/backend/model/loan/loan_purpose.dart';
 import 'package:rtd_project/backend/model/loan/loan_type_model.dart';
 import 'package:rtd_project/controller/loan/loan_edit_controller.dart';
-import 'package:rtd_project/controller/loan/loan_screen_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/util/theme.dart';
 
 import '../../../core/common_widget/commen_botten.dart';
 import '../../../core/common_widget/imagepicker.dart';
-import '../../../core/common_widget/textformfield_widget.dart';
 import '../../../helper/router.dart';
 import '../../../util/toast.dart';
-import '../../../util/validators.dart';
 
 class LoanEditScreen extends StatefulWidget {
   const LoanEditScreen({super.key});
@@ -109,11 +107,10 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
 
                                         // Set the initial value (hint text)
                                         onChanged: (newValue) {
-                                          Get.find<LoanScreenController>()
-                                              .getLoanPurpose(newValue!.id);
+                                          value.getLoanPurpose(newValue!.id);
                                           setState(() {});
                                           value.loan = newValue;
-                                          value.purpose = newValue!.title;
+                                          value.purpose = newValue.title;
 
                                           log(value.loan!.id.toString());
                                         },
@@ -190,12 +187,66 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
                                 SizedBox(
                                   height: 10.h,
                                 ),
-                                TextFormFieldWidget(
-                                    validator:
-                                        Rtd_Validators.noneEmptyValidator,
-                                    controller: value.loanAmountController,
-                                    textInputType: TextInputType.number,
-                                    hitText: 'Loan Amount'),
+                                Container(
+                                  height: 50.h,
+                                  width: 290.w,
+                                  decoration: BoxDecoration(
+                                    color: textFormBase,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      value.loanAmount ?? 'Loan Amount',
+                                      style: const TextStyle(fontSize: 18),
+                                    ),
+                                  ),
+                                ),
+                                kSizedBoxH,
+                                Container(
+                                  height: 50.h,
+                                  width: 290.w,
+                                  decoration: BoxDecoration(
+                                    color: textFormBase,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                              right: 20, left: 20)
+                                          .r,
+                                      child: DropdownButton<PurposeData>(
+                                        isExpanded: true,
+                                        underline: Container(),
+                                        hint: Center(
+                                          child: Text(
+                                            "Select Purpose",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: Colors.black
+                                                    .withOpacity(.55),
+                                                fontSize: 17,
+                                                letterSpacing: .1,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                        ),
+                                        value: Get.find<LoanEditController>()
+                                            .purposeData,
+
+                                        // Set the initial value (hint text)
+                                        onChanged: (newValue) {
+                                          setState(() {});
+                                          value.purposeData = newValue;
+                                          value.purpose = newValue!.purpose;
+                                          value.loanAmount = newValue.maxLimit;
+                                          log('loan amount ${newValue.maxLimit}');
+
+                                          log(value.purposeData!.id.toString());
+                                        },
+                                        items: value.dropdownMenuPurpose,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                                 kSizedBoxH,
                                 const Align(
                                     alignment: Alignment.centerLeft,
@@ -211,12 +262,6 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
                                   buttonText: 'Update',
                                   borderAvalable: false,
                                   press: () {
-                                    if (value.loanAmountController.text
-                                            .isEmpty ||
-                                        value.loanAmountController.text == '') {
-                                      showToast('Enter Amount');
-                                      return;
-                                    }
                                     if (value.purpose == null) {
                                       showToast('Select Loan Type and Purpose');
                                       return;
@@ -256,55 +301,106 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
                   onPress: () {
                     // Get.back();
                     log('selected document : ${value.loanDocument1!.path}');
-                    value.uploadLoanDocument(
-                      value.loanDocument1!,
-                    );
+                    value
+                        .uploadLoanDocument(
+                          value.loanDocument1!,
+                        )
+                        .then((valuee) => value.loanDocument1 = null);
                   },
                 )
-              : Image.file(
-                  File(value.loanDocument1?.path ?? ''),
-                  height: 50.h,
-                  width: 50.w,
+              : documentContainer(
+                  value: value,
+                  selectedDocument: value.loanDocument1,
                 ),
+          SizedBox(
+            width: 10.w,
+          ),
           value.loanDocument2 == null
               ? selectionContainer(
                   onPress: () {
-                    value.uploadLoanDocument(
-                      value.loanDocument2!,
-                    );
+                    value
+                        .uploadLoanDocument(
+                          value.loanDocument2!,
+                        )
+                        .then((valuee) => value.loanDocument2 = null);
                     // Get.back();
                   },
                   onImageSelected: value.updateSelectedImage2,
                 )
-              : Image.file(
-                  File(value.loanDocument2?.path ?? ''),
-                  height: 50.h,
-                  width: 50.w,
+              : documentContainer(
+                  value: value,
+                  selectedDocument: value.loanDocument2,
                 ),
+          SizedBox(
+            width: 10.w,
+          ),
           value.loanDocument3 == null
               ? selectionContainer(
                   onPress: () {
-                    value.uploadLoanDocument(
-                      value.loanDocument3!,
-                    );
+                    value
+                        .uploadLoanDocument(
+                          value.loanDocument3!,
+                        )
+                        .then((valuee) => value.loanDocument3 = null);
                     // Get.back();
                   },
                   onImageSelected: value.updateSelectedImage3,
                 )
-              : Image.file(
-                  File(value.loanDocument3?.path ?? ''),
-                  height: 50.h,
-                  width: 50.w,
+              : documentContainer(
+                  value: value,
+                  selectedDocument: value.loanDocument3,
                 ),
         ],
       );
     }
     if (value.loanData!.data.loanDocument.length == 1) {
-      return documentContainer(
-        documentProof: value.loanData!.data.loanDocument[0].file,
-        selectedDocument: value.loanDocument1,
-        onImageSelected: (p0) => value.updateSelectedImage1(p0),
-        value: value,
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          documentContainer(
+            documentProof: value.loanData!.data.loanDocument[0].file,
+            documentId: value.loanData!.data.loanDocument[0].id,
+            value: value,
+          ),
+          SizedBox(
+            width: 10.w,
+          ),
+          value.loanDocument2 == null
+              ? selectionContainer(
+                  onPress: () {
+                    value
+                        .uploadLoanDocument(
+                          value.loanDocument2!,
+                        )
+                        .then((valuee) => value.loanDocument2 = null);
+                    // Get.back();
+                  },
+                  onImageSelected: value.updateSelectedImage2,
+                )
+              : documentContainer(
+                  value: value,
+                  selectedDocument: value.loanDocument2,
+                ),
+          SizedBox(
+            width: 10.w,
+          ),
+          value.loanDocument3 == null
+              ? selectionContainer(
+                  onPress: () {
+                    value
+                        .uploadLoanDocument(
+                          value.loanDocument3!,
+                        )
+                        .then((valuee) => value.loanDocument3 = null);
+                    // Get.back();
+                  },
+                  onImageSelected: value.updateSelectedImage3,
+                )
+              : documentContainer(
+                  value: value,
+                  selectedDocument: value.loanDocument3,
+                ),
+        ],
       );
     }
     if (value.loanData!.data.loanDocument.length == 2) {
@@ -312,8 +408,7 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
         children: [
           documentContainer(
             documentProof: value.loanData!.data.loanDocument[0].file,
-            selectedDocument: value.loanDocument1,
-            onImageSelected: (p0) => value.updateSelectedImage1(p0),
+            documentId: value.loanData!.data.loanDocument[0].id,
             value: value,
           ),
           SizedBox(
@@ -321,10 +416,29 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
           ),
           documentContainer(
             documentProof: value.loanData!.data.loanDocument[1].file,
-            selectedDocument: value.loanDocument2,
-            onImageSelected: (p0) => value.updateSelectedImage2(p0),
+            documentId: value.loanData!.data.loanDocument[1].id,
             value: value,
           ),
+          SizedBox(
+            width: 10.w,
+          ),
+          value.loanDocument3 == null
+              ? selectionContainer(
+                  onPress: () {
+                    value
+                        .uploadLoanDocument(
+                          value.loanDocument3!,
+                        )
+                        .then((valuee) => value.loanDocument3 = null);
+
+                    // Get.back();
+                  },
+                  onImageSelected: value.updateSelectedImage3,
+                )
+              : documentContainer(
+                  value: value,
+                  selectedDocument: value.loanDocument3,
+                )
         ],
       );
     }
@@ -332,31 +446,26 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
     return Row(
       children: [
         documentContainer(
-            documentProof: value.loanData!.data.loanDocument[0].file,
-            selectedDocument: value.loanDocument1,
-            onImageSelected: (p0) => value.updateSelectedImage1(p0),
-            value: value),
-        SizedBox(
-          width: 10.w,
-        ),
-        documentContainer(
-          documentProof: value.loanData!.data.loanDocument[1].file,
-          selectedDocument: value.loanDocument2,
-          onImageSelected: (p0) => value.updateSelectedImage3(p0),
+          documentProof: value.loanData!.data.loanDocument[0].file,
+          documentId: value.loanData!.data.loanDocument[0].id,
           value: value,
         ),
         SizedBox(
           width: 10.w,
         ),
         documentContainer(
-            documentProof: value.loanData!.data.loanDocument[2].file,
-            selectedDocument: value.loanDocument2,
-            onImageSelected: (p0) {
-              log("&&&&&&&&&&&&&&&&&&&& ${p0?.path}");
-              // value.updateSelectedImage3(p0);
-              value.uploadLoanDocument(p0);
-            },
-            value: value),
+          documentProof: value.loanData!.data.loanDocument[1].file,
+          documentId: value.loanData!.data.loanDocument[1].id,
+          value: value,
+        ),
+        SizedBox(
+          width: 10.w,
+        ),
+        documentContainer(
+          documentProof: value.loanData!.data.loanDocument[2].file,
+          documentId: value.loanData!.data.loanDocument[2].id,
+          value: value,
+        ),
       ],
     );
   }
@@ -364,7 +473,7 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
   Stack documentContainer(
       {String? documentProof,
       XFile? selectedDocument,
-      required ValueChanged<XFile?> onImageSelected,
+      int? documentId,
       required LoanEditController value}) {
     return Stack(
       fit: StackFit.loose,
@@ -383,23 +492,17 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
               borderRadius: BorderRadius.circular(20)),
         ),
         Positioned(
-          top: 0,
-          right: 0,
-          child: IconButton(
-            onPressed: () => showModalBottomSheet(
-              context: context,
-              builder: (context) => Imagepiker(
-                onImageSelected: (value) {
-                  log('picked image : ${value?.path}');
-                  onImageSelected(value);
-                },
-                press: () {
-                  log('selected document : $selectedDocument');
-                  value.uploadLoanDocument(selectedDocument);
-                },
-              ),
+          top: 5,
+          right: 5,
+          child: InkWell(
+            onTap: () {
+              value.removeLoanDocument(documentId, selectedDocument);
+            },
+            child: const Icon(
+              Icons.delete_outline,
+              color: Colors.red,
+              size: 25,
             ),
-            icon: const Icon(Icons.edit_outlined),
           ),
         )
       ],
@@ -449,11 +552,11 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
         ),
       ),
       child: Container(
-        width: 80.w,
-        height: 80.h,
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
-          color: Color(0xfff3f3f3),
+        height: 100.h,
+        width: 90.w,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: const Color.fromARGB(255, 223, 220, 220),
         ),
         child: const Center(
           child: Icon(

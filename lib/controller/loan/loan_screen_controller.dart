@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:rtd_project/core/constraints/api_urls.dart';
+import 'package:rtd_project/helper/router.dart';
 
 import '../../backend/model/loan/loan_purpose.dart';
 import '../../backend/model/loan/loan_request_model.dart';
@@ -37,7 +38,7 @@ class LoanScreenController extends GetxController {
   XFile? selectedImage1;
   XFile? selectedImage2;
   XFile? selectedImage3;
-  LoanPurpose? loanPurpose;
+  LoanPurposeData? loanPurpose;
   List<int> noOfSurties = [];
   TextEditingController loanAmountController = TextEditingController();
   List<LoanData> _loanData = <LoanData>[];
@@ -86,30 +87,35 @@ class LoanScreenController extends GetxController {
     update();
   }
 
-  // Future<void> selectPurpose(id) async {
-  //   final body = {
-  //     "loan_type": 1,
-  //   };
-  //   Response response = await parser.getLoanPurpose(body);
-  //   if (response.statusCode == 200) {
-  //     try {
-  //       Map<String, dynamic> data = Map<String, dynamic>.from(response.body);
-  //       var allLoan = data['data'];
-  //       _getLoanTypes = [];
-  //       allLoan.forEach((data) {
-  //         Data individual = Data.fromJson(data);
-  //         _getLoanTypes.add(individual);
-  //       });
-  //       _dropdownMenuLoanType = buildDropDownMenuItemsLoanType(_getLoanTypes);
-  //       loan != null ? _dropdownMenuLoanType[0].value : null;
-  //       log(_getLoanTypes.toString());
-  //     } catch (e) {
-  //       log(e.toString());
-  //     }
-  //   }
-  //
-  //   update();
-  // }
+  Future<void> selectPurpose(id) async {
+    final body = {
+      "loan_type": 1,
+    };
+    Response response = await parser.getLoanPurpose(body);
+    if (response.statusCode == 200) {
+      try {
+        Map<String, dynamic> data = Map<String, dynamic>.from(response.body);
+        var allLoan = data['data'];
+        _getLoanTypes = [];
+        allLoan.forEach((data) {
+          Data individual = Data.fromJson(data);
+          _getLoanTypes.add(individual);
+        });
+        _dropdownMenuLoanType = buildDropDownMenuItemsLoanType(_getLoanTypes);
+        loan != null ? _dropdownMenuLoanType[0].value : null;
+        log(_getLoanTypes.toString());
+      } catch (e) {
+        log(e.toString());
+      }
+    }
+
+    update();
+  }
+
+  void updateLoanAmount(amount) {
+    loanAmount = amount;
+    update();
+  }
 
   Future<void> getLoanPurpose(id) async {
     // _getPurpose.clear();
@@ -121,7 +127,7 @@ class LoanScreenController extends GetxController {
     if (response.statusCode == 200) {
       log('Loan purpose :${response.body}');
       try {
-        loanPurpose = LoanPurpose.fromJson(response.body);
+        loanPurpose = LoanPurposeData.fromJson(response.body);
 
         _addedSurties.clear();
         surties.clear();
@@ -417,7 +423,9 @@ class LoanScreenController extends GetxController {
             selectedImage1 = null;
             selectedImage2 = null;
             selectedImage3 = null;
+
             successToast('Loan Request created');
+            Get.offAllNamed(AppRouter.getBottomNavRoute(), arguments: [2]);
           },
           loanId: parsedData['data']['id'],
         ),
