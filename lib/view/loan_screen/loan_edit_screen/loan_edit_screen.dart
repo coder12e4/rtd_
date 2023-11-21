@@ -291,7 +291,7 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
   }
 
   Widget documentsRow(LoanEditController value) {
-    if (value.loanData!.data.loanDocument.isEmpty) {
+    if (value.loanEditDocument!.data.isEmpty) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -353,13 +353,13 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
         ],
       );
     }
-    if (value.loanData!.data.loanDocument.length == 1) {
+    if (value.loanEditDocument!.data.length == 1) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           documentContainer(
-            documentProof: value.loanData!.data.loanDocument[0].file,
-            documentId: value.loanData!.data.loanDocument[0].id,
+            documentProof: value.loanEditDocument!.data[0].file,
+            documentId: value.loanEditDocument!.data[0].id,
             value: value,
           ),
           SizedBox(
@@ -403,20 +403,20 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
         ],
       );
     }
-    if (value.loanData!.data.loanDocument.length == 2) {
+    if (value.loanEditDocument!.data.length == 2) {
       return Row(
         children: [
           documentContainer(
-            documentProof: value.loanData!.data.loanDocument[0].file,
-            documentId: value.loanData!.data.loanDocument[0].id,
+            documentProof: value.loanEditDocument!.data[0].file,
+            documentId: value.loanEditDocument!.data[0].id,
             value: value,
           ),
           SizedBox(
             width: 10.w,
           ),
           documentContainer(
-            documentProof: value.loanData!.data.loanDocument[1].file,
-            documentId: value.loanData!.data.loanDocument[1].id,
+            documentProof: value.loanEditDocument!.data[1].file,
+            documentId: value.loanEditDocument!.data[1].id,
             value: value,
           ),
           SizedBox(
@@ -446,24 +446,24 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
     return Row(
       children: [
         documentContainer(
-          documentProof: value.loanData!.data.loanDocument[0].file,
-          documentId: value.loanData!.data.loanDocument[0].id,
+          documentProof: value.loanEditDocument!.data[0].file,
+          documentId: value.loanEditDocument!.data[0].id,
           value: value,
         ),
         SizedBox(
           width: 10.w,
         ),
         documentContainer(
-          documentProof: value.loanData!.data.loanDocument[1].file,
-          documentId: value.loanData!.data.loanDocument[1].id,
+          documentProof: value.loanEditDocument!.data[1].file,
+          documentId: value.loanEditDocument!.data[1].id,
           value: value,
         ),
         SizedBox(
           width: 10.w,
         ),
         documentContainer(
-          documentProof: value.loanData!.data.loanDocument[2].file,
-          documentId: value.loanData!.data.loanDocument[2].id,
+          documentProof: value.loanEditDocument!.data[2].file,
+          documentId: value.loanEditDocument!.data[2].id,
           value: value,
         ),
       ],

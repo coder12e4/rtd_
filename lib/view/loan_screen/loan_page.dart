@@ -8,12 +8,15 @@ import 'package:rtd_project/controller/loan/loan_edit_controller.dart';
 import 'package:rtd_project/controller/loan/loan_screen_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
+import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/util/theme.dart';
 import 'package:rtd_project/view/loan_screen/widgets/cancel_popup.dart';
 import 'package:rtd_project/view/loan_screen/widgets/porpose.dart';
 
 import '../../backend/model/loan/loan_type_model.dart';
+import '../../controller/loan/loan_rules.dart';
 import '../../helper/router.dart';
+import '../../util/toast.dart';
 
 class LoanPage extends StatefulWidget {
   const LoanPage({super.key});
@@ -23,6 +26,13 @@ class LoanPage extends StatefulWidget {
 }
 
 class _LoanPageState extends State<LoanPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    Get.find<LoanScreenController>();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -495,7 +505,7 @@ class _LoanPageState extends State<LoanPage> {
                     value.loan = newValue;
                     value.purpose = newValue!.title;
 
-                    value.getLoanPurpose(newValue!.id);
+                    value.getLoanPurpose(newValue.id);
                     log(value.loan!.id.toString());
                   },
                   items: value.dropdownMenuLoanType,
@@ -570,11 +580,7 @@ class _LoanPageState extends State<LoanPage> {
           SizedBox(
             height: 10.h,
           ),
-          // TextFormFieldWidget(
-          //     validator: Rtd_Validators.noneEmptyValidator,
-          //     controller: value.loanAmountController,
-          //     textInputType: TextInputType.number,
-          //     hitText: 'Loan Amount'),
+
           Container(
             height: 50.h,
             width: 290.w,
@@ -597,32 +603,25 @@ class _LoanPageState extends State<LoanPage> {
           // SizedBox(
           //   height: 20.h,
           // ),
-          // ButtonWidget(
-          //     buttonBackgroundColor: whiteColor,
-          //     buttonForegroundColor: buttenBlue,
-          //     buttonText: 'Attach Docements',
-          //     borderAvalable: true,
-          //     press: () {
-          //       showModalBottomSheet(
-          //         context: context,
-          //         builder: (context) => Imagepiker(
-          //           onImageSelected: _updateSelectedImage,
-          //           press: () => Get.back(),
-          //         ),
-          //       );
-          //     }),
+
           SizedBox(
             height: 20.h,
           ),
+          LoanRulesButton(controller: value),
+          kSizedBoxH,
           ButtonWidget(
             buttonBackgroundColor: buttenBlue,
             buttonForegroundColor: whiteColor,
             buttonText: 'submit',
             borderAvalable: false,
             press: () {
-              value.upload(value.loan?.id ?? '', value.addedSurties, context);
-              value.getLoanRequestData();
-              // _selectedImage = null;
+              if (value.isAccepted.value) {
+                value.upload(value.loan?.id ?? '', value.addedSurties, context);
+                value.getLoanRequestData();
+              } else {
+                showToast(
+                    'Please Agree the Rules and Instructions to continue.');
+              }
             },
           )
         ],
@@ -674,6 +673,56 @@ class _LoanPageState extends State<LoanPage> {
         style: Theme.of(context).textTheme.displaySmall!.copyWith(
             color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
       ),
+    );
+  }
+}
+
+class LoanRulesButton extends StatelessWidget {
+  const LoanRulesButton({
+    super.key,
+    required this.controller,
+  });
+  final LoanScreenController controller;
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Obx(
+          () => Radio<String>(
+            value: 'accepted',
+            groupValue: controller.isAccepted.value ? 'accepted' : '',
+            onChanged: (String? newValue) {
+              controller.toggleSelection();
+            },
+          ),
+        ),
+        SizedBox(width: 2.w),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'I have read and agreed to the',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+              // Adjust the text styling as needed
+            ),
+            InkWell(
+              onTap: () {
+                Get.to(
+                  const LoanRules(),
+                );
+              },
+              child: const Text(
+                'Rules & Instructions for loan.',
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: buttenBlue),
+                // Adjust the text styling as needed
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

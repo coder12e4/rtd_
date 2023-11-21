@@ -84,7 +84,7 @@ class Surety {
   Name? name;
   String profileImage;
   int status;
-  StatusText statusText;
+  StatusText? statusText;
 
   Surety({
     required this.userId,
@@ -99,7 +99,7 @@ class Surety {
         name: nameValues.map[json["name"]],
         profileImage: json["profile_image"],
         status: json["status"],
-        statusText: statusTextValues.map[json["status_text"]]!,
+        statusText: statusTextValues.map[json["status_text"]],
       );
 
   Map<String, dynamic> toJson() => {

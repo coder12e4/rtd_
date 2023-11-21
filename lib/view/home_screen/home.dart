@@ -1,10 +1,12 @@
 import 'package:awesome_circular_chart/awesome_circular_chart.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rtd_project/backend/model/home_data_model.dart';
 import 'package:rtd_project/controller/home_screen_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
+import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/util/theme.dart';
 
 import '../../controller/notification/notification_controller.dart';
@@ -26,124 +28,164 @@ class _HomePageState extends State<HomePage> {
         child: Scaffold(
       backgroundColor: baseColor,
       body: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: GetBuilder<HomeController>(builder: (value) {
-        return Column(
-          children: [
-            homeTextWidget(context, value),
-            Container(
-              // height: 1050.h,
-              //hallo
-              height: MediaQuery.sizeOf(context).height,
-              decoration: const BoxDecoration(
-                color: whiteColor,
-                borderRadius: BorderRadiusDirectional.only(
-                  topEnd: Radius.circular(40),
-                  topStart: Radius.circular(40),
-                ),
-              ),
-              child: value.loading != true
-                  ? Column(
-                      // physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                          Padding(
-                            padding: const EdgeInsets.all(18.0),
-                            child: Container(
-                              height: 450.h,
-                              // width: 100.w,
-                              decoration: BoxDecoration(
-                                  color: textFormBase,
-                                  borderRadius: BorderRadius.circular(30)),
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 68.h, vertical: 68.w),
-                                      child: Stack(
-                                        children: [
-                                          Positioned(
-                                            child: AnimatedCircularChart(
-                                              holeRadius: 70.r,
-                                              key: _chartKey,
-                                              size: Size(350.w, 100.h),
-                                              initialChartData: <CircularStackEntry>[
-                                                CircularStackEntry(
-                                                  <CircularSegmentEntry>[
-                                                    CircularSegmentEntry(
-                                                      value.homeData!
-                                                          .totalCollectionAmount
-                                                          .toDouble(),
-                                                      const Color.fromARGB(
-                                                          255, 147, 8, 96),
-                                                      rankKey: 'remaining',
-                                                    ),
-                                                    CircularSegmentEntry(
-                                                      100 -
-                                                          value.homeData!
-                                                              .totalAmountBalance
-                                                              .toDouble(),
-                                                      const Color.fromARGB(
-                                                          255, 207, 200, 200),
-                                                      rankKey: 'completed',
-                                                    ),
-                                                  ],
-                                                  rankKey: 'progress',
-                                                ),
-                                              ],
-                                              chartType:
-                                                  CircularChartType.Radial,
-                                              percentageValues: true,
-                                              // holeLabel: 'Total Collection',
-                                              labelStyle: const TextStyle(
-                                                color: baseColor,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 24.0,
-                                              ),
-                                              edgeStyle: SegmentEdgeStyle.round,
-                                              startAngle:
-                                                  BorderSide.strokeAlignOutside,
-                                            ),
-                                          ),
-                                          Positioned(
-                                            top: 5.h,
-                                            left: 25.w,
-                                            child: graphCenterText(
-                                                context, value.homeData!),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  incomBreakdown(value.homeData!),
-                                ],
-                              ),
-                            ),
-                          ),
-                          activeLoan(value.homeData!),
-                        ])
-                  : const Center(
-                      child: CircularProgressIndicator(
-                        strokeWidth: 6,
-                        color: ThemeProvider.blackColor,
-                      ),
+            return Column(
+              children: [
+                homeTextWidget(context, value),
+                Container(
+                  // height: 1050.h,
+                  //hallo
+                  height: MediaQuery.sizeOf(context).height,
+                  decoration: const BoxDecoration(
+                    color: whiteColor,
+                    borderRadius: BorderRadiusDirectional.only(
+                      topEnd: Radius.circular(40),
+                      topStart: Radius.circular(40),
                     ),
-            ),
-          ],
-        );
-      })),
+                  ),
+                  child: value.loading != true
+                      ? Column(
+                          // physics: const NeverScrollableScrollPhysics(),
+                          children: [
+                              Padding(
+                                padding: const EdgeInsets.all(18.0),
+                                child: Container(
+                                  height: 470.h,
+                                  // width: 100.w,
+                                  decoration: BoxDecoration(
+                                    color: textFormBase,
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      kSizedBoxH20,
+                                      CarouselSlider(
+                                        items: value.homeData?.collectionSummary
+                                            .map(
+                                              (item) => Text(
+                                                item.title.toString(),
+                                                style: const TextStyle(
+                                                    fontSize: 17,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                            )
+                                            .toList(),
+                                        options: CarouselOptions(
+                                          height: 20.h,
+                                          autoPlayInterval:
+                                              const Duration(seconds: 2),
+                                          // aspectRatio: 16 / 17,
+                                          autoPlay: true,
+                                        ),
+                                      ),
+                                      CarouselSlider(
+                                        items: value.homeData?.collectionSummary
+                                            .map(
+                                              (item) => Stack(
+                                                alignment:
+                                                    AlignmentDirectional.center,
+                                                children: [
+                                                  AnimatedCircularChart(
+                                                    holeRadius: 65.r,
+                                                    key: UniqueKey(),
+                                                    size: Size(350.w, 100.h),
+                                                    initialChartData: <CircularStackEntry>[
+                                                      CircularStackEntry(
+                                                        <CircularSegmentEntry>[
+                                                          CircularSegmentEntry(
+                                                            item
+                                                                .amountSummary[
+                                                                    0]
+                                                                .amount
+                                                                .toDouble(),
+                                                            const Color
+                                                                .fromARGB(255,
+                                                                147, 8, 96),
+                                                            rankKey:
+                                                                'remaining',
+                                                          ),
+                                                          CircularSegmentEntry(
+                                                            100 -
+                                                                item
+                                                                    .amountSummary[
+                                                                        1]
+                                                                    .amount
+                                                                    .toDouble(),
+                                                            const Color
+                                                                .fromARGB(255,
+                                                                207, 200, 200),
+                                                            rankKey:
+                                                                'completed',
+                                                          ),
+                                                        ],
+                                                        rankKey: 'progress',
+                                                      ),
+                                                    ],
+                                                    chartType: CircularChartType
+                                                        .Radial,
+                                                    percentageValues: true,
+                                                    // holeLabel: 'Total Collection',
+                                                    labelStyle: const TextStyle(
+                                                      color: baseColor,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 24.0,
+                                                    ),
+                                                    edgeStyle:
+                                                        SegmentEdgeStyle.round,
+                                                    startAngle: BorderSide
+                                                        .strokeAlignOutside,
+                                                  ),
+                                                  Positioned(
+                                                    top: 60.h,
+                                                    child: graphCenterText(
+                                                        context, item),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                            .toList(),
+                                        options: CarouselOptions(
+                                          height: 220.h,
+                                          autoPlayInterval:
+                                              const Duration(seconds: 2),
+                                          aspectRatio: 16 / 17,
+                                          autoPlay: true,
+
+                                          // enlargeCenterPage: true,
+                                        ),
+                                      ),
+                                      incomBreakdown(value.homeData!),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              activeLoan(value.homeData!),
+                            ])
+                      : const Center(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 6,
+                            color: ThemeProvider.blackColor,
+                          ),
+                        ),
+                ),
+              ],
+            );
+          })),
     ));
   }
 
-  graphCenterText(context, HomeData homeData) {
+  graphCenterText(context, CollectionSummary item) {
     return Column(
       children: [
-        const Text(
-          'Total Collection',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+        Text(
+          item.amountSummary[0].title,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
         ),
         Text(
-          '${homeData.totalCollectionAmount} INR',
+          '${item.amountSummary[0].amount} INR',
           style: Theme.of(context)
               .textTheme
               .displayLarge!
@@ -152,12 +194,12 @@ class _HomePageState extends State<HomePage> {
         SizedBox(
           height: 10.h,
         ),
-        const Text(
-          'Balance',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+        Text(
+          item.amountSummary[1].title,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
         ),
         Text(
-          '${homeData.totalAmountBalance} INR',
+          '${item.amountSummary[1].amount} INR',
           style: Theme.of(context)
               .textTheme
               .displayLarge!
@@ -249,15 +291,15 @@ class _HomePageState extends State<HomePage> {
     ));
   }
 
-  Container divider() {
-    return Container(
-      width: 270.w,
-      child: const Text(
-        '-------------------',
-        style: TextStyle(fontSize: 30),
-      ),
-    );
-  }
+  // Container divider() {
+  //   return Container(
+  //     width: 270.w,
+  //     child: const Text(
+  //       '-------------------',
+  //       style: TextStyle(fontSize: 30),
+  //     ),
+  //   );
+  // }
 
   Row IncomRow({String? title, String? price}) {
     return Row(
@@ -355,6 +397,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-final GlobalKey<AnimatedCircularChartState> _chartKey =
-    GlobalKey<AnimatedCircularChartState>();

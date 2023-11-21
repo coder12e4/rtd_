@@ -22,16 +22,16 @@ class LoanScreenController extends GetxController {
   LoanScreenController({required this.parser});
   @override
   void onInit() {
-    // _addedSurties = [-1, -1, -1];
-    // surties = [null, null, null];
+    log("Loan Init called");
     getLoanType();
-
     getLoanRequestData();
     super.onInit();
   }
 
   bool loading = true;
   Data? loan;
+  var isAccepted = false.obs;
+
   String? loanAmount;
   PurposeData? purposeData;
   bool image1 = false;
@@ -65,6 +65,10 @@ class LoanScreenController extends GetxController {
   List<bool> isSelected = [false, false, false];
   LoanType? loanType;
   String? purpose;
+  void toggleSelection() {
+    isAccepted.value = !isAccepted.value;
+  }
+
   Future<void> getLoanType() async {
     Response response = await parser.getLoanTypes();
     if (response.statusCode == 200) {
@@ -181,8 +185,8 @@ class LoanScreenController extends GetxController {
           LoanData individual = LoanData.fromJson(element);
           loanData.add(individual);
         }
-      } catch (e) {
-        log('Loan request data error $e');
+      } catch (e, stackTrace) {
+        log('Loan request data error $e', error: e, stackTrace: stackTrace);
       }
     }
     loading = false;
@@ -419,12 +423,12 @@ class LoanScreenController extends GetxController {
         isDismissible: false,
         builder: (context) => LoanDocumentsBottomSheet(
           press: () {
-            Get.back();
+            // Get.back();
+            successToast('Loan Request created');
             selectedImage1 = null;
             selectedImage2 = null;
             selectedImage3 = null;
 
-            successToast('Loan Request created');
             Get.offAllNamed(AppRouter.getBottomNavRoute(), arguments: [2]);
           },
           loanId: parsedData['data']['id'],

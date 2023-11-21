@@ -1,3 +1,7 @@
+// To parse this JSON data, do
+//
+//     final homeData = homeDataFromJson(jsonString);
+
 import 'dart:convert';
 
 HomeData homeDataFromJson(String str) => HomeData.fromJson(json.decode(str));
@@ -5,31 +9,30 @@ HomeData homeDataFromJson(String str) => HomeData.fromJson(json.decode(str));
 String homeDataToJson(HomeData data) => json.encode(data.toJson());
 
 class HomeData {
-  int totalCollectionAmount;
-  int totalAmountBalance;
+  List<CollectionSummary> collectionSummary;
   Income income;
   Loans loans;
   ActiveLoan activeLoan;
 
   HomeData({
-    required this.totalCollectionAmount,
-    required this.totalAmountBalance,
+    required this.collectionSummary,
     required this.income,
     required this.loans,
     required this.activeLoan,
   });
 
   factory HomeData.fromJson(Map<String, dynamic> json) => HomeData(
-        totalCollectionAmount: json["total_collection_amount"],
-        totalAmountBalance: json["total_amount_balance"],
+        collectionSummary: List<CollectionSummary>.from(
+            json["collection_summary"]
+                .map((x) => CollectionSummary.fromJson(x))),
         income: Income.fromJson(json["income"]),
         loans: Loans.fromJson(json["loans"]),
         activeLoan: ActiveLoan.fromJson(json["active_loan"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "total_collection_amount": totalCollectionAmount,
-        "total_amount_balance": totalAmountBalance,
+        "collection_summary":
+            List<dynamic>.from(collectionSummary.map((x) => x.toJson())),
         "income": income.toJson(),
         "loans": loans.toJson(),
         "active_loan": activeLoan.toJson(),
@@ -57,6 +60,49 @@ class ActiveLoan {
         "loan_amount": loanAmount,
         "start_date": startDate,
         "Loan Type": loanType,
+      };
+}
+
+class CollectionSummary {
+  String title;
+  List<AmountSummary> amountSummary;
+
+  CollectionSummary({
+    required this.title,
+    required this.amountSummary,
+  });
+
+  factory CollectionSummary.fromJson(Map<String, dynamic> json) =>
+      CollectionSummary(
+        title: json["title"],
+        amountSummary: List<AmountSummary>.from(
+            json["amount_summary"].map((x) => AmountSummary.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "title": title,
+        "amount_summary":
+            List<dynamic>.from(amountSummary.map((x) => x.toJson())),
+      };
+}
+
+class AmountSummary {
+  String title;
+  int amount;
+
+  AmountSummary({
+    required this.title,
+    required this.amount,
+  });
+
+  factory AmountSummary.fromJson(Map<String, dynamic> json) => AmountSummary(
+        title: json["title"],
+        amount: json["amount"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "title": title,
+        "amount": amount,
       };
 }
 

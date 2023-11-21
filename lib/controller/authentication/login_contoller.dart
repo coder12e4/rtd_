@@ -20,7 +20,8 @@ class LoginController extends GetxController implements GetxService {
 
   @override
   void onInit() {
-    log("getting fcm token from shared pref ${fcmToken = parser.getFcmToken()}");
+    fcmToken = parser.getFcmToken();
+    log("getting fcm token from shared pref $fcmToken");
     super.onInit();
   }
 

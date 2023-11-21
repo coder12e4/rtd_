@@ -25,7 +25,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       child: Scaffold(
         backgroundColor: baseColor,
         body: SingleChildScrollView(
-          physics: const NeverScrollableScrollPhysics(),
+          // physics: const NeverScrollableScrollPhysics(),/
           child: GetBuilder<NotificationController>(builder: (controller) {
             return controller.loading != true
                 ? Column(
@@ -33,6 +33,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       appbar(context, controller),
                       Container(
                         height: MediaQuery.sizeOf(context).height,
+                        // height: controller.notification?.data.length == 0
+                        //     ? MediaQuery.sizeOf(context).height
+                        //     : controller.notification!.data.length * 150.h,
                         decoration: const BoxDecoration(
                             color: whiteColor,
                             borderRadius: BorderRadiusDirectional.only(
@@ -44,7 +47,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 padding: EdgeInsets.only(top: 20.h),
                                 itemCount:
                                     controller.notification?.data.length ?? 0,
-                                physics: const BouncingScrollPhysics(),
+                                physics: const NeverScrollableScrollPhysics(),
                                 separatorBuilder: (context, index) =>
                                     kSizedBoxH20,
                                 itemBuilder: (context, index) {

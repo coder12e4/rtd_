@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class TermsAndConditions extends StatefulWidget {
-  const TermsAndConditions({
+class LoanRules extends StatefulWidget {
+  const LoanRules({
     super.key,
   });
 
   @override
-  State<TermsAndConditions> createState() => _TermsAndConditionsState();
+  State<LoanRules> createState() => _LoanRulesState();
 }
 
 bool loading = true;
 
-class _TermsAndConditionsState extends State<TermsAndConditions> {
+class _LoanRulesState extends State<LoanRules> {
   WebViewController controller = WebViewController()
     ..setJavaScriptMode(JavaScriptMode.unrestricted)
     ..setBackgroundColor(const Color(0x00000000))
@@ -30,8 +30,7 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
         },
       ),
     )
-    ..loadRequest(
-        Uri.parse('https://rtd.canisostudio.com/terms-and-conditions'));
+    ..loadRequest(Uri.parse('https://rtd.canisostudio.com/loan-rules'));
 
   @override
   Widget build(BuildContext context) {

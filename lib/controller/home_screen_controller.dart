@@ -41,6 +41,7 @@ class HomeController extends GetxController implements GetxService {
   }
 
   Future<void> getNotificaion() async {
+    // Get.find<NotificationController>().getNotification();
     await controllerN!.getNotification();
     update();
   }

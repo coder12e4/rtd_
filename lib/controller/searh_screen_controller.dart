@@ -3,10 +3,10 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:rtd_project/controller/loan/loan_edit_controller.dart';
-import 'package:rtd_project/controller/loan/loan_screen_controller.dart';
 
 import '../backend/model/loan/surties_model.dart';
 import '../backend/parser/search_parser.dart';
+import 'loan/loan_screen_controller.dart';
 
 class SearchScreenController extends GetxController {
   final SearchScreenParser parser;

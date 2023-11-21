@@ -19,7 +19,7 @@ class SplashScreenController extends GetxController {
         Get.put(NotificationController(parser: Get.find()));
     initNotifications();
     FirebaseMessaging.instance.getToken().then((value) {
-      log('fcm token from splash$value');
+      log('fcm token from splash $value');
       parser.saveDeviceToken(value.toString());
     });
 

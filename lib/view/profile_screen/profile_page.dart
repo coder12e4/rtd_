@@ -8,6 +8,7 @@ import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/helper/router.dart';
 
+import '../../controller/notification/notification_controller.dart';
 import '../../util/alert_dialog.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -56,6 +57,15 @@ class ProfilePage extends StatelessWidget {
                               imageContainer(value),
                               kSizedBoxH,
                               nameText(value),
+                              // kSizedBoxH,
+                              Align(
+                                child: Text(
+                                  "(${value.userData!.data.memberId})",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
+                                ),
+                              ),
                               kSizedBoxH,
                               dividerWidget(),
                               kSizedBoxH,
@@ -327,7 +337,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Container appbar(BuildContext context, ProfileController ProController) {
+  Container appbar(BuildContext context, ProfileController proController) {
     return Container(
       margin: EdgeInsets.only(top: 10.h, bottom: 10.h),
       child: Row(
@@ -356,13 +366,13 @@ class ProfilePage extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              // Get.delete<NotificationController>(force: true);
+              Get.delete<NotificationController>(force: true);
               Get.toNamed(AppRouter.getNotificationPageRoute());
             },
-            child: const Stack(
+            child: Stack(
               alignment: AlignmentDirectional.center,
               children: [
-                IconButton(
+                const IconButton(
                   onPressed: null,
                   icon: Icon(
                     Icons.notifications_none,
@@ -370,23 +380,26 @@ class ProfilePage extends StatelessWidget {
                     size: 35,
                   ),
                 ),
-                // Positioned(
-                //         top: 3.h,
-                //         right: 4.w,
-                //         child: Container(
-                //           height: 20.h,
-                //           width: 20.w,
-                //           decoration: const BoxDecoration(
-                //               color: Colors.red, shape: BoxShape.circle),
-                //           child: const Center(
-                //               child: Text(
-                //             '${ 0}',
-                //             style: TextStyle(
-                //                 color: whiteColor,
-                //                 fontWeight: FontWeight.bold),
-                //           )),
-                //         ),
-                //       )
+                proController.controllerN?.notificationCount != 0
+                    ? Positioned(
+                        top: 3.h,
+                        right: 4.w,
+                        child: Container(
+                          height: 20.h,
+                          width: 20.w,
+                          decoration: const BoxDecoration(
+                              color: Colors.red, shape: BoxShape.circle),
+                          child: Center(
+                            child: Text(
+                              '${proController.controllerN?.notificationCount ?? 0}',
+                              style: const TextStyle(
+                                  color: whiteColor,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      )
+                    : const SizedBox(),
               ],
             ),
           ),

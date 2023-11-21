@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:rtd_project/controller/loan/loan_screen_controller.dart';
 
+import '../../backend/model/loan/loan_document.dart';
 import '../../backend/model/loan/loan_edite_model.dart';
 import '../../backend/model/loan/loan_purpose.dart';
 import '../../backend/model/loan/loan_type_model.dart';
@@ -27,6 +28,7 @@ class LoanEditController extends GetxController implements GetxService {
   void onInit() {
     loanId = Get.arguments[0].toString();
     getLoanDetails(loanId);
+
     getLoanType();
     super.onInit();
   }
@@ -36,6 +38,7 @@ class LoanEditController extends GetxController implements GetxService {
   XFile? loanDocument2;
   XFile? loanDocument3;
   PurposeData? purposeData;
+  LoanEditDocument? loanEditDocument;
   String? loanAmount;
   LoanPurposeData? loanPurpose;
   List<int> noOfSurties = [];
@@ -85,6 +88,23 @@ class LoanEditController extends GetxController implements GetxService {
     update();
   }
 
+  Future<void> getLoanDocuments() async {
+    final body = {
+      "loan_request_id": loanId.toString(),
+    };
+    Response response = await parser.getLoanDocuments(body);
+    log("loan document response ${response.body}");
+    if (response.statusCode == 200) {
+      try {
+        loanEditDocument = LoanEditDocument.fromJson(response.body);
+      } catch (e, stackTrace) {
+        log("Loan document catch $e", error: e, stackTrace: stackTrace);
+      }
+    }
+
+    update();
+  }
+
   Future<void> removeLoanDocument(documentId, XFile? selectedDocument) async {
     final body = {
       "loan_request_id": loanId.toString(),
@@ -103,7 +123,7 @@ class LoanEditController extends GetxController implements GetxService {
     } else {
       showToast(response.body['message']);
     }
-    getLoanDetails(loanId);
+    getLoanDocuments();
     update();
   }
 
@@ -116,7 +136,7 @@ class LoanEditController extends GetxController implements GetxService {
         loanPurpose = LoanPurposeData.fromJson(response.body);
 
         _addedSurties.clear();
-        addedSurties.clear();
+
         surties.clear();
         isSelected.clear();
         noOfSurties.clear();
@@ -177,7 +197,7 @@ class LoanEditController extends GetxController implements GetxService {
 
   Future<void> getLoanDetails(id) async {
     _addedSurties.clear();
-    addedSurties.clear();
+    // addedSurties.clear();
     surties.clear();
     isSelected.clear();
     final body = {"loan_request_id": id};
@@ -188,43 +208,40 @@ class LoanEditController extends GetxController implements GetxService {
         Map<String, dynamic> jsonData =
             Map<String, dynamic>.from(response.body);
         loanData = LoanData.fromJson(jsonData);
-        for (var element in loanData!.data.sureties) {
-          _addedSurties.add(-1);
-          addedSurties.add(element.userId);
+        for (Surety element in loanData!.data.sureties) {
+          _addedSurties.add(element.userId);
           isSelected.add(true);
           surties.add(element);
         }
-        // final imagePath =
-        //     await parser.urlToFile(loanData!.data.loanDocument[1].file);
-        // loanDocument = XFile(imagePath.path);
         loanAmount = loanData!.data.loanAmount;
+        await getLoanDocuments();
         loading = false;
       }
     } catch (e, stackTrace) {
       log('loan details catch $e', error: e, stackTrace: stackTrace);
     }
 
-    log(loanData!.toString());
     update();
   }
 
   void deleteSurety(int index) {
-    addedSurties.remove(index);
+    _addedSurties[index] = -1;
+    // addedSurties.remove(index);
     surties[index] = null;
     isSelected[index] = !isSelected[index];
     update();
   }
 
   void addSurties(SuretiesData surety, int index) {
-    if (addedSurties.contains(surety.id)) {
+    if (_addedSurties.contains(surety.id)) {
       showToast('Surety already selected');
       return;
     }
-    if (!addedSurties.contains(surety.id)) {
+    if (!_addedSurties.contains(surety.id)) {
       isSelected[index] = !isSelected[index];
-      addedSurties[index] = surety.id;
+      _addedSurties[index] = surety.id;
       surties[index] = surety;
-      log(addedSurties.toString());
+      log(_addedSurties.toString());
       log('selected surty$surties');
       Get.back();
       successToast('Surety selected');
@@ -255,11 +272,11 @@ class LoanEditController extends GetxController implements GetxService {
 
   Future<void> upload() async {
     loadingWidget();
-    if (loanData!.data.loanDocument.length != 3) {
-      Get.back();
-      showToast('Upload 3 documents');
-      return;
-    }
+    // if (loanData!.data.loanDocument.length != 3) {
+    //   Get.back();
+    //   showToast('Upload 3 documents');
+    //   return;
+    // }
     var uri =
         Uri.parse("http://rtd.canisostudio.com/api/user/loan/request/update");
 
@@ -368,7 +385,7 @@ class LoanEditController extends GetxController implements GetxService {
     log('loan update response ${parsedData}');
     if (parsedData['status'] == true) {
       log(parsedData.toString());
-      getLoanDetails(loanId);
+      getLoanDocuments();
       Get.back();
       successToast('Document uploaded');
     } else {

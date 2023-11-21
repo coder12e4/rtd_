@@ -73,4 +73,11 @@ class LoanEditParser {
         Constants.baseUrl + Constants.updateLoanRequest, body, accessToken!);
     return response;
   }
+
+  Future<Response> getLoanDocuments(body) async {
+    final accessToken = sharedPreferencesManager.getString('access_token');
+    var response = await apiService.postPrivate(
+        Constants.baseUrl + Constants.getLoanDocuments, body, accessToken!);
+    return response;
+  }
 }

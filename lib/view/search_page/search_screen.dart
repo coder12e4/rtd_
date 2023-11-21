@@ -12,6 +12,7 @@ class SearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get.put<LoanScreenController>(LoanScreenController(parser: Get.find()));
     return Scaffold(
         backgroundColor: baseColor,
         body: SingleChildScrollView(

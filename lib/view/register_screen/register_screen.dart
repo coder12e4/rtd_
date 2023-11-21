@@ -853,7 +853,9 @@ class _RadioButtonWidgetState extends State<RadioButtonWidget> {
             ),
             InkWell(
               onTap: () {
-                Get.to(const TermsAndConditions());
+                Get.to(
+                  const TermsAndConditions(),
+                );
               },
               child: const Text(
                 'Terms and Conditions.',

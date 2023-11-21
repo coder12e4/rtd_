@@ -108,16 +108,16 @@ class EditData {
 }
 
 class LoanDocument {
-  int id;
-  int loanRequestId;
-  String filename;
-  String ogFileName;
-  String type;
-  String size;
-  int status;
-  DateTime createdAt;
-  DateTime updatedAt;
-  String file;
+  int? id;
+  int? loanRequestId;
+  String? filename;
+  String? ogFileName;
+  String? type;
+  String? size;
+  int? status;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  String? file;
 
   LoanDocument({
     required this.id,
@@ -153,8 +153,8 @@ class LoanDocument {
         "type": type,
         "size": size,
         "status": status,
-        "created_at": createdAt.toIso8601String(),
-        "updated_at": updatedAt.toIso8601String(),
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
         "file": file,
       };
 }
