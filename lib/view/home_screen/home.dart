@@ -6,10 +6,10 @@ import 'package:get/get.dart';
 import 'package:rtd_project/backend/model/home_data_model.dart';
 import 'package:rtd_project/controller/home_screen_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
-import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/util/theme.dart';
 
 import '../../controller/notification/notification_controller.dart';
+import '../../core/constraints/conatrints.dart';
 import '../../helper/router.dart';
 
 class HomePage extends StatefulWidget {
@@ -63,83 +63,84 @@ class _HomePageState extends State<HomePage> {
                                       CarouselSlider(
                                         items: value.homeData?.collectionSummary
                                             .map(
-                                              (item) => Text(
-                                                item.title.toString(),
-                                                style: const TextStyle(
-                                                    fontSize: 17,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              ),
-                                            )
-                                            .toList(),
-                                        options: CarouselOptions(
-                                          height: 20.h,
-                                          autoPlayInterval:
-                                              const Duration(seconds: 2),
-                                          // aspectRatio: 16 / 17,
-                                          autoPlay: true,
-                                        ),
-                                      ),
-                                      CarouselSlider(
-                                        items: value.homeData?.collectionSummary
-                                            .map(
                                               (item) => Stack(
                                                 alignment:
                                                     AlignmentDirectional.center,
                                                 children: [
-                                                  AnimatedCircularChart(
-                                                    holeRadius: 65.r,
-                                                    key: UniqueKey(),
-                                                    size: Size(350.w, 100.h),
-                                                    initialChartData: <CircularStackEntry>[
-                                                      CircularStackEntry(
-                                                        <CircularSegmentEntry>[
-                                                          CircularSegmentEntry(
-                                                            item
-                                                                .amountSummary[
-                                                                    0]
-                                                                .amount
-                                                                .toDouble(),
-                                                            const Color
-                                                                .fromARGB(255,
-                                                                147, 8, 96),
-                                                            rankKey:
-                                                                'remaining',
-                                                          ),
-                                                          CircularSegmentEntry(
-                                                            100 -
-                                                                item
-                                                                    .amountSummary[
-                                                                        1]
-                                                                    .amount
-                                                                    .toDouble(),
-                                                            const Color
-                                                                .fromARGB(255,
-                                                                207, 200, 200),
-                                                            rankKey:
-                                                                'completed',
-                                                          ),
-                                                        ],
-                                                        rankKey: 'progress',
-                                                      ),
-                                                    ],
-                                                    chartType: CircularChartType
-                                                        .Radial,
-                                                    percentageValues: true,
-                                                    // holeLabel: 'Total Collection',
-                                                    labelStyle: const TextStyle(
-                                                      color: baseColor,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 24.0,
+                                                  // kSizedBoxH20,
+                                                  Positioned(
+                                                    top: 0,
+                                                    child: Text(
+                                                      item.title.toString(),
+                                                      style: const TextStyle(
+                                                          fontSize: 17,
+                                                          fontWeight:
+                                                              FontWeight.w600),
                                                     ),
-                                                    edgeStyle:
-                                                        SegmentEdgeStyle.round,
-                                                    startAngle: BorderSide
-                                                        .strokeAlignOutside,
                                                   ),
                                                   Positioned(
-                                                    top: 60.h,
+                                                    top: 80.h,
+                                                    child:
+                                                        AnimatedCircularChart(
+                                                      holeRadius: 65.r,
+                                                      key: UniqueKey(),
+                                                      size: Size(350.w, 100.h),
+                                                      initialChartData: <CircularStackEntry>[
+                                                        CircularStackEntry(
+                                                          <CircularSegmentEntry>[
+                                                            CircularSegmentEntry(
+                                                              item
+                                                                  .amountSummary[
+                                                                      0]
+                                                                  .amount
+                                                                  .toDouble(),
+                                                              const Color
+                                                                  .fromARGB(255,
+                                                                  147, 8, 96),
+                                                              rankKey:
+                                                                  'remaining',
+                                                            ),
+                                                            CircularSegmentEntry(
+                                                              100 -
+                                                                  item
+                                                                      .amountSummary[
+                                                                          1]
+                                                                      .amount
+                                                                      .toDouble(),
+                                                              const Color
+                                                                  .fromARGB(
+                                                                  255,
+                                                                  207,
+                                                                  200,
+                                                                  200),
+                                                              rankKey:
+                                                                  'completed',
+                                                            ),
+                                                          ],
+                                                          rankKey: 'progress',
+                                                        ),
+                                                      ],
+                                                      chartType:
+                                                          CircularChartType
+                                                              .Radial,
+                                                      percentageValues: true,
+                                                      // holeLabel: 'Total Collection',
+                                                      labelStyle:
+                                                          const TextStyle(
+                                                        color: baseColor,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 24.0,
+                                                      ),
+                                                      edgeStyle:
+                                                          SegmentEdgeStyle
+                                                              .round,
+                                                      startAngle: BorderSide
+                                                          .strokeAlignOutside,
+                                                    ),
+                                                  ),
+                                                  Positioned(
+                                                    top: 80.h,
                                                     child: graphCenterText(
                                                         context, item),
                                                   ),
@@ -148,7 +149,8 @@ class _HomePageState extends State<HomePage> {
                                             )
                                             .toList(),
                                         options: CarouselOptions(
-                                          height: 220.h,
+                                          pauseAutoPlayOnTouch: false,
+                                          height: 240.h,
                                           autoPlayInterval:
                                               const Duration(seconds: 2),
                                           aspectRatio: 16 / 17,
