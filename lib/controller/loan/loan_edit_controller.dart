@@ -69,7 +69,6 @@ class LoanEditController extends GetxController implements GetxService {
 
   Future<void> getLoanType() async {
     try {
-
       Response response = await parser.getLoanTypes();
 
       if (response.statusCode == 200) {
@@ -155,10 +154,11 @@ class LoanEditController extends GetxController implements GetxService {
           surties.clear();
           isSelected.clear();
           noOfSurties.clear();
+          addedSurties.clear();
           loanSuretyCount = 0;
           for (int i = 1; i <= loanPurpose!.data[0].noOfSureties; i++) {
             noOfSurties.add(1);
-            _addedSurties.add(-1);
+            addedSurties.add(-1);
             surties.add(null);
             isSelected.add(false);
           }
@@ -267,13 +267,13 @@ class LoanEditController extends GetxController implements GetxService {
   }
 
   void addSurties(SuretiesData surety, int index) {
-    if (_addedSurties.contains(surety.id)) {
+    if (addedSurties.contains(surety.id)) {
       showToast('Surety already selected');
       return;
     }
-    if (!_addedSurties.contains(surety.id)) {
+    if (!addedSurties.contains(surety.id)) {
       isSelected[index] = !isSelected[index];
-      _addedSurties[index] = surety.id;
+      addedSurties[index] = surety.id;
       surties[index] = surety;
       loanSuretyCount++;
       log(_addedSurties.toString());
@@ -306,13 +306,13 @@ class LoanEditController extends GetxController implements GetxService {
   }
 
   void updateLoanSuretyCount(PurposeData purposeData) {
-    _addedSurties.clear();
+    addedSurties.clear();
     surties.clear();
     isSelected.clear();
     noOfSurties.clear();
     for (int i = 1; i <= purposeData.noOfSureties; i++) {
       noOfSurties.add(1);
-      _addedSurties.add(-1);
+      addedSurties.add(-1);
       surties.add(null);
       isSelected.add(false);
     }
@@ -381,43 +381,7 @@ class LoanEditController extends GetxController implements GetxService {
         // error += error;
       }
     }
-
-    // } catch (e, stackTrace) {
-    //   log('loan update catch $e', error: e, stackTrace: stackTrace);
-    // }
   }
-  // Future<void> upload() async {
-  //   loadingWidget();
-  //   final body = {
-  //     'loan_request_id': loanId!,
-  //     'loan_type': loan!.id.toString(),
-  //     'loan_amount': loanAmount!,
-  //     'loan_purpose': purposeData!.id.toString(),
-  //     'sureties': addedSurties.toString(),
-  //   };
-  //   Response response = await parser.updateLoanRequest(body);
-  //   try {
-  //     Get.back();
-  //     log("loan update response :${response.body}");
-  //     if (response.statusCode == 200) {
-  //       if (response.body["status"] == true) {
-  //         successToast(response.body["message"]);
-  //       } else {
-  //         String errorMessage = '';
-  //         for (var error in response.body['errors']) {
-  //           errorMessage = "${errorMessage + error['error_name']}\n ";
-  //           log(errorMessage.toString());
-  //           // error += error;
-  //         }
-  //         successToast(errorMessage);
-  //       }
-  //     } else {
-  //       successToast(response.body["errors"]);
-  //     }
-  //   } catch (e, stackTrace) {
-  //     log('loan update catch $e', error: e, stackTrace: stackTrace);
-  //   }
-  // }
 
   Future<void> uploadLoanDocument(XFile? data) async {
     loadingWidget();

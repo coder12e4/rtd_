@@ -103,6 +103,11 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
                                       onChanged: (newValue) {
                                         value.getLoanPurpose(newValue!.id, 2);
                                         setState(() {});
+                                        value.surties.clear();
+                                        value.addedSurties.clear();
+                                        value.isSelected.clear();
+                                        value.noOfSurties.clear();
+                                        value.loanSuretyCount = 0;
                                         value.loan = newValue;
                                         value.purpose = newValue.title;
 
