@@ -22,14 +22,13 @@ class EditProfileController extends GetxController implements GetxService {
   final EditProfileParser parser;
   EditProfileController({required this.parser});
   @override
-  void onInit() {
+  void onInit() async {
+    await getUserDatas();
+    await getKsaStates();
+    await getStates();
+    await getVehicleType();
+    await getAllBloodGroup();
     super.onInit();
-
-    getUserDatas();
-    getKsaStates();
-    getStates();
-    getVehicleType();
-    getAllBloodGroup();
   }
 
   Profile? userData;
@@ -96,7 +95,7 @@ class EditProfileController extends GetxController implements GetxService {
   TextEditingController saudiAddPinContoller = TextEditingController();
   TextEditingController nameController = TextEditingController();
 
-  void getStates() async {
+  Future<void> getStates() async {
     var response = await parser.getStates('1');
     if (response.statusCode == 200) {
       Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
@@ -111,13 +110,17 @@ class EditProfileController extends GetxController implements GetxService {
       });
 
       _dropdownMenuItems = buildDropDownMenuItems(_allStates);
-      selectedItem != null ? _dropdownMenuItems[0].value : null;
+      int index = _dropdownMenuItems.indexWhere(
+          (element) => element.value?.id == userData?.data.indiaState.id);
+
+      selectedItem = index != -1 ? _dropdownMenuItems[index].value : null;
+      // selectedItem != null ? _dropdownMenuItems[0].value : null;
     }
     // log(_allStates.toString());
     update();
   }
 
-  void getKsaStates() async {
+  Future<void> getKsaStates() async {
     var response = await parser.getStates('2');
     if (response.statusCode == 200) {
       Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
@@ -132,13 +135,17 @@ class EditProfileController extends GetxController implements GetxService {
       });
 
       _dropdownKsaItems = buildDropDownMenuItems(_ksaStates);
-      selectedKsaItem != null ? _dropdownMenuItems[0].value : null;
+      int index = _dropdownKsaItems.indexWhere(
+          (element) => element.value?.id == userData?.data.ksaState.id);
+
+      selectedKsaItem = index != -1 ? _dropdownKsaItems[index].value : null;
+      // selectedKsaItem != null ? _dropdownMenuItems[0].value : null;
     }
     debugPrint(_ksaStates.toString());
     update();
   }
 
-  void getVehicleType() async {
+  Future<void> getVehicleType() async {
     var response = await parser.getVehicleType();
     if (response.statusCode == 200) {
       Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
@@ -154,13 +161,18 @@ class EditProfileController extends GetxController implements GetxService {
 
       _dropdownMenuItemsVehicleModel =
           buildDropDownMenuItemsVehivleType(_getAllVehicleType);
-      vehicleType != null ? _dropdownMenuItems[0].value : null;
+      int index = _dropdownMenuItemsVehicleModel.indexWhere(
+          (element) => element.value?.id == userData?.data.vehicleTypeId);
+
+      vehicleType =
+          index != -1 ? _dropdownMenuItemsVehicleModel[index].value : null;
+      // vehicleType != null ? _dropdownMenuItems[0].value : null;
     }
     // log(_getAllVehicleType.toString());
     update();
   }
 
-  void getAllBloodGroup() async {
+  Future<void> getAllBloodGroup() async {
     var response = await parser.getBloodGroup();
     if (response.statusCode == 200) {
       Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
@@ -176,7 +188,12 @@ class EditProfileController extends GetxController implements GetxService {
 
       _dropdownMenuItemsBloodgroup =
           buildDropDownMenuItemsBloodGroup(_getAllbloodGroup);
-      bloodGroup != null ? _dropdownMenuItemsBloodgroup[0].value : null;
+      int index = _dropdownMenuItemsBloodgroup.indexWhere(
+          (element) => element.value?.id == userData?.data.bloodGroup);
+
+      bloodGroup =
+          index != -1 ? _dropdownMenuItemsBloodgroup[index].value : null;
+      // bloodGroup != null ? _dropdownMenuItemsBloodgroup[0].value : null;
     }
     // log(_getAllbloodGroup.toString());
     update();
@@ -250,7 +267,7 @@ class EditProfileController extends GetxController implements GetxService {
     return items;
   }
 
-  void getUserDatas() async {
+  Future<void> getUserDatas() async {
     final response = await parser.getUserData();
 
     if (response.statusCode == 200) {

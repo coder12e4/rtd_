@@ -47,6 +47,8 @@ class _PorposeWidgetState extends State<PorposeWidget> {
             onChanged: (newValue) {
               widget.value.purposeData = newValue;
               widget.value.purpose = newValue!.purpose;
+              widget.value.suretyCount = 0;
+              widget.value.updateLoanSuretyCount(newValue);
               widget.value.updateLoanAmount(newValue.maxLimit);
               // widget.value.loanAmount = newValue.maxLimit;
               log('loan amount ${newValue.maxLimit}');

@@ -15,7 +15,6 @@ import 'package:rtd_project/util/theme.dart';
 import '../../../core/common_widget/commen_botten.dart';
 import '../../../core/common_widget/imagepicker.dart';
 import '../../../helper/router.dart';
-import '../../../util/toast.dart';
 
 class LoanEditScreen extends StatefulWidget {
   const LoanEditScreen({super.key});
@@ -24,266 +23,250 @@ class LoanEditScreen extends StatefulWidget {
   State<LoanEditScreen> createState() => _LoanEditScreenState();
 }
 
-XFile? _selectedImage;
+// XFile? _selectedImage;
 
 class _LoanEditScreenState extends State<LoanEditScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: baseColor,
-      body: WillPopScope(
-        onWillPop: () async {
-          _selectedImage == null;
-          return true;
-        },
-        child: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                appBarWidget(context),
-                GetBuilder<LoanEditController>(builder: (value) {
-                  return value.loading == true
-                      ? Container(
-                          height: 590.h,
-                          decoration: const BoxDecoration(
-                            color: whiteColor,
-                            borderRadius: BorderRadiusDirectional.only(
-                              topEnd: Radius.circular(40),
-                              topStart: Radius.circular(40),
-                            ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              appBarWidget(context),
+              GetBuilder<LoanEditController>(builder: (value) {
+                return value.loading == true
+                    ? Container(
+                        height: 590.h,
+                        decoration: const BoxDecoration(
+                          color: whiteColor,
+                          borderRadius: BorderRadiusDirectional.only(
+                            topEnd: Radius.circular(40),
+                            topStart: Radius.circular(40),
                           ),
-                          child: const Center(
-                            child: CircularProgressIndicator(
-                              strokeWidth: 6,
-                              color: ThemeProvider.blackColor,
-                            ),
+                        ),
+                        child: const Center(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 6,
+                            color: ThemeProvider.blackColor,
                           ),
-                        )
-                      : Container(
-                          height: 590.h,
-                          decoration: const BoxDecoration(
-                            color: whiteColor,
-                            borderRadius: BorderRadiusDirectional.only(
-                              topEnd: Radius.circular(40),
-                              topStart: Radius.circular(40),
-                            ),
+                        ),
+                      )
+                    : Container(
+                        height: 590.h,
+                        decoration: const BoxDecoration(
+                          color: whiteColor,
+                          borderRadius: BorderRadiusDirectional.only(
+                            topEnd: Radius.circular(40),
+                            topStart: Radius.circular(40),
                           ),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 40.h),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  height: 20.h,
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 40.h),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                              Container(
+                                height: 50.h,
+                                width: 290.w,
+                                decoration: BoxDecoration(
+                                  color: textFormBase,
+                                  borderRadius: BorderRadius.circular(20),
                                 ),
-                                Container(
-                                  height: 50.h,
-                                  width: 290.w,
-                                  decoration: BoxDecoration(
-                                    color: textFormBase,
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                              right: 20, left: 20)
-                                          .r,
-                                      child: DropdownButton<Data>(
-                                        isExpanded: true,
-                                        underline: Container(),
-                                        hint: Center(
-                                          child: Text(
-                                            "Select Loan Type",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: Colors.black
-                                                    .withOpacity(.55),
-                                                fontSize: 17,
-                                                letterSpacing: .1,
-                                                fontWeight: FontWeight.w600),
-                                          ),
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                            right: 20, left: 20)
+                                        .r,
+                                    child: DropdownButton<Data>(
+                                      isExpanded: true,
+                                      underline: Container(),
+                                      hint: Center(
+                                        child: Text(
+                                          "Select Loan Type",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color:
+                                                  Colors.black.withOpacity(.55),
+                                              fontSize: 17,
+                                              letterSpacing: .1,
+                                              fontWeight: FontWeight.w600),
                                         ),
-                                        value: value.loan,
-
-                                        // Set the initial value (hint text)
-                                        onChanged: (newValue) {
-                                          value.getLoanPurpose(newValue!.id);
-                                          setState(() {});
-                                          value.loan = newValue;
-                                          value.purpose = newValue.title;
-
-                                          log(value.loan!.id.toString());
-                                        },
-                                        items: value.dropdownMenuLoanType,
                                       ),
+                                      value: value.loan,
+
+                                      // Set the initial value (hint text)
+                                      onChanged: (newValue) {
+                                        value.getLoanPurpose(newValue!.id, 2);
+                                        setState(() {});
+                                        value.loan = newValue;
+                                        value.purpose = newValue.title;
+
+                                        log(value.loan!.id.toString());
+                                      },
+                                      items: value.dropdownMenuLoanType,
                                     ),
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 10.h,
-                                ),
-                                const Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text('Sureties')),
-                                SizedBox(
-                                  height: 10.h,
-                                ),
-                                SizedBox(
-                                  height: 80.h,
-                                  child: ListView.separated(
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: value.surties.length,
-                                    itemBuilder: (context, index) => value
-                                                .isSelected[index] ==
-                                            false
-                                        ? GestureDetector(
-                                            onTap: () => Get.toNamed(
-                                                AppRouter
-                                                    .getSearchScreenRoute(),
-                                                arguments: [index, true]),
-                                            child: CircleAvatar(
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              const Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text('Sureties')),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              SizedBox(
+                                height: 80.h,
+                                child: ListView.separated(
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: value.surties.length,
+                                  itemBuilder: (context, index) => value
+                                              .isSelected[index] ==
+                                          false
+                                      ? GestureDetector(
+                                          onTap: () => Get.toNamed(
+                                              AppRouter.getSearchScreenRoute(),
+                                              arguments: [index, true]),
+                                          child: CircleAvatar(
+                                            minRadius: 35.r,
+                                            backgroundColor: textFormBase,
+                                            child: const Icon(Icons.add),
+                                          ),
+                                        )
+                                      : Stack(
+                                          children: [
+                                            CircleAvatar(
                                               minRadius: 35.r,
                                               backgroundColor: textFormBase,
-                                              child: const Icon(Icons.add),
+                                              backgroundImage: NetworkImage(
+                                                  value.surties[index]!
+                                                      .profileImage),
                                             ),
-                                          )
-                                        : Stack(
-                                            children: [
-                                              CircleAvatar(
-                                                minRadius: 35.r,
-                                                backgroundColor: textFormBase,
-                                                backgroundImage: NetworkImage(
-                                                    value.surties[index]!
-                                                        .profileImage),
-                                              ),
-                                              Positioned(
-                                                bottom: 9.h,
-                                                right: 0,
-                                                child: GestureDetector(
-                                                  onTap: () =>
-                                                      value.deleteSurety(index),
-                                                  child: CircleAvatar(
-                                                    minRadius: 15.r,
-                                                    backgroundColor:
-                                                        ThemeProvider
-                                                            .blackColor,
-                                                    child: const Icon(
-                                                      Icons.delete_outline,
-                                                      color: Colors.white,
-                                                      size: 20,
-                                                    ),
+                                            Positioned(
+                                              bottom: 9.h,
+                                              right: 0,
+                                              child: GestureDetector(
+                                                onTap: () =>
+                                                    value.deleteSurety(index),
+                                                child: CircleAvatar(
+                                                  minRadius: 15.r,
+                                                  backgroundColor:
+                                                      ThemeProvider.blackColor,
+                                                  child: const Icon(
+                                                    Icons.delete_outline,
+                                                    color: Colors.white,
+                                                    size: 20,
                                                   ),
                                                 ),
-                                              )
-                                            ],
-                                          ),
-                                    separatorBuilder: (context, index) =>
-                                        const SizedBox(
-                                      width: 15,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10.h,
-                                ),
-                                Container(
-                                  height: 50.h,
-                                  width: 290.w,
-                                  decoration: BoxDecoration(
-                                    color: textFormBase,
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      value.loanAmount ?? 'Loan Amount',
-                                      style: const TextStyle(fontSize: 18),
-                                    ),
-                                  ),
-                                ),
-                                kSizedBoxH,
-                                Container(
-                                  height: 50.h,
-                                  width: 290.w,
-                                  decoration: BoxDecoration(
-                                    color: textFormBase,
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                              right: 20, left: 20)
-                                          .r,
-                                      child: DropdownButton<PurposeData>(
-                                        isExpanded: true,
-                                        underline: Container(),
-                                        hint: Center(
-                                          child: Text(
-                                            "Select Purpose",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: Colors.black
-                                                    .withOpacity(.55),
-                                                fontSize: 17,
-                                                letterSpacing: .1,
-                                                fontWeight: FontWeight.w600),
-                                          ),
+                                              ),
+                                            )
+                                          ],
                                         ),
-                                        value: Get.find<LoanEditController>()
-                                            .purposeData,
-
-                                        // Set the initial value (hint text)
-                                        onChanged: (newValue) {
-                                          setState(() {});
-                                          value.purposeData = newValue;
-                                          value.purpose = newValue!.purpose;
-                                          value.loanAmount = newValue.maxLimit;
-                                          log('loan amount ${newValue.maxLimit}');
-
-                                          log(value.purposeData!.id.toString());
-                                        },
-                                        items: value.dropdownMenuPurpose,
+                                  separatorBuilder: (context, index) =>
+                                      const SizedBox(
+                                    width: 15,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              Container(
+                                height: 50.h,
+                                width: 290.w,
+                                decoration: BoxDecoration(
+                                  color: textFormBase,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    value.loanAmount ?? 'Loan Amount',
+                                    style: const TextStyle(fontSize: 18),
+                                  ),
+                                ),
+                              ),
+                              kSizedBoxH,
+                              Container(
+                                height: 50.h,
+                                width: 290.w,
+                                decoration: BoxDecoration(
+                                  color: textFormBase,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                            right: 20, left: 20)
+                                        .r,
+                                    child: DropdownButton<PurposeData>(
+                                      isExpanded: true,
+                                      underline: Container(),
+                                      hint: Center(
+                                        child: Text(
+                                          "Select Purpose",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color:
+                                                  Colors.black.withOpacity(.55),
+                                              fontSize: 17,
+                                              letterSpacing: .1,
+                                              fontWeight: FontWeight.w600),
+                                        ),
                                       ),
+                                      value: Get.find<LoanEditController>()
+                                          .purposeData,
+
+                                      // Set the initial value (hint text)
+                                      onChanged: (newValue) {
+                                        setState(() {});
+                                        value.purposeData = newValue;
+                                        value.purpose = newValue!.purpose;
+                                        value.loanSuretyCount = 0;
+                                        value.loanAmount = newValue.maxLimit;
+                                        value.updateLoanSuretyCount(newValue);
+                                        log('loan amount ${newValue.maxLimit}');
+
+                                        log(value.purposeData!.id.toString());
+                                      },
+                                      items: value.dropdownMenuPurpose,
                                     ),
                                   ),
                                 ),
-                                kSizedBoxH,
-                                const Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text('Documents')),
-                                kSizedBoxH,
-                                documentsRow(value),
-                                SizedBox(
-                                  height: 20.h,
-                                ),
-                                ButtonWidget(
-                                  buttonBackgroundColor: buttenBlue,
-                                  buttonForegroundColor: whiteColor,
-                                  buttonText: 'Update',
-                                  borderAvalable: false,
-                                  press: () {
-                                    if (value.purpose == null) {
-                                      showToast('Select Loan Type and Purpose');
-                                      return;
-                                    }
-                                    // if (_selectedImage == null) {
-                                    //   showToast('Select Document');
-                                    //   return;
-                                    // }
-                                    value
-                                        .upload()
-                                        .then((value) => _selectedImage = null);
-                                    // value.getLoanRequestData();
-                                    // _selectedImage = null;
-                                  },
-                                )
-                              ],
-                            ),
+                              ),
+                              kSizedBoxH,
+                              const Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text('Documents')),
+                              kSizedBoxH,
+                              documentsRow(value),
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                              ButtonWidget(
+                                buttonBackgroundColor: buttenBlue,
+                                buttonForegroundColor: whiteColor,
+                                buttonText: 'Update',
+                                borderAvalable: false,
+                                press: () {
+                                  value.upload();
+                                  // value.getLoanRequestData();
+                                  // _selectedImage = null;
+                                },
+                              )
+                            ],
                           ),
-                        );
-                }),
-              ],
-            ),
+                        ),
+                      );
+              }),
+            ],
           ),
         ),
       ),
@@ -354,6 +337,7 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
       );
     }
     if (value.loanEditDocument!.data.length == 1) {
+      value.loanDocumentCount = 1;
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -404,6 +388,7 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
       );
     }
     if (value.loanEditDocument!.data.length == 2) {
+      value.loanDocumentCount = 2;
       return Row(
         children: [
           documentContainer(
@@ -442,7 +427,7 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
         ],
       );
     }
-
+    value.loanDocumentCount = 3;
     return Row(
       children: [
         documentContainer(
@@ -567,11 +552,4 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
       ),
     );
   }
-
-  // void _updateSelectedImage(XFile? newImage) {
-  //   setState(() {
-  //     _selectedImage = newImage;
-  //     // image1 = true;
-  //   });
-  // }
 }

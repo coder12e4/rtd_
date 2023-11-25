@@ -833,6 +833,7 @@ class _RadioButtonWidgetState extends State<RadioButtonWidget> {
       children: [
         Obx(
           () => Radio<String>(
+            toggleable: true,
             value: 'accepted',
             groupValue: auth.isSelected.value ? 'accepted' : '',
             onChanged: (String? newValue) {

@@ -30,7 +30,7 @@ class LoanScreenController extends GetxController {
 
   bool loading = true;
   Data? loan;
-  var isAccepted = false.obs;
+  bool isAccepted = false;
 
   String? loanAmount;
   PurposeData? purposeData;
@@ -39,6 +39,7 @@ class LoanScreenController extends GetxController {
   XFile? selectedImage2;
   XFile? selectedImage3;
   LoanPurposeData? loanPurpose;
+  int suretyCount = 0;
   List<int> noOfSurties = [];
   TextEditingController loanAmountController = TextEditingController();
   List<LoanData> _loanData = <LoanData>[];
@@ -66,7 +67,8 @@ class LoanScreenController extends GetxController {
   LoanType? loanType;
   String? purpose;
   void toggleSelection() {
-    isAccepted.value = !isAccepted.value;
+    isAccepted = !isAccepted;
+    update();
   }
 
   Future<void> getLoanType() async {
@@ -129,7 +131,7 @@ class LoanScreenController extends GetxController {
     final body = {"loan_type": id};
     Response response = await parser.getLoanPurpose(body);
     if (response.statusCode == 200) {
-      log('Loan purpose :${response.body}');
+      log('Loan purpose responce :${response.body}');
       try {
         loanPurpose = LoanPurposeData.fromJson(response.body);
 
@@ -137,6 +139,7 @@ class LoanScreenController extends GetxController {
         surties.clear();
         isSelected.clear();
         noOfSurties.clear();
+        suretyCount = 0;
         for (int i = 1; i <= loanPurpose!.data[0].noOfSureties; i++) {
           noOfSurties.add(1);
           _addedSurties.add(-1);
@@ -191,6 +194,19 @@ class LoanScreenController extends GetxController {
     }
     loading = false;
     update();
+  }
+
+  void updateLoanSuretyCount(PurposeData purposeData) {
+    _addedSurties.clear();
+    surties.clear();
+    isSelected.clear();
+    noOfSurties.clear();
+    for (int i = 1; i <= purposeData.noOfSureties; i++) {
+      noOfSurties.add(1);
+      _addedSurties.add(-1);
+      surties.add(null);
+      isSelected.add(false);
+    }
   }
 
   Future<void> cancelLoanRequest(id) async {
@@ -255,6 +271,8 @@ class LoanScreenController extends GetxController {
   }
 
   void deleteSurety(int index) {
+    suretyCount--;
+    log("surety count $suretyCount ");
     addedSurties[index] = -1;
     surties[index] = null;
     isSelected[index] = !isSelected[index];
@@ -274,17 +292,11 @@ class LoanScreenController extends GetxController {
       return;
     }
     if (!addedSurties.contains(surety.id)) {
+      suretyCount++;
       isSelected[index] = !isSelected[index];
       addedSurties[index] = surety.id;
       surties[index] = surety;
-      if (noOfSurties.length <= 4) {
-        // noOfSurties.add(1);
-        // _addedSurties.add(-1);
-        // surties.add(null);
-        // isSelected.add(false);
-        log('no of sureties after selection $noOfSurties');
-      }
-      update();
+
       log(addedSurties.toString());
       log('selected surty$surties');
       Get.back();
@@ -352,9 +364,9 @@ class LoanScreenController extends GetxController {
       showToast('Select loan type');
       return;
     }
-
-    if (addedSurties.length != loanPurpose!.data[0].noOfSureties) {
-      showToast('Add ${loanPurpose!.data[0].noOfSureties} sureties');
+    log('added sureties$addedSurties');
+    if (suretyCount != purposeData!.noOfSureties) {
+      showToast('Add ${purposeData!.noOfSureties} sureties');
       return;
     }
     Get.dialog(
@@ -408,9 +420,10 @@ class LoanScreenController extends GetxController {
     var parsedData;
     final responceData = await response.stream.bytesToString();
     parsedData = json.decode(responceData);
-    log(parsedData.toString());
+    log("loan create response $parsedData");
     if (parsedData['status'] == true) {
       Get.back();
+      suretyCount = 0;
       _addedSurties.clear();
       surties.clear();
       isSelected.clear();

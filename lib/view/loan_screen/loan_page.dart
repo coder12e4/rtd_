@@ -516,6 +516,15 @@ class _LoanPageState extends State<LoanPage> {
           SizedBox(
             height: 10.h,
           ),
+
+          PorposeWidget(value: value),
+          // SizedBox(
+          //   height: 20.h,
+          // ),
+
+          SizedBox(
+            height: 10.h,
+          ),
           const Align(
               alignment: Alignment.centerLeft, child: Text('Choose Sureties')),
           SizedBox(
@@ -596,16 +605,7 @@ class _LoanPageState extends State<LoanPage> {
             ),
           ),
           SizedBox(
-            height: 20.h,
-          ),
-
-          PorposeWidget(value: value),
-          // SizedBox(
-          //   height: 20.h,
-          // ),
-
-          SizedBox(
-            height: 20.h,
+            height: 10.h,
           ),
           LoanRulesButton(controller: value),
           kSizedBoxH,
@@ -615,7 +615,7 @@ class _LoanPageState extends State<LoanPage> {
             buttonText: 'submit',
             borderAvalable: false,
             press: () {
-              if (value.isAccepted.value) {
+              if (value.isAccepted) {
                 value.upload(value.loan?.id ?? '', value.addedSurties, context);
                 value.getLoanRequestData();
               } else {
@@ -687,14 +687,13 @@ class LoanRulesButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Obx(
-          () => Radio<String>(
-            value: 'accepted',
-            groupValue: controller.isAccepted.value ? 'accepted' : '',
-            onChanged: (String? newValue) {
-              controller.toggleSelection();
-            },
-          ),
+        Radio<String>(
+          toggleable: true,
+          value: 'accepted',
+          groupValue: controller.isAccepted ? "accepted" : "not",
+          onChanged: (value) {
+            controller.toggleSelection();
+          },
         ),
         SizedBox(width: 2.w),
         Column(

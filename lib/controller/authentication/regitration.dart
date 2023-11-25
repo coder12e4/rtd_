@@ -569,9 +569,10 @@ class RegisterController extends GetxController implements GetxService {
     var uri = Uri.parse("http://rtd.canisostudio.com/api/register");
 
     var request = http.MultipartRequest("POST", uri);
-    var file =
-        await http.MultipartFile.fromPath('profile_image', data?.path ?? '');
-    request.files.add(file);
+    if (data != null) {
+      var file = await http.MultipartFile.fromPath('profile_image', data.path);
+      request.files.add(file);
+    }
     request.fields['name'] = name;
     request.fields['email'] = email;
     request.fields['password'] = password;

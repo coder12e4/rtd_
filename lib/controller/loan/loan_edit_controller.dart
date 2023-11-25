@@ -25,14 +25,16 @@ class LoanEditController extends GetxController implements GetxService {
 
   LoanEditController({required this.parser});
   @override
-  void onInit() {
+  void onInit() async {
     loanId = Get.arguments[0].toString();
-    getLoanDetails(loanId);
+    await getLoanDetails(loanId);
 
-    getLoanType();
+    await getLoanType();
     super.onInit();
   }
 
+  int loanDocumentCount = 0;
+  int loanSuretyCount = 0;
   String? loanId;
   XFile? loanDocument1;
   XFile? loanDocument2;
@@ -66,23 +68,37 @@ class LoanEditController extends GetxController implements GetxService {
   LoanData? loanData;
 
   Future<void> getLoanType() async {
-    Response response = await parser.getLoanTypes();
-    if (response.statusCode == 200) {
-      try {
+    try {
+
+      Response response = await parser.getLoanTypes();
+
+      if (response.statusCode == 200) {
         Map<String, dynamic> data = Map<String, dynamic>.from(response.body);
         var allLoan = data['data'];
-        _getLoanTypes = [];
-        allLoan.forEach((data) {
-          Data individual = Data.fromJson(data);
-          _getLoanTypes.add(individual);
-        });
-        _dropdownMenuLoanType = buildDropDownMenuItemsLoanType(_getLoanTypes);
-        loan != null ? _dropdownMenuLoanType[0].value : null;
 
+        _getLoanTypes.clear();
+
+        for (var loanData in allLoan) {
+          _getLoanTypes.add(Data.fromJson(loanData));
+        }
+
+        _dropdownMenuLoanType = buildDropDownMenuItemsLoanType(_getLoanTypes);
+
+        int index = _dropdownMenuLoanType.indexWhere(
+            (element) => element.value?.id == loanData?.data.loanType.id);
+
+        loan = index != -1 ? _dropdownMenuLoanType[index].value : null;
+        log('loan type index $index');
+        if (loan != null) {
+          await getLoanPurpose(loan?.id, 1);
+        }
+        //
+
+        log("loan type ${loan?.title}");
         log(_getLoanTypes.toString());
-      } catch (e) {
-        log(e.toString());
       }
+    } catch (e, stackTrace) {
+      log("loan type catch $e", error: e, stackTrace: stackTrace);
     }
 
     update();
@@ -127,7 +143,7 @@ class LoanEditController extends GetxController implements GetxService {
     update();
   }
 
-  Future<void> getLoanPurpose(id) async {
+  Future<void> getLoanPurpose(id, int value) async {
     final body = {"loan_type": id};
     Response response = await parser.getLoanPurpose(body);
     if (response.statusCode == 200) {
@@ -135,20 +151,21 @@ class LoanEditController extends GetxController implements GetxService {
       try {
         loanPurpose = LoanPurposeData.fromJson(response.body);
 
-        _addedSurties.clear();
-
-        surties.clear();
-        isSelected.clear();
-        noOfSurties.clear();
-        for (int i = 1; i <= loanPurpose!.data[0].noOfSureties; i++) {
-          noOfSurties.add(1);
-          _addedSurties.add(-1);
-          surties.add(null);
-          isSelected.add(false);
+        if (value == 2) {
+          surties.clear();
+          isSelected.clear();
+          noOfSurties.clear();
+          loanSuretyCount = 0;
+          for (int i = 1; i <= loanPurpose!.data[0].noOfSureties; i++) {
+            noOfSurties.add(1);
+            _addedSurties.add(-1);
+            surties.add(null);
+            isSelected.add(false);
+          }
         }
+
         var allPurpose = response.body["data"];
-        // _getPurpose = [];
-        // purpose != response.body["data"][0]["title"];
+
         if (_getPurposeType.isNotEmpty) {
           _getPurposeType.clear();
           _dropdownMenuPurpose.clear();
@@ -159,10 +176,22 @@ class LoanEditController extends GetxController implements GetxService {
           _getPurposeType.add(individual);
         });
         _dropdownMenuPurpose = buildDropDownMenuItemsPurpose(_getPurposeType);
-        purposeData = _getPurposeType[0];
-        loanAmount = _getPurposeType[0].maxLimit;
 
-        purpose != null ? _dropdownMenuPurpose[0].value : null;
+        if (value == 1) {
+          int purposeIndex = _dropdownMenuPurpose.indexWhere(
+              (element) => element.value?.id == loanData?.data.loanPurposeId);
+          purposeData = purposeIndex != -1
+              ? _dropdownMenuPurpose[purposeIndex].value
+              : null;
+          loanAmount = _getPurposeType[purposeIndex].maxLimit;
+          log('loan purpose index $purposeIndex');
+        }
+        if (value == 2) {
+          purposeData = _getPurposeType[0];
+          loanAmount = _getPurposeType[0].maxLimit;
+          purpose != null ? _dropdownMenuPurpose[0].value : null;
+        }
+
         update();
         log(_getPurposeType.toString());
         log('loan purpose surety : ${noOfSurties}');
@@ -208,10 +237,13 @@ class LoanEditController extends GetxController implements GetxService {
         Map<String, dynamic> jsonData =
             Map<String, dynamic>.from(response.body);
         loanData = LoanData.fromJson(jsonData);
+        purpose = loanData?.data.loanType.title;
+        // loanPurpose=loanData?.data.loanType;
         for (Surety element in loanData!.data.sureties) {
           _addedSurties.add(element.userId);
           isSelected.add(true);
           surties.add(element);
+          loanSuretyCount++;
         }
         loanAmount = loanData!.data.loanAmount;
         await getLoanDocuments();
@@ -227,8 +259,10 @@ class LoanEditController extends GetxController implements GetxService {
   void deleteSurety(int index) {
     _addedSurties[index] = -1;
     // addedSurties.remove(index);
+
     surties[index] = null;
     isSelected[index] = !isSelected[index];
+    loanSuretyCount--;
     update();
   }
 
@@ -241,6 +275,7 @@ class LoanEditController extends GetxController implements GetxService {
       isSelected[index] = !isSelected[index];
       _addedSurties[index] = surety.id;
       surties[index] = surety;
+      loanSuretyCount++;
       log(_addedSurties.toString());
       log('selected surty$surties');
       Get.back();
@@ -270,13 +305,37 @@ class LoanEditController extends GetxController implements GetxService {
     return items;
   }
 
+  void updateLoanSuretyCount(PurposeData purposeData) {
+    _addedSurties.clear();
+    surties.clear();
+    isSelected.clear();
+    noOfSurties.clear();
+    for (int i = 1; i <= purposeData.noOfSureties; i++) {
+      noOfSurties.add(1);
+      _addedSurties.add(-1);
+      surties.add(null);
+      isSelected.add(false);
+    }
+  }
+
   Future<void> upload() async {
+    if (loanSuretyCount < purposeData!.noOfSureties) {
+      showToast('Select ${purposeData?.noOfSureties}  Sureties');
+      return;
+    }
+    if (purpose == null) {
+      showToast('Select Loan  Purpose');
+      return;
+    }
+    if (loan == null) {
+      showToast('Select Loan Type');
+      return;
+    }
+    if (loanDocumentCount < 3) {
+      showToast("Loan request must need three documents");
+      return;
+    }
     loadingWidget();
-    // if (loanData!.data.loanDocument.length != 3) {
-    //   Get.back();
-    //   showToast('Upload 3 documents');
-    //   return;
-    // }
     var uri =
         Uri.parse("http://rtd.canisostudio.com/api/user/loan/request/update");
 
