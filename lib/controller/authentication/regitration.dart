@@ -454,7 +454,7 @@ class RegisterController extends GetxController implements GetxService {
     } else {
       showToast('Select Document to Upload');
     }
-    registerSuccess();
+    registerSuccess(1);
     update();
   }
 
@@ -470,7 +470,7 @@ class RegisterController extends GetxController implements GetxService {
     } else {
       showToast('Select Document to Upload');
     }
-    registerSuccess();
+    registerSuccess(1);
     update();
   }
 
@@ -625,9 +625,9 @@ class RegisterController extends GetxController implements GetxService {
     update();
   }
 
-  Future<void> registerSuccess() async {
+  Future<void> registerSuccess(int status) async {
     if (indianDocSubmitted == true && ksaDocSubmitted == true) {
-      await Future.delayed(const Duration(seconds: 2));
+      status == 1 ? await Future.delayed(const Duration(seconds: 2)) : null;
       final pref = await SharedPreferences.getInstance();
       await pref.remove('indianDocSubmitted');
       await pref.remove('ksaDocSubmitted');

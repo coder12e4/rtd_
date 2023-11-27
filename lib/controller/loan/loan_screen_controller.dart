@@ -142,7 +142,7 @@ class LoanScreenController extends GetxController {
         suretyCount = 0;
         for (int i = 1; i <= loanPurpose!.data[0].noOfSureties; i++) {
           noOfSurties.add(1);
-          _addedSurties.add(-1);
+          // _addedSurties.add(-1);
           surties.add(null);
           isSelected.add(false);
         }
@@ -203,7 +203,7 @@ class LoanScreenController extends GetxController {
     noOfSurties.clear();
     for (int i = 1; i <= purposeData.noOfSureties; i++) {
       noOfSurties.add(1);
-      _addedSurties.add(-1);
+      // _addedSurties.add(-1);
       surties.add(null);
       isSelected.add(false);
     }
@@ -270,10 +270,10 @@ class LoanScreenController extends GetxController {
     return items;
   }
 
-  void deleteSurety(int index) {
+  void deleteSurety(int index, id) {
     suretyCount--;
     log("surety count $suretyCount ");
-    addedSurties[index] = -1;
+    addedSurties.remove(id);
     surties[index] = null;
     isSelected[index] = !isSelected[index];
 
@@ -294,7 +294,7 @@ class LoanScreenController extends GetxController {
     if (!addedSurties.contains(surety.id)) {
       suretyCount++;
       isSelected[index] = !isSelected[index];
-      addedSurties[index] = surety.id;
+      addedSurties.add(surety.id);
       surties[index] = surety;
 
       log(addedSurties.toString());
@@ -365,8 +365,8 @@ class LoanScreenController extends GetxController {
       return;
     }
     log('added sureties$addedSurties');
-    if (suretyCount != purposeData!.noOfSureties) {
-      showToast('Add ${purposeData!.noOfSureties} sureties');
+    if (suretyCount < 1) {
+      showToast('Add atleast one  surety to continue');
       return;
     }
     Get.dialog(
@@ -424,11 +424,11 @@ class LoanScreenController extends GetxController {
     if (parsedData['status'] == true) {
       Get.back();
       suretyCount = 0;
-      _addedSurties.clear();
+      addedSurties.clear();
       surties.clear();
       isSelected.clear();
       noOfSurties.clear();
-      addedSurties.clear();
+
       loanAmountController.clear();
       // successToast(parsedData['message'].toString());
       showModalBottomSheet(

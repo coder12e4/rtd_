@@ -561,7 +561,8 @@ class _LoanPageState extends State<LoanPage> {
                                 bottom: 9.h,
                                 right: 0,
                                 child: GestureDetector(
-                                  onTap: () => value.deleteSurety(index),
+                                  onTap: () => value.deleteSurety(
+                                      index, value.surties[index]!.id),
                                   child: CircleAvatar(
                                     minRadius: 15.r,
                                     backgroundColor: ThemeProvider.blackColor,

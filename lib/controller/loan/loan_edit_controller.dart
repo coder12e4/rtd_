@@ -158,7 +158,6 @@ class LoanEditController extends GetxController implements GetxService {
           loanSuretyCount = 0;
           for (int i = 1; i <= loanPurpose!.data[0].noOfSureties; i++) {
             noOfSurties.add(1);
-            addedSurties.add(-1);
             surties.add(null);
             isSelected.add(false);
           }
@@ -225,8 +224,8 @@ class LoanEditController extends GetxController implements GetxService {
   }
 
   Future<void> getLoanDetails(id) async {
-    _addedSurties.clear();
-    // addedSurties.clear();
+    addedSurties.clear();
+
     surties.clear();
     isSelected.clear();
     final body = {"loan_request_id": id};
@@ -240,7 +239,7 @@ class LoanEditController extends GetxController implements GetxService {
         purpose = loanData?.data.loanType.title;
         // loanPurpose=loanData?.data.loanType;
         for (Surety element in loanData!.data.sureties) {
-          _addedSurties.add(element.userId);
+          addedSurties.add(element.userId);
           isSelected.add(true);
           surties.add(element);
           loanSuretyCount++;
@@ -256,10 +255,9 @@ class LoanEditController extends GetxController implements GetxService {
     update();
   }
 
-  void deleteSurety(int index) {
-    _addedSurties[index] = -1;
+  void deleteSurety(int index, id) {
+    addedSurties.remove(id);
     // addedSurties.remove(index);
-
     surties[index] = null;
     isSelected[index] = !isSelected[index];
     loanSuretyCount--;
@@ -273,7 +271,7 @@ class LoanEditController extends GetxController implements GetxService {
     }
     if (!addedSurties.contains(surety.id)) {
       isSelected[index] = !isSelected[index];
-      addedSurties[index] = surety.id;
+      addedSurties.add(surety.id);
       surties[index] = surety;
       loanSuretyCount++;
       log(_addedSurties.toString());
@@ -312,7 +310,7 @@ class LoanEditController extends GetxController implements GetxService {
     noOfSurties.clear();
     for (int i = 1; i <= purposeData.noOfSureties; i++) {
       noOfSurties.add(1);
-      addedSurties.add(-1);
+      // addedSurties.add(-1);
       surties.add(null);
       isSelected.add(false);
     }

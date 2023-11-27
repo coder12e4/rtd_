@@ -472,7 +472,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           showToast('Please Agree the Terms and Conditions');
                         }
                       })
-                  : SizedBox(),
+                  : const SizedBox(),
               // registerStepContainer('2'),
               // textFieldHeight,
               // textFieldHeight,
@@ -543,6 +543,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         buttonForegroundColor: Colors.blue,
                         buttonText: 'Attach Ksa Proof',
                         borderAvalable: true),
+                    kSizedBoxH20,
+                    kSizedBoxH,
+                    value.indianDocSubmitted == true &&
+                            value.ksaDocSubmitted == true
+                        ? ButtonWidget(
+                            press: () {
+                              value.registerSuccess(2);
+                            },
+                            buttonBackgroundColor: Colors.blue,
+                            buttonForegroundColor: Colors.white,
+                            buttonText: 'Continue',
+                            borderAvalable: true)
+                        : const SizedBox(),
                   ],
                 ),
               ),

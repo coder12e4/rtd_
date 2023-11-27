@@ -159,8 +159,10 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
                                               bottom: 9.h,
                                               right: 0,
                                               child: GestureDetector(
-                                                onTap: () =>
-                                                    value.deleteSurety(index),
+                                                onTap: () => value.deleteSurety(
+                                                    index,
+                                                    value
+                                                        .surties[index].userId),
                                                 child: CircleAvatar(
                                                   minRadius: 15.r,
                                                   backgroundColor:
