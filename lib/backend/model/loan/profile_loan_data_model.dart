@@ -10,7 +10,7 @@ String loanDataToJson(LoanData data) => json.encode(data.toJson());
 
 class LoanData {
   bool status;
-  Data data;
+  Data? data;
   String message;
   String accessToken;
   String tokenType;
@@ -33,7 +33,7 @@ class LoanData {
 
   Map<String, dynamic> toJson() => {
         "status": status,
-        "data": data.toJson(),
+        "data": data?.toJson() ?? null,
         "message": message,
         "access_token": accessToken,
         "token_type": tokenType,

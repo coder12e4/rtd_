@@ -13,7 +13,6 @@ import '../../backend/model/loan/loan_document.dart';
 import '../../backend/model/loan/loan_edite_model.dart';
 import '../../backend/model/loan/loan_purpose.dart';
 import '../../backend/model/loan/loan_type_model.dart';
-import '../../backend/model/loan/surties_model.dart';
 import '../../backend/parser/loan/loan_edit_parser.dart';
 import '../../core/constraints/api_urls.dart';
 import '../../helper/router.dart';
@@ -239,7 +238,7 @@ class LoanEditController extends GetxController implements GetxService {
         purpose = loanData?.data.loanType.title;
         // loanPurpose=loanData?.data.loanType;
         for (Surety element in loanData!.data.sureties) {
-          addedSurties.add(element.userId);
+          addedSurties.add(element.id);
           isSelected.add(true);
           surties.add(element);
           loanSuretyCount++;
@@ -255,16 +254,16 @@ class LoanEditController extends GetxController implements GetxService {
     update();
   }
 
-  void deleteSurety(int index, id) {
-    addedSurties.remove(id);
-    // addedSurties.remove(index);
+  void deleteSurety(int index, surety) {
+    addedSurties.remove(surety.id);
     surties[index] = null;
     isSelected[index] = !isSelected[index];
     loanSuretyCount--;
+    log("added sureties ${addedSurties.length}");
     update();
   }
 
-  void addSurties(SuretiesData surety, int index) {
+  void addSurties(surety, int index) {
     if (addedSurties.contains(surety.id)) {
       showToast('Surety already selected');
       return;
@@ -317,8 +316,8 @@ class LoanEditController extends GetxController implements GetxService {
   }
 
   Future<void> upload() async {
-    if (loanSuretyCount < purposeData!.noOfSureties) {
-      showToast('Select ${purposeData?.noOfSureties}  Sureties');
+    if (loanSuretyCount < 1) {
+      showToast('Select atleast one  Surety to continue');
       return;
     }
     if (purpose == null) {

@@ -24,145 +24,183 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
               children: [
                 appbar(context),
                 kSizedBoxH20,
-                Container(
-                  height: 820.h,
-                  //hallo
-                  decoration: const BoxDecoration(
-                    color: whiteColor,
-                    borderRadius: BorderRadiusDirectional.only(
-                      topEnd: Radius.circular(40),
-                      topStart: Radius.circular(40),
-                    ),
-                  ),
-                  child: value.loading != true
-                      ? Column(
-                          // crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left: 18.0.h, right: 18, top: 28),
-                              child: filenumAndActiveloan(
-                                  value.loanData!.data.fileNumber,
-                                  value.loanData!.data.statusText.toString()),
-                            ),
-                            dashText(),
-                            kSizedBoxH,
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10.0.w),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                value.error != true
+                    ? Container(
+                        height: 820.h,
+                        //hallo
+                        decoration: const BoxDecoration(
+                          color: whiteColor,
+                          borderRadius: BorderRadiusDirectional.only(
+                            topEnd: Radius.circular(40),
+                            topStart: Radius.circular(40),
+                          ),
+                        ),
+                        child: value.loading != true
+                            ? Column(
+                                // crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Column(
-                                    children: [
-                                      Text(
-                                        'Loan Type :',
-                                        style: TextStyle(
-                                            color: Colors.grey.shade500),
-                                      ),
-                                      Text(
-                                        value.loanData!.data.loanType,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 18.0.h, right: 18, top: 28),
+                                    child: filenumAndActiveloan(
+                                        value.loanData?.data?.fileNumber,
+                                        value.loanData?.data?.statusText
+                                                .toString() ??
+                                            ''),
                                   ),
-                                  Column(
-                                    children: [
-                                      Text(
-                                        'Purpose :',
-                                        style: TextStyle(
-                                            color: Colors.grey.shade500),
+                                  dashText(),
+                                  kSizedBoxH,
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 10.0.w),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          children: [
+                                            Text(
+                                              'Loan Type :',
+                                              style: TextStyle(
+                                                  color: Colors.grey.shade500),
+                                            ),
+                                            Text(
+                                              value.loanData?.data?.loanType ??
+                                                  "Not available",
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ],
+                                        ),
+                                        Column(
+                                          children: [
+                                            Text(
+                                              'Purpose :',
+                                              style: TextStyle(
+                                                  color: Colors.grey.shade500),
+                                            ),
+                                            Text(
+                                              value.loanData?.data?.purpose ??
+                                                  "Not available",
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  kSizedBoxH,
+                                  dashText(),
+                                  imageContainer(value),
+                                  kSizedBoxH,
+                                  dashText(),
+                                  kSizedBoxH,
+                                  malayalamTextWidget('തുക :', Icons.money,
+                                      value.loanData?.data?.loanAmount),
+                                  kSizedBoxH20,
+                                  malayalamTextWidget(
+                                    'തുടങ്ങിയത് :',
+                                    Icons.calendar_month,
+                                    value.loanData!.data?.startDate.toString(),
+                                  ),
+                                  kSizedBoxH20,
+                                  malayalamTextWidget(
+                                    'തിരിച്ചടവ്  :',
+                                    Icons.calendar_month,
+                                    DateFormat('dd-MM-yyyy').format(
+                                      DateTime.parse(
+                                        value.loanData!.data?.dueDate
+                                                .toString() ??
+                                            "",
                                       ),
-                                      Text(
-                                        value.loanData!.data.purpose,
-                                        style: const TextStyle(
+                                    ),
+                                  ),
+                                  kSizedBoxH,
+                                  // String formattedDate =;
+                                  // Padding(
+                                  //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                  //   child: RoundedProgressBar(
+                                  //       childCenter: const Text(
+                                  //         'Due in 31 days',
+                                  //         style: TextStyle(fontWeight: FontWeight.bold),
+                                  //       ),
+                                  //       milliseconds: 1000,
+                                  //       percent: 50,
+                                  //       height: 25,
+                                  //       theme: RoundedProgressBarTheme.purple,
+                                  //       style: RoundedProgressBarStyle(
+                                  //           colorBackgroundIcon:
+                                  //               const Color.fromARGB(255, 190, 185, 185),
+                                  //           widthShadow: 1,
+                                  //           backgroundProgress:
+                                  //               const Color.fromARGB(255, 190, 185, 185),
+                                  //           colorProgress:
+                                  //               const Color.fromARGB(255, 190, 185, 185),
+                                  //           colorBorder: whiteColor,
+                                  //           borderWidth: 2,
+                                  //           colorProgressDark:
+                                  //               const Color.fromARGB(255, 186, 39, 110)),
+                                  //       borderRadius: BorderRadius.circular(24)),
+                                  // ),
+                                  kSizedBoxH20,
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Attached Document',
+                                        style: TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
+                                      kSizedBoxH,
+                                      documentContainer(value),
                                     ],
                                   ),
                                 ],
-                              ),
-                            ),
-                            kSizedBoxH,
-                            dashText(),
-                            imageContainer(value),
-                            kSizedBoxH,
-                            dashText(),
-                            kSizedBoxH,
-                            malayalamTextWidget('തുക :', Icons.money,
-                                value.loanData!.data.loanAmount),
-                            kSizedBoxH20,
-                            malayalamTextWidget(
-                              'തുടങ്ങിയത് :',
-                              Icons.calendar_month,
-                              value.loanData!.data.startDate.toString(),
-                            ),
-                            kSizedBoxH20,
-                            malayalamTextWidget(
-                              'തിരിച്ചടവ്  :',
-                              Icons.calendar_month,
-                              DateFormat('dd-MM-yyyy').format(
-                                DateTime.parse(
-                                  value.loanData!.data.dueDate.toString(),
+                              )
+                            : Center(
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 300.h,
+                                    ),
+                                    const CircularProgressIndicator(
+                                      strokeWidth: 6,
+                                      color: Colors.black,
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                            kSizedBoxH,
-                            // String formattedDate =;
-                            // Padding(
-                            //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                            //   child: RoundedProgressBar(
-                            //       childCenter: const Text(
-                            //         'Due in 31 days',
-                            //         style: TextStyle(fontWeight: FontWeight.bold),
-                            //       ),
-                            //       milliseconds: 1000,
-                            //       percent: 50,
-                            //       height: 25,
-                            //       theme: RoundedProgressBarTheme.purple,
-                            //       style: RoundedProgressBarStyle(
-                            //           colorBackgroundIcon:
-                            //               const Color.fromARGB(255, 190, 185, 185),
-                            //           widthShadow: 1,
-                            //           backgroundProgress:
-                            //               const Color.fromARGB(255, 190, 185, 185),
-                            //           colorProgress:
-                            //               const Color.fromARGB(255, 190, 185, 185),
-                            //           colorBorder: whiteColor,
-                            //           borderWidth: 2,
-                            //           colorProgressDark:
-                            //               const Color.fromARGB(255, 186, 39, 110)),
-                            //       borderRadius: BorderRadius.circular(24)),
-                            // ),
-                            kSizedBoxH20,
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Attached Document',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                kSizedBoxH,
-                                documentContainer(value),
-                              ],
-                            ),
-                          ],
-                        )
-                      : Center(
+                      )
+                    : Container(
+                        height: MediaQuery.sizeOf(context).height,
+                        //hallo
+                        decoration: const BoxDecoration(
+                          color: whiteColor,
+                          borderRadius: BorderRadiusDirectional.only(
+                            topEnd: Radius.circular(40),
+                            topStart: Radius.circular(40),
+                          ),
+                        ),
+                        child: const Center(
                           child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              SizedBox(
-                                height: 300.h,
+                              Icon(
+                                Icons.warning_amber,
+                                size: 40,
                               ),
-                              const CircularProgressIndicator(
-                                strokeWidth: 6,
-                                color: Colors.black,
+                              kSizedBoxH,
+                              Text(
+                                "Unknown error ",
+                                style: TextStyle(fontSize: 20),
                               ),
                             ],
                           ),
                         ),
-                ),
+                      ),
               ],
             );
           }),
@@ -178,7 +216,8 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
       width: 320.w,
       decoration: BoxDecoration(
           image: DecorationImage(
-              image: NetworkImage(controller.loanData!.data.loanDocument)),
+              image:
+                  NetworkImage(controller.loanData!.data?.loanDocument ?? "")),
           color: const Color.fromARGB(255, 223, 220, 220),
           borderRadius: BorderRadius.circular(20)),
     );
@@ -228,7 +267,7 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
                 separatorBuilder: (context, index) => const SizedBox(
                       width: 10,
                     ),
-                itemCount: controller.loanData?.data.sureties.length ?? 0),
+                itemCount: controller.loanData?.data?.sureties.length ?? 0),
           ),
         ),
       ],
@@ -243,7 +282,7 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
           child: CircleAvatar(
             minRadius: 30.r,
             backgroundImage: NetworkImage(
-              controller.loanData!.data.sureties[index].profileImage,
+              controller.loanData!.data?.sureties[index].profileImage ?? "",
             ),
           ),
         ),
@@ -335,19 +374,15 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
               //   width: 90.w,
               // ),
               Text(
-                'Profile',
+                'Loan Details',
                 style: Theme.of(context).textTheme.displaySmall!.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 24),
               ),
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.notifications_none,
-                    color: whiteColor,
-                    size: 35,
-                  ))
+              SizedBox(
+                width: 30.w,
+              ),
             ],
           ),
         ],

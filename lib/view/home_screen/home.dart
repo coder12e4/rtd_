@@ -89,10 +89,8 @@ class _HomePageState extends State<HomePage> {
                                                         CircularStackEntry(
                                                           <CircularSegmentEntry>[
                                                             CircularSegmentEntry(
-                                                              item
-                                                                  .amountSummary[
-                                                                      0]
-                                                                  .amount
+                                                              (item.amountSummary[0]
+                                                                      .amount)
                                                                   .toDouble(),
                                                               const Color
                                                                   .fromARGB(255,
@@ -101,12 +99,12 @@ class _HomePageState extends State<HomePage> {
                                                                   'remaining',
                                                             ),
                                                             CircularSegmentEntry(
-                                                              100 -
-                                                                  item
-                                                                      .amountSummary[
-                                                                          1]
-                                                                      .amount
-                                                                      .toDouble(),
+                                                              (100 -
+                                                                      item
+                                                                          .amountSummary[
+                                                                              1]
+                                                                          .amount)
+                                                                  .toDouble(),
                                                               const Color
                                                                   .fromARGB(
                                                                   255,
@@ -149,7 +147,7 @@ class _HomePageState extends State<HomePage> {
                                             )
                                             .toList(),
                                         options: CarouselOptions(
-                                          pauseAutoPlayOnTouch: false,
+                                          pauseAutoPlayOnTouch: true,
                                           height: 240.h,
                                           autoPlayInterval:
                                               const Duration(seconds: 2),
@@ -159,12 +157,14 @@ class _HomePageState extends State<HomePage> {
                                           // enlargeCenterPage: true,
                                         ),
                                       ),
-                                      incomBreakdown(value.homeData!),
+                                      incomBreakdown(value.homeData),
                                     ],
                                   ),
                                 ),
                               ),
-                              activeLoan(value.homeData!),
+                              value.homeData?.activeLoan != null
+                                  ? activeLoan(value.homeData!)
+                                  : const SizedBox(),
                             ])
                       : const Center(
                           child: CircularProgressIndicator(
@@ -241,19 +241,20 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             IncomRow(
-                price: '${data.activeLoan.loanAmount} INR',
+                price: '${data.activeLoan?.loanAmount} INR',
                 title: 'Loan Amount'),
             const Divider(),
-            activeLoanRow(title: 'Start Date', date: data.activeLoan.startDate),
+            activeLoanRow(
+                title: 'Start Date', date: data.activeLoan?.startDate),
             // activeLoanRow(title: 'End Date', date: '${data.activeLoan.}'),
-            activeLoanRow(title: 'Loan Type', date: data.activeLoan.loanType)
+            activeLoanRow(title: 'Loan Type', date: data.activeLoan?.loanType)
           ],
         ),
       ),
     );
   }
 
-  Expanded incomBreakdown(HomeData homeData) {
+  Expanded incomBreakdown(HomeData? homeData) {
     return Expanded(
         child: SizedBox(
       height: 400.h,
@@ -269,11 +270,11 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: 10.h,
             ),
-            IncomRow(title: 'Truck', price: '${homeData.income.truck} INR'),
+            IncomRow(title: 'Rent', price: '${homeData?.income.rent} INR'),
             const Divider(),
             IncomRow(
                 title: 'Membership',
-                price: '${homeData.income.membership} INR'),
+                price: '${homeData?.income.membership} INR'),
             SizedBox(
               height: 30.h,
             ),
@@ -284,9 +285,9 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: 10.h,
             ),
-            IncomRow(title: 'Active', price: '${homeData.loans.active}'),
+            IncomRow(title: 'Active', price: '${homeData?.loans.active}'),
             const Divider(),
-            IncomRow(title: 'Closed', price: '${homeData.loans.closed}'),
+            IncomRow(title: 'Closed', price: '${homeData?.loans.closed}'),
           ],
         ),
       ),

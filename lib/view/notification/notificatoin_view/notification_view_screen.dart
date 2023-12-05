@@ -42,9 +42,9 @@ class NotificationViewScreen extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.only(
                                   left: 30.0.w, right: 30.w, top: 25.h),
-                              child: const Text(
-                                "You were choosen as Jacob's surety. Respond as soon as possible .",
-                                style: TextStyle(
+                              child: Text(
+                                "${value.details?.message}",
+                                style: const TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 17),
                               ),
                             ),
@@ -100,7 +100,9 @@ class NotificationViewScreen extends StatelessWidget {
                                   buttonForegroundColor: whiteColor,
                                   buttonText: 'Submit',
                                   borderAvalable: true,
-                                  press: () {}),
+                                  press: () {
+                                    value.onSubmit();
+                                  }),
                             )
                           ],
                         ),

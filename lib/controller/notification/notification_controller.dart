@@ -31,7 +31,7 @@ class NotificationController extends GetxController implements GetxService {
         if (response.body != null) {
           notification = Notification.fromJson(response.body);
           notificationCount =
-              notification!.data.where((element) => element.seen == 0).length;
+              notification!.data!.where((element) => element.seen == 0).length;
         }
 
         log('Notification count $notificationCount');

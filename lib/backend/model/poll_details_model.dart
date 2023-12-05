@@ -11,7 +11,7 @@ String pollDetailsToJson(PollDetails data) => json.encode(data.toJson());
 
 class PollDetails {
   bool status;
-  PollData data;
+  PollData? data;
   String message;
   String accessToken;
   String tokenType;
@@ -34,7 +34,7 @@ class PollDetails {
 
   Map<String, dynamic> toJson() => {
         "status": status,
-        "data": data.toJson(),
+        "data": data?.toJson(),
         "message": message,
         "access_token": accessToken,
         "token_type": tokenType,

@@ -10,7 +10,8 @@ class HomeParser {
   HomeParser(
       {required this.sharedPreferencesManager, required this.apiService});
   Future<Response> getHomeData() async {
-    return await apiService
-        .getPublic(Constants.baseUrl + Constants.getHomeData);
+    final accessToken = sharedPreferencesManager.getString('access_token');
+    return await apiService.getPrivate(
+        Constants.baseUrl + Constants.getHomeData, accessToken!);
   }
 }

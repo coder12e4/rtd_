@@ -27,6 +27,7 @@ class HomeController extends GetxController implements GetxService {
 
   Future<void> getHomeDatas() async {
     Response response = await parser.getHomeData();
+    log("home data responce ${response.body}");
     try {
       if (response.statusCode == 200) {
         homeData = HomeData.fromJson(response.body);

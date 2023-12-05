@@ -83,24 +83,24 @@ class ElectedMemberScreen extends StatelessWidget {
 
   Container appbar(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 10.h),
+      margin: EdgeInsets.only(top: 10.h, bottom: 10.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    color: whiteColor,
-                  )),
-              SizedBox(
-                width: 90.w,
-              ),
+              // IconButton(
+              //     onPressed: () {
+              //       Navigator.pop(context);
+              //     },
+              //     icon: const Icon(
+              //       Icons.arrow_back,
+              //       color: whiteColor,
+              //     )),
+              // SizedBox(
+              //   width: 90.w,
+              // ),
               Text(
                 'Elected Members',
                 style: Theme.of(context).textTheme.displaySmall!.copyWith(

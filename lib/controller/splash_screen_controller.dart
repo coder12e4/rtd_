@@ -7,6 +7,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 
 import '../backend/parser/splash_screen_parser.dart';
+import '../helper/router.dart';
 import 'notification/notification_controller.dart';
 
 class SplashScreenController extends GetxController {
@@ -32,7 +33,10 @@ class SplashScreenController extends GetxController {
   }
 
   void onLogin() {
-    parser.getPage();
+    Get.offNamed(AppRouter.getElectedMemberRoute());
+    Future.delayed(const Duration(seconds: 3))
+        .then((value) => parser.getPage());
+    //
   }
 
   final _firebasemessageing = FirebaseMessaging.instance;

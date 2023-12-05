@@ -228,14 +228,14 @@ class LoanType {
 }
 
 class Surety {
-  int userId;
+  int id;
   String name;
   String profileImage;
   int status;
   String statusText;
 
   Surety({
-    required this.userId,
+    required this.id,
     required this.name,
     required this.profileImage,
     required this.status,
@@ -243,7 +243,7 @@ class Surety {
   });
 
   factory Surety.fromJson(Map<String, dynamic> json) => Surety(
-        userId: json["user_id"],
+        id: json["id"],
         name: json["name"],
         profileImage: json["profile_image"],
         status: json["status"],
@@ -251,7 +251,7 @@ class Surety {
       );
 
   Map<String, dynamic> toJson() => {
-        "user_id": userId,
+        "id": id,
         "name": name,
         "profile_image": profileImage,
         "status": status,
