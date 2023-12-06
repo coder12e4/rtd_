@@ -55,9 +55,14 @@ class ElectedMemberScreen extends StatelessWidget {
                                   ),
                                   itemBuilder: (context, index) {
                                     return GestureDetector(
-                                      onTap: () => Get.to(BookProfilePage(
-                                        data: electedMembers[index],
-                                      )),
+                                      onTap: () {
+                                        if (value.isStart != null ||
+                                            value.isStart == false) {
+                                          Get.to(BookProfilePage(
+                                            data: electedMembers[index],
+                                          ));
+                                        }
+                                      },
                                       child: ElectedMemberListTileWidget(
                                         data: electedMembers[index],
                                       ),

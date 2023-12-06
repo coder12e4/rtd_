@@ -61,19 +61,27 @@ class ProfileLoanScreen extends StatelessWidget {
           SizedBox(
             height: 10.h,
           ),
-          feedDate('19/10/2023'),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: controller.closedLoans?.data.data.length ?? 0,
-            itemBuilder: (context, index) => GestureDetector(
-                onTap: () => Get.toNamed(AppRouter.getProfileLoanDetailsRoute(),
-                        arguments: [
-                          controller.closedLoans?.data.data[index].userId
-                        ]),
-                child: activeAndClosedLoans(
-                    false, '418', controller, index, controller.closedLoans!)),
-          ),
+          // feedDate('19/10/2023'),
+          controller.closedLoans?.data.data.length != 0
+              ? ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: controller.closedLoans?.data.data.length ?? 0,
+                  itemBuilder: (context, index) => GestureDetector(
+                      onTap: () => Get.toNamed(
+                              AppRouter.getProfileLoanDetailsRoute(),
+                              arguments: [
+                                controller.closedLoans?.data.data[index].id
+                              ]),
+                      child: activeAndClosedLoans(false, '418', controller,
+                          index, controller.closedLoans!)),
+                )
+              : SizedBox(
+                  height: 600.h,
+                  child: const Center(
+                    child: Text('Closed loans is Empty'),
+                  ),
+                ),
           SizedBox(
             height: 10.h,
           ),
@@ -234,20 +242,27 @@ class ProfileLoanScreen extends StatelessWidget {
           SizedBox(
             height: 10.h,
           ),
-          feedDate('19/10/2023'),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: data?.length ?? 0,
-            itemBuilder: (context, index) => GestureDetector(
-              onTap: () {
-                Get.toNamed(AppRouter.getProfileLoanDetailsRoute(),
-                    arguments: [data![index].userId]);
-              },
-              child: activeAndClosedLoans(
-                  true, '418', controller, index, controller.activeLoans!),
-            ),
-          ),
+          // feedDate('19/10/2023'),
+          data?.length != 0
+              ? ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: data?.length ?? 0,
+                  itemBuilder: (context, index) => GestureDetector(
+                    onTap: () {
+                      Get.toNamed(AppRouter.getProfileLoanDetailsRoute(),
+                          arguments: [data![index].id]);
+                    },
+                    child: activeAndClosedLoans(true, '418', controller, index,
+                        controller.activeLoans!),
+                  ),
+                )
+              : SizedBox(
+                  height: 600.h,
+                  child: const Center(
+                    child: Text('Active loans is Empty'),
+                  ),
+                ),
           SizedBox(
             height: 10.h,
           ),

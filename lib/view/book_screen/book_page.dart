@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rtd_project/backend/model/books/services_model.dart';
 import 'package:rtd_project/controller/book/book_screen_controller.dart';
+import 'package:rtd_project/controller/elected_member_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/helper/router.dart';
@@ -349,7 +350,9 @@ class _BookPageState extends State<BookPage> {
               ),
               IconButton(
                 onPressed: () {
-                  Get.toNamed(AppRouter.getElectedMemberRoute());
+                  Get.delete<ElectedMemberController>(force: true);
+                  Get.toNamed(AppRouter.getElectedMemberRoute(),
+                      arguments: [false]);
                 },
                 icon: const Icon(
                   Icons.people_alt_rounded,

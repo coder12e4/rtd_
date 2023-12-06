@@ -36,6 +36,7 @@ class LoanDetailsController extends GetxController {
 
   Future<void> getClosedLoan() async {
     Response response = await parser.getClosedLoan();
+    log("Closed loan list ${response.body}");
     if (response.statusCode == 200) {
       try {
         // Map<String, dynamic> data = Map<String, dynamic>.from(response.body);

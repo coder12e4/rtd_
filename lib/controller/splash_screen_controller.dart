@@ -33,7 +33,7 @@ class SplashScreenController extends GetxController {
   }
 
   void onLogin() {
-    Get.offNamed(AppRouter.getElectedMemberRoute());
+    Get.offNamed(AppRouter.getElectedMemberRoute(), arguments: [true]);
     Future.delayed(const Duration(seconds: 3))
         .then((value) => parser.getPage());
     //
