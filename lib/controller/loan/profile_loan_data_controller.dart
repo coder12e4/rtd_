@@ -24,7 +24,7 @@ class ProfileLoanDataController extends GetxController {
   Future<void> getLoanDetails() async {
     final body = {"loan_id": loanId};
     Response response = await parser.getLoanDetails(body);
-    log(response.body.toString());
+    log('loan details ${response.body}');
     if (response.statusCode == 200) {
       if (response.body["status"] == true) {
         try {

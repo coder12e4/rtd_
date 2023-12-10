@@ -30,7 +30,7 @@ class BookScreenController extends GetxController {
   MemberDetails? memberDetails;
   bool loading = false;
   bool serviceLoading = true;
-  bool memberEmpty = false;
+
   String? statesName;
   String? serviceName;
   String? serviceStateName;
@@ -108,17 +108,15 @@ class BookScreenController extends GetxController {
     update();
   }
 
-  Future<void> searchBookMember() async {
-    loading = true;
-    update();
-    log('selected state id ${selectedItem!.id}');
-    _memberList.clear();
-    final body = {
-      "state": selectedItem!.id,
-    };
+  Future<void> searchBookMember(String? query) async {
+    if (_memberList.isNotEmpty) {
+      _memberList.clear();
+    }
+
     try {
-      var response = await parser.searchBookMember(body);
+      var response = await parser.searchBookMember(selectedItem!.id, query);
       if (response.statusCode == 200) {
+        loading = false;
         Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
         log("${response.body}");
         var allMembers = myMap['data'];
@@ -127,8 +125,6 @@ class BookScreenController extends GetxController {
           MemberData individual = MemberData.fromJson(data);
           _memberList.add(individual);
         });
-        _memberList.isEmpty ? memberEmpty = true : false;
-        loading = !loading;
       }
       update();
     } catch (e, stracktrace) {

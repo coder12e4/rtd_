@@ -293,13 +293,8 @@ class ServiceMemberProfile extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     fontSize: 18),
               ),
-              // SizedBox(
-              //   width: 30.w,
-              // ),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.people_alt),
-                color: whiteColor,
+              SizedBox(
+                width: 30.w,
               ),
             ],
           ),

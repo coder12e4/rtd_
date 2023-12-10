@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:rtd_project/controller/book/board_member_details_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../backend/model/elected_member_model.dart';
+class BoardMemberDetailsScreen extends StatelessWidget {
+  const BoardMemberDetailsScreen({super.key});
 
-class BookProfilePage extends StatelessWidget {
-  const BookProfilePage({super.key, this.data});
-  final ElectedMemberData? data;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -19,47 +19,47 @@ class BookProfilePage extends StatelessWidget {
           children: [
             appbar(context),
             Container(
-              height: 700.h,
+              height: 620.h,
               decoration: const BoxDecoration(
                   color: whiteColor,
                   borderRadius: BorderRadiusDirectional.only(
                     topStart: Radius.circular(50),
                     topEnd: Radius.circular(50),
                   )),
-              child: ListView(
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  imageContainer(),
-                  kSizedBoxH,
-                  nameText(data?.name ?? 'Not Available',
-                      data?.id.toString() ?? 'Not Available'),
-                  kSizedBoxH,
-                  dividerWidget(),
-                  kSizedBoxH,
-                  textButton(),
-                  kSizedBoxH,
-                  dividerWidget(),
-                  kSizedBoxH,
-                  detailsText('India', data?.mobile ?? 'Not Available'),
-                  kSizedBoxH,
-                  dividerWidget(),
-                  kSizedBoxH,
-                  detailsText('Saudi Arabia', 'Not Available'),
-                  kSizedBoxH,
-                  dividerWidget(),
-                  kSizedBoxH,
-                  detailsText('Mail Address', 'example@gmail.com'),
-                  kSizedBoxH,
-                  dividerWidget(),
-                  kSizedBoxH,
-                  detailsText('Mail Address', 'example@gmail.com'),
-                  kSizedBoxH,
-                  dividerWidget(),
-                  kSizedBoxH,
-                  detailsText('Blood Group', 'Not Available'),
-                  kSizedBoxH,
-                ],
-              ),
+              child: GetBuilder<BoardMemberDetailsController>(
+                  builder: (controller) {
+                return controller.loading != true
+                    ? ListView(
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: [
+                          imageContainer(controller),
+                          kSizedBoxH,
+                          nameText(controller.memberDetails!.data.name,
+                              controller.memberDetails!.data.position),
+                          kSizedBoxH,
+                          dividerWidget(),
+                          kSizedBoxH,
+                          textButton(controller, context),
+                          kSizedBoxH,
+                          dividerWidget(),
+                          kSizedBoxH,
+                          detailsText(
+                              'Mobile', controller.memberDetails!.data.mobile),
+                          kSizedBoxH,
+                          dividerWidget(),
+                          kSizedBoxH,
+                          detailsText('State',
+                              controller.memberDetails!.data.stateName),
+                          kSizedBoxH,
+                        ],
+                      )
+                    : const Center(
+                        child: CircularProgressIndicator(
+                          strokeWidth: 6,
+                          color: Colors.black,
+                        ),
+                      );
+              }),
             )
           ],
         ),
@@ -97,7 +97,7 @@ class BookProfilePage extends StatelessWidget {
     );
   }
 
-  textButton() {
+  textButton(BoardMemberDetailsController controller, BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -108,7 +108,7 @@ class BookProfilePage extends StatelessWidget {
                 backgroundColor:
                     MaterialStateColor.resolveWith((states) => Colors.green)),
             onPressed: () {
-              launch("tel:${data?.mobile}");
+              launch("tel:${controller.memberDetails!.data.mobile}");
             },
             child: const Padding(
               padding:
@@ -168,22 +168,22 @@ class BookProfilePage extends StatelessWidget {
           name!,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
-        Text('(M.$id)',
+        Text('($id)',
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
       ],
     );
   }
 
-  Container imageContainer() {
+  Container imageContainer(BoardMemberDetailsController controller) {
     return Container(
       margin: EdgeInsets.only(top: 30.h),
       height: 100.h,
       width: 100.w,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         shape: BoxShape.circle,
         image: DecorationImage(
           fit: BoxFit.contain,
-          image: AssetImage('assets/images/pexels-pixabay-220453 1.png'),
+          image: NetworkImage(controller.memberDetails!.data.image),
         ),
       ),
     );
@@ -192,25 +192,33 @@ class BookProfilePage extends StatelessWidget {
   Container appbar(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 10.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).pop(context);
-              },
-              icon: const Icon(
-                Icons.arrow_back,
-                color: whiteColor,
-                size: 30,
-              )),
-          Text(
-            'Member Book',
-            style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
-          ),
-          SizedBox(
-            width: 30.w,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                  onPressed: () => Get.back(),
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: whiteColor,
+                    size: 30,
+                  )),
+              // SizedBox(
+              //   width: 90.w,
+              // ),
+              Text(
+                'Member Book',
+                style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),
+              ),
+              SizedBox(
+                width: 30.w,
+              ),
+            ],
           ),
         ],
       ),

@@ -7,7 +7,6 @@ import 'package:rtd_project/controller/elected_member_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/helper/router.dart';
-import 'package:rtd_project/view/book_screen/book_edit_screen/book_edit_screen.dart';
 import 'package:rtd_project/view/book_screen/widgets/membrlisttile_widgetr.dart';
 
 import '../../backend/model/states_model.dart';
@@ -194,7 +193,11 @@ class _BookPageState extends State<BookPage> {
                     color: Color.fromARGB(255, 227, 224, 224),
                   ),
                 )
-              : const Expanded(child: Center(child: Text('Not Available'))),
+              : const Expanded(
+                  child: Center(
+                    child: Text('Not Available'),
+                  ),
+                ),
         ],
       ),
     );
@@ -232,7 +235,7 @@ class _BookPageState extends State<BookPage> {
                       setState(() {
                         value.selectedItem = valuee;
                         value.statesName = value.selectedItem!.stateName;
-                        value.searchBookMember();
+                        value.searchBookMember("");
                       });
                     }),
               ),
@@ -242,10 +245,10 @@ class _BookPageState extends State<BookPage> {
           searchField(
             value: value,
             controller: value.memberSearchController,
-            onChanged: (p0) {},
+            onChanged: (p0) => value.searchBookMember(p0),
           ),
           kSizedBoxH,
-          value.memberEmpty == true
+          value.memberList.isNotEmpty
               ? Text(
                   '${value.memberList.length} Members',
                   style: const TextStyle(
@@ -253,7 +256,7 @@ class _BookPageState extends State<BookPage> {
                       fontWeight: FontWeight.bold),
                 )
               : const SizedBox(),
-          value.memberEmpty != true
+          value.memberList.isNotEmpty
               ? Container(
                   child: value.loading != true
                       ? ListView.separated(
@@ -265,15 +268,15 @@ class _BookPageState extends State<BookPage> {
                               padding: const EdgeInsets.all(8.0),
                               child: GestureDetector(
                                 onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) =>
-                                        const BookProfilePage(),
-                                  ));
+                                  Get.toNamed(
+                                      AppRouter
+                                          .getBoardMemberDetailsRoutesRoute(),
+                                      arguments: [value.memberList[index].id]);
                                 },
                                 child: MemberistTileWidget(
                                   name: value.memberList[index].name,
-                                  image: value.memberList[index].profileImage,
-                                  memberid: value.memberList[index].memberId,
+                                  image: value.memberList[index].image,
+                                  memberid: value.memberList[index].position,
                                 ),
                               ),
                             );

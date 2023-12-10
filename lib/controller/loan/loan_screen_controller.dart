@@ -6,15 +6,14 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:rtd_project/core/constraints/api_urls.dart';
-import 'package:rtd_project/helper/router.dart';
+import 'package:rtd_project/util/loading_widget.dart';
 
 import '../../backend/model/loan/loan_purpose.dart';
 import '../../backend/model/loan/loan_request_model.dart';
 import '../../backend/model/loan/loan_type_model.dart';
 import '../../backend/model/loan/surties_model.dart';
 import '../../backend/parser/loan/loan_screen_parser.dart';
-import '../../core/common_widget/loane_documents.dart';
-import '../../util/theme.dart';
+import '../../helper/router.dart';
 import '../../util/toast.dart';
 
 class LoanScreenController extends GetxController {
@@ -29,6 +28,7 @@ class LoanScreenController extends GetxController {
   }
 
   bool loading = true;
+  var loanId;
   Data? loan;
   bool isAccepted = false;
 
@@ -40,6 +40,7 @@ class LoanScreenController extends GetxController {
   XFile? selectedImage3;
   LoanPurposeData? loanPurpose;
   int suretyCount = 0;
+  bool isCompleted = false;
   List<int> noOfSurties = [];
   TextEditingController loanAmountController = TextEditingController();
   List<LoanData> _loanData = <LoanData>[];
@@ -165,7 +166,7 @@ class LoanScreenController extends GetxController {
         purpose != null ? _dropdownMenuPurpose[0].value : null;
         update();
         log(_getPurposeType.toString());
-        log('loan purpose surety : ${noOfSurties}');
+        log('loan purpose surety : $noOfSurties');
       } catch (e, stackTrace) {
         log('loanPurpose catch $e', error: e, stackTrace: stackTrace);
       }
@@ -308,38 +309,20 @@ class LoanScreenController extends GetxController {
   Future<void> uploadLoanDocument(XFile? data, loanId) async {
     // Get.back();
 
-    Get.dialog(
-      SimpleDialog(
-        children: [
-          Row(
-            children: [
-              const SizedBox(
-                width: 30,
-              ),
-              const CircularProgressIndicator(
-                color: ThemeProvider.appColor,
-              ),
-              const SizedBox(
-                width: 30,
-              ),
-              SizedBox(
-                  child: Text(
-                "Please wait".tr,
-                style: const TextStyle(fontFamily: 'bold'),
-              )),
-            ],
-          )
-        ],
-      ),
-      barrierDismissible: false,
-    );
+    loadingWidget();
     var uri = Uri.parse(Constants.baseUrl + Constants.uploadLoanDocument);
     var request = http.MultipartRequest("POST", uri);
     String? accessToken =
         parser.sharedPreferencesManager.getString('access_token');
-    var file =
-        await http.MultipartFile.fromPath('loan_document', data?.path ?? '');
-    request.files.add(file);
+
+    if (data != null) {
+      var file =
+          await http.MultipartFile.fromPath('loan_document', data?.path ?? '');
+      request.files.add(file);
+    } else {
+      showToast('Select a image to upload');
+    }
+
     request.fields['loan_request_id'] = loanId.toString();
     request.headers.addAll({
       "Accept": "application/json",
@@ -350,11 +333,14 @@ class LoanScreenController extends GetxController {
     var parsedData;
     final responceData = await response.stream.bytesToString();
     parsedData = json.decode(responceData);
+    log("document upload data $parsedData");
     Get.back();
     if (parsedData['status'] == true) {
       log(parsedData.toString());
       Get.back();
       successToast('Document uploaded');
+    } else {
+      showToast(parsedData['message']);
     }
     update();
   }
@@ -369,31 +355,7 @@ class LoanScreenController extends GetxController {
       showToast('Add atleast one  surety to continue');
       return;
     }
-    Get.dialog(
-      SimpleDialog(
-        children: [
-          Row(
-            children: [
-              const SizedBox(
-                width: 30,
-              ),
-              const CircularProgressIndicator(
-                color: ThemeProvider.appColor,
-              ),
-              const SizedBox(
-                width: 30,
-              ),
-              SizedBox(
-                  child: Text(
-                "Please wait".tr,
-                style: const TextStyle(fontFamily: 'bold'),
-              )),
-            ],
-          )
-        ],
-      ),
-      barrierDismissible: false,
-    );
+    loadingWidget();
     var uri =
         Uri.parse("http://rtd.canisostudio.com/api/user/loan/request/create");
     var request = http.MultipartRequest("POST", uri);
@@ -430,33 +392,63 @@ class LoanScreenController extends GetxController {
       noOfSurties.clear();
 
       loanAmountController.clear();
+      loanId = parsedData['data']['id'];
       // successToast(parsedData['message'].toString());
-      showModalBottomSheet(
-        context: context,
-        isDismissible: false,
-        builder: (context) => LoanDocumentsBottomSheet(
-          press: () {
-            // Get.back();
-            successToast('Loan Request created');
-            selectedImage1 = null;
-            selectedImage2 = null;
-            selectedImage3 = null;
-
-            Get.offAllNamed(AppRouter.getBottomNavRoute(), arguments: [2]);
-          },
-          loanId: parsedData['data']['id'],
-        ),
-      );
+      // showModalBottomSheet(
+      //   context: context,
+      //   isDismissible: false,
+      //   builder: (context) => LoanDocumentsBottomSheet(
+      //     press: () {
+      //       // Get.back();
+      //       successToast('Loan Request created');
+      //       selectedImage1 = null;
+      //       selectedImage2 = null;
+      //       selectedImage3 = null;
+      //
+      //       Get.offAllNamed(AppRouter.getBottomNavRoute(), arguments: [2]);
+      //     },
+      //     loanId: parsedData['data']['id'],
+      //   ),
+      // );
+      isCompleted = true;
       getLoanRequestData();
     } else {
       Get.back();
-      String errorMessage = '';
-      for (var error in parsedData['errors']) {
-        errorMessage = "${errorMessage + error['error_name']}\n ";
-        log(errorMessage.toString());
-        // error += error;
+      // String errorMessage = '';
+      // for (var error in parsedData['errors']) {
+      //   errorMessage = "${errorMessage + error['error_name']}\n ";
+      //   log(errorMessage.toString());
+      //   // error += error;
+      // }
+
+      showToast(parsedData['message'].toString());
+    }
+  }
+
+  Future<void> loanRequestComplete() async {
+    loadingWidget();
+    final body = {
+      "loan_request_id": loanId,
+    };
+    Response response = await parser.loanRequestComplete(body);
+    Get.back();
+    try {
+      if (response.statusCode == 200) {
+        if (response.body["status"] == true) {
+          successToast(response.body["message"].toString());
+          selectedImage1 = null;
+          selectedImage2 = null;
+          selectedImage3 = null;
+
+          Get.offAllNamed(AppRouter.getBottomNavRoute(), arguments: [2]);
+        } else {
+          showToast(response.body["message"].toString());
+        }
+      } else {
+        showToast(response.body["message"].toString());
       }
-      showToast(errorMessage);
+    } catch (e, stackTrace) {
+      log('loan request complete catch $e', error: e, stackTrace: stackTrace);
     }
   }
 

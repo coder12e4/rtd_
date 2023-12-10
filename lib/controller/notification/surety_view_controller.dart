@@ -15,10 +15,10 @@ class SuretyViewController extends GetxController implements GetxService {
   void onInit() {
     voteId = Get.arguments[0].toString();
     details = Get.arguments[1];
-
-    // if (voteId != null) {
-    //   getPollDetails();
-    // }
+    isPoll = Get.arguments[2];
+    if (isPoll != null && isPoll == true) {
+      getPollDetails();
+    }
     super.onInit();
   }
 
@@ -30,6 +30,7 @@ class SuretyViewController extends GetxController implements GetxService {
   int? groupValue = 0;
 
   NotificationDetails? details;
+  bool? isPoll;
   bool? isSelected = false;
   final TextEditingController reasonController = TextEditingController();
 

@@ -144,18 +144,35 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
                                   //       borderRadius: BorderRadius.circular(24)),
                                   // ),
                                   kSizedBoxH20,
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        'Attached Document',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      kSizedBoxH,
-                                      documentContainer(value),
-                                    ],
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10.w),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          'Attached Document',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        kSizedBoxH,
+                                        SizedBox(
+                                          height: value.loanData!.data!
+                                                  .loanDocument.length *
+                                              140.h,
+                                          child: ListView.separated(
+                                            itemBuilder: (context, index) =>
+                                                documentContainer(value, index),
+                                            separatorBuilder:
+                                                (context, index) => kSizedBoxH,
+                                            itemCount: value.loanData!.data
+                                                    ?.loanDocument.length ??
+                                                0,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               )
@@ -209,15 +226,15 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
     );
   }
 
-  Container documentContainer(ProfileLoanDataController controller) {
+  Container documentContainer(ProfileLoanDataController controller, int index) {
     return Container(
       margin: EdgeInsets.only(right: 15.w),
       height: 130.h,
       width: 320.w,
       decoration: BoxDecoration(
           image: DecorationImage(
-              image:
-                  NetworkImage(controller.loanData!.data?.loanDocument ?? "")),
+              image: NetworkImage(
+                  controller.loanData!.data?.loanDocument[index].file ?? "")),
           color: const Color.fromARGB(255, 223, 220, 220),
           borderRadius: BorderRadius.circular(20)),
     );

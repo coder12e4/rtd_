@@ -1,4 +1,3 @@
-import 'package:awesome_circular_chart/awesome_circular_chart.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,6 +6,7 @@ import 'package:rtd_project/backend/model/home_data_model.dart';
 import 'package:rtd_project/controller/home_screen_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/util/theme.dart';
+import 'package:rtd_project/view/home_screen/widgets/chart_items.dart';
 
 import '../../controller/notification/notification_controller.dart';
 import '../../core/constraints/conatrints.dart';
@@ -63,94 +63,14 @@ class _HomePageState extends State<HomePage> {
                                       CarouselSlider(
                                         items: value.homeData?.collectionSummary
                                             .map(
-                                              (item) => Stack(
-                                                alignment:
-                                                    AlignmentDirectional.center,
-                                                children: [
-                                                  // kSizedBoxH20,
-                                                  Positioned(
-                                                    top: 0,
-                                                    child: Text(
-                                                      item.title.toString(),
-                                                      style: const TextStyle(
-                                                          fontSize: 17,
-                                                          fontWeight:
-                                                              FontWeight.w600),
-                                                    ),
-                                                  ),
-                                                  Positioned(
-                                                    top: 80.h,
-                                                    child:
-                                                        AnimatedCircularChart(
-                                                      holeRadius: 65.r,
-                                                      key: UniqueKey(),
-                                                      size: Size(350.w, 100.h),
-                                                      initialChartData: <CircularStackEntry>[
-                                                        CircularStackEntry(
-                                                          <CircularSegmentEntry>[
-                                                            CircularSegmentEntry(
-                                                              (item.amountSummary[0]
-                                                                      .amount)
-                                                                  .toDouble(),
-                                                              const Color
-                                                                  .fromARGB(255,
-                                                                  147, 8, 96),
-                                                              rankKey:
-                                                                  'remaining',
-                                                            ),
-                                                            CircularSegmentEntry(
-                                                              (100 -
-                                                                      item
-                                                                          .amountSummary[
-                                                                              1]
-                                                                          .amount)
-                                                                  .toDouble(),
-                                                              const Color
-                                                                  .fromARGB(
-                                                                  255,
-                                                                  207,
-                                                                  200,
-                                                                  200),
-                                                              rankKey:
-                                                                  'completed',
-                                                            ),
-                                                          ],
-                                                          rankKey: 'progress',
-                                                        ),
-                                                      ],
-                                                      chartType:
-                                                          CircularChartType
-                                                              .Radial,
-                                                      percentageValues: true,
-                                                      // holeLabel: 'Total Collection',
-                                                      labelStyle:
-                                                          const TextStyle(
-                                                        color: baseColor,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 24.0,
-                                                      ),
-                                                      edgeStyle:
-                                                          SegmentEdgeStyle
-                                                              .round,
-                                                      startAngle: BorderSide
-                                                          .strokeAlignOutside,
-                                                    ),
-                                                  ),
-                                                  Positioned(
-                                                    top: 80.h,
-                                                    child: graphCenterText(
-                                                        context, item),
-                                                  ),
-                                                ],
-                                              ),
+                                              (item) => ChartItems(item: item),
                                             )
                                             .toList(),
                                         options: CarouselOptions(
                                           pauseAutoPlayOnTouch: true,
                                           height: 240.h,
                                           autoPlayInterval:
-                                              const Duration(seconds: 2),
+                                              const Duration(seconds: 3),
                                           aspectRatio: 16 / 17,
                                           autoPlay: true,
 
@@ -177,38 +97,6 @@ class _HomePageState extends State<HomePage> {
             );
           })),
     ));
-  }
-
-  graphCenterText(context, CollectionSummary item) {
-    return Column(
-      children: [
-        Text(
-          item.amountSummary[0].title,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-        ),
-        Text(
-          '${item.amountSummary[0].amount} INR',
-          style: Theme.of(context)
-              .textTheme
-              .displayLarge!
-              .copyWith(fontWeight: FontWeight.bold, fontSize: 25),
-        ),
-        SizedBox(
-          height: 10.h,
-        ),
-        Text(
-          item.amountSummary[1].title,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-        ),
-        Text(
-          '${item.amountSummary[1].amount} INR',
-          style: Theme.of(context)
-              .textTheme
-              .displayLarge!
-              .copyWith(fontWeight: FontWeight.bold, fontSize: 25),
-        ),
-      ],
-    );
   }
 
   Padding activeLoan(HomeData homeData) {

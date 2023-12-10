@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:rtd_project/backend/api/api.dart';
 import 'package:rtd_project/backend/parser/authentication/login_parser.dart';
 import 'package:rtd_project/backend/parser/authentication/sighnup_parser.dart';
+import 'package:rtd_project/backend/parser/book/board_member_details_parser.dart';
 import 'package:rtd_project/backend/parser/book/service_member_parser.dart';
 import 'package:rtd_project/backend/parser/elected_member_parser.dart';
 import 'package:rtd_project/backend/parser/home_parser.dart';
@@ -20,6 +21,7 @@ import '../backend/parser/loan/loan_screen_parser.dart';
 import '../backend/parser/profile/edit_profile_parser.dart';
 import '../backend/parser/splash_screen_parser.dart';
 import '../backend/parser/wall_screen_parser.dart';
+import '../controller/network_controller/network_controller.dart';
 
 class MainBinding extends Bindings {
   @override
@@ -29,6 +31,7 @@ class MainBinding extends Bindings {
       SharedPreferencesManager(sharedPreferences: sharedPref),
       permanent: true,
     );
+    Get.put<NetworkController>(NetworkController(), permanent: true);
 
     Get.lazyPut(() => ApiService(appBaseUrl: Constants.baseUrl));
 
@@ -104,6 +107,11 @@ class MainBinding extends Bindings {
 
     Get.lazyPut(
         () => LoanDetailsParser(
+            apiService: Get.find(), sharedPreferencesManager: Get.find()),
+        fenix: true);
+
+    Get.lazyPut(
+        () => BoardMemberDetailsParser(
             apiService: Get.find(), sharedPreferencesManager: Get.find()),
         fenix: true);
   }

@@ -18,7 +18,7 @@ class Constants {
   static const String getWallFeedData = 'api/user/wall/feeds';
   static const String getWallVotesData = 'api/user/vote/list/questions';
   static const String submitVote = 'api/user/vote/submit/option';
-  static const String searchBookMember = 'api/user/search';
+  static const String searchBookMember = 'api/user/board-members/list?';
   static const String getServices = 'api/user/service/list';
   static const String getNotification = 'api/user/notification/list';
   static const String seenNotification = 'api/user/notification/mark/seen';
@@ -29,8 +29,11 @@ class Constants {
   static const String getLonPurpose = 'api/user/purpose/list';
   static const String updateLoanRequest = 'api/user/purpose/list';
   static const String getLoanDocuments = 'api/user/loan/request/documents/list';
+  static const String loanRequestComplete = 'api/user/loan/request/completed';
   static const String loanRules = 'loan-rules';
   static const String termsAndConditions = 'terms-and-conditions';
+  static const String getBoardMemberDetails =
+      'api/user/board-members/show?member_id=';
 
   static const String removeLoanDocument =
       'api/user/loan/request/document/remove';

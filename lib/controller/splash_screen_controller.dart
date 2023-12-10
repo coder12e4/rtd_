@@ -73,7 +73,7 @@ class SplashScreenController extends GetxController {
             android: AndroidNotificationDetails(
                 _androidChannel.id, _androidChannel.name,
                 channelDescription: _androidChannel.description,
-                icon: '@drawable/ic_launcher',
+                icon: '@drawable/app_logo',
                 playSound: true),
           ),
           payload: jsonEncode(event.toMap()));
@@ -82,7 +82,7 @@ class SplashScreenController extends GetxController {
   }
 
   Future initLocalNotifications() async {
-    const android = AndroidInitializationSettings("@drawable/ic_launcher");
+    const android = AndroidInitializationSettings("@drawable/app_logo");
     const settings = InitializationSettings(
       android: android,
     );

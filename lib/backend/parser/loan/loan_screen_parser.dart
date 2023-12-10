@@ -37,6 +37,13 @@ class LoanScreenParser {
     return response;
   }
 
+  Future<Response> loanRequestComplete(body) async {
+    final accessToken = sharedPreferencesManager.getString('access_token');
+    var response = await apiService.postPrivate(
+        Constants.baseUrl + Constants.loanRequestComplete, body, accessToken!);
+    return response;
+  }
+
   Future<Response> uploadLoneDocument(body) async {
     final accessToken = sharedPreferencesManager.getString('access_token');
     var response = await apiService.postPrivate(

@@ -15,6 +15,7 @@ import 'package:rtd_project/view/loan_screen/widgets/porpose.dart';
 
 import '../../backend/model/loan/loan_type_model.dart';
 import '../../controller/loan/loan_rules.dart';
+import '../../core/common_widget/loane_documents.dart';
 import '../../helper/router.dart';
 import '../../util/toast.dart';
 
@@ -38,24 +39,31 @@ class _LoanPageState extends State<LoanPage> {
     return SafeArea(
       child: GetBuilder<LoanScreenController>(builder: (value) {
         return Scaffold(
-            backgroundColor: baseColor,
-            body: SingleChildScrollView(
-              child: DefaultTabController(
-                length: 2,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    wallTextWidget(context),
-                    SizedBox(
-                      height: 70.h,
-                    ),
-                    tabBar(),
-                    tabBarView(context, value),
-                  ],
-                ),
+          backgroundColor: baseColor,
+          body: SingleChildScrollView(
+            child: DefaultTabController(
+              length: 2,
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  wallTextWidget(context),
+                  SizedBox(
+                    height: 70.h,
+                  ),
+                  tabBar(),
+                  tabBarView(context, value),
+                ],
               ),
-            ));
+            ),
+          ),
+          bottomSheet: value.isCompleted == true
+              ? LoanDocumentsBottomSheet(
+                  loanId: value.loanId,
+                  press: () => value.loanRequestComplete(),
+                )
+              : const Offstage(),
+        );
       }),
     );
   }

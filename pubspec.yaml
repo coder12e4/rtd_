@@ -37,25 +37,25 @@ dependencies:
   flutter_svg: ^2.0.7
   get: ^4.6.5
   path_provider: ^2.1.1
-  internet_connection_checker: ^1.0.0+1
   lottie: ^2.6.0
 
   google_fonts:
-  http: ^0.13.6
+  http: ^1.1.2
 
   image_picker: ^1.0.4
   shared_preferences: ^2.2.1
   http_parser: ^4.0.2
   firebase_core: ^2.16.0
   firebase_messaging: ^14.6.8
-  flutter_local_notifications: ^15.1.1
+  flutter_local_notifications: ^16.2.0
   intl:
   webview_flutter: ^4.4.1
   flutter_image_compress: ^2.1.0
   carousel_slider: ^4.2.1
+  connectivity_plus: ^5.0.2
 
 dev_dependencies:
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.1
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: "^0.13.1"

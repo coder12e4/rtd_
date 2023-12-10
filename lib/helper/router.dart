@@ -1,7 +1,7 @@
-
 import 'package:get/get.dart';
 import 'package:rtd_project/backend/binding/auth/login_binding.dart';
 import 'package:rtd_project/backend/binding/auth/register_binding.dart';
+import 'package:rtd_project/backend/binding/book/board_member_details_binding.dart';
 import 'package:rtd_project/backend/binding/book/service_member_details_bindig.dart';
 import 'package:rtd_project/backend/binding/bottom_navigation_binding.dart';
 import 'package:rtd_project/backend/binding/elected_member_binding.dart';
@@ -23,6 +23,7 @@ import '../backend/binding/loan/loan_edit_binding.dart';
 import '../backend/binding/loan/profie_loan_data_binding.dart';
 import '../backend/binding/notification/notification_binding.dart';
 import '../backend/binding/profile_binding.dart';
+import '../view/book_screen/board_member_details/board_member_details.dart';
 import '../view/book_screen/service_member_profile/service_member_profile.dart';
 import '../view/home_screen/home_page.dart';
 import '../view/loan_screen/loan_edit_screen/loan_edit_screen.dart';
@@ -53,35 +54,9 @@ class AppRouter {
   static const String loanDetailsRoutes = '/loanDetails';
   static const String notificationPollRoutes = '/notificationPoll';
   static const String profileLoanDetailsRoutes = '/profileLoanDetails';
-  static const String reviewRoutes = '/review';
-  static const String languagesRoutes = '/languages';
-  static const String contactUsRoutes = '/contact_us';
-  static const String appPagesRoutes = '/app_pages';
-  static const String packagesRoutes = '/packages';
-  static const String addPackagesRoutes = '/add_packages';
-  static const String packagesCategoriesRoutes = '/select_packages';
-  static const String productsRoutes = '/products';
-  static const String createProductsRoutes = '/create_products';
-  static const String shopCategoriesRoutes = '/shop_categories';
-  static const String shopSubCategoriesRoutes = '/shop_subcategories';
-  static const String salonCategoriesRoutes = '/salon_categories';
-  static const String citiesCategoriesRoutes = '/select_cities';
-  static const String slotRoutes = '/slot';
-  static const String addSlotRoutes = '/add_slot';
-  static const String servicesRoutes = '/services';
-  static const String addServicesRoutes = '/add_services';
-  static const String servicesCategoriesRoutes = '/services_categories';
-  static const String packagesSpecialistRoutes = '/packages_specialist';
-  static const String individualProfileRoutes = '/individual_profile';
-  static const String individualProfileCategoriesRoutes =
-      '/individual_profile_categories';
-  static const String individualCitiesRoutes = '/individual_cities';
-  static const String errorRoutes = '/error';
+  static const String boardMemberDetailsRoutes = '/boardMemberDetails';
+
   static const String splash = '/splash';
-  static const String analyticsRoutes = '/analytics';
-  static const String firebaseRoutes = '/firebase_auth';
-  static const String productOrderDetailsRoutes = '/product_order_details';
-  static const String registerCategoriesRoutes = '/register_categories';
 
   static String getInitialRoute() => initial;
   static String getVerifyRoute() => verifyRoutes;
@@ -103,9 +78,7 @@ class AppRouter {
   static String getLoanDetailsRoute() => loanDetailsRoutes;
   static String getNotificationPollRoute() => notificationPollRoutes;
   static String getProfileLoanDetailsRoute() => profileLoanDetailsRoutes;
-
-
-
+  static String getBoardMemberDetailsRoutesRoute() => boardMemberDetailsRoutes;
 
   static List<GetPage> routes = [
     GetPage(
@@ -126,12 +99,10 @@ class AppRouter {
         name: bottomNavRoutes,
         page: () => const NavigationBarpage(),
         binding: BottomNavBinding()),
-
     GetPage(
         name: electedMemberRoutes,
         page: () => const ElectedMemberScreen(),
         binding: ElectedMemberBinding()),
-
     GetPage(
         name: editProfileRoutes,
         page: () => const ProfileEditScreen(),
@@ -140,7 +111,6 @@ class AppRouter {
         name: userProfileRoutes,
         page: () => const ProfilePage(),
         binding: ProfileBinding()),
-
     GetPage(
         name: searchScreenRoutes,
         page: () => const SearchScreen(),
@@ -162,7 +132,6 @@ class AppRouter {
       page: () => const NotificationScreen(),
       binding: NotificationBinding(),
     ),
-
     GetPage(
         name: suretyRequestDetailsRoutes,
         page: () => const NotificationViewScreen(),
@@ -180,6 +149,9 @@ class AppRouter {
         name: profileLoanDetailsRoutes,
         page: () => const ActiveLoanDetailsScreen(),
         binding: ProfileLoanDataBinding()),
-    
+    GetPage(
+        name: boardMemberDetailsRoutes,
+        page: () => const BoardMemberDetailsScreen(),
+        binding: BoardMemberDetailsBinding()),
   ];
 }
