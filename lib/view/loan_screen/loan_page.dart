@@ -40,21 +40,18 @@ class _LoanPageState extends State<LoanPage> {
       child: GetBuilder<LoanScreenController>(builder: (value) {
         return Scaffold(
           backgroundColor: baseColor,
-          body: SingleChildScrollView(
-            child: DefaultTabController(
-              length: 2,
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  wallTextWidget(context),
-                  SizedBox(
-                    height: 70.h,
-                  ),
-                  tabBar(),
-                  tabBarView(context, value),
-                ],
-              ),
+          body: DefaultTabController(
+            length: 2,
+            child: Column(
+              // mainAxisSize: MainAxisSize.max,
+              // mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                kSizedBoxH,
+                wallTextWidget(context),
+                kSizedBoxH,
+                tabBar(),
+                tabBarView(context, value),
+              ],
             ),
           ),
           bottomSheet: value.isCompleted == true
@@ -85,37 +82,38 @@ class _LoanPageState extends State<LoanPage> {
 
   Widget tabBarView(BuildContext context, LoanScreenController value) {
     return value.loading == true
-        ? Container(
-            height: 485.h,
-            // width: 100,
-            decoration: const BoxDecoration(
-              color: whiteColor,
-              borderRadius: BorderRadiusDirectional.only(
-                topEnd: Radius.circular(40),
-                topStart: Radius.circular(40),
+        ? Expanded(
+            child: Container(
+              decoration: const BoxDecoration(
+                color: whiteColor,
+                borderRadius: BorderRadiusDirectional.only(
+                  topEnd: Radius.circular(40),
+                  topStart: Radius.circular(40),
+                ),
               ),
-            ),
-            child: const Center(
-              child: CircularProgressIndicator(
-                color: Colors.black,
-                strokeWidth: 6,
+              child: const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.black,
+                  strokeWidth: 6,
+                ),
               ),
             ),
           )
-        : Container(
-            height: 482.h,
-            //hallo
-            decoration: const BoxDecoration(
-              color: whiteColor,
-              borderRadius: BorderRadiusDirectional.only(
-                topEnd: Radius.circular(40),
-                topStart: Radius.circular(40),
+        : Expanded(
+            child: Container(
+              //hallo
+              decoration: const BoxDecoration(
+                color: whiteColor,
+                borderRadius: BorderRadiusDirectional.only(
+                  topEnd: Radius.circular(40),
+                  topStart: Radius.circular(40),
+                ),
               ),
+              child: TabBarView(children: [
+                NewRequestView(context, value),
+                requestView(context, value),
+              ]),
             ),
-            child: TabBarView(children: [
-              NewRequestView(context, value),
-              requestView(context, value),
-            ]),
           );
   }
 
@@ -674,14 +672,11 @@ class _LoanPageState extends State<LoanPage> {
     );
   }
 
-  Container wallTextWidget(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: 10.h),
-      child: Text(
-        'Loan Request',
-        style: Theme.of(context).textTheme.displaySmall!.copyWith(
-            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
-      ),
+  Text wallTextWidget(BuildContext context) {
+    return Text(
+      'Loan Request',
+      style: Theme.of(context).textTheme.displaySmall!.copyWith(
+          color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
     );
   }
 }

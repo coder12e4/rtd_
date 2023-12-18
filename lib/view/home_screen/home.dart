@@ -21,82 +21,81 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final HomeController contoller = Get.find();
+  final NotificationController notiController =
+      Get.put(NotificationController(parser: Get.find()));
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-      backgroundColor: baseColor,
-      body: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: GetBuilder<HomeController>(builder: (value) {
-            return Column(
-              children: [
-                homeTextWidget(context, value),
-                Container(
-                  // height: 1050.h,
-                  //hallo
-                  height: MediaQuery.sizeOf(context).height,
-                  decoration: const BoxDecoration(
-                    color: whiteColor,
-                    borderRadius: BorderRadiusDirectional.only(
-                      topEnd: Radius.circular(40),
-                      topStart: Radius.circular(40),
+    return SafeArea(child: GetBuilder<HomeController>(builder: (value) {
+      return Scaffold(
+          backgroundColor: baseColor,
+          body: SingleChildScrollView(
+              physics: value.homeData?.activeLoan != null
+                  ? const BouncingScrollPhysics()
+                  : const NeverScrollableScrollPhysics(),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  homeTextWidget(context, value),
+                  Container(
+                    height: MediaQuery.sizeOf(context).height,
+                    decoration: const BoxDecoration(
+                      color: whiteColor,
+                      borderRadius: BorderRadiusDirectional.only(
+                        topEnd: Radius.circular(40),
+                        topStart: Radius.circular(40),
+                      ),
                     ),
-                  ),
-                  child: value.loading != true
-                      ? Column(
-                          // physics: const NeverScrollableScrollPhysics(),
-                          children: [
-                              Padding(
-                                padding: const EdgeInsets.all(18.0),
-                                child: Container(
-                                  height: 470.h,
-                                  // width: 100.w,
-                                  decoration: BoxDecoration(
-                                    color: textFormBase,
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      kSizedBoxH20,
-                                      CarouselSlider(
-                                        items: value.homeData?.collectionSummary
-                                            .map(
-                                              (item) => ChartItems(item: item),
-                                            )
-                                            .toList(),
-                                        options: CarouselOptions(
-                                          pauseAutoPlayOnTouch: true,
-                                          height: 240.h,
-                                          autoPlayInterval:
-                                              const Duration(seconds: 3),
-                                          aspectRatio: 16 / 17,
-                                          autoPlay: true,
+                    child: value.loading != true
+                        ? Column(children: [
+                            Padding(
+                              padding: const EdgeInsets.all(18.0),
+                              child: Container(
+                                height: 470.h,
+                                // width: 100.w,
+                                decoration: BoxDecoration(
+                                  color: textFormBase,
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                child: Column(
+                                  children: [
+                                    kSizedBoxH20,
+                                    CarouselSlider(
+                                      items: value.homeData?.collectionSummary
+                                          .map(
+                                            (item) => ChartItems(item: item),
+                                          )
+                                          .toList(),
+                                      options: CarouselOptions(
+                                        pauseAutoPlayOnTouch: true,
+                                        height: 240.h,
+                                        autoPlayInterval:
+                                            const Duration(seconds: 3),
+                                        aspectRatio: 16 / 17,
+                                        autoPlay: true,
 
-                                          // enlargeCenterPage: true,
-                                        ),
+                                        // enlargeCenterPage: true,
                                       ),
-                                      incomBreakdown(value.homeData),
-                                    ],
-                                  ),
+                                    ),
+                                    incomBreakdown(value.homeData),
+                                  ],
                                 ),
                               ),
-                              value.homeData?.activeLoan != null
-                                  ? activeLoan(value.homeData!)
-                                  : const SizedBox(),
-                            ])
-                      : const Center(
-                          child: CircularProgressIndicator(
-                            strokeWidth: 6,
-                            color: ThemeProvider.blackColor,
+                            ),
+                            value.homeData?.activeLoan != null
+                                ? activeLoan(value.homeData!)
+                                : const SizedBox(),
+                          ])
+                        : const Center(
+                            child: CircularProgressIndicator(
+                              strokeWidth: 6,
+                              color: ThemeProvider.blackColor,
+                            ),
                           ),
-                        ),
-                ),
-              ],
-            );
-          })),
-    ));
+                  ),
+                ],
+              )));
+    }));
   }
 
   Padding activeLoan(HomeData homeData) {
@@ -251,37 +250,40 @@ class _HomePageState extends State<HomePage> {
               Get.delete<NotificationController>(force: true);
               Get.toNamed(AppRouter.getNotificationPageRoute());
             },
-            child: Stack(
-              alignment: AlignmentDirectional.center,
-              children: [
-                const IconButton(
-                  onPressed: null,
-                  icon: Icon(
-                    Icons.notifications_none,
-                    color: whiteColor,
-                    size: 35,
+            child: GetBuilder<NotificationController>(builder: (notController) {
+              return Stack(
+                alignment: AlignmentDirectional.center,
+                children: [
+                  const IconButton(
+                    onPressed: null,
+                    icon: Icon(
+                      Icons.notifications_none,
+                      color: whiteColor,
+                      size: 35,
+                    ),
                   ),
-                ),
-                contoller.controllerN?.notificationCount != 0
-                    ? Positioned(
-                        top: 3.h,
-                        right: 4.w,
-                        child: Container(
-                          height: 20.h,
-                          width: 20.w,
-                          decoration: const BoxDecoration(
-                              color: Colors.red, shape: BoxShape.circle),
-                          child: Center(
-                              child: Text(
-                            '${contoller.controllerN?.notificationCount ?? 0}',
-                            style: const TextStyle(
-                                color: whiteColor, fontWeight: FontWeight.bold),
-                          )),
-                        ),
-                      )
-                    : const SizedBox(),
-              ],
-            ),
+                  notiController.notificationCount != 0
+                      ? Positioned(
+                          top: 3.h,
+                          right: 4.w,
+                          child: Container(
+                            height: 20.h,
+                            width: 20.w,
+                            decoration: const BoxDecoration(
+                                color: Colors.red, shape: BoxShape.circle),
+                            child: Center(
+                                child: Text(
+                              '${notiController.notificationCount ?? 0}',
+                              style: const TextStyle(
+                                  color: whiteColor,
+                                  fontWeight: FontWeight.bold),
+                            )),
+                          ),
+                        )
+                      : const SizedBox(),
+                ],
+              );
+            }),
           ),
         ],
       ),

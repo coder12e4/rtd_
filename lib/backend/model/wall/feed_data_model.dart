@@ -45,7 +45,7 @@ class FeedData {
   int? currentPage;
   List<Datum> data;
   String firstPageUrl;
-  int from;
+  int? from;
   int lastPage;
   String lastPageUrl;
   List<Link> links;
@@ -53,7 +53,7 @@ class FeedData {
   String path;
   int perPage;
   dynamic prevPageUrl;
-  int to;
+  int? to;
   int total;
 
   FeedData({

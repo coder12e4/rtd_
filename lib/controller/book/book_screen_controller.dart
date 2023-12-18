@@ -29,6 +29,7 @@ class BookScreenController extends GetxController {
   ServicesMemberList? servicesMemberList;
   MemberDetails? memberDetails;
   bool loading = false;
+  bool initial = true;
   bool serviceLoading = true;
 
   String? statesName;
@@ -109,6 +110,7 @@ class BookScreenController extends GetxController {
   }
 
   Future<void> searchBookMember(String? query) async {
+    initial = false;
     if (_memberList.isNotEmpty) {
       _memberList.clear();
     }
@@ -160,6 +162,7 @@ class BookScreenController extends GetxController {
         // Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
         servicesMemberList = ServicesMemberList.fromJson(response.body);
         serviceLoading = !serviceLoading;
+        initial = false;
         log("${response.body}");
       }
       update();

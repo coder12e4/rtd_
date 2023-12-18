@@ -20,67 +20,70 @@ class NotificationViewScreen extends StatelessWidget {
           return Column(
             children: [
               appbar(context),
-              Container(
-                padding: EdgeInsets.only(left: 30.0.w, right: 30.w, top: 25.h),
-                height: 614.h,
-                width: 390.w,
-                decoration: const BoxDecoration(
-                    color: whiteColor,
-                    borderRadius: BorderRadiusDirectional.only(
-                      topStart: Radius.circular(50),
-                      topEnd: Radius.circular(50),
-                    )),
-                child: Column(
-                  children: [
-                    Text(
-                      "${value.details?.message}",
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 17),
-                    ),
-                    SizedBox(
-                      height: 40.h,
-                    ),
-                    radioButton(
-                      controller: value,
-                      text: 'Accept Request',
-                      value: 1,
-                    ),
-                    Divider(
-                      indent: 35.w,
-                      endIndent: 35.w,
-                    ),
-                    radioButton(
-                      controller: value,
-                      text: 'Reject Request',
-                      value: 2,
-                    ),
-                    Divider(
-                      indent: 35.w,
-                      endIndent: 35.w,
-                    ),
-                    kSizedBoxH,
-                    const Text(
-                      'Share Reasons for rejection',
-                      style:
-                          TextStyle(color: Color.fromARGB(255, 117, 113, 113)),
-                    ),
-                    kSizedBoxH,
-                    TextFormFieldWidget(
-                      validator: Rtd_Validators.noneEmptyValidator,
-                      controller: value.reasonController,
-                      hitText: "Type your reason here",
-                    ),
-                    kSizedBoxH,
-                    ButtonWidget(
-                        buttonBackgroundColor:
-                            const Color.fromARGB(255, 4, 78, 139),
-                        buttonForegroundColor: whiteColor,
-                        buttonText: 'Submit',
-                        borderAvalable: true,
-                        press: () {
-                          value.onSubmit();
-                        })
-                  ],
+              Expanded(
+                child: Container(
+                  padding:
+                      EdgeInsets.only(left: 30.0.w, right: 30.w, top: 25.h),
+                  // height: 614.h,
+                  width: 390.w,
+                  decoration: const BoxDecoration(
+                      color: whiteColor,
+                      borderRadius: BorderRadiusDirectional.only(
+                        topStart: Radius.circular(50),
+                        topEnd: Radius.circular(50),
+                      )),
+                  child: Column(
+                    children: [
+                      Text(
+                        "${value.details?.message}",
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 17),
+                      ),
+                      SizedBox(
+                        height: 40.h,
+                      ),
+                      radioButton(
+                        controller: value,
+                        text: 'Accept Request',
+                        value: 1,
+                      ),
+                      Divider(
+                        indent: 35.w,
+                        endIndent: 35.w,
+                      ),
+                      radioButton(
+                        controller: value,
+                        text: 'Reject Request',
+                        value: 2,
+                      ),
+                      Divider(
+                        indent: 35.w,
+                        endIndent: 35.w,
+                      ),
+                      kSizedBoxH,
+                      const Text(
+                        'Share Reasons for rejection',
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 117, 113, 113)),
+                      ),
+                      kSizedBoxH,
+                      TextFormFieldWidget(
+                        validator: Rtd_Validators.noneEmptyValidator,
+                        controller: value.reasonController,
+                        hitText: "Type your reason here",
+                      ),
+                      kSizedBoxH,
+                      ButtonWidget(
+                          buttonBackgroundColor:
+                              const Color.fromARGB(255, 4, 78, 139),
+                          buttonForegroundColor: whiteColor,
+                          buttonText: 'Submit',
+                          borderAvalable: true,
+                          press: () {
+                            value.onSubmit();
+                          })
+                    ],
+                  ),
                 ),
               )
             ],

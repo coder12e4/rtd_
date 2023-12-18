@@ -21,12 +21,13 @@ class HomeChart extends StatelessWidget {
         CircularStackEntry(
           <CircularSegmentEntry>[
             CircularSegmentEntry(
-              (item.amountSummary[0].amount).toDouble(),
+              // 30.2,
+              (item.amountSummary[1].amount).toDouble(),
               const Color.fromARGB(255, 147, 8, 96),
               rankKey: 'remaining',
             ),
             CircularSegmentEntry(
-              (100 - item.amountSummary[1].amount).toDouble(),
+              (item.amountSummary[0].amount).toDouble(),
               const Color.fromARGB(255, 207, 200, 200),
               rankKey: 'completed',
             ),

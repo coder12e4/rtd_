@@ -8,7 +8,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/util/theme.dart';
-import 'package:rtd_project/util/toast.dart';
 
 import '../../../backend/model/bloodgroup_model.dart';
 import '../../../backend/model/profile_model.dart';
@@ -328,19 +327,6 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                                 (states) => baseColor)),
                                     onPressed: () {
                                       if (_formKey.currentState!.validate()) {
-                                        if (value.vehicleTypeName == null) {
-                                          showToast('Select Vehicle Model');
-                                          return;
-                                        }
-                                        if (value.bloodGroupName == null) {
-                                          showToast('Select blood group');
-                                          return;
-                                        }
-                                        if (value.selectedKsaItem == null ||
-                                            value.selectedItem == null) {
-                                          showToast('Select States');
-                                          return;
-                                        }
                                         value
                                             .upload(_profileImage, _docProf1,
                                                 _docProf2)

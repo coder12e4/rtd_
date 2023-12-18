@@ -209,7 +209,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                     'assets/images/no_notification.json',
                                     height: 200.h),
                                 const Text(
-                                  'Notificatoin is empty',
+                                  'Notifications is empty',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ],

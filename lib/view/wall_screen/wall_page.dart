@@ -22,10 +22,9 @@ class WallPage extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
+                    kSizedBoxH,
                     wallTextWidget(context),
-                    SizedBox(
-                      height: 10.h,
-                    ),
+                    kSizedBoxH,
                     tabBar(),
                     tabBarView(context),
                   ],
@@ -59,20 +58,26 @@ class WallPage extends StatelessWidget {
     );
   }
 
-  ListView votesView(WallScreenController controller) {
-    return ListView.builder(
-      physics: const BouncingScrollPhysics(),
-      itemCount: controller.votesData.length,
-      itemBuilder: (context, index) {
-        return Column(
-          children: [
-            kSizedBoxH,
-            feedDate(controller.votesData[index].createdAt.toString()),
-            VoteData(index, controller)
-          ],
-        );
-      },
-    );
+  Widget votesView(WallScreenController controller) {
+    return controller.votesData.isNotEmpty
+        ? ListView.builder(
+            physics: const BouncingScrollPhysics(),
+            itemCount: controller.votesData.length,
+            itemBuilder: (context, index) {
+              return Column(
+                children: [
+                  kSizedBoxH,
+                  feedDate(controller.votesData[index].createdAt.toString()),
+                  VoteData(index, controller)
+                ],
+              );
+            },
+          )
+        : const Center(
+            child: Text(
+            "Votes is empty",
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ));
   }
 
   Padding VoteData(int index, WallScreenController controller) {
@@ -267,7 +272,11 @@ class WallPage extends StatelessWidget {
                             ],
                           );
                         })
-                    : Center(child: const Text("Feed is empty")),
+                    : const Center(
+                        child: Text(
+                        "Feed is empty",
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      )),
               ),
             ),
 
@@ -469,16 +478,11 @@ class WallPage extends StatelessWidget {
     );
   }
 
-  Container wallTextWidget(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(
-        top: 10.h,
-      ),
-      child: Text(
-        'Wall',
-        style: Theme.of(context).textTheme.displaySmall!.copyWith(
-            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
-      ),
+  Text wallTextWidget(BuildContext context) {
+    return Text(
+      'Wall',
+      style: Theme.of(context).textTheme.displaySmall!.copyWith(
+          color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
     );
   }
 }

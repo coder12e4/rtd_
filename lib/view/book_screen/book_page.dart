@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:rtd_project/backend/model/books/services_model.dart';
 import 'package:rtd_project/controller/book/book_screen_controller.dart';
 import 'package:rtd_project/controller/elected_member_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
@@ -9,6 +8,7 @@ import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/helper/router.dart';
 import 'package:rtd_project/view/book_screen/widgets/membrlisttile_widgetr.dart';
 
+import '../../backend/model/books/services_model.dart';
 import '../../backend/model/states_model.dart';
 
 class BookPage extends StatefulWidget {
@@ -87,15 +87,16 @@ class _BookPageState extends State<BookPage> {
     return Padding(
       padding: EdgeInsets.only(left: 30.w, right: 30.w),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
+        // crossAxisAlignment: CrossAxisAlignment.start,
+        // mainAxisSize: MainAxisSize.max,
         children: [
           kSizedBoxH20,
           Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            // mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
+                width: 145.w,
                 padding: const EdgeInsets.only(left: 5, right: 5).r,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
@@ -103,7 +104,7 @@ class _BookPageState extends State<BookPage> {
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<AllStatesModel>(
                       // padding: EdgeInsets.only(left: 95.w),
-                      // isExpanded: true,
+                      isExpanded: true,
                       hint: Text(
                         "Choose State",
                         style: TextStyle(
@@ -126,16 +127,18 @@ class _BookPageState extends State<BookPage> {
                 ),
               ),
               Container(
+                width: 175.w,
                 padding: const EdgeInsets.only(left: 5, right: 5).r,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     color: textFormBase),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<ServiceData>(
-                      // padding: EdgeInsets.only(left: 95.w),
-                      // isExpanded: true,
+                      padding: const EdgeInsets.all(0.0),
+                      isExpanded: true,
                       hint: Text(
-                        "Choose Services",
+                        "Choose Service ",
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             color: Colors.black.withOpacity(.55),
                             fontSize: 15,
@@ -256,9 +259,9 @@ class _BookPageState extends State<BookPage> {
                       fontWeight: FontWeight.bold),
                 )
               : const SizedBox(),
-          value.memberList.isNotEmpty
+          value.loading != true
               ? Container(
-                  child: value.loading != true
+                  child: value.memberList.isNotEmpty
                       ? ListView.separated(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
@@ -285,22 +288,24 @@ class _BookPageState extends State<BookPage> {
                             color: Color.fromARGB(255, 227, 224, 224),
                           ),
                         )
-                      : SizedBox(
-                          height: 400.h,
-                          child: const Center(
-                            child: SizedBox(
-                              child: CircularProgressIndicator(
-                                strokeWidth: 6,
-                                color: Colors.black,
+                      : value.initial == false
+                          ? SizedBox(
+                              height: 400.h,
+                              child: const Center(
+                                child: Text('Member is not available'),
                               ),
-                            ),
-                          ),
-                        ),
+                            )
+                          : const Offstage(),
                 )
               : SizedBox(
                   height: 400.h,
                   child: const Center(
-                    child: Text('Member is not available'),
+                    child: SizedBox(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 6,
+                        color: Colors.black,
+                      ),
+                    ),
                   ),
                 ),
         ],

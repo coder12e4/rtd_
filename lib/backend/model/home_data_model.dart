@@ -260,8 +260,8 @@ class AmountSummary {
 }
 
 class Income {
-  String rent;
-  String membership;
+  int rent;
+  int membership;
 
   Income({
     required this.rent,

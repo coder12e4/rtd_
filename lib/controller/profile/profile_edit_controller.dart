@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:rtd_project/controller/profile/profile_controller.dart';
 import 'package:rtd_project/helper/router.dart';
+import 'package:rtd_project/util/loading_widget.dart';
 import 'package:rtd_project/util/toast.dart';
 
 import '../../backend/model/bloodgroup_model.dart';
@@ -16,7 +17,6 @@ import '../../backend/model/profile_model.dart';
 import '../../backend/model/states_model.dart';
 import '../../backend/model/vehicle_type_model.dart';
 import '../../backend/parser/profile/edit_profile_parser.dart';
-import '../../util/theme.dart';
 
 class EditProfileController extends GetxController implements GetxService {
   final EditProfileParser parser;
@@ -193,9 +193,15 @@ class EditProfileController extends GetxController implements GetxService {
 
       bloodGroup =
           index != -1 ? _dropdownMenuItemsBloodgroup[index].value : null;
+      // bloodGroup = _dropdownMenuItemsBloodgroup
+      //     .firstWhere(
+      //       (element) => element.value?.id == userData?.data.bloodGroup,
+      //       // orElse: () => ,
+      //     )
+      //     .value;
       // bloodGroup != null ? _dropdownMenuItemsBloodgroup[0].value : null;
     }
-    // log(_getAllbloodGroup.toString());
+
     update();
   }
 
@@ -314,65 +320,6 @@ class EditProfileController extends GetxController implements GetxService {
     update();
   }
 
-  // Future<void> updateProfileData() async {
-  //   Get.dialog(
-  //     SimpleDialog(
-  //       children: [
-  //         Row(
-  //           children: [
-  //             const SizedBox(
-  //               width: 30,
-  //             ),
-  //             const CircularProgressIndicator(
-  //               color: ThemeProvider.appColor,
-  //             ),
-  //             const SizedBox(
-  //               width: 30,
-  //             ),
-  //             SizedBox(
-  //                 child: Text(
-  //               "Please wait".tr,
-  //               style: const TextStyle(fontFamily: 'bold'),
-  //             )),
-  //           ],
-  //         )
-  //       ],
-  //     ),
-  //     barrierDismissible: false,
-  //   );
-  //   var body = {
-  //     "name": nameController.text,
-  //     "email": mailContoller.text,
-  //     "in_mobile": indianMobNumContoller.text,
-  //     "ksa_mobile": saudiMobNumContoller.text,
-  //     "blood_group": bloodGroup!.id,
-  //     "in_address_1": indianAddressContoller1.text,
-  //     "in_address_2": indianAddressContoller2.text,
-  //     "in_state": selectedItem!.id,
-  //     "in_pin": indiaAddPinContoller.text,
-  //     "ksa_address_1": ksaAddressContoller1.text,
-  //     "ksa_address_2": ksaAddressContoller2.text,
-  //     "ksa_state": stateKsa!.id,
-  //     "vehicle_number": vehicleNumberContoller.text,
-  //     "vehicle_type_id": vehicleType!.id,
-  //     "ksa_pin": saudiAddPinContoller.text
-  //   };
-  //   debugPrint('blood id:${bloodGroup!.id}');
-  //   debugPrint('state id:${selectedItem!.id}');
-  //   debugPrint('stateksa id:${stateKsa!.id}');
-  //   Response response = await parser.updateUserData(body);
-  //   debugPrint(response.statusCode.toString());
-  //   if (response.statusCode == 200) {
-  //     debugPrint(response.body.toString());
-  //     if (response.body['status']) {
-  //       successToast(response.body['message']);
-  //       onProfileEditSuccess();
-  //     } else {
-  //       showToast(response.body['message']);
-  //     }
-  //   }
-  // }
-
   Future<File> urlToFile(String imageUrl) async {
 // generate random number.
     var rng = Random();
@@ -392,31 +339,20 @@ class EditProfileController extends GetxController implements GetxService {
   }
 
   Future<void> upload(XFile? data1, XFile? data2, XFile? data3) async {
-    Get.dialog(
-      SimpleDialog(
-        children: [
-          Row(
-            children: [
-              const SizedBox(
-                width: 30,
-              ),
-              const CircularProgressIndicator(
-                color: ThemeProvider.appColor,
-              ),
-              const SizedBox(
-                width: 30,
-              ),
-              SizedBox(
-                  child: Text(
-                "Please wait".tr,
-                style: const TextStyle(fontFamily: 'bold'),
-              )),
-            ],
-          )
-        ],
-      ),
-      barrierDismissible: false,
-    );
+    if (vehicleType == null) {
+      showToast('Select Vehicle Model');
+      return;
+    }
+    if (bloodGroup == null) {
+      showToast('Select blood group');
+      return;
+    }
+    if (selectedKsaItem == null || selectedItem == null) {
+      showToast('Select States');
+      return;
+    }
+    loadingWidget();
+
     String? accessToken =
         parser.sharedPreferencesManager.getString('access_token');
     final file1 = data1 == null ? profileImageFile!.path : data1.path;
@@ -481,35 +417,4 @@ class EditProfileController extends GetxController implements GetxService {
     Get.delete<ProfileController>(force: true);
     Get.offNamed(AppRouter.getBottomNavRoute(), arguments: [4]);
   }
-
-  // Future<void> uploadFile(String url, String path, String fileName) async {
-  //   var uri = Uri.parse(Constants.baseUrl + url);
-  //
-  //   try {
-  //     final accessToken =
-  //         parser.sharedPreferencesManager.getString('access_token');
-  //     var request = http.MultipartRequest('POST', uri);
-  //     debugPrint('url $uri');
-  //     var file1 =
-  //         await http.MultipartFile.fromPath('document_proof_india', path);
-  //     request.files.add(file1);
-  //     request.headers.addAll({
-  //       "Accept": "application/json",
-  //       "Authorization": "Bearer $accessToken"
-  //     });
-  //     var response = await request.send();
-  //     debugPrint(response.statusCode.toString());
-  //     var responseData = await response.stream.bytesToString();
-  //     var parsedData = json.decode(responseData);
-  //     debugPrint(' message Data: ${parsedData['message']}');
-  //     if (response.statusCode == 200) {
-  //       // Print the response data.
-  //       debugPrint('File uploaded successfully. Response Data: $responseData');
-  //     } else {
-  //       debugPrint('Error uploading file: ${responseData}');
-  //     }
-  //   } catch (e) {
-  //     print('File upload error: $e');
-  //   }
-  // }
 }
