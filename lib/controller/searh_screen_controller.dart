@@ -31,10 +31,10 @@ class SearchScreenController extends GetxController {
   List<int> _addedSurties = <int>[];
   List<int> get addedSurties => _addedSurties;
   List<SuretiesData>? searchResult = [];
+
   Future<void> getSurties() async {
     Response response = await parser.getSurties();
     searchResult!.clear();
-
     if (response.statusCode == 200) {
       log(response.body.toString());
       try {
@@ -48,8 +48,8 @@ class SearchScreenController extends GetxController {
         searchResult = List<SuretiesData>.from(surties ?? []);
         loading = false;
         log(surties.toString());
-      } catch (e) {
-        log(e.toString());
+      } catch (e, stackTrace) {
+        log("get surety catch $e", error: e, stackTrace: stackTrace);
       }
     }
     // loading = false;

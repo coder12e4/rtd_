@@ -1,12 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart ' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:rtd_project/controller/profile/profile_controller.dart';
 import 'package:rtd_project/helper/router.dart';
 import 'package:rtd_project/util/loading_widget.dart';
@@ -296,19 +293,19 @@ class EditProfileController extends GetxController implements GetxService {
         ksaAddressContoller2.text = userData!.data.ksaAddress2;
         saudiAddPinContoller.text = userData!.data.ksaPin;
         nameController.text = userData!.data.name;
-        final imagePath = await urlToFile(userData!.data.profileImage);
-        final docIndiaPath = await urlToFile(userData!.data.documentProofIndia);
-        final ksaPath = await urlToFile(userData!.data.documentProofKsa);
-        profileImageFile = XFile(imagePath.path);
-        docProofIndia = XFile(docIndiaPath.path);
-        docProofKsa = XFile(ksaPath.path);
+        // final imagePath = await urlToFile(userData!.data.profileImage);
+        // final docIndiaPath = await urlToFile(userData!.data.documentProofIndia);
+        // final ksaPath = await urlToFile(userData!.data.documentProofKsa);
+        // profileImageFile = XFile(imagePath.path);
+        // docProofIndia = XFile(docIndiaPath.path);
+        // docProofKsa = XFile(ksaPath.path);
 
-        debugPrint(
-            'profile image path ********************${profileImageFile!.path}');
-        debugPrint(
-            'document india path ********************${docProofIndia!.path}');
-        debugPrint(
-            'document ksa path ********************${docProofKsa!.path}');
+        // debugPrint(
+        //     'profile image path ********************${profileImageFile!.path}');
+        // debugPrint(
+        //     'document india path ********************${docProofIndia!.path}');
+        // debugPrint(
+        //     'document ksa path ********************${docProofKsa!.path}');
         // log("Profile Edit Screen :${userData!.data.name.toString()}");
         loading = false;
       } catch (e) {
@@ -320,23 +317,23 @@ class EditProfileController extends GetxController implements GetxService {
     update();
   }
 
-  Future<File> urlToFile(String imageUrl) async {
-// generate random number.
-    var rng = Random();
-// get temporary directory of device.
-    Directory tempDir = await getTemporaryDirectory();
-// get temporary path from temporary directory.
-    String tempPath = tempDir.path;
-// create a new file in temporary path with random file name.
-    File file = File('$tempPath' + (rng.nextInt(100)).toString() + '.png');
-// call http.get method and pass imageUrl into it to get response.
-    http.Response response = await http.get(Uri.parse(imageUrl));
-// write bodyBytes received in response to file.
-    await file.writeAsBytes(response.bodyBytes);
-// now return the file which is created with random name in
-// temporary directory and image bytes from response is written to // that file.
-    return file;
-  }
+//   Future<File> urlToFile(String imageUrl) async {
+// // generate random number.
+//     var rng = Random();
+// // get temporary directory of device.
+//     Directory tempDir = await getTemporaryDirectory();
+// // get temporary path from temporary directory.
+//     String tempPath = tempDir.path;
+// // create a new file in temporary path with random file name.
+//     File file = File('$tempPath' + (rng.nextInt(100)).toString() + '.png');
+// // call http.get method and pass imageUrl into it to get response.
+//     http.Response response = await http.get(Uri.parse(imageUrl));
+// // write bodyBytes received in response to file.
+//     await file.writeAsBytes(response.bodyBytes);
+// // now return the file which is created with random name in
+// // temporary directory and image bytes from response is written to // that file.
+//     return file;
+//   }
 
   Future<void> upload(XFile? data1, XFile? data2, XFile? data3) async {
     if (vehicleType == null) {
@@ -355,18 +352,24 @@ class EditProfileController extends GetxController implements GetxService {
 
     String? accessToken =
         parser.sharedPreferencesManager.getString('access_token');
-    final file1 = data1 == null ? profileImageFile!.path : data1.path;
-    final file2 = data2 == null ? docProofIndia!.path : data2.path;
-    final file3 = data3 == null ? docProofKsa!.path : data3.path;
+
     var uri = Uri.parse("http://rtd.canisostudio.com/api/user/update");
     var request = http.MultipartRequest("POST", uri);
-    var image1 = await http.MultipartFile.fromPath('profile_image', file1);
-    var image2 = await http.MultipartFile.fromPath('in_document', file2);
-    var image3 = await http.MultipartFile.fromPath('ksa_document', file3);
+    if (data1 != null) {
+      var image1 =
+          await http.MultipartFile.fromPath('profile_image', data1.path);
+      request.files.add(image1);
+    }
 
-    request.files.add(image1);
-    request.files.add(image2);
-    request.files.add(image3);
+    if (data2 != null) {
+      var image2 = await http.MultipartFile.fromPath('in_document', data2.path);
+      request.files.add(image2);
+    }
+    if (data3 != null) {
+      var image3 =
+          await http.MultipartFile.fromPath('ksa_document', data3.path);
+      request.files.add(image3);
+    }
 
     request.fields['name'] = nameController.text;
     request.fields['email'] = mailContoller.text;

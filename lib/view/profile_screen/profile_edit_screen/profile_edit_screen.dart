@@ -471,6 +471,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   }
 
   Stack documentContainer(documentProof, XFile? image, bool select) {
+    // String extension = image?.path.split('.').last.toLowerCase() ?? '';
+    // bool isPdf = extension == 'pdf';
     return Stack(
       alignment: AlignmentDirectional.center,
       children: [
@@ -498,6 +500,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                     ? _updateSelectedImage1
                     : _updateSelectedImage2,
                 press: () => Get.back(),
+                // onFileSelected: (File? value) {},
               ),
             ),
             icon: const Icon(Icons.edit_outlined),

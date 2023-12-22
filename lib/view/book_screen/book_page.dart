@@ -10,6 +10,7 @@ import 'package:rtd_project/view/book_screen/widgets/membrlisttile_widgetr.dart'
 
 import '../../backend/model/books/services_model.dart';
 import '../../backend/model/states_model.dart';
+import '../../controller/book/board_member_details_controller.dart';
 
 class BookPage extends StatefulWidget {
   const BookPage({super.key});
@@ -271,6 +272,8 @@ class _BookPageState extends State<BookPage> {
                               padding: const EdgeInsets.all(8.0),
                               child: GestureDetector(
                                 onTap: () {
+                                  Get.delete<BoardMemberDetailsController>(
+                                      force: true);
                                   Get.toNamed(
                                       AppRouter
                                           .getBoardMemberDetailsRoutesRoute(),

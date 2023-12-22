@@ -87,8 +87,9 @@ class SearchScreen extends StatelessWidget {
                                                 value.searchResult![index].name,
                                             image: value.searchResult![index]
                                                 .profileImage,
-                                            memberid: value
-                                                .searchResult![index].memberId),
+                                            memberid: value.searchResult![index]
+                                                    .memberId ??
+                                                "Not Available"),
                                       ),
                                       separatorBuilder: (context, index) =>
                                           const Divider(

@@ -61,17 +61,21 @@ class NotificationViewScreen extends StatelessWidget {
                         endIndent: 35.w,
                       ),
                       kSizedBoxH,
-                      const Text(
-                        'Share Reasons for rejection',
-                        style: TextStyle(
-                            color: Color.fromARGB(255, 117, 113, 113)),
-                      ),
+                      value.groupValue == 2
+                          ? const Text(
+                              'Share Reasons for rejection',
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 117, 113, 113)),
+                            )
+                          : const Offstage(),
                       kSizedBoxH,
-                      TextFormFieldWidget(
-                        validator: Rtd_Validators.noneEmptyValidator,
-                        controller: value.reasonController,
-                        hitText: "Type your reason here",
-                      ),
+                      value.groupValue == 2
+                          ? TextFormFieldWidget(
+                              validator: Rtd_Validators.noneEmptyValidator,
+                              controller: value.reasonController,
+                              hitText: "Type your reason here",
+                            )
+                          : const Offstage(),
                       kSizedBoxH,
                       ButtonWidget(
                           buttonBackgroundColor:

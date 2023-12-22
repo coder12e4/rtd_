@@ -261,7 +261,7 @@ class AmountSummary {
 
 class Income {
   int rent;
-  int membership;
+  String membership;
 
   Income({
     required this.rent,

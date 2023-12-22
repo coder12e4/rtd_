@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 const textFieldHeight = SizedBox(
   height: 20,
 );
 
-const kSizedBoxH = SizedBox(
-  height: 10,
+final kSizedBoxH = SizedBox(
+  height: 10.h,
 );
 
-const kSizedBoxH20 = SizedBox(
-  height: 20,
+final kSizedBoxH20 = SizedBox(
+  height: 20.h,
 );

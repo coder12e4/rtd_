@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: baseColor,
           body: SingleChildScrollView(
               physics: value.homeData?.activeLoan != null
-                  ? const BouncingScrollPhysics()
+                  ? const AlwaysScrollableScrollPhysics()
                   : const NeverScrollableScrollPhysics(),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
                             Padding(
                               padding: const EdgeInsets.all(18.0),
                               child: Container(
-                                height: 470.h,
+                                height: 480.h,
                                 // width: 100.w,
                                 decoration: BoxDecoration(
                                   color: textFormBase,
@@ -119,7 +119,7 @@ class _HomePageState extends State<HomePage> {
 
   Container activeLoanData(HomeData data) {
     return Container(
-      height: 120.h,
+      height: 140.h,
       decoration: BoxDecoration(
           color: textFormBase,
           borderRadius: BorderRadius.all(Radius.circular(30.r))),
@@ -131,10 +131,11 @@ class _HomePageState extends State<HomePage> {
                 price: '${data.activeLoan?.loanAmount} INR',
                 title: 'Loan Amount'),
             const Divider(),
+            activeLoanRow(title: 'Loan Type', date: data.activeLoan?.loanType),
             activeLoanRow(
                 title: 'Start Date', date: data.activeLoan?.startDate),
-            // activeLoanRow(title: 'End Date', date: '${data.activeLoan.}'),
-            activeLoanRow(title: 'Loan Type', date: data.activeLoan?.loanType)
+            activeLoanRow(
+                title: 'Due Date', date: '${data.activeLoan?.dueDate}'),
           ],
         ),
       ),

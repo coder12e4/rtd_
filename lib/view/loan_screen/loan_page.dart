@@ -27,12 +27,12 @@ class LoanPage extends StatefulWidget {
 }
 
 class _LoanPageState extends State<LoanPage> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    Get.find<LoanScreenController>();
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   Get.find<LoanScreenController>();
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -126,13 +126,9 @@ class _LoanPageState extends State<LoanPage> {
               shrinkWrap: true,
               itemCount: value.loanData.length,
               itemBuilder: (context, index) => Column(children: [
-                SizedBox(
-                  height: 10.h,
-                ),
+                kSizedBoxH,
                 requestDate(value.loanData[index].createdAt.toString()),
-                SizedBox(
-                  height: 10.h,
-                ),
+                kSizedBoxH,
                 requestData(context, value, index)
               ]),
             )
@@ -203,7 +199,8 @@ class _LoanPageState extends State<LoanPage> {
               SizedBox(
                 height: 8.h,
               ),
-              value.loanData[index].status != 2
+              value.loanData[index].status != 1 &&
+                      value.loanData[index].status != 2
                   ? ButtonWidget(
                       buttonBackgroundColor: value.loanData[index].status != 3
                           ? whiteColor
@@ -228,40 +225,41 @@ class _LoanPageState extends State<LoanPage> {
                               )
                             : null;
                       })
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Reasons for rejection:',
-                          style: TextStyle(
-                              color: Colors.black54,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        SizedBox(
-                          height: 8.h,
-                        ),
-                        const Text(
-                          'Here reasons for the rejection can be shown',
-                          style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.w600),
-                        ),
-                        const Text(
-                          ' \ . First reason for rejection',
-                          style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.w600),
-                        ),
-                        const Text(
-                          ' \. Second reason for rejection',
-                          style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.w600),
-                        ),
-                        const Text(
-                          ' \. Third reason for rejection',
-                          style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.w600),
-                        )
-                      ],
-                    ),
+                  : const Offstage(),
+              // : Column(
+              //     crossAxisAlignment: CrossAxisAlignment.start,
+              //     children: [
+              //       const Text(
+              //         'Reasons for rejection:',
+              //         style: TextStyle(
+              //             color: Colors.black54,
+              //             fontWeight: FontWeight.w600),
+              //       ),
+              //       SizedBox(
+              //         height: 8.h,
+              //       ),
+              //       const Text(
+              //         'Here reasons for the rejection can be shown',
+              //         style: TextStyle(
+              //             color: Colors.black, fontWeight: FontWeight.w600),
+              //       ),
+              //       const Text(
+              //         ' \ . First reason for rejection',
+              //         style: TextStyle(
+              //             color: Colors.black, fontWeight: FontWeight.w600),
+              //       ),
+              //       const Text(
+              //         ' \. Second reason for rejection',
+              //         style: TextStyle(
+              //             color: Colors.black, fontWeight: FontWeight.w600),
+              //       ),
+              //       const Text(
+              //         ' \. Third reason for rejection',
+              //         style: TextStyle(
+              //             color: Colors.black, fontWeight: FontWeight.w600),
+              //       )
+              //     ],
+              //   ),
             ],
           ),
         ),

@@ -44,7 +44,7 @@ class _ImagepikerState extends State<Imagepiker> {
     // return GetBuilder<RegisterController>(
     //   builder: (value) {
     return Container(
-      height: 320.h,
+      height: 280.h,
       width: 390.w,
       decoration: const BoxDecoration(
         color: whiteColor,

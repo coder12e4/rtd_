@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:rtd_project/controller/loan/loan_details_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
+import 'package:rtd_project/core/constraints/conatrints.dart';
 
 import '../../../backend/model/loan/active_loan_model.dart';
 import '../../../helper/router.dart';
@@ -239,9 +240,7 @@ class ProfileLoanScreen extends StatelessWidget {
     return Column(
         // physics: const NeverScrollableScrollPhysics(),
         children: [
-          SizedBox(
-            height: 10.h,
-          ),
+          kSizedBoxH,
           // feedDate('19/10/2023'),
           data?.length != 0
               ? ListView.builder(

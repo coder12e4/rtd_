@@ -43,7 +43,7 @@ class Surties {
 
 class SuretiesData {
   int id;
-  String memberId;
+  String? memberId;
   String name;
   String email;
   String profileImage;

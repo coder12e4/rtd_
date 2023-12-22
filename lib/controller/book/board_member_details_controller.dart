@@ -23,6 +23,7 @@ class BoardMemberDetailsController extends GetxController
 
   Future<void> getBoardMemberDetails() async {
     Response response = await parser.getBoardMemberDetails(memberId);
+
     log("bord member details response ${response.body}");
     try {
       if (response.statusCode == 200) {
@@ -38,5 +39,6 @@ class BoardMemberDetailsController extends GetxController
     } catch (e, stackTrace) {
       log("Board member details catch $e", error: e, stackTrace: stackTrace);
     }
+    update();
   }
 }

@@ -7,6 +7,7 @@ import 'package:rtd_project/util/toast.dart';
 import '../../backend/model/notification_model/notification_model.dart';
 import '../../backend/model/poll_details_model.dart';
 import '../../backend/parser/notification/notification_parser.dart';
+import 'notification_controller.dart';
 
 class SuretyViewController extends GetxController implements GetxService {
   final NotificationParser parser;
@@ -37,7 +38,7 @@ class SuretyViewController extends GetxController implements GetxService {
   void onChanged(int? newValue) {
     groupValue = newValue;
     isSelected = !isSelected!;
-    print(groupValue);
+    log(groupValue.toString());
     update();
   }
 
@@ -51,6 +52,7 @@ class SuretyViewController extends GetxController implements GetxService {
     } else if (groupValue == 2) {
       rejectSurety();
     }
+    Get.find<NotificationController>().getNotification();
   }
 
   Future<void> getPollDetails() async {

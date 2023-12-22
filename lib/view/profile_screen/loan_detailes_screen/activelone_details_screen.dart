@@ -158,10 +158,10 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
                                         ),
                                         kSizedBoxH,
                                         SizedBox(
-                                          height: value.loanData!.data!
-                                                  .loanDocument.length *
-                                              140.h,
+                                          height: 140.h,
                                           child: ListView.separated(
+                                            shrinkWrap: true,
+                                            scrollDirection: Axis.horizontal,
                                             itemBuilder: (context, index) =>
                                                 documentContainer(value, index),
                                             separatorBuilder:
@@ -200,17 +200,17 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
                             topStart: Radius.circular(40),
                           ),
                         ),
-                        child: const Center(
+                        child: Center(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.warning_amber,
                                 size: 40,
                               ),
                               kSizedBoxH,
-                              Text(
+                              const Text(
                                 "Unknown error ",
                                 style: TextStyle(fontSize: 20),
                               ),
@@ -230,7 +230,7 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(right: 15.w),
       height: 130.h,
-      width: 320.w,
+      width: 105.w,
       decoration: BoxDecoration(
           image: DecorationImage(
               image: NetworkImage(
