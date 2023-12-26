@@ -260,7 +260,7 @@ class AmountSummary {
 }
 
 class Income {
-  int rent;
+  String rent;
   String membership;
 
   Income({

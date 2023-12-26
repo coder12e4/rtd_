@@ -431,15 +431,15 @@ class RegisterController extends GetxController implements GetxService {
       return;
     }
 
-    if (registerToken != null) {
-      isSubmitted = !isSubmitted;
-      //   double offset = 1500.0;
-      //   _scrollController.animateTo(
-      //     offset,
-      //     duration: const Duration(milliseconds: 500),
-      //     curve: Curves.easeInOut,
-      //   );
-    }
+    // if (registerToken != null) {
+    //   // isSubmitted = !isSubmitted;
+    //   //   double offset = 1500.0;
+    //   //   _scrollController.animateTo(
+    //   //     offset,
+    //   //     duration: const Duration(milliseconds: 500),
+    //   //     curve: Curves.easeInOut,
+    //   //   );
+    // }
     update();
   }
 
@@ -631,7 +631,7 @@ class RegisterController extends GetxController implements GetxService {
       final pref = await SharedPreferences.getInstance();
       await pref.remove('indianDocSubmitted');
       await pref.remove('ksaDocSubmitted');
-      await pref.remove('register_token');
+
       Get.bottomSheet(const RegisterComplited(text: 'Continue'),
           isDismissible: false);
     }

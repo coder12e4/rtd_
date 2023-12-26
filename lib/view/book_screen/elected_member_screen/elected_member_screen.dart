@@ -4,8 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rtd_project/controller/elected_member_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
-import 'package:rtd_project/view/book_screen/book_edit_screen/book_edit_screen.dart';
 import 'package:rtd_project/view/book_screen/widgets/electedmembers_list_tile.dart';
+
+import '../../../controller/book/board_member_details_controller.dart';
+import '../../../helper/router.dart';
 
 class ElectedMemberScreen extends StatelessWidget {
   const ElectedMemberScreen({super.key});
@@ -58,9 +60,15 @@ class ElectedMemberScreen extends StatelessWidget {
                                       onTap: () {
                                         if (value.isStart != null ||
                                             value.isStart == false) {
-                                          Get.to(BookProfilePage(
-                                            data: electedMembers[index],
-                                          ));
+                                          Get.delete<
+                                                  BoardMemberDetailsController>(
+                                              force: true);
+                                          Get.toNamed(
+                                              AppRouter
+                                                  .getBoardMemberDetailsRoutesRoute(),
+                                              arguments: [
+                                                electedMembers[index].id
+                                              ]);
                                         }
                                       },
                                       child: ElectedMemberListTileWidget(

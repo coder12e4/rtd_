@@ -57,6 +57,7 @@ class SearchScreenController extends GetxController {
   }
 
   addSurties(SuretiesData surety) {
+    FocusManager.instance.primaryFocus?.unfocus();
     if (tappedScreen == true) {
       Get.find<LoanEditController>().addSurties(surety, tappedIndex!);
     } else {

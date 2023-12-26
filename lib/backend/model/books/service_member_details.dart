@@ -11,19 +11,35 @@ String servicesMemberDetailsToJson(ServicesMemberDetails data) =>
     json.encode(data.toJson());
 
 class ServicesMemberDetails {
+  bool status;
   MemberDetails data;
+  String message;
+  String accessToken;
+  String tokenType;
 
   ServicesMemberDetails({
+    required this.status,
     required this.data,
+    required this.message,
+    required this.accessToken,
+    required this.tokenType,
   });
 
   factory ServicesMemberDetails.fromJson(Map<String, dynamic> json) =>
       ServicesMemberDetails(
+        status: json["status"],
         data: MemberDetails.fromJson(json["data"]),
+        message: json["message"],
+        accessToken: json["access_token"],
+        tokenType: json["token_type"],
       );
 
   Map<String, dynamic> toJson() => {
+        "status": status,
         "data": data.toJson(),
+        "message": message,
+        "access_token": accessToken,
+        "token_type": tokenType,
       };
 }
 
@@ -34,13 +50,12 @@ class MemberDetails {
   String profileImage;
   int stateId;
   int serviceId;
-  String indiaMobileNumber;
+  String location;
   String ksaMobileNumber;
-  int bloodGroup;
+  String highlights;
   DateTime createdAt;
   DateTime updatedAt;
   String service;
-  String bloodGroupName;
 
   MemberDetails({
     required this.id,
@@ -49,13 +64,12 @@ class MemberDetails {
     required this.profileImage,
     required this.stateId,
     required this.serviceId,
-    required this.indiaMobileNumber,
+    required this.location,
     required this.ksaMobileNumber,
-    required this.bloodGroup,
+    required this.highlights,
     required this.createdAt,
     required this.updatedAt,
     required this.service,
-    required this.bloodGroupName,
   });
 
   factory MemberDetails.fromJson(Map<String, dynamic> json) => MemberDetails(
@@ -65,13 +79,12 @@ class MemberDetails {
         profileImage: json["profile_image"],
         stateId: json["state_id"],
         serviceId: json["service_id"],
-        indiaMobileNumber: json["india_mobile_number"],
+        location: json["location"],
         ksaMobileNumber: json["ksa_mobile_number"],
-        bloodGroup: json["blood_group"],
+        highlights: json["highlights"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
         service: json["service"],
-        bloodGroupName: json["blood_group_name"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -81,12 +94,11 @@ class MemberDetails {
         "profile_image": profileImage,
         "state_id": stateId,
         "service_id": serviceId,
-        "india_mobile_number": indiaMobileNumber,
+        "location": location,
         "ksa_mobile_number": ksaMobileNumber,
-        "blood_group": bloodGroup,
+        "highlights": highlights,
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
         "service": service,
-        "blood_group_name": bloodGroupName,
       };
 }

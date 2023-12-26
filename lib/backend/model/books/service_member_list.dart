@@ -51,13 +51,13 @@ class MemberList {
   String profileImage;
   int stateId;
   int serviceId;
-  String indiaMobileNumber;
+  String? indiaMobileNumber;
   String ksaMobileNumber;
-  int bloodGroup;
+  int? bloodGroup;
   DateTime createdAt;
   DateTime updatedAt;
   String service;
-  String bloodGroupName;
+  String? bloodGroupName;
 
   MemberList({
     required this.id,

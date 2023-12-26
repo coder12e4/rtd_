@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
+import 'package:rtd_project/util/toast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../backend/model/books/service_member_details.dart';
 import '../../backend/parser/book/service_member_parser.dart';
@@ -38,6 +40,15 @@ class ServiceMemberDetailsController extends GetxController {
         error: e,
         stackTrace: stackTrace,
       );
+    }
+  }
+
+  Future<void> launchURL() async {
+    final Uri url = Uri.parse(memberDetails!.data.location.toString());
+
+    if (!await launchUrl(url)) {
+      showToast('Failed to find location');
+      throw Exception('Could not launch $url');
     }
   }
 }

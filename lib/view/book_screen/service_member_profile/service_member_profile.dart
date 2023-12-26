@@ -14,12 +14,11 @@ class ServiceMemberProfile extends StatelessWidget {
     return SafeArea(
         child: Scaffold(
       backgroundColor: baseColor,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            appbar(context),
-            Container(
-              height: 620.h,
+      body: Column(
+        children: [
+          appbar(context),
+          Expanded(
+            child: Container(
               decoration: const BoxDecoration(
                   color: whiteColor,
                   borderRadius: BorderRadiusDirectional.only(
@@ -30,7 +29,7 @@ class ServiceMemberProfile extends StatelessWidget {
                   builder: (controller) {
                 return controller.loading != true
                     ? ListView(
-                        physics: const NeverScrollableScrollPhysics(),
+                        physics: const BouncingScrollPhysics(),
                         children: [
                           imageContainer(controller),
                           kSizedBoxH,
@@ -43,8 +42,8 @@ class ServiceMemberProfile extends StatelessWidget {
                           kSizedBoxH,
                           dividerWidget(),
                           kSizedBoxH,
-                          detailsText('Indian Number',
-                              controller.memberDetails!.data.indiaMobileNumber),
+                          detailsText('Highlights',
+                              controller.memberDetails!.data.highlights),
                           kSizedBoxH,
                           dividerWidget(),
                           kSizedBoxH,
@@ -61,9 +60,9 @@ class ServiceMemberProfile extends StatelessWidget {
                           // detailsText('Mail Address', 'example@gmail.com'),
                           // kSizedBoxH,
                           // dividerWidget(),
-                          kSizedBoxH,
-                          detailsText('Blood Group',
-                              controller.memberDetails!.data.bloodGroupName),
+                          // kSizedBoxH,
+                          // detailsText('Blood Group',
+                          //     controller.memberDetails!.data.bloodGroupName),
                           kSizedBoxH,
                         ],
                       )
@@ -74,9 +73,9 @@ class ServiceMemberProfile extends StatelessWidget {
                         ),
                       );
               }),
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     ));
   }
@@ -121,12 +120,8 @@ class ServiceMemberProfile extends StatelessWidget {
                     (states) => const Size(60, 50)),
                 backgroundColor:
                     MaterialStateColor.resolveWith((states) => Colors.green)),
-            onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                builder: (context) => callDetailsBottomSheet(controller),
-              );
-            },
+            onPressed: () =>
+                launch("tel:${controller.memberDetails!.data.ksaMobileNumber}"),
             child: const Padding(
               padding:
                   EdgeInsets.only(left: 18.0, right: 18, top: 8, bottom: 8),
@@ -149,7 +144,7 @@ class ServiceMemberProfile extends StatelessWidget {
                     (states) => const Size(60, 50)),
                 backgroundColor:
                     MaterialStateColor.resolveWith((states) => baseColor)),
-            onPressed: () {},
+            onPressed: controller.launchURL,
             child: const Padding(
               padding:
                   EdgeInsets.only(left: 18.0, right: 18, top: 5, bottom: 5),
@@ -193,21 +188,21 @@ class ServiceMemberProfile extends StatelessWidget {
                     const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
               )),
           kSizedBoxH20,
-          Padding(
-            padding: EdgeInsets.only(right: 20.w),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                detailsText('Indian Number',
-                    controller.memberDetails!.data.indiaMobileNumber),
-                IconButton(
-                  onPressed: () => launch(
-                      "tel:${controller.memberDetails!.data.indiaMobileNumber}"),
-                  icon: const Icon(Icons.call),
-                ),
-              ],
-            ),
-          ),
+          // Padding(
+          //   padding: EdgeInsets.only(right: 20.w),
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //     children: [
+          //       detailsText('Indian Number',
+          //           controller.memberDetails!.data.indiaMobileNumber),
+          //       IconButton(
+          //         onPressed: () => launch(
+          //             "tel:${controller.memberDetails!.data.indiaMobileNumber}"),
+          //         icon: const Icon(Icons.call),
+          //       ),
+          //     ],
+          //   ),
+          // ),
           kSizedBoxH,
           dividerWidget(),
           kSizedBoxH,
