@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rtd_project/controller/book/service_member_details_controller.dart';
@@ -40,10 +41,11 @@ class ServiceMemberProfile extends StatelessWidget {
                           kSizedBoxH,
                           textButton(controller, context),
                           kSizedBoxH,
-                          dividerWidget(),
-                          kSizedBoxH,
-                          detailsText('Highlights',
-                              controller.memberDetails!.data.highlights),
+                          // dividerWidget(),
+                          // kSizedBoxH,
+                          // detailsText('Highlights',
+                          //     controller.memberDetails!.data.highlights),
+
                           kSizedBoxH,
                           dividerWidget(),
                           kSizedBoxH,
@@ -56,6 +58,25 @@ class ServiceMemberProfile extends StatelessWidget {
                               controller.memberDetails!.data.email),
                           kSizedBoxH,
                           dividerWidget(),
+                          Padding(
+                            padding: EdgeInsets.only(left: 38.0.w),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "Highlights",
+                                  style: TextStyle(
+                                      color: Color.fromARGB(255, 97, 95, 95),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Html(
+                                  data:
+                                      controller.memberDetails!.data.highlights,
+                                ),
+                              ],
+                            ),
+                          ),
                           // kSizedBoxH,
                           // detailsText('Mail Address', 'example@gmail.com'),
                           // kSizedBoxH,
@@ -165,66 +186,66 @@ class ServiceMemberProfile extends StatelessWidget {
     );
   }
 
-  Container callDetailsBottomSheet(ServiceMemberDetailsController controller) {
-    return Container(
-      height: 210.h,
-      width: 390.w,
-      decoration: const BoxDecoration(
-        color: whiteColor,
-        borderRadius: BorderRadiusDirectional.only(
-          topEnd: Radius.circular(50),
-          topStart: Radius.circular(50),
-        ),
-      ),
-      child: Column(
-        children: [
-          kSizedBoxH20,
-          SizedBox(
-              width: 290.w,
-              child: Text(
-                'You can reach ${controller.memberDetails!.data.name} from the below numbers.',
-                textAlign: TextAlign.center,
-                style:
-                    const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
-              )),
-          kSizedBoxH20,
-          // Padding(
-          //   padding: EdgeInsets.only(right: 20.w),
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     children: [
-          //       detailsText('Indian Number',
-          //           controller.memberDetails!.data.indiaMobileNumber),
-          //       IconButton(
-          //         onPressed: () => launch(
-          //             "tel:${controller.memberDetails!.data.indiaMobileNumber}"),
-          //         icon: const Icon(Icons.call),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-          kSizedBoxH,
-          dividerWidget(),
-          kSizedBoxH,
-          Padding(
-            padding: EdgeInsets.only(right: 20.w),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                detailsText('Ksa Number',
-                    controller.memberDetails!.data.ksaMobileNumber),
-                IconButton(
-                  onPressed: () => launch(
-                      "tel:${controller.memberDetails!.data.ksaMobileNumber}"),
-                  icon: const Icon(Icons.call),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Container callDetailsBottomSheet(ServiceMemberDetailsController controller) {
+  //   return Container(
+  //     height: 210.h,
+  //     width: 390.w,
+  //     decoration: const BoxDecoration(
+  //       color: whiteColor,
+  //       borderRadius: BorderRadiusDirectional.only(
+  //         topEnd: Radius.circular(50),
+  //         topStart: Radius.circular(50),
+  //       ),
+  //     ),
+  //     child: Column(
+  //       children: [
+  //         kSizedBoxH20,
+  //         SizedBox(
+  //             width: 290.w,
+  //             child: Text(
+  //               'You can reach ${controller.memberDetails!.data.name} from the below numbers.',
+  //               textAlign: TextAlign.center,
+  //               style:
+  //                   const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+  //             )),
+  //         kSizedBoxH20,
+  //         // Padding(
+  //         //   padding: EdgeInsets.only(right: 20.w),
+  //         //   child: Row(
+  //         //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //         //     children: [
+  //         //       detailsText('Indian Number',
+  //         //           controller.memberDetails!.data.indiaMobileNumber),
+  //         //       IconButton(
+  //         //         onPressed: () => launch(
+  //         //             "tel:${controller.memberDetails!.data.indiaMobileNumber}"),
+  //         //         icon: const Icon(Icons.call),
+  //         //       ),
+  //         //     ],
+  //         //   ),
+  //         // ),
+  //         kSizedBoxH,
+  //         dividerWidget(),
+  //         kSizedBoxH,
+  //         Padding(
+  //           padding: EdgeInsets.only(right: 20.w),
+  //           child: Row(
+  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //             children: [
+  //               detailsText('Ksa Number',
+  //                   controller.memberDetails!.data.ksaMobileNumber),
+  //               IconButton(
+  //                 onPressed: () => launch(
+  //                     "tel:${controller.memberDetails!.data.ksaMobileNumber}"),
+  //                 icon: const Icon(Icons.call),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Divider dividerWidget() {
     return Divider(

@@ -123,32 +123,32 @@ class BoardMemberDetailsScreen extends StatelessWidget {
                 ],
               ),
             )),
-        const SizedBox(
-          width: 20,
-        ),
-        TextButton(
-            style: ButtonStyle(
-                minimumSize: MaterialStateProperty.resolveWith(
-                    (states) => const Size(60, 50)),
-                backgroundColor:
-                    MaterialStateColor.resolveWith((states) => baseColor)),
-            onPressed: () {},
-            child: const Padding(
-              padding:
-                  EdgeInsets.only(left: 18.0, right: 18, top: 5, bottom: 5),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.location_on_outlined,
-                    color: whiteColor,
-                  ),
-                  Text(
-                    'Location',
-                    style: TextStyle(color: whiteColor, fontSize: 16),
-                  ),
-                ],
-              ),
-            )),
+        // const SizedBox(
+        //   width: 20,
+        // ),
+        // TextButton(
+        //     style: ButtonStyle(
+        //         minimumSize: MaterialStateProperty.resolveWith(
+        //             (states) => const Size(60, 50)),
+        //         backgroundColor:
+        //             MaterialStateColor.resolveWith((states) => baseColor)),
+        //     onPressed: () {},
+        //     child: const Padding(
+        //       padding:
+        //           EdgeInsets.only(left: 18.0, right: 18, top: 5, bottom: 5),
+        //       child: Row(
+        //         children: [
+        //           Icon(
+        //             Icons.location_on_outlined,
+        //             color: whiteColor,
+        //           ),
+        //           Text(
+        //             'Location',
+        //             style: TextStyle(color: whiteColor, fontSize: 16),
+        //           ),
+        //         ],
+        //       ),
+        //     )),
       ],
     );
   }
