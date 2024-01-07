@@ -36,24 +36,20 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
                           ),
                         ),
                         child: value.loading != true
-                            ? Column(
-                                // crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 18.0.h, right: 18, top: 28),
-                                    child: filenumAndActiveloan(
+                            ? Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                                child: Column(
+                                  // crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    kSizedBoxH20,
+                                    filenumAndActiveloan(
                                         value.loanData?.data?.fileNumber,
                                         value.loanData?.data?.statusText
                                                 .toString() ??
                                             ''),
-                                  ),
-                                  dashText(),
-                                  kSizedBoxH,
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 10.0.w),
-                                    child: Row(
+                                    dashText(),
+                                    kSizedBoxH,
+                                    Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
@@ -89,65 +85,44 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
                                         ),
                                       ],
                                     ),
-                                  ),
-                                  kSizedBoxH,
-                                  dashText(),
-                                  imageContainer(value),
-                                  kSizedBoxH,
-                                  dashText(),
-                                  kSizedBoxH,
-                                  malayalamTextWidget('തുക :', Icons.money,
-                                      value.loanData?.data?.loanAmount),
-                                  kSizedBoxH20,
-                                  malayalamTextWidget(
-                                    'തുടങ്ങിയത് :',
-                                    Icons.calendar_month,
-                                    value.loanData!.data?.startDate.toString(),
-                                  ),
-                                  kSizedBoxH20,
-                                  malayalamTextWidget(
-                                    'തിരിച്ചടവ്  :',
-                                    Icons.calendar_month,
-                                    DateFormat('dd-MM-yyyy').format(
-                                      DateTime.parse(
-                                        value.loanData!.data?.dueDate
-                                                .toString() ??
-                                            "",
+                                    kSizedBoxH,
+                                    dashText(),
+                                    imageContainer(value),
+                                    kSizedBoxH,
+                                    dashText(),
+                                    kSizedBoxH,
+                                    malayalamTextWidget('തുക :', Icons.money,
+                                        value.loanData?.data?.loanAmount),
+                                    kSizedBoxH20,
+                                    malayalamTextWidget(
+                                      'തുടങ്ങിയത് :',
+                                      Icons.calendar_month,
+                                      value.loanData!.data?.startDate
+                                          .toString(),
+                                    ),
+                                    kSizedBoxH20,
+                                    malayalamTextWidget(
+                                      'തിരിച്ചടവ്  :',
+                                      Icons.calendar_month,
+                                      DateFormat('dd-MM-yyyy').format(
+                                        DateTime.parse(
+                                          value.loanData!.data?.dueDate
+                                                  .toString() ??
+                                              "",
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  kSizedBoxH,
-                                  // String formattedDate =;
-                                  // Padding(
-                                  //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                  //   child: RoundedProgressBar(
-                                  //       childCenter: const Text(
-                                  //         'Due in 31 days',
-                                  //         style: TextStyle(fontWeight: FontWeight.bold),
-                                  //       ),
-                                  //       milliseconds: 1000,
-                                  //       percent: 50,
-                                  //       height: 25,
-                                  //       theme: RoundedProgressBarTheme.purple,
-                                  //       style: RoundedProgressBarStyle(
-                                  //           colorBackgroundIcon:
-                                  //               const Color.fromARGB(255, 190, 185, 185),
-                                  //           widthShadow: 1,
-                                  //           backgroundProgress:
-                                  //               const Color.fromARGB(255, 190, 185, 185),
-                                  //           colorProgress:
-                                  //               const Color.fromARGB(255, 190, 185, 185),
-                                  //           colorBorder: whiteColor,
-                                  //           borderWidth: 2,
-                                  //           colorProgressDark:
-                                  //               const Color.fromARGB(255, 186, 39, 110)),
-                                  //       borderRadius: BorderRadius.circular(24)),
-                                  // ),
-                                  kSizedBoxH20,
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 10.w),
-                                    child: Column(
+                                    kSizedBoxH,
+                                    // LinearProgressIndicator(
+                                    //   value: value.progressValue,
+                                    //   backgroundColor: Colors.grey[300],
+                                    //   valueColor:
+                                    //       const AlwaysStoppedAnimation<Color>(
+                                    //           Colors.blue),
+                                    // ),
+
+                                    kSizedBoxH20,
+                                    Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
@@ -173,8 +148,8 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
                                         ),
                                       ],
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               )
                             : Center(
                                 child: Column(
@@ -240,24 +215,21 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
     );
   }
 
-  Padding malayalamTextWidget(title, icon, subtitle) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.0.w),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(icon),
-              Text(title),
-            ],
-          ),
-          Text(
-            subtitle,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-          ),
-        ],
-      ),
+  Column malayalamTextWidget(title, icon, subtitle) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(icon),
+            Text(title),
+          ],
+        ),
+        Text(
+          subtitle,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        ),
+      ],
     );
   }
 
@@ -265,27 +237,22 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: EdgeInsets.only(top: 8.0.h, left: 22.0.w, bottom: 8.h),
-          child: Text(
-            'Loan Sureties :',
-            style: TextStyle(
-                fontWeight: FontWeight.bold, color: Colors.grey.shade500),
-          ),
+        Text(
+          'Loan Sureties :',
+          style: TextStyle(
+              fontWeight: FontWeight.bold, color: Colors.grey.shade500),
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 28.0.w),
-          child: SizedBox(
-            height: 60,
-            child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) =>
-                    chechmarkimage(true, true, controller, index),
-                separatorBuilder: (context, index) => const SizedBox(
-                      width: 10,
-                    ),
-                itemCount: controller.loanData?.data?.sureties.length ?? 0),
-          ),
+        kSizedBoxH,
+        SizedBox(
+          height: 60,
+          child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) =>
+                  chechmarkimage(true, true, controller, index),
+              separatorBuilder: (context, index) => const SizedBox(
+                    width: 10,
+                  ),
+              itemCount: controller.loanData?.data?.sureties.length ?? 0),
         ),
       ],
     );
@@ -319,14 +286,14 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
                       size: 16,
                     ),
                   )
-                : Container())
+                : const Offstage())
       ],
     );
   }
 
   Text dashText() {
     return const Text(
-      '_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _',
+      '_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ ',
       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
     );
   }

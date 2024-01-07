@@ -10,7 +10,6 @@ import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/util/theme.dart';
 
 import '../../../backend/model/bloodgroup_model.dart';
-import '../../../backend/model/profile_model.dart';
 import '../../../backend/model/states_model.dart';
 import '../../../backend/model/vehicle_type_model.dart';
 import '../../../controller/profile/profile_edit_controller.dart';
@@ -24,13 +23,12 @@ class ProfileEditScreen extends StatefulWidget {
   State<ProfileEditScreen> createState() => _ProfileEditScreenState();
 }
 
-Data? userData;
 bool selectProfileImage = false;
 XFile? _profileImage;
 XFile? _docProf1;
 XFile? _docProf2;
 
-final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 class _ProfileEditScreenState extends State<ProfileEditScreen> {
   @override
@@ -38,17 +36,14 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: baseColor,
-        body: SingleChildScrollView(
-          child: GetBuilder<EditProfileController>(builder: (value) {
-            return Column(
-              children: [
-                appbar(context),
-                SizedBox(
-                  height: 20.h,
-                ),
-                value.loading == true
-                    ? Container(
-                        height: 600.h,
+        body: GetBuilder<EditProfileController>(builder: (value) {
+          return Column(
+            children: [
+              appbar(context),
+              kSizedBoxH,
+              value.loading == true
+                  ? Expanded(
+                      child: Container(
                         // width: 100,
                         decoration: const BoxDecoration(
                           color: whiteColor,
@@ -63,21 +58,23 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                             strokeWidth: 6,
                           ),
                         ),
-                      )
-                    : Container(
-                        height: 1550.h,
-                        width: 390.w,
+                      ),
+                    )
+                  : Expanded(
+                      child: Container(
+                        // height: 1650.h,
+                        // width: 390.w,
                         decoration: const BoxDecoration(
-                            color: whiteColor,
-                            borderRadius: BorderRadiusDirectional.only(
-                              topStart: Radius.circular(50),
-                              topEnd: Radius.circular(50),
-                            )),
+                          color: whiteColor,
+                          borderRadius: BorderRadiusDirectional.only(
+                            topStart: Radius.circular(50),
+                            topEnd: Radius.circular(50),
+                          ),
+                        ),
                         child: Form(
                           key: _formKey,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           child: ListView(
-                            physics: const NeverScrollableScrollPhysics(),
                             children: [
                               imageContainer(value),
                               kSizedBoxH,
@@ -362,11 +359,11 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                             ],
                           ),
                         ),
-                      )
-              ],
-            );
-          }),
-        ),
+                      ),
+                    )
+            ],
+          );
+        }),
       ),
     );
   }
@@ -579,44 +576,27 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     });
   }
 
-  Container appbar(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: 10.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              IconButton(
-                  onPressed: Get.back,
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    color: whiteColor,
-                    size: 30,
-                  )),
-              SizedBox(
-                width: 95.w,
-              ),
-              Text(
-                'Edit Profile',
-                style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24),
-              ),
-
-              // IconButton(
-              //     onPressed: () {},
-              //     icon: const Icon(
-              //       Icons.notifications_none,
-              //       color: whiteColor,
-              //       size: 35,
-              //     ))
-            ],
+  Row appbar(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        IconButton(
+          onPressed: Get.back,
+          icon: const Icon(
+            Icons.arrow_back,
+            color: whiteColor,
+            size: 30,
           ),
-        ],
-      ),
+        ),
+        Text(
+          'Edit Profile',
+          style: Theme.of(context).textTheme.displaySmall!.copyWith(
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
+        ),
+        SizedBox(
+          width: 20.w,
+        ),
+      ],
     );
   }
 }

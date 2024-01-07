@@ -51,12 +51,18 @@ class SplashScreenController extends GetxController {
     debugPrint("Title:${message.notification?.title}");
     debugPrint("body:${message.notification?.body}");
     debugPrint("Payload:${message.data}");
+    Get.toNamed(
+      AppRouter.getNotificationPageRoute(),
+    );
   }
 
   Future initPushNotifications() async {
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
-            alert: true, badge: true, sound: true);
+      alert: true,
+      badge: true,
+      sound: true,
+    );
     FirebaseMessaging.instance
         .getInitialMessage()
         .then((value) => handleBackgroudMessage);
@@ -93,11 +99,7 @@ class SplashScreenController extends GetxController {
   }
 
   Future<void> initNotifications() async {
-    // final pref = await SharedPreferences.getInstance();
     await _firebasemessageing.requestPermission();
-    // final fcmToken = await _firebasemessageing.getToken();
-    // debugPrint("fcm token --  $fcmToken");
-    // await pref.setString('fcm_token', fcmToken!);
     initPushNotifications();
     initLocalNotifications();
   }

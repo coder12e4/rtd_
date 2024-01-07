@@ -30,190 +30,188 @@ class _NotificationScreenState extends State<NotificationScreen> {
               ? Column(
                   children: [
                     appbar(context, controller),
-                    Container(
-                      padding: EdgeInsets.only(top: 10.h),
-                      height: MediaQuery.sizeOf(context).height * 0.877,
-                      decoration: const BoxDecoration(
-                        color: whiteColor,
-                        borderRadius: BorderRadiusDirectional.only(
-                          topStart: Radius.circular(50),
-                          topEnd: Radius.circular(50),
+                    Expanded(
+                      child: Container(
+                        padding:
+                            EdgeInsets.only(top: 7.h, left: 20.w, right: 20.w),
+                        decoration: const BoxDecoration(
+                          color: whiteColor,
+                          borderRadius: BorderRadiusDirectional.only(
+                            topStart: Radius.circular(50),
+                            topEnd: Radius.circular(50),
+                          ),
                         ),
-                      ),
-                      child: controller.notification?.data?.length != 0
-                          ? ListView.separated(
-                              shrinkWrap: true,
+                        child: controller.notification?.data?.length != 0
+                            ? ListView.separated(
+                                padding: EdgeInsets.only(bottom: 10.h),
+                                shrinkWrap: true,
+                                itemCount:
+                                    controller.notification?.data?.length ?? 0,
+                                physics: const BouncingScrollPhysics(),
+                                separatorBuilder: (context, index) =>
+                                    kSizedBoxH,
+                                itemBuilder: (context, index) {
+                                  final type = controller
+                                      .notification?.data?[index].type;
+                                  if (type == 4) {
+                                    return containerWithClickable(
+                                      onTap: () {
+                                        controller.markNotificationSeen(
+                                          controller
+                                              .notification!.data![index].id!,
+                                        );
 
-                              itemCount:
-                                  controller.notification?.data?.length ?? 0,
-                              physics: const BouncingScrollPhysics(),
-                              separatorBuilder: (context, index) => kSizedBoxH,
-                              itemBuilder: (context, index) {
-                                final type =
-                                    controller.notification?.data?[index].type;
-                                if (type == 4) {
-                                  return containerWithClickable(
-                                    onTap: () {
-                                      controller.markNotificationSeen(
-                                        controller
-                                            .notification!.data![index].id!,
-                                      );
+                                        Get.delete<SuretyViewController>(
+                                            force: true);
+                                        Get.toNamed(
+                                            AppRouter
+                                                .getSuretyRequestDetailsRoute(),
+                                            arguments: [
+                                              controller.notification!
+                                                  .data![index].details?.id,
+                                              controller
+                                                  .notification!.data![index],
+                                              false
+                                            ]);
+                                      },
+                                      100.h,
+                                      controller
+                                          .notification?.data?[index].message,
+                                      clikable: 'View Details',
+                                      index: index,
+                                      controller: controller,
+                                    );
+                                  } else if (type == 2) {
+                                    return textContainer(
+                                      onTap: () {
+                                        controller.markNotificationSeen(
+                                          controller
+                                              .notification!.data![index].id!,
+                                        );
+                                        Get.toNamed(
+                                            AppRouter
+                                                .getProfileLoanDetailsRoute(),
+                                            arguments: [
+                                              controller.notification!
+                                                  .data![index].details!.id!
+                                            ]);
+                                      },
+                                      110.h,
+                                      controller
+                                          .notification?.data?[index].message,
+                                      // text1: 'Loan Number : 0123',
+                                      text2:
+                                          'Loan Amount :  ${controller.notification?.data?[index].details!.amount}',
+                                      text3:
+                                          'Purpose : ${controller.notification?.data?[index].details!.purpose}',
 
-                                      Get.delete<SuretyViewController>(
-                                          force: true);
-                                      Get.toNamed(
-                                          AppRouter
-                                              .getSuretyRequestDetailsRoute(),
-                                          arguments: [
+                                      // text4: 'Repayment Date : 20/12/2023',
+                                      controller: controller,
+                                      index: index,
+                                    );
+                                  } else if (type == 1) {
+                                    return textContainer(
+                                      onTap: () {
+                                        controller.markNotificationSeen(
+                                          controller
+                                              .notification!.data![index].id!,
+                                        );
+                                        Get.toNamed(
+                                            AppRouter
+                                                .getProfileLoanDetailsRoute(),
+                                            arguments: [
+                                              controller.notification!
+                                                  .data![index].details!.id
+                                            ]);
+                                      },
+                                      110.h,
+                                      controller
+                                          .notification?.data?[index].message,
+                                      // text1: 'Loan Number : 0123',
+                                      text2:
+                                          'Loan Amount : ${controller.notification?.data?[index].details!.amount}',
+                                      text3:
+                                          'Purpose :  ${controller.notification?.data?[index].details!.purpose}',
+                                      controller: controller,
+                                      index: index,
+                                    );
+                                  } else if (type == 3) {
+                                    final inputFormat = controller
+                                        .notification!.data?[index].date
+                                        .toString();
+
+                                    return GestureDetector(
+                                      onTap: () {
+                                        controller.markNotificationSeen(
                                             controller.notification!
-                                                .data![index].details?.id,
-                                            controller
-                                                .notification!.data![index],
-                                            false
-                                          ]);
-                                    },
-                                    100.h,
-                                    controller
-                                        .notification?.data?[index].message,
-                                    clikable: 'View Details',
-                                    index: index,
-                                    controller: controller,
-                                  );
-                                } else if (type == 2) {
-                                  return textContainer(
-                                    onTap: () {
-                                      controller.markNotificationSeen(
-                                        controller
-                                            .notification!.data![index].id!,
-                                      );
-                                      Get.to(const NotificationDetailsScreen(),
-                                          arguments: [
-                                            controller
-                                                .notification!.data![index]
-                                          ]);
-                                    },
-                                    110.h,
-                                    controller
-                                        .notification?.data?[index].message,
-                                    // text1: 'Loan Number : 0123',
-                                    text2:
-                                        'Loan Amount :  ${controller.notification?.data?[index].details!.amount}',
-                                    text3:
-                                        'Purpose : ${controller.notification?.data?[index].details!.purpose}',
-
-                                    // text4: 'Repayment Date : 20/12/2023',
-                                    controller: controller,
-                                    index: index,
-                                  );
-                                } else if (type == 1) {
-                                  return textContainer(
-                                    onTap: () {
-                                      controller.markNotificationSeen(
-                                        controller
-                                            .notification!.data![index].id!,
-                                      );
-                                      Get.to(const NotificationDetailsScreen(),
-                                          arguments: [
-                                            controller
-                                                .notification!.data![index]
-                                          ]);
-                                    },
-                                    110.h,
-                                    controller
-                                        .notification?.data?[index].message,
-                                    // text1: 'Loan Number : 0123',
-                                    text2:
-                                        'Loan Amount : ${controller.notification?.data?[index].details!.amount}',
-                                    text3:
-                                        'Purpose :  ${controller.notification?.data?[index].details!.purpose}',
-                                    controller: controller,
-                                    index: index,
-                                  );
-                                } else if (type == 3) {
-                                  final inputFormat = controller
-                                      .notification!.data?[index].date
-                                      .toString();
-                                  // String formattedDate =
-                                  //     DateFormat('dd-MM-yyyy').format(
-                                  //         DateTime.parse(inputFormat!));
-                                  return GestureDetector(
-                                    onTap: () {
-                                      controller.markNotificationSeen(controller
-                                          .notification!.data![index].id!);
-                                      Get.toNamed(
-                                          AppRouter.getNotificationPollRoute(),
-                                          arguments: [
-                                            controller.notification!
-                                                .data?[index].details!.id,
-                                            null,
-                                            true
-                                          ]);
-                                    },
-                                    child: textContainer(
-                                        100.h,
-                                        controller
-                                            .notification?.data?[index].message,
-                                        controller: controller,
-                                        index: index,
-                                        endDate: inputFormat,
-                                        clickable: 'View Details'),
-                                  );
-                                }
-                                return containerWithClickable(onTap: () {
-                                  controller.markNotificationSeen(
-                                    controller.notification!.data![index].id!,
-                                  );
-                                  Get.to(const NotificationDetailsScreen(),
-                                      arguments: [
-                                        controller.notification!.data![index]
-                                      ]);
+                                                .data![index].id!);
+                                        Get.toNamed(
+                                            AppRouter
+                                                .getNotificationPollRoute(),
+                                            arguments: [
+                                              controller.notification!
+                                                  .data?[index].details!.id,
+                                              null,
+                                              true
+                                            ]);
+                                      },
+                                      child: textContainer(
+                                          110.h,
+                                          controller.notification?.data?[index]
+                                              .message,
+                                          controller: controller,
+                                          index: index,
+                                          endDate: inputFormat,
+                                          clickable: 'View Details'),
+                                    );
+                                  } else if (type == 6) {
+                                    return textContainer(
+                                      70.h,
+                                      controller
+                                          .notification?.data?[index].message,
+                                      onTap: () => controller
+                                          .markNotificationSeen(controller
+                                              .notification!.data![index].id!),
+                                      controller: controller,
+                                      index: index,
+                                      text1:
+                                          "Date : ${controller.notification?.data?[index].date}",
+                                    );
+                                  }
+                                  return containerWithClickable(onTap: () {
+                                    controller.markNotificationSeen(
+                                      controller.notification!.data![index].id!,
+                                    );
+                                    Get.to(const NotificationDetailsScreen(),
+                                        arguments: [
+                                          controller.notification!.data![index]
+                                        ]);
+                                  },
+                                      40.h,
+                                      controller
+                                          .notification?.data?[index].message,
+                                      controller: controller,
+                                      index: index);
                                 },
-                                    40.h,
-                                    controller
-                                        .notification?.data?[index].message,
-                                    controller: controller,
-                                    index: index);
-                                // return textContainer(
-                                //   40.h,
-                                //   controller.notification?.data?[index].message,
-                                //   // text1: 'Loan Number : 0123',
-                                //
-                                //   controller: controller,
-                                //   index: index,
-                                // );
-                              },
-                              // children: [
-                              //   SizedBox(
-                              //     height: 20.h,
-                              //   ),
-                              //   dateContainer(),
-                              //   kSizedBoxH20,
-                              //   textContainerWithDots(
-                              //     240.h,
-                              //     "Jacob rejected your surety request .",
-                              //     "Here is the reason for the recjection can be shown .",
-                              //     text1: 'Loan Number : 0123',
-                              //     text2: 'Loan Amount : 200SR',
-                              //     text3: 'Purpose : Loan Purpose',
-                              //   )
-                              // ]
-                            )
-                          : Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SizedBox(
-                                  height: 180.h,
-                                  width: double.infinity,
-                                ),
-                                Lottie.asset(
-                                    'assets/images/no_notification.json',
-                                    height: 200.h),
-                                const Text(
-                                  'Notifications is empty',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
+                              )
+                            : Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SizedBox(
+                                    height: 180.h,
+                                    width: double.infinity,
+                                  ),
+                                  Lottie.asset(
+                                      'assets/images/no_notification.json',
+                                      height: 200.h),
+                                  const Text(
+                                    'Notifications is empty',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                      ),
                     ),
                   ],
                 )
@@ -235,7 +233,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     );
   }
 
-  Padding textContainer(
+  GestureDetector textContainer(
     height,
     title, {
     String? text1,
@@ -248,88 +246,84 @@ class _NotificationScreenState extends State<NotificationScreen> {
     required NotificationController controller,
     required int index,
   }) {
-    return Padding(
-      padding: EdgeInsets.only(left: 22.0.w, right: 22.0),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          height: height,
-          width: 300.w,
-          decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 223, 220, 220),
-              borderRadius: BorderRadiusDirectional.circular(20)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: height,
+        decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 223, 220, 220),
+            borderRadius: BorderRadiusDirectional.circular(20)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                    child: Padding(
+                  padding:
+                      EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h),
+                  child: Text(
+                    title,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                )),
+                Container(
+                  margin: EdgeInsets.only(right: 20.w),
+                  height: 7.h,
+                  width: 7.w,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: controller.notification?.data?[index].seen == 1
+                        ? Colors.grey
+                        : Colors.red,
+                  ),
+                )
+              ],
+            ),
+            kSizedBoxH,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 28.0.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                      child: Padding(
-                    padding:
-                        EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h),
-                    child: Text(
-                      title,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  )),
-                  Container(
-                    margin: EdgeInsets.only(right: 20.w),
-                    height: 7.h,
-                    width: 7.w,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: controller.notification?.data?[index].seen == 1
-                          ? Colors.grey
-                          : Colors.red,
-                    ),
-                  )
+                  endDate != null
+                      ? Text("End Date: $endDate")
+                      : const SizedBox(),
+                  clickable != null
+                      ? const SizedBox(
+                          height: 20,
+                        )
+                      : const SizedBox(),
+                  clickable != null
+                      ? Text(
+                          clickable,
+                          style: const TextStyle(color: Colors.blue),
+                        )
+                      : const SizedBox(),
+                  text1 != null
+                      ? Text(
+                          text1,
+                        )
+                      : const SizedBox(),
+                  text2 != null
+                      ? Text(
+                          text2,
+                        )
+                      : const SizedBox(),
+                  text3 != null
+                      ? Text(
+                          text3,
+                        )
+                      : const SizedBox(),
+                  text4 != null
+                      ? Text(
+                          text4,
+                        )
+                      : const SizedBox(),
                 ],
               ),
-              kSizedBoxH,
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 28.0.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    endDate != null
-                        ? Text("End Date: $endDate")
-                        : const SizedBox(),
-                    clickable != null
-                        ? const SizedBox(
-                            height: 20,
-                          )
-                        : const SizedBox(),
-                    clickable != null
-                        ? Text(
-                            clickable,
-                            style: const TextStyle(color: Colors.blue),
-                          )
-                        : const SizedBox(),
-                    text1 != null
-                        ? Text(
-                            text1,
-                          )
-                        : const SizedBox(),
-                    text2 != null
-                        ? Text(
-                            text2,
-                          )
-                        : const SizedBox(),
-                    text3 != null
-                        ? Text(
-                            text3,
-                          )
-                        : const SizedBox(),
-                    text4 != null
-                        ? Text(
-                            text4,
-                          )
-                        : const SizedBox(),
-                  ],
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
@@ -348,171 +342,162 @@ class _NotificationScreenState extends State<NotificationScreen> {
     Function()? onTap,
   }) {
     if (controller.notification!.data?[index].details?.status == 0) {
-      return Padding(
-        padding: EdgeInsets.only(left: 22.0.w, right: 22.0),
-        child: Container(
-          height: height,
-          width: 300.w,
-          decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 223, 220, 220),
-              borderRadius: BorderRadiusDirectional.circular(20)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+      return Container(
+        height: height,
+        width: 300.w,
+        decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 223, 220, 220),
+            borderRadius: BorderRadiusDirectional.circular(20)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                    child: Padding(
+                  padding:
+                      EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h),
+                  child: Text(
+                    title,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                )),
+                Container(
+                  margin: EdgeInsets.only(right: 20.w),
+                  height: 7.h,
+                  width: 7.w,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: controller.notification?.data?[index].seen == 1
+                        ? Colors.grey
+                        : Colors.red,
+                  ),
+                )
+              ],
+            ),
+            kSizedBoxH,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 28.0.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                      child: Padding(
-                    padding:
-                        EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h),
+                  InkWell(
+                    onTap: onTap,
                     child: Text(
-                      title,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                      clikable ?? '',
+                      style: const TextStyle(color: Colors.blue),
                     ),
-                  )),
-                  Container(
-                    margin: EdgeInsets.only(right: 20.w),
-                    height: 7.h,
-                    width: 7.w,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: controller.notification?.data?[index].seen == 1
-                          ? Colors.grey
-                          : Colors.red,
-                    ),
-                  )
+                  ),
                 ],
               ),
-              kSizedBoxH,
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 28.0.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    InkWell(
-                      onTap: onTap,
-                      child: Text(
-                        clikable ?? '',
-                        style: const TextStyle(color: Colors.blue),
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
       );
     } else if (controller.notification!.data?[index].details?.status == 2) {
-      return Padding(
-        padding: EdgeInsets.only(left: 22.0.w, right: 22.0),
-        child: Container(
-          height: height + 50,
-          width: 300.w,
-          decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 223, 220, 220),
-              borderRadius: BorderRadiusDirectional.circular(20)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+      return Container(
+        height: height + 50,
+        width: 300.w,
+        decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 223, 220, 220),
+            borderRadius: BorderRadiusDirectional.circular(20)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                    child: Padding(
+                  padding:
+                      EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h),
+                  child: Text(
+                    title,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                )),
+                Container(
+                  margin: EdgeInsets.only(right: 20.w),
+                  height: 7.h,
+                  width: 7.w,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: controller.notification?.data?[index].seen == 1
+                        ? Colors.grey
+                        : Colors.red,
+                  ),
+                )
+              ],
+            ),
+            kSizedBoxH,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 28.0.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                      child: Padding(
-                    padding:
-                        EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h),
-                    child: Text(
-                      title,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  )),
-                  Container(
-                    margin: EdgeInsets.only(right: 20.w),
-                    height: 7.h,
-                    width: 7.w,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: controller.notification?.data?[index].seen == 1
-                          ? Colors.grey
-                          : Colors.red,
-                    ),
-                  )
+                  Text(
+                      'Loan Amount: ${controller.notification!.data?[index].details!.amount}'),
+                  Text(
+                      'Purpose: ${controller.notification!.data?[index].details!.purpose}'),
+                  kSizedBoxH,
+                  const Text(
+                    'Reason for rejection',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const Text('NA'),
                 ],
               ),
-              kSizedBoxH,
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 28.0.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                        'Loan Amount: ${controller.notification!.data?[index].details!.amount}'),
-                    Text(
-                        'Purpose: ${controller.notification!.data?[index].details!.purpose}'),
-                    kSizedBoxH,
-                    const Text(
-                      'Reason for rejection',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    const Text('NA'),
-                  ],
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
       );
     } else if (controller.notification!.data?[index].details?.status == 1) {
-      return Padding(
-        padding: EdgeInsets.only(left: 22.0.w, right: 22.0),
-        child: Container(
-          height: height,
-          width: 300.w,
-          decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 223, 220, 220),
-              borderRadius: BorderRadiusDirectional.circular(20)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+      return Container(
+        height: height,
+        width: 300.w,
+        decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 223, 220, 220),
+            borderRadius: BorderRadiusDirectional.circular(20)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                    child: Padding(
+                  padding:
+                      EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h),
+                  child: Text(
+                    title,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                )),
+                Container(
+                  margin: EdgeInsets.only(right: 20.w),
+                  height: 7.h,
+                  width: 7.w,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: controller.notification?.data?[index].seen == 1
+                        ? Colors.grey
+                        : Colors.red,
+                  ),
+                )
+              ],
+            ),
+            kSizedBoxH,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 28.0.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                      child: Padding(
-                    padding:
-                        EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h),
-                    child: Text(
-                      title,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  )),
-                  Container(
-                    margin: EdgeInsets.only(right: 20.w),
-                    height: 7.h,
-                    width: 7.w,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: controller.notification?.data?[index].seen == 1
-                          ? Colors.grey
-                          : Colors.red,
-                    ),
-                  )
+                  Text(
+                      'Loan Amount: ${controller.notification!.data?[index].details!.amount}'),
+                  Text(
+                      'Purpose: ${controller.notification!.data?[index].details!.purpose}')
                 ],
               ),
-              kSizedBoxH,
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 28.0.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                        'Loan Amount: ${controller.notification!.data?[index].details!.amount}'),
-                    Text(
-                        'Purpose: ${controller.notification!.data?[index].details!.purpose}')
-                  ],
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
       );
     }

@@ -20,7 +20,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final HomeController contoller = Get.find();
   final NotificationController notiController =
       Get.put(NotificationController(parser: Get.find()));
 

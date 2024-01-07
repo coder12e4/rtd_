@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -19,15 +20,14 @@ class ProfilePage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         backgroundColor: baseColor,
-        body: SingleChildScrollView(
-          child: GetBuilder<ProfileController>(
-            builder: (value) {
-              return Column(
-                children: [
-                  appbar(context, value),
-                  value.loading || value.userData == null
-                      ? Container(
-                          height: 550.h,
+        body: GetBuilder<ProfileController>(
+          builder: (value) {
+            return Column(
+              children: [
+                appbar(context, value),
+                value.loading || value.userData == null
+                    ? Expanded(
+                        child: Container(
                           // width: 100,
                           decoration: const BoxDecoration(
                             color: whiteColor,
@@ -42,9 +42,10 @@ class ProfilePage extends StatelessWidget {
                               strokeWidth: 6,
                             ),
                           ),
-                        )
-                      : Container(
-                          height: 1550.h,
+                        ),
+                      )
+                    : Expanded(
+                        child: Container(
                           decoration: const BoxDecoration(
                               color: whiteColor,
                               borderRadius: BorderRadiusDirectional.only(
@@ -52,7 +53,6 @@ class ProfilePage extends StatelessWidget {
                                 topEnd: Radius.circular(50),
                               )),
                           child: ListView(
-                            physics: const NeverScrollableScrollPhysics(),
                             children: [
                               imageContainer(value),
                               kSizedBoxH,
@@ -162,10 +162,10 @@ class ProfilePage extends StatelessWidget {
                             ],
                           ),
                         ),
-                ],
-              );
-            },
-          ),
+                      ),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -192,26 +192,10 @@ class ProfilePage extends StatelessWidget {
         decoration: BoxDecoration(
             image: DecorationImage(
               fit: BoxFit.contain,
-              image: NetworkImage(documentProof),
+              image: CachedNetworkImageProvider(documentProof),
             ),
             color: const Color.fromARGB(255, 223, 220, 220),
             borderRadius: BorderRadius.circular(20)),
-        // child: Image.network(
-        //   documentProof,
-        //   height: 130.h,
-        //   width: 280.w,
-        //   errorBuilder: (context, error, stackTrace) => Padding(
-        //     padding: const EdgeInsets.all(10.0).r,
-        //     child: Column(
-        //       mainAxisAlignment: MainAxisAlignment.center,
-        //       children: [
-        //         const Icon(Icons.error_outline),
-        //         kSizedBoxH,
-        //         Text(error.toString()),
-        //       ],
-        //     ),
-        //   ),
-        // ),
       ),
     );
   }
@@ -329,7 +313,7 @@ class ProfilePage extends StatelessWidget {
         shape: BoxShape.circle,
         image: DecorationImage(
           fit: BoxFit.contain,
-          image: NetworkImage(
+          image: CachedNetworkImageProvider(
             value.userData!.data.profileImage,
           ),
         ),
@@ -339,7 +323,7 @@ class ProfilePage extends StatelessWidget {
 
   Container appbar(BuildContext context, ProfileController proController) {
     return Container(
-      margin: EdgeInsets.only(top: 10.h, bottom: 10.h),
+      margin: EdgeInsets.only(bottom: 10.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -399,7 +383,7 @@ class ProfilePage extends StatelessWidget {
                           ),
                         ),
                       )
-                    : const SizedBox(),
+                    : const Offstage(),
               ],
             ),
           ),

@@ -17,79 +17,66 @@ class ElectedMemberScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         backgroundColor: baseColor,
-        body: SingleChildScrollView(
-          child: GetBuilder<ElectedMemberController>(builder: (value) {
-            return Column(
-              children: [
-                appbar(context),
-                Container(
-                  // height: 700.h,
-                  width: 390.w,
+        body: GetBuilder<ElectedMemberController>(builder: (value) {
+          return Column(
+            children: [
+              appbar(context),
+              Expanded(
+                child: Container(
                   decoration: const BoxDecoration(
                       color: whiteColor,
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(30),
                           topRight: Radius.circular(30))),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 700.h,
-                        child: FutureBuilder(
-                            future: value.getElectedMembers(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Center(
-                                  child: CupertinoActivityIndicator(radius: 20),
-                                );
-                              }
-                              if (snapshot.hasData) {
-                                final electedMembers = snapshot.data!;
-                                return GridView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: electedMembers.length,
-                                  padding: EdgeInsets.only(top: 30.h),
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    mainAxisSpacing: 10,
-                                  ),
-                                  itemBuilder: (context, index) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        if (value.isStart != null ||
-                                            value.isStart == false) {
-                                          Get.delete<
-                                                  BoardMemberDetailsController>(
-                                              force: true);
-                                          Get.toNamed(
-                                              AppRouter
-                                                  .getBoardMemberDetailsRoutesRoute(),
-                                              arguments: [
-                                                electedMembers[index].id
-                                              ]);
-                                        }
-                                      },
-                                      child: ElectedMemberListTileWidget(
-                                        data: electedMembers[index],
-                                      ),
-                                    );
-                                  },
-                                );
-                              }
-                              return const Center(
-                                child: CircularProgressIndicator(),
+                  child: FutureBuilder(
+                      future: value.getElectedMembers(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CupertinoActivityIndicator(radius: 20),
+                          );
+                        }
+                        if (snapshot.hasData) {
+                          final electedMembers = snapshot.data!;
+                          return GridView.builder(
+                            shrinkWrap: true,
+                            itemCount: electedMembers.length,
+                            padding: EdgeInsets.only(top: 30.h),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 10,
+                            ),
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  if (value.isStart != null ||
+                                      value.isStart == false) {
+                                    Get.delete<BoardMemberDetailsController>(
+                                        force: true);
+                                    Get.toNamed(
+                                        AppRouter
+                                            .getBoardMemberDetailsRoutesRoute(),
+                                        arguments: [electedMembers[index].id]);
+                                  }
+                                },
+                                child: ElectedMemberListTileWidget(
+                                  data: electedMembers[index],
+                                ),
                               );
-                            }),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            );
-          }),
-        ),
+                            },
+                          );
+                        }
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }),
+                ),
+              )
+            ],
+          );
+        }),
       ),
     );
   }

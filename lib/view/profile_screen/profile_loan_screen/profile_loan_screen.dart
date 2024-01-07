@@ -17,76 +17,71 @@ class ProfileLoanScreen extends StatelessWidget {
     return SafeArea(
         child: Scaffold(
             backgroundColor: baseColor,
-            body: SingleChildScrollView(
-              child: DefaultTabController(
-                length: 2,
-                child: GetBuilder<LoanDetailsController>(builder: (value) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      wallTextWidget(context),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      tabBar(),
-                      tabBarView(value),
-                    ],
-                  );
-                }),
-              ),
+            body: DefaultTabController(
+              length: 2,
+              child: GetBuilder<LoanDetailsController>(builder: (value) {
+                return Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    wallTextWidget(context),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    tabBar(),
+                    tabBarView(value),
+                  ],
+                );
+              }),
             )));
   }
 
-  Container tabBarView(LoanDetailsController controller) {
-    return Container(
-      height: 1050.h,
-      //hallo
-      decoration: const BoxDecoration(
-        color: whiteColor,
-        borderRadius: BorderRadiusDirectional.only(
-          topEnd: Radius.circular(40),
-          topStart: Radius.circular(40),
+  Expanded tabBarView(LoanDetailsController controller) {
+    return Expanded(
+      child: Container(
+        decoration: const BoxDecoration(
+          color: whiteColor,
+          borderRadius: BorderRadiusDirectional.only(
+            topEnd: Radius.circular(40),
+            topStart: Radius.circular(40),
+          ),
         ),
+        child: TabBarView(children: [
+          activeLoan(controller),
+          closedLoan(controller),
+        ]),
       ),
-      child: TabBarView(children: [
-        activeLoan(controller),
-        closedLoan(controller),
-      ]),
     );
   }
 
   Column closedLoan(LoanDetailsController controller) {
     return Column(
-        // physics: const NeverScrollableScrollPhysics(),
-        children: [
-          SizedBox(
-            height: 10.h,
-          ),
-          // feedDate('19/10/2023'),
-          controller.closedLoans?.data.data.length != 0
-              ? ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: controller.closedLoans?.data.data.length ?? 0,
-                  itemBuilder: (context, index) => GestureDetector(
-                      onTap: () => Get.toNamed(
-                              AppRouter.getProfileLoanDetailsRoute(),
-                              arguments: [
-                                controller.closedLoans?.data.data[index].id
-                              ]),
-                      child: activeAndClosedLoans(false, '418', controller,
-                          index, controller.closedLoans!)),
-                )
-              : SizedBox(
-                  height: 600.h,
-                  child: const Center(
-                    child: Text('Closed loans is Empty'),
-                  ),
+      // physics: const NeverScrollableScrollPhysics(),
+      children: [
+        SizedBox(
+          height: 10.h,
+        ),
+        // feedDate('19/10/2023'),
+        controller.closedLoans?.data.data.length != 0
+            ? ListView.builder(
+                shrinkWrap: true,
+                itemCount: controller.closedLoans?.data.data.length ?? 0,
+                itemBuilder: (context, index) => GestureDetector(
+                    onTap: () => Get.toNamed(
+                            AppRouter.getProfileLoanDetailsRoute(),
+                            arguments: [
+                              controller.closedLoans?.data.data[index].id
+                            ]),
+                    child: activeAndClosedLoans(false, '418', controller, index,
+                        controller.closedLoans!)),
+              )
+            : const Expanded(
+                child: Center(
+                  child: Text('Closed loans is Empty'),
                 ),
-          SizedBox(
-            height: 10.h,
-          ),
-        ]);
+              ),
+        kSizedBoxH,
+      ],
+    );
   }
 
   Padding VoteData(bool isActive, String filenumber) {
@@ -238,34 +233,31 @@ class ProfileLoanScreen extends StatelessWidget {
   Column activeLoan(LoanDetailsController controller) {
     final data = controller.activeLoans?.data.data;
     return Column(
-        // physics: const NeverScrollableScrollPhysics(),
-        children: [
-          kSizedBoxH,
-          // feedDate('19/10/2023'),
-          data?.length != 0
-              ? ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: data?.length ?? 0,
-                  itemBuilder: (context, index) => GestureDetector(
-                    onTap: () {
-                      Get.toNamed(AppRouter.getProfileLoanDetailsRoute(),
-                          arguments: [data![index].id]);
-                    },
-                    child: activeAndClosedLoans(true, '418', controller, index,
-                        controller.activeLoans!),
-                  ),
-                )
-              : SizedBox(
-                  height: 600.h,
-                  child: const Center(
-                    child: Text('Active loans is Empty'),
-                  ),
+      // physics: const NeverScrollableScrollPhysics(),
+      children: [
+        kSizedBoxH,
+        // feedDate('19/10/2023'),
+        data?.length != 0
+            ? ListView.builder(
+                shrinkWrap: true,
+                itemCount: data?.length ?? 0,
+                itemBuilder: (context, index) => GestureDetector(
+                  onTap: () {
+                    Get.toNamed(AppRouter.getProfileLoanDetailsRoute(),
+                        arguments: [data![index].id]);
+                  },
+                  child: activeAndClosedLoans(
+                      true, '418', controller, index, controller.activeLoans!),
                 ),
-          SizedBox(
-            height: 10.h,
-          ),
-        ]);
+              )
+            : const Expanded(
+                child: Center(
+                  child: Text('Active loans is Empty'),
+                ),
+              ),
+        kSizedBoxH,
+      ],
+    );
   }
 
   Container feedDate(String date) {

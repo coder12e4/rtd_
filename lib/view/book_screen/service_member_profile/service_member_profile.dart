@@ -31,6 +31,7 @@ class ServiceMemberProfile extends StatelessWidget {
                 return controller.loading != true
                     ? ListView(
                         physics: const BouncingScrollPhysics(),
+                        padding: EdgeInsets.symmetric(horizontal: 20.0.w),
                         children: [
                           imageContainer(controller),
                           kSizedBoxH,
@@ -41,11 +42,6 @@ class ServiceMemberProfile extends StatelessWidget {
                           kSizedBoxH,
                           textButton(controller, context),
                           kSizedBoxH,
-                          // dividerWidget(),
-                          // kSizedBoxH,
-                          // detailsText('Highlights',
-                          //     controller.memberDetails!.data.highlights),
-
                           kSizedBoxH,
                           dividerWidget(),
                           kSizedBoxH,
@@ -58,32 +54,30 @@ class ServiceMemberProfile extends StatelessWidget {
                               controller.memberDetails!.data.email),
                           kSizedBoxH,
                           dividerWidget(),
-                          Padding(
-                            padding: EdgeInsets.only(left: 38.0.w),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  "Highlights",
-                                  style: TextStyle(
-                                      color: Color.fromARGB(255, 97, 95, 95),
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Html(
-                                  data:
-                                      controller.memberDetails!.data.highlights,
-                                ),
-                              ],
-                            ),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "Highlights",
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 97, 95, 95),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Html(
+                                data: controller.memberDetails?.data.highlights,
+                                style: {
+                                  "body": Style(
+                                    padding: HtmlPaddings.zero,
+                                    margin: Margins.zero,
+                                  ),
+                                  "p": Style(
+                                      padding: HtmlPaddings.zero,
+                                      margin: Margins.zero),
+                                },
+                              ),
+                            ],
                           ),
-                          // kSizedBoxH,
-                          // detailsText('Mail Address', 'example@gmail.com'),
-                          // kSizedBoxH,
-                          // dividerWidget(),
-                          // kSizedBoxH,
-                          // detailsText('Blood Group',
-                          //     controller.memberDetails!.data.bloodGroupName),
                           kSizedBoxH,
                         ],
                       )
@@ -101,33 +95,24 @@ class ServiceMemberProfile extends StatelessWidget {
     ));
   }
 
-  Padding detailsText(title, subtitle) {
-    return Padding(
-      padding: EdgeInsets.only(left: 38.0.w),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(left: 8.0.w, right: 8.0.w),
-            child: Text(
-              title,
-              style: const TextStyle(
-                  color: Color.fromARGB(255, 97, 95, 95),
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 8.0.w, right: 8.0.w),
-            child: Text(
-              subtitle,
-              style: const TextStyle(
-                  // color: Color.fromARGB(255, 97, 95, 95),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16),
-            ),
-          ),
-        ],
-      ),
+  Column detailsText(title, subtitle) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+              color: Color.fromARGB(255, 97, 95, 95),
+              fontWeight: FontWeight.bold),
+        ),
+        Text(
+          subtitle,
+          style: const TextStyle(
+              // color: Color.fromARGB(255, 97, 95, 95),
+              fontWeight: FontWeight.bold,
+              fontSize: 16),
+        ),
+      ],
     );
   }
 
@@ -250,8 +235,6 @@ class ServiceMemberProfile extends StatelessWidget {
   Divider dividerWidget() {
     return Divider(
       color: Colors.grey.shade300,
-      indent: 30.w,
-      endIndent: 30.w,
     );
   }
 
@@ -299,9 +282,6 @@ class ServiceMemberProfile extends StatelessWidget {
                     color: whiteColor,
                     size: 30,
                   )),
-              // SizedBox(
-              //   width: 90.w,
-              // ),
               Text(
                 'Member Book',
                 style: Theme.of(context).textTheme.displaySmall!.copyWith(

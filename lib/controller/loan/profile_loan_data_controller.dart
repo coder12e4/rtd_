@@ -21,6 +21,18 @@ class ProfileLoanDataController extends GetxController {
   bool loading = true;
   bool error = false;
   LoanData? loanData;
+  // final startDate = DateTime(2024, 01, 01); // Replace with your start date
+  final startDate = DateTime(2024, 01, 01); // Replace with your start date
+  final endDate = DateTime(2024, 01, 15); // Replace with your end date
+  final now = DateTime.now();
+
+  double get progressValue {
+    final totalDuration = endDate.difference(startDate).inMilliseconds;
+    final elapsedDuration = now.difference(startDate).inMilliseconds;
+    log('balance days ${now.difference(endDate).inDays}.');
+    return elapsedDuration / totalDuration;
+  }
+
   Future<void> getLoanDetails() async {
     final body = {"loan_id": loanId};
     Response response = await parser.getLoanDetails(body);

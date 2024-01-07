@@ -1,10 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:rtd_project/controller/book/board_member_details_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../../controller/book/board_member_details_controller.dart';
 
 class BoardMemberDetailsScreen extends StatelessWidget {
   const BoardMemberDetailsScreen({super.key});
@@ -14,12 +16,11 @@ class BoardMemberDetailsScreen extends StatelessWidget {
     return SafeArea(
         child: Scaffold(
       backgroundColor: baseColor,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            appbar(context),
-            Container(
-              height: 620.h,
+      body: Column(
+        children: [
+          appbar(context),
+          Expanded(
+            child: Container(
               decoration: const BoxDecoration(
                   color: whiteColor,
                   borderRadius: BorderRadiusDirectional.only(
@@ -30,16 +31,20 @@ class BoardMemberDetailsScreen extends StatelessWidget {
                   builder: (controller) {
                 return controller.loading != true
                     ? ListView(
-                        physics: const NeverScrollableScrollPhysics(),
+                        physics: const BouncingScrollPhysics(),
+                        padding: EdgeInsets.symmetric(horizontal: 20.0.w),
                         children: [
                           imageContainer(controller),
                           kSizedBoxH,
-                          nameText(controller.memberDetails!.data.name,
-                              controller.memberDetails!.data.position),
+                          nameText(
+                            controller.memberDetails!.data.name,
+                            controller.memberDetails!.data.position,
+                          ),
                           kSizedBoxH,
                           dividerWidget(),
                           kSizedBoxH,
                           textButton(controller, context),
+                          kSizedBoxH,
                           kSizedBoxH,
                           dividerWidget(),
                           kSizedBoxH,
@@ -51,6 +56,8 @@ class BoardMemberDetailsScreen extends StatelessWidget {
                           detailsText('State',
                               controller.memberDetails!.data.stateName),
                           kSizedBoxH,
+                          dividerWidget(),
+                          kSizedBoxH,
                         ],
                       )
                     : const Center(
@@ -60,40 +67,31 @@ class BoardMemberDetailsScreen extends StatelessWidget {
                         ),
                       );
               }),
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     ));
   }
 
-  Padding detailsText(title, subtitle) {
-    return Padding(
-      padding: EdgeInsets.only(left: 38.0.w),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(left: 8.0.w, right: 8.0.w),
-            child: Text(
-              title,
-              style: const TextStyle(
-                  color: Color.fromARGB(255, 97, 95, 95),
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 8.0.w, right: 8.0.w),
-            child: Text(
-              subtitle,
-              style: const TextStyle(
-                  // color: Color.fromARGB(255, 97, 95, 95),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16),
-            ),
-          ),
-        ],
-      ),
+  Column detailsText(title, subtitle) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+              color: Color.fromARGB(255, 97, 95, 95),
+              fontWeight: FontWeight.bold),
+        ),
+        Text(
+          subtitle,
+          style: const TextStyle(
+              // color: Color.fromARGB(255, 97, 95, 95),
+              fontWeight: FontWeight.bold,
+              fontSize: 16),
+        ),
+      ],
     );
   }
 
@@ -102,53 +100,26 @@ class BoardMemberDetailsScreen extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         TextButton(
-            style: ButtonStyle(
-                minimumSize: MaterialStateProperty.resolveWith(
-                    (states) => const Size(60, 50)),
-                backgroundColor:
-                    MaterialStateColor.resolveWith((states) => Colors.green)),
-            onPressed: () {
-              launch("tel:${controller.memberDetails!.data.mobile}");
-            },
-            child: const Padding(
-              padding:
-                  EdgeInsets.only(left: 18.0, right: 18, top: 8, bottom: 8),
-              child: Row(
-                children: [
-                  Icon(Icons.call, color: whiteColor),
-                  Text(
-                    'Call',
-                    style: TextStyle(color: whiteColor, fontSize: 16),
-                  ),
-                ],
-              ),
-            )),
-        // const SizedBox(
-        //   width: 20,
-        // ),
-        // TextButton(
-        //     style: ButtonStyle(
-        //         minimumSize: MaterialStateProperty.resolveWith(
-        //             (states) => const Size(60, 50)),
-        //         backgroundColor:
-        //             MaterialStateColor.resolveWith((states) => baseColor)),
-        //     onPressed: () {},
-        //     child: const Padding(
-        //       padding:
-        //           EdgeInsets.only(left: 18.0, right: 18, top: 5, bottom: 5),
-        //       child: Row(
-        //         children: [
-        //           Icon(
-        //             Icons.location_on_outlined,
-        //             color: whiteColor,
-        //           ),
-        //           Text(
-        //             'Location',
-        //             style: TextStyle(color: whiteColor, fontSize: 16),
-        //           ),
-        //         ],
-        //       ),
-        //     )),
+          style: ButtonStyle(
+              minimumSize: MaterialStateProperty.resolveWith(
+                  (states) => const Size(60, 50)),
+              backgroundColor:
+                  MaterialStateColor.resolveWith((states) => Colors.green)),
+          onPressed: () =>
+              launch("tel:${controller.memberDetails!.data.mobile}"),
+          child: const Padding(
+            padding: EdgeInsets.only(left: 18.0, right: 18, top: 8, bottom: 8),
+            child: Row(
+              children: [
+                Icon(Icons.call, color: whiteColor),
+                Text(
+                  'Call',
+                  style: TextStyle(color: whiteColor, fontSize: 16),
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -156,8 +127,6 @@ class BoardMemberDetailsScreen extends StatelessWidget {
   Divider dividerWidget() {
     return Divider(
       color: Colors.grey.shade300,
-      indent: 30.w,
-      endIndent: 30.w,
     );
   }
 
@@ -183,7 +152,8 @@ class BoardMemberDetailsScreen extends StatelessWidget {
         shape: BoxShape.circle,
         image: DecorationImage(
           fit: BoxFit.contain,
-          image: NetworkImage(controller.memberDetails!.data.image),
+          image:
+              CachedNetworkImageProvider(controller.memberDetails!.data.image),
         ),
       ),
     );
@@ -205,9 +175,6 @@ class BoardMemberDetailsScreen extends StatelessWidget {
                     color: whiteColor,
                     size: 30,
                   )),
-              // SizedBox(
-              //   width: 90.w,
-              // ),
               Text(
                 'Member Book',
                 style: Theme.of(context).textTheme.displaySmall!.copyWith(
