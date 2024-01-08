@@ -1,8 +1,7 @@
-import 'package:awesome_circular_chart/awesome_circular_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rtd_project/controller/home_screen_controller.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../backend/model/home_data_model.dart';
 
@@ -15,33 +14,42 @@ class HomeChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(builder: (value) {
-      return AnimatedCircularChart(
-        holeRadius: 65.r,
-        size: Size(350.w, 100.h),
-        initialChartData: <CircularStackEntry>[
-          CircularStackEntry(
-            <CircularSegmentEntry>[
-              CircularSegmentEntry(
-                // 30.2,
-                (item.amountSummary[0].amount - item.amountSummary[1].amount)
-                    .toDouble(),
-                const Color.fromARGB(255, 147, 8, 96),
-                rankKey: 'remaining',
-              ),
-              CircularSegmentEntry(
-                (item.amountSummary[0].amount).toDouble(),
-                const Color.fromARGB(255, 207, 200, 200),
-                rankKey: 'completed',
+      return SfCircularChart(
+        title: ChartTitle(
+          text: item.title,
+          textStyle: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+        ),
+        series: <CircularSeries>[
+          RadialBarSeries<ChartSampleData, String>(
+            dataSource: <ChartSampleData>[
+              ChartSampleData(
+                x: 'remaining',
+                y: item.amountSummary[1].amount.toDouble(),
+                color: const Color.fromARGB(255, 147, 8, 96),
               ),
             ],
-            rankKey: 'progress',
+            xValueMapper: (ChartSampleData data, _) => data.x,
+            yValueMapper: (ChartSampleData data, _) => data.y,
+            pointColorMapper: (ChartSampleData data, _) => data.color,
+            radius: '100%',
+            dataLabelSettings: const DataLabelSettings(
+              isVisible: false,
+            ),
+            trackColor: const Color.fromARGB(255, 207, 200, 200),
+            enableTooltip: true,
+            innerRadius: "90",
+            maximumValue: item.amountSummary[0].amount.toDouble(),
           ),
         ],
-        chartType: CircularChartType.Radial,
-        percentageValues: true,
-        edgeStyle: SegmentEdgeStyle.round,
-        startAngle: -90,
       );
     });
   }
+}
+
+class ChartSampleData {
+  final String x;
+  final double y;
+  final Color color;
+
+  ChartSampleData({required this.x, required this.y, this.color = Colors.blue});
 }

@@ -2,8 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:rtd_project/controller/loan/profile_loan_data_controller.dart';
+import 'package:rtd_project/controller/loan/loan_request_detail_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 
@@ -11,8 +10,8 @@ import '../../../core/common_widget/dotted_text.dart';
 // import 'package:flutter_rounded_progress_bar/flutter_rounded_progress_bar.dart';
 // import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
 
-class ActiveLoanDetailsScreen extends StatelessWidget {
-  const ActiveLoanDetailsScreen({
+class LoanRequestDetailsScreen extends StatelessWidget {
+  const LoanRequestDetailsScreen({
     super.key,
   });
 
@@ -21,7 +20,7 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         backgroundColor: baseColor,
-        body: GetBuilder<ProfileLoanDataController>(builder: (value) {
+        body: GetBuilder<LoanRequestDetailsController>(builder: (value) {
           return Column(
             children: [
               appbar(context),
@@ -44,8 +43,10 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
                                   children: [
                                     kSizedBoxH20,
                                     filenumAndActiveloan(
-                                        value.loanData?.data?.fileNumber,
-                                        value.loanData?.data?.statusText
+                                        value.loanRequestDetails?.data
+                                            .createdDate,
+                                        value.loanRequestDetails?.data
+                                                .statusText
                                                 .toString() ??
                                             ''),
                                     kSizedBoxH,
@@ -63,7 +64,8 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
                                                   color: Colors.grey.shade500),
                                             ),
                                             Text(
-                                              value.loanData?.data?.loanType ??
+                                              value.loanRequestDetails?.data
+                                                      .loanType.title ??
                                                   "Not available",
                                               style: const TextStyle(
                                                   fontWeight: FontWeight.bold),
@@ -78,7 +80,8 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
                                                   color: Colors.grey.shade500),
                                             ),
                                             Text(
-                                              value.loanData?.data?.purpose ??
+                                              value.loanRequestDetails?.data
+                                                      .loanPurpose.purpose ??
                                                   "Not available",
                                               style: const TextStyle(
                                                   fontWeight: FontWeight.bold),
@@ -94,28 +97,31 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
                                     kSizedBoxH,
                                     const DashText(),
                                     kSizedBoxH,
-                                    malayalamTextWidget('തുക :', Icons.money,
-                                        value.loanData?.data?.loanAmount),
-                                    kSizedBoxH20,
                                     malayalamTextWidget(
-                                      'തുടങ്ങിയത് :',
-                                      Icons.calendar_month,
-                                      value.loanData!.data?.startDate
-                                          .toString(),
-                                    ),
-                                    kSizedBoxH20,
-                                    malayalamTextWidget(
-                                      'തിരിച്ചടവ്  :',
-                                      Icons.calendar_month,
-                                      DateFormat('dd-MM-yyyy').format(
-                                        DateTime.parse(
-                                          value.loanData!.data?.dueDate
-                                                  .toString() ??
-                                              "",
-                                        ),
-                                      ),
-                                    ),
-                                    kSizedBoxH,
+                                        'ആവശ്യപ്പെട്ടത് :',
+                                        Icons.money,
+                                        value.loanRequestDetails?.data
+                                            .loanAmount),
+                                    // kSizedBoxH20,
+                                    // malayalamTextWidget(
+                                    //   'തുടങ്ങിയത് :',
+                                    //   Icons.calendar_month,
+                                    //   value.loanRequestDetails?.data.createdAt
+                                    //       .toString(),
+                                    // ),
+                                    // kSizedBoxH20,
+                                    // malayalamTextWidget(
+                                    //   'തിരിച്ചടവ്  :',
+                                    //   Icons.calendar_month,
+                                    //   DateFormat('dd-MM-yyyy').format(
+                                    //     DateTime.parse(
+                                    //       value.loanData!.data?.dueDate
+                                    //               .toString() ??
+                                    //           "",
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                    // kSizedBoxH,
                                     // LinearProgressIndicator(
                                     //   value: value.progressValue,
                                     //   backgroundColor: Colors.grey[300],
@@ -144,8 +150,11 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
                                                 documentContainer(value, index),
                                             separatorBuilder:
                                                 (context, index) => kSizedBoxH,
-                                            itemCount: value.loanData!.data
-                                                    ?.loanDocument.length ??
+                                            itemCount: value
+                                                    .loanRequestDetails
+                                                    ?.data
+                                                    .loanDocument
+                                                    .length ??
                                                 0,
                                           ),
                                         ),
@@ -197,15 +206,17 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
     );
   }
 
-  Container documentContainer(ProfileLoanDataController controller, int index) {
+  Container documentContainer(
+      LoanRequestDetailsController controller, int index) {
     return Container(
       margin: EdgeInsets.only(right: 15.w),
       height: 130.h,
       width: 105.w,
       decoration: BoxDecoration(
           image: DecorationImage(
-              image: CachedNetworkImageProvider(
-                  controller.loanData!.data?.loanDocument[index].file ?? "")),
+              image: CachedNetworkImageProvider(controller
+                      .loanRequestDetails?.data.loanDocument[index].file ??
+                  "")),
           color: const Color.fromARGB(255, 223, 220, 220),
           borderRadius: BorderRadius.circular(20)),
     );
@@ -229,7 +240,7 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
     );
   }
 
-  Column imageContainer(ProfileLoanDataController controller) {
+  Column imageContainer(LoanRequestDetailsController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -248,21 +259,24 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
               separatorBuilder: (context, index) => const SizedBox(
                     width: 10,
                   ),
-              itemCount: controller.loanData?.data?.sureties.length ?? 0),
+              itemCount:
+                  controller.loanRequestDetails?.data.sureties.length ?? 0),
         ),
       ],
     );
   }
 
   Stack chechmarkimage(bool checkmark, bool markAvalable,
-      ProfileLoanDataController controller, int index) {
+      LoanRequestDetailsController controller, int index) {
     return Stack(
       children: [
         Positioned(
           child: CircleAvatar(
             minRadius: 30.r,
             backgroundImage: CachedNetworkImageProvider(
-              controller.loanData!.data?.sureties[index].profileImage ?? "",
+              controller
+                      .loanRequestDetails?.data.sureties[index].profileImage ??
+                  "",
             ),
           ),
         ),
@@ -296,10 +310,10 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
               color: Color.fromARGB(255, 242, 233, 233),
               borderRadius: BorderRadius.all(Radius.circular(30))),
           height: 40.h,
-          width: 160.w,
+          width: 180.w,
           child: Center(
             child: Text(
-              'File Number:$filenumber',
+              'Applied Date:$filenumber',
               textAlign: TextAlign.center,
               style: const TextStyle(
                   color: Colors.black, fontWeight: FontWeight.bold),

@@ -15,69 +15,66 @@ class NotificationDetailsScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         backgroundColor: baseColor,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              appbar(context),
-              Container(
-                padding: EdgeInsets.only(top: 20.h, left: 15.w, right: 15.w),
-                height: 920.h,
-                width: 390.w,
-                decoration: const BoxDecoration(
-                    color: whiteColor,
-                    borderRadius: BorderRadiusDirectional.only(
-                      topStart: Radius.circular(50),
-                      topEnd: Radius.circular(50),
-                    )),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      data.message ?? "Not Available",
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 17),
-                    ),
-                    kSizedBoxH,
-                    detailsWidget(
-                      title: "Date",
-                      content: data.date,
-                    ),
-                    kSizedBoxH,
-                    detailsWidget(
-                      title: "From",
-                      content: data.sender,
-                    ),
-                    kSizedBoxH20,
-                    const Text(
-                      "Details",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
-                    ),
-                    kSizedBoxH,
-                    detailsWidget(
-                      title: "Amount",
-                      content: data.details?.amount,
-                    ),
-                    detailsWidget(
-                      title: "Purpose",
-                      content: data.details?.purpose,
-                    ),
-                    // SizedBox(
-                    //   height: 40.h,
-                    // ),
+        body: Column(
+          children: [
+            appbar(context),
+            Container(
+              padding: EdgeInsets.only(top: 20.h, left: 15.w, right: 15.w),
+              height: 920.h,
+              width: 390.w,
+              decoration: const BoxDecoration(
+                  color: whiteColor,
+                  borderRadius: BorderRadiusDirectional.only(
+                    topStart: Radius.circular(50),
+                    topEnd: Radius.circular(50),
+                  )),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    data.message ?? "Not Available",
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 17),
+                  ),
+                  kSizedBoxH,
+                  detailsWidget(
+                    title: "Date",
+                    content: data.date,
+                  ),
+                  kSizedBoxH,
+                  detailsWidget(
+                    title: "From",
+                    content: data.sender,
+                  ),
+                  kSizedBoxH20,
+                  const Text(
+                    "Details",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+                  ),
+                  kSizedBoxH,
+                  detailsWidget(
+                    title: "Amount",
+                    content: data.details?.amount,
+                  ),
+                  detailsWidget(
+                    title: "Purpose",
+                    content: data.details?.purpose,
+                  ),
+                  // SizedBox(
+                  //   height: 40.h,
+                  // ),
 
-                    // Divider(
-                    //   indent: 35.w,
-                    //   endIndent: 35.w,
-                    // ),
-                    // SizedBox(
-                    //   height: 50.h,
-                    // ),
-                  ],
-                ),
-              )
-            ],
-          ),
+                  // Divider(
+                  //   indent: 35.w,
+                  //   endIndent: 35.w,
+                  // ),
+                  // SizedBox(
+                  //   height: 50.h,
+                  // ),
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );

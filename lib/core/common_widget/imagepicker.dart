@@ -6,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
-import 'package:rtd_project/view/test.dart';
 
 class Imagepiker extends StatefulWidget {
   const Imagepiker({
@@ -32,8 +31,7 @@ class _ImagepikerState extends State<Imagepiker> {
   Future pickImage(ImageSource source) async {
     image = await picker.pickImage(source: source);
     fileSize = await image!.length();
-    compressImage(image!.path);
-    // log('image************${image.path}');
+
     return image;
   }
 

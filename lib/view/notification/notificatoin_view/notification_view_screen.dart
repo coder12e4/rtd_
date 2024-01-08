@@ -25,7 +25,7 @@ class NotificationViewScreen extends StatelessWidget {
                   padding:
                       EdgeInsets.only(left: 30.0.w, right: 30.w, top: 25.h),
                   // height: 614.h,
-                  width: 390.w,
+
                   decoration: const BoxDecoration(
                       color: whiteColor,
                       borderRadius: BorderRadiusDirectional.only(

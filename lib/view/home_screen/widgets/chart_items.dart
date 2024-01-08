@@ -14,19 +14,19 @@ class ChartItems extends StatelessWidget {
       alignment: AlignmentDirectional.center,
       children: [
         // kSizedBoxH20,
+        // Positioned(
+        //   top: 0,
+        //   child: Text(
+        //     item.title.toString(),
+        //     style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+        //   ),
+        // ),
         Positioned(
           top: 0,
-          child: Text(
-            item.title.toString(),
-            style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
-          ),
-        ),
-        Positioned(
-          top: 80.h,
           child: HomeChart(item: item),
         ),
         Positioned(
-          top: 80.h,
+          top: 90.h,
           child: graphCenterText(context, item),
         ),
       ],

@@ -9,6 +9,7 @@ import 'package:rtd_project/backend/binding/notification/surety_view_binding.dar
 import 'package:rtd_project/backend/binding/search_screen_binding.dart';
 import 'package:rtd_project/backend/binding/splash_binding.dart';
 import 'package:rtd_project/view/book_screen/elected_member_screen/elected_member_screen.dart';
+import 'package:rtd_project/view/loan_screen/loan_request_details/loan_request_details.dart';
 import 'package:rtd_project/view/login_screen/login_page.dart';
 import 'package:rtd_project/view/profile_screen/profile_edit_screen/profile_edit_screen.dart';
 import 'package:rtd_project/view/profile_screen/profile_page.dart';
@@ -20,6 +21,7 @@ import '../backend/binding/book/board_member_details_binding.dart';
 import '../backend/binding/edit_profile_binding.dart';
 import '../backend/binding/loan/loan_details_binding.dart';
 import '../backend/binding/loan/loan_edit_binding.dart';
+import '../backend/binding/loan/loan_request_details_bindig.dart';
 import '../backend/binding/loan/profie_loan_data_binding.dart';
 import '../backend/binding/notification/notification_binding.dart';
 import '../backend/binding/profile_binding.dart';
@@ -55,6 +57,7 @@ class AppRouter {
   static const String notificationPollRoutes = '/notificationPoll';
   static const String profileLoanDetailsRoutes = '/profileLoanDetails';
   static const String boardMemberDetailsRoutes = '/boardMemberDetails';
+  static const String loanRequestDetailsRoutes = '/loanRequestDetails';
 
   static const String splash = '/splash';
 
@@ -79,6 +82,7 @@ class AppRouter {
   static String getNotificationPollRoute() => notificationPollRoutes;
   static String getProfileLoanDetailsRoute() => profileLoanDetailsRoutes;
   static String getBoardMemberDetailsRoutesRoute() => boardMemberDetailsRoutes;
+  static String getLoanRequestDetailsRoutes() => loanRequestDetailsRoutes;
 
   static List<GetPage> routes = [
     GetPage(
@@ -153,6 +157,11 @@ class AppRouter {
       name: boardMemberDetailsRoutes,
       page: () => const BoardMemberDetailsScreen(),
       binding: BoardMemberDetailsBinding(),
+    ),
+    GetPage(
+      name: loanRequestDetailsRoutes,
+      page: () => const LoanRequestDetailsScreen(),
+      binding: LoanRequestDetailsBinding(),
     ),
   ];
 }

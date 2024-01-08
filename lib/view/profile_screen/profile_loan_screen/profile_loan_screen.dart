@@ -45,10 +45,12 @@ class ProfileLoanScreen extends StatelessWidget {
             topStart: Radius.circular(40),
           ),
         ),
-        child: TabBarView(children: [
-          activeLoan(controller),
-          closedLoan(controller),
-        ]),
+        child: TabBarView(
+          children: [
+            activeLoan(controller),
+            closedLoan(controller),
+          ],
+        ),
       ),
     );
   }
@@ -66,13 +68,13 @@ class ProfileLoanScreen extends StatelessWidget {
                 shrinkWrap: true,
                 itemCount: controller.closedLoans?.data.data.length ?? 0,
                 itemBuilder: (context, index) => GestureDetector(
-                    onTap: () => Get.toNamed(
-                            AppRouter.getProfileLoanDetailsRoute(),
-                            arguments: [
-                              controller.closedLoans?.data.data[index].id
-                            ]),
-                    child: activeAndClosedLoans(false, '418', controller, index,
-                        controller.closedLoans!)),
+                  onTap: () => Get.toNamed(
+                    AppRouter.getProfileLoanDetailsRoute(),
+                    arguments: [controller.closedLoans?.data.data[index].id],
+                  ),
+                  child: activeAndClosedLoans(
+                      false, '418', controller, index, controller.closedLoans!),
+                ),
               )
             : const Expanded(
                 child: Center(
@@ -84,100 +86,100 @@ class ProfileLoanScreen extends StatelessWidget {
     );
   }
 
-  Padding VoteData(bool isActive, String filenumber) {
-    return Padding(
-      padding: EdgeInsets.only(top: 10.h, left: 18.w, right: 18.w),
-      child: Container(
-        height: 300.h,
-        width: 500.w,
-        decoration: BoxDecoration(
-            color: textFormBase,
-            borderRadius: BorderRadius.all(Radius.circular(30.r))),
-        child: Padding(
-          padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 20.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                        color: whiteColor,
-                        borderRadius: BorderRadius.all(Radius.circular(30))),
-                    height: 40.h,
-                    width: 160.w,
-                    child: Center(
-                      child: Text(
-                        'Pole Number:$filenumber',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    height: 40.h,
-                    width: 100.w,
-                    decoration: const BoxDecoration(
-                        color: whiteColor,
-                        borderRadius: BorderRadius.all(Radius.circular(30))),
-                    child: Center(
-                      child: Text(
-                        isActive == true ? 'Active' : 'Closed',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 10.h,
-              ),
-              const Text("വോട്ടിന്റെ വിഷയം ഇവിടെ എഴുതുക",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16)),
-              Divider(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  optionButton(
-                      borderAvalable: false,
-                      buttonForegroundColor: Colors.white,
-                      buttonbackgroundColor: Colors.black,
-                      buttonText: 'Option one'),
-                  optionButton(
-                      borderAvalable: false,
-                      buttonForegroundColor: Colors.white,
-                      buttonbackgroundColor: Colors.black,
-                      buttonText: 'Option Two')
-                ],
-              ),
-              SizedBox(
-                height: 8.h,
-              ),
-              optionButton(
-                  borderAvalable: true,
-                  buttonForegroundColor: Colors.white,
-                  buttonbackgroundColor: Colors.black,
-                  buttonText: 'Option Three Hire'),
-              SizedBox(
-                height: 10.h,
-              ),
-              submitedButton(
-                  borderAvalable: true,
-                  buttonForegroundColor: whiteColor,
-                  buttonbackgroundColor: Colors.blue)
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  // Padding VoteData(bool isActive, String filenumber) {
+  //   return Padding(
+  //     padding: EdgeInsets.only(top: 10.h, left: 18.w, right: 18.w),
+  //     child: Container(
+  //       height: 300.h,
+  //       width: 500.w,
+  //       decoration: BoxDecoration(
+  //           color: textFormBase,
+  //           borderRadius: BorderRadius.all(Radius.circular(30.r))),
+  //       child: Padding(
+  //         padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 20.h),
+  //         child: Column(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             Row(
+  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //               children: [
+  //                 Container(
+  //                   decoration: const BoxDecoration(
+  //                       color: whiteColor,
+  //                       borderRadius: BorderRadius.all(Radius.circular(30))),
+  //                   height: 40.h,
+  //                   width: 160.w,
+  //                   child: Center(
+  //                     child: Text(
+  //                       'Pole Number:$filenumber',
+  //                       textAlign: TextAlign.center,
+  //                       style: const TextStyle(
+  //                           color: Colors.black, fontWeight: FontWeight.bold),
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 Container(
+  //                   height: 40.h,
+  //                   width: 100.w,
+  //                   decoration: const BoxDecoration(
+  //                       color: whiteColor,
+  //                       borderRadius: BorderRadius.all(Radius.circular(30))),
+  //                   child: Center(
+  //                     child: Text(
+  //                       isActive == true ? 'Active' : 'Closed',
+  //                       textAlign: TextAlign.center,
+  //                       style: const TextStyle(
+  //                           color: Colors.black, fontWeight: FontWeight.bold),
+  //                     ),
+  //                   ),
+  //                 )
+  //               ],
+  //             ),
+  //             SizedBox(
+  //               height: 10.h,
+  //             ),
+  //             const Text("വോട്ടിന്റെ വിഷയം ഇവിടെ എഴുതുക",
+  //                 style: TextStyle(
+  //                     color: Colors.black,
+  //                     fontWeight: FontWeight.w500,
+  //                     fontSize: 16)),
+  //             Divider(),
+  //             Row(
+  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //               children: [
+  //                 optionButton(
+  //                     borderAvalable: false,
+  //                     buttonForegroundColor: Colors.white,
+  //                     buttonbackgroundColor: Colors.black,
+  //                     buttonText: 'Option one'),
+  //                 optionButton(
+  //                     borderAvalable: false,
+  //                     buttonForegroundColor: Colors.white,
+  //                     buttonbackgroundColor: Colors.black,
+  //                     buttonText: 'Option Two')
+  //               ],
+  //             ),
+  //             SizedBox(
+  //               height: 8.h,
+  //             ),
+  //             optionButton(
+  //                 borderAvalable: true,
+  //                 buttonForegroundColor: Colors.white,
+  //                 buttonbackgroundColor: Colors.black,
+  //                 buttonText: 'Option Three Hire'),
+  //             SizedBox(
+  //               height: 10.h,
+  //             ),
+  //             submitedButton(
+  //                 borderAvalable: true,
+  //                 buttonForegroundColor: whiteColor,
+  //                 buttonbackgroundColor: Colors.blue)
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   SizedBox submitedButton({
     bool? borderAvalable,
@@ -328,9 +330,7 @@ class ProfileLoanScreen extends StatelessWidget {
                   )
                 ],
               ),
-              SizedBox(
-                height: 10.h,
-              ),
+              kSizedBoxH,
               Row(
                 children: [
                   ClipOval(
@@ -338,7 +338,7 @@ class ProfileLoanScreen extends StatelessWidget {
                       data.user.profileImage,
                       height: 40.h,
                       width: 40.w,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.contain,
                     ),
                   ),
                   SizedBox(

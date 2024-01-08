@@ -32,6 +32,7 @@ class Constants {
   static const String loanRequestComplete = 'api/user/loan/request/completed';
   static const String loanRules = 'loan-rules';
   static const String termsAndConditions = 'terms-and-conditions';
+  static const String loanRequestDetails = 'api/user/loan/request/details';
   static const String getBoardMemberDetails =
       'api/user/board-members/show?member_id=';
 

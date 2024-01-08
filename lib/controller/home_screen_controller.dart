@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:awesome_circular_chart/awesome_circular_chart.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rtd_project/backend/model/home_data_model.dart';
 import 'package:rtd_project/controller/notification/notification_controller.dart';
@@ -24,8 +22,6 @@ class HomeController extends GetxController implements GetxService {
   bool? loading = true;
   NotificationController? controllerN;
   HomeData? homeData;
-  GlobalKey<AnimatedCircularChartState> chartKey =
-      GlobalKey<AnimatedCircularChartState>();
 
   Future<void> getHomeDatas() async {
     Response response = await parser.getHomeData();

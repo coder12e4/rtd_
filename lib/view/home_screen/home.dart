@@ -25,19 +25,18 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: GetBuilder<HomeController>(builder: (value) {
-      return Scaffold(
-          backgroundColor: baseColor,
-          body: SingleChildScrollView(
-              physics: value.homeData?.activeLoan != null
-                  ? const AlwaysScrollableScrollPhysics()
-                  : const NeverScrollableScrollPhysics(),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  homeTextWidget(context, value),
-                  Container(
-                    height: MediaQuery.sizeOf(context).height,
+    return SafeArea(
+      child: GetBuilder<HomeController>(
+        builder: (value) {
+          return Scaffold(
+            backgroundColor: baseColor,
+            body: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                homeTextWidget(context, value),
+                Expanded(
+                  child: Container(
+                    // height: MediaQuery.sizeOf(context).height,
                     decoration: const BoxDecoration(
                       color: whiteColor,
                       borderRadius: BorderRadiusDirectional.only(
@@ -46,45 +45,49 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     child: value.loading != true
-                        ? Column(children: [
-                            Padding(
-                              padding: const EdgeInsets.all(18.0),
-                              child: Container(
-                                height: 480.h,
-                                // width: 100.w,
-                                decoration: BoxDecoration(
-                                  color: textFormBase,
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                child: Column(
-                                  children: [
-                                    kSizedBoxH20,
-                                    CarouselSlider(
-                                      items: value.homeData?.collectionSummary
-                                          .map(
-                                            (item) => ChartItems(item: item),
-                                          )
-                                          .toList(),
-                                      options: CarouselOptions(
-                                        pauseAutoPlayOnTouch: true,
-                                        height: 240.h,
-                                        autoPlayInterval:
-                                            const Duration(seconds: 3),
-                                        aspectRatio: 16 / 17,
-                                        autoPlay: true,
+                        ? ListView(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.only(bottom: 10.h),
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(18.0),
+                                child: Container(
+                                  height: 480.h,
+                                  // width: 100.w,
+                                  decoration: BoxDecoration(
+                                    color: textFormBase,
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      kSizedBoxH,
+                                      CarouselSlider(
+                                        items: value.homeData?.collectionSummary
+                                            .map(
+                                              (item) => ChartItems(item: item),
+                                            )
+                                            .toList(),
+                                        options: CarouselOptions(
+                                          pauseAutoPlayOnTouch: true,
+                                          height: 240.h,
+                                          autoPlayInterval:
+                                              const Duration(seconds: 3),
+                                          aspectRatio: 16 / 17,
+                                          autoPlay: true,
 
-                                        // enlargeCenterPage: true,
+                                          // enlargeCenterPage: true,
+                                        ),
                                       ),
-                                    ),
-                                    incomBreakdown(value.homeData),
-                                  ],
+                                      incomBreakdown(value.homeData),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            value.homeData?.activeLoan != null
-                                ? activeLoan(value.homeData!)
-                                : const SizedBox(),
-                          ])
+                              value.homeData?.activeLoan != null
+                                  ? activeLoan(value.homeData!)
+                                  : const Offstage(),
+                            ],
+                          )
                         : const Center(
                             child: CircularProgressIndicator(
                               strokeWidth: 6,
@@ -92,9 +95,13 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                   ),
-                ],
-              )));
-    }));
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
   }
 
   Padding activeLoan(HomeData homeData) {

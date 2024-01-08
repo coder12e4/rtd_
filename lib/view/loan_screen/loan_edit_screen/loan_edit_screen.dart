@@ -505,17 +505,15 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
     return Container(
       margin: EdgeInsets.only(top: 20.h, bottom: 10.h),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
-              onPressed: Get.back,
-              icon: const Icon(
-                Icons.arrow_back,
-                color: whiteColor,
-                size: 30,
-              )),
-          SizedBox(
-            width: 50.w,
+            onPressed: Get.back,
+            icon: const Icon(
+              Icons.arrow_back,
+              color: whiteColor,
+              size: 30,
+            ),
           ),
           Text(
             'Edit Loan Request',
@@ -525,7 +523,7 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
                 fontSize: 24.r),
           ),
           SizedBox(
-            width: 80.w,
+            width: 20.w,
           ),
         ],
       ),

@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:rtd_project/controller/loan/loan_edit_controller.dart';
+import 'package:rtd_project/controller/loan/loan_request_detail_controller.dart';
 import 'package:rtd_project/controller/loan/loan_screen_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
@@ -151,8 +152,9 @@ class _LoanPageState extends State<LoanPage> {
       padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: GestureDetector(
         onTap: () {
-          // Get.toNamed(AppRouter.getProfileLoanDetailsRoute(),
-          //     arguments: [value.loanData[index].id]);
+          Get.delete<LoanRequestDetailsController>(force: true);
+          Get.toNamed(AppRouter.getLoanRequestDetailsRoutes(),
+              arguments: [value.loanData[index].id]);
         },
         child: Container(
           // height: prossesing == true ? 300.h : 360.h,

@@ -258,9 +258,7 @@ class WallPage extends StatelessWidget {
                             feedDate(controller.data!.data[index].user.createdAt
                                 .toString()),
                             feedActiveData(controller, index),
-                            SizedBox(
-                              height: 10.h,
-                            ),
+                            kSizedBoxH,
                           ],
                         ),
                       )

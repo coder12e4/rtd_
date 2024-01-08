@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:rtd_project/controller/loan/loan_request_detail_controller.dart';
 import 'package:rtd_project/controller/notification/notification_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
@@ -116,12 +117,15 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                           controller
                                               .notification!.data![index].id!,
                                         );
+                                        Get.delete<
+                                                LoanRequestDetailsController>(
+                                            force: true);
                                         Get.toNamed(
                                             AppRouter
-                                                .getProfileLoanDetailsRoute(),
+                                                .getLoanRequestDetailsRoutes(),
                                             arguments: [
                                               controller.notification!
-                                                  .data![index].details!.id
+                                                  .data![index].details!.id,
                                             ]);
                                       },
                                       110.h,
@@ -145,6 +149,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                         controller.markNotificationSeen(
                                             controller.notification!
                                                 .data![index].id!);
+                                        Get.delete<SuretyViewController>(
+                                            force: true);
                                         Get.toNamed(
                                             AppRouter
                                                 .getNotificationPollRoute(),

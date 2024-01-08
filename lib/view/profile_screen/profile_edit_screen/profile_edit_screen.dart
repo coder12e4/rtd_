@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -480,7 +481,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
               image: DecorationImage(
                 fit: BoxFit.contain,
                 image: image == null
-                    ? NetworkImage(documentProof) as ImageProvider
+                    ? CachedNetworkImageProvider(documentProof) as ImageProvider
                     : FileImage(File(image.path)),
               ),
               color: const Color.fromARGB(255, 223, 220, 220),
@@ -522,8 +523,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
               image: DecorationImage(
                 fit: BoxFit.cover,
                 image: selectProfileImage == false
-                    ? NetworkImage(value.userData!.data.profileImage)
-                        as ImageProvider
+                    ? CachedNetworkImageProvider(
+                        value.userData!.data.profileImage) as ImageProvider
                     : FileImage(File(_profileImage!.path)),
               ),
             ),
