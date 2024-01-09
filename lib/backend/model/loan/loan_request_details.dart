@@ -59,8 +59,8 @@ class RequestDetails {
   LoanPurpose loanPurpose;
   List<Surety> sureties;
   RequestedUser requestedUser;
-  String statusText;
-  String createdDate;
+  String? statusText;
+  String? createdDate;
 
   RequestDetails({
     required this.id,

@@ -16,4 +16,13 @@ class LoanRequestDetailsParser {
         Constants.baseUrl + Constants.loanRequestDetails, body, accessToken!);
     return response;
   }
+
+  Future<Response> getLoanRequestDetailsForSurety(body) async {
+    final accessToken = sharedPreferencesManager.getString('access_token');
+    var response = await apiService.postPrivate(
+        Constants.baseUrl + Constants.loanRequestDetailsForSurety,
+        body,
+        accessToken!);
+    return response;
+  }
 }

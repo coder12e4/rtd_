@@ -35,14 +35,10 @@ class _NavigationBarpageState extends State<NavigationBarpage> {
           length: _tablist.length,
           child: Scaffold(
             extendBody: true,
-            body: Stack(
-              children: [
-                TabBarView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  controller: value.tabController,
-                  children: _tablist,
-                ),
-              ],
+            body: TabBarView(
+              physics: const NeverScrollableScrollPhysics(),
+              controller: value.tabController,
+              children: _tablist,
             ),
             bottomNavigationBar: Padding(
               padding: const EdgeInsets.all(7).r,

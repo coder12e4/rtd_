@@ -13,14 +13,6 @@ class ChartItems extends StatelessWidget {
     return Stack(
       alignment: AlignmentDirectional.center,
       children: [
-        // kSizedBoxH20,
-        // Positioned(
-        //   top: 0,
-        //   child: Text(
-        //     item.title.toString(),
-        //     style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
-        //   ),
-        // ),
         Positioned(
           top: 0,
           child: HomeChart(item: item),

@@ -154,7 +154,7 @@ class _LoanPageState extends State<LoanPage> {
         onTap: () {
           Get.delete<LoanRequestDetailsController>(force: true);
           Get.toNamed(AppRouter.getLoanRequestDetailsRoutes(),
-              arguments: [value.loanData[index].id]);
+              arguments: [value.loanData[index].id, true]);
         },
         child: Container(
           // height: prossesing == true ? 300.h : 360.h,

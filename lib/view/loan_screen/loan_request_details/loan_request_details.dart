@@ -44,11 +44,11 @@ class LoanRequestDetailsScreen extends StatelessWidget {
                                     kSizedBoxH20,
                                     filenumAndActiveloan(
                                         value.loanRequestDetails?.data
-                                            .createdDate,
+                                                .createdDate ??
+                                            "NA",
                                         value.loanRequestDetails?.data
-                                                .statusText
-                                                .toString() ??
-                                            ''),
+                                                .statusText ??
+                                            'NA'),
                                     kSizedBoxH,
                                     const DashText(),
                                     kSizedBoxH,
@@ -102,34 +102,6 @@ class LoanRequestDetailsScreen extends StatelessWidget {
                                         Icons.money,
                                         value.loanRequestDetails?.data
                                             .loanAmount),
-                                    // kSizedBoxH20,
-                                    // malayalamTextWidget(
-                                    //   'തുടങ്ങിയത് :',
-                                    //   Icons.calendar_month,
-                                    //   value.loanRequestDetails?.data.createdAt
-                                    //       .toString(),
-                                    // ),
-                                    // kSizedBoxH20,
-                                    // malayalamTextWidget(
-                                    //   'തിരിച്ചടവ്  :',
-                                    //   Icons.calendar_month,
-                                    //   DateFormat('dd-MM-yyyy').format(
-                                    //     DateTime.parse(
-                                    //       value.loanData!.data?.dueDate
-                                    //               .toString() ??
-                                    //           "",
-                                    //     ),
-                                    //   ),
-                                    // ),
-                                    // kSizedBoxH,
-                                    // LinearProgressIndicator(
-                                    //   value: value.progressValue,
-                                    //   backgroundColor: Colors.grey[300],
-                                    //   valueColor:
-                                    //       const AlwaysStoppedAnimation<Color>(
-                                    //           Colors.blue),
-                                    // ),
-
                                     kSizedBoxH20,
                                     Column(
                                       crossAxisAlignment:
@@ -145,11 +117,15 @@ class LoanRequestDetailsScreen extends StatelessWidget {
                                           height: 140.h,
                                           child: ListView.separated(
                                             shrinkWrap: true,
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
                                             scrollDirection: Axis.horizontal,
                                             itemBuilder: (context, index) =>
                                                 documentContainer(value, index),
                                             separatorBuilder:
-                                                (context, index) => kSizedBoxH,
+                                                (context, index) => SizedBox(
+                                              width: 2.w,
+                                            ),
                                             itemCount: value
                                                     .loanRequestDetails
                                                     ?.data
@@ -301,7 +277,7 @@ class LoanRequestDetailsScreen extends StatelessWidget {
     );
   }
 
-  Row filenumAndActiveloan(filenumber, String statusText) {
+  Row filenumAndActiveloan(String createdDate, String statusText) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -313,7 +289,7 @@ class LoanRequestDetailsScreen extends StatelessWidget {
           width: 180.w,
           child: Center(
             child: Text(
-              'Applied Date:$filenumber',
+              'Applied Date: $createdDate',
               textAlign: TextAlign.center,
               style: const TextStyle(
                   color: Colors.black, fontWeight: FontWeight.bold),

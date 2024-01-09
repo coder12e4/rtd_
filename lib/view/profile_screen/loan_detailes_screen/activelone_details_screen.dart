@@ -8,6 +8,7 @@ import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 
 import '../../../core/common_widget/dotted_text.dart';
+import '../widget/custom_progressbar.dart';
 // import 'package:flutter_rounded_progress_bar/flutter_rounded_progress_bar.dart';
 // import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
 
@@ -116,14 +117,7 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
                                       ),
                                     ),
                                     kSizedBoxH,
-                                    // LinearProgressIndicator(
-                                    //   value: value.progressValue,
-                                    //   backgroundColor: Colors.grey[300],
-                                    //   valueColor:
-                                    //       const AlwaysStoppedAnimation<Color>(
-                                    //           Colors.blue),
-                                    // ),
-
+                                    CustomProgressBar(value: value),
                                     kSizedBoxH20,
                                     Column(
                                       crossAxisAlignment:

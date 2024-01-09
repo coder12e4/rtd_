@@ -126,6 +126,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                             arguments: [
                                               controller.notification!
                                                   .data![index].details!.id,
+                                              true
                                             ]);
                                       },
                                       110.h,
@@ -457,53 +458,64 @@ class _NotificationScreenState extends State<NotificationScreen> {
         ),
       );
     } else if (controller.notification!.data?[index].details?.status == 1) {
-      return Container(
-        height: height,
-        width: 300.w,
-        decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 223, 220, 220),
-            borderRadius: BorderRadiusDirectional.circular(20)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                    child: Padding(
-                  padding:
-                      EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h),
-                  child: Text(
-                    title,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                )),
-                Container(
-                  margin: EdgeInsets.only(right: 20.w),
-                  height: 7.h,
-                  width: 7.w,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: controller.notification?.data?[index].seen == 1
-                        ? Colors.grey
-                        : Colors.red,
-                  ),
-                )
-              ],
-            ),
-            kSizedBoxH,
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 28.0.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      return GestureDetector(
+        onTap: () {
+          if (controller.notification?.data?[index].type == 4) {
+            Get.delete<LoanRequestDetailsController>(force: true);
+            Get.toNamed(AppRouter.getLoanRequestDetailsRoutes(), arguments: [
+              controller.notification!.data![index].details!.id,
+              false
+            ]);
+          }
+        },
+        child: Container(
+          height: height,
+          width: 300.w,
+          decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 223, 220, 220),
+              borderRadius: BorderRadiusDirectional.circular(20)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 children: [
-                  Text(
-                      'Loan Amount: ${controller.notification!.data?[index].details!.amount}'),
-                  Text(
-                      'Purpose: ${controller.notification!.data?[index].details!.purpose}')
+                  Expanded(
+                      child: Padding(
+                    padding:
+                        EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h),
+                    child: Text(
+                      title,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  )),
+                  Container(
+                    margin: EdgeInsets.only(right: 20.w),
+                    height: 7.h,
+                    width: 7.w,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: controller.notification?.data?[index].seen == 1
+                          ? Colors.grey
+                          : Colors.red,
+                    ),
+                  )
                 ],
               ),
-            )
-          ],
+              kSizedBoxH,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 28.0.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                        'Loan Amount: ${controller.notification!.data?[index].details!.amount}'),
+                    Text(
+                        'Purpose: ${controller.notification!.data?[index].details!.purpose}')
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       );
     }

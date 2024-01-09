@@ -6,6 +6,7 @@ import 'package:rtd_project/controller/home_screen_controller.dart';
 
 import '../../backend/model/notification_model/notification_model.dart';
 import '../../backend/parser/notification/notification_parser.dart';
+import '../profile/profile_controller.dart';
 
 class NotificationController extends GetxController implements GetxService {
   final NotificationParser parser;
@@ -52,6 +53,7 @@ class NotificationController extends GetxController implements GetxService {
         getNotification();
 
         await Get.find<HomeController>().getNotificaion();
+        await Get.find<ProfileController>().getNotificaion();
       } else {
         log('failed seen notification statusCode: ${response.statusCode}');
       }
