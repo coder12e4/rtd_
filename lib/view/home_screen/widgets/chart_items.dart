@@ -18,7 +18,7 @@ class ChartItems extends StatelessWidget {
           child: HomeChart(item: item),
         ),
         Positioned(
-          top: 90.h,
+          top: 100.h,
           child: graphCenterText(context, item),
         ),
       ],

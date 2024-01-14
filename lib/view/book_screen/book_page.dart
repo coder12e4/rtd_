@@ -139,7 +139,6 @@ class _BookPageState extends State<BookPage> {
                       color: textFormBase),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<ServiceData>(
-                        padding: const EdgeInsets.all(0.0),
                         isExpanded: true,
                         hint: Text(
                           "Choose Service ",

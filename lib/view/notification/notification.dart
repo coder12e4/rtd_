@@ -47,7 +47,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 padding: EdgeInsets.only(bottom: 10.h),
                                 shrinkWrap: true,
                                 itemCount:
-                                    controller.notification?.data?.length ?? 0,
+                                    controller.notification!.data!.length,
                                 physics: const BouncingScrollPhysics(),
                                 separatorBuilder: (context, index) =>
                                     kSizedBoxH,

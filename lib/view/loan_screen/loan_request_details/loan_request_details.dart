@@ -81,7 +81,7 @@ class LoanRequestDetailsScreen extends StatelessWidget {
                                             ),
                                             Text(
                                               value.loanRequestDetails?.data
-                                                      .loanPurpose.purpose ??
+                                                      .loanPurpose?.purpose ??
                                                   "Not available",
                                               style: const TextStyle(
                                                   fontWeight: FontWeight.bold),

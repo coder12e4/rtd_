@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
                               Padding(
                                 padding: const EdgeInsets.all(18.0),
                                 child: Container(
-                                  height: 480.h,
+                                  height: 500.h,
                                   // width: 100.w,
                                   decoration: BoxDecoration(
                                     color: textFormBase,
@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> {
                                             .toList(),
                                         options: CarouselOptions(
                                           pauseAutoPlayOnTouch: true,
-                                          height: 240.h,
+                                          height: 260.h,
                                           autoPlayInterval:
                                               const Duration(seconds: 3),
                                           aspectRatio: 16 / 17,

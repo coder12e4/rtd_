@@ -56,7 +56,7 @@ class RequestDetails {
   DateTime createdAt;
   DateTime updatedAt;
   LoanType loanType;
-  LoanPurpose loanPurpose;
+  LoanPurpose? loanPurpose;
   List<Surety> sureties;
   RequestedUser requestedUser;
   String? statusText;
@@ -96,7 +96,9 @@ class RequestDetails {
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
         loanType: LoanType.fromJson(json["loan_type"]),
-        loanPurpose: LoanPurpose.fromJson(json["loan_purpose"]),
+        loanPurpose: json["loan_purpose"] != null
+            ? LoanPurpose.fromJson(json["loan_purpose"])
+            : null,
         sureties:
             List<Surety>.from(json["sureties"].map((x) => Surety.fromJson(x))),
         requestedUser: RequestedUser.fromJson(json["requested_user"]),
@@ -118,7 +120,7 @@ class RequestDetails {
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
         "loan_type": loanType.toJson(),
-        "loan_purpose": loanPurpose.toJson(),
+        "loan_purpose": loanPurpose?.toJson(),
         "sureties": List<dynamic>.from(sureties.map((x) => x.toJson())),
         "requested_user": requestedUser.toJson(),
         "status_text": statusText,
