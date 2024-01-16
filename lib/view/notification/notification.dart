@@ -256,7 +256,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: height,
+        height: height+12.h,
         decoration: BoxDecoration(
             color: const Color.fromARGB(255, 223, 220, 220),
             borderRadius: BorderRadiusDirectional.circular(20)),

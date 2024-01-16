@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
                 homeTextWidget(context, value),
                 Expanded(
                   child: Container(
-                    // height: MediaQuery.sizeOf(context).height,
+                     height: 550.h,
                     decoration: const BoxDecoration(
                       color: whiteColor,
                       borderRadius: BorderRadiusDirectional.only(
@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
                               Padding(
                                 padding: const EdgeInsets.all(18.0),
                                 child: Container(
-                                  height: 500.h,
+                                  height: 530.h,
                                   // width: 100.w,
                                   decoration: BoxDecoration(
                                     color: textFormBase,
@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> {
                                             .toList(),
                                         options: CarouselOptions(
                                           pauseAutoPlayOnTouch: true,
-                                          height: 260.h,
+                                          height: 290.h,
                                           autoPlayInterval:
                                               const Duration(seconds: 3),
                                           aspectRatio: 16 / 17,
