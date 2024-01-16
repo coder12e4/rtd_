@@ -87,7 +87,10 @@ class SuretyViewController extends GetxController implements GetxService {
   }
 
   Future<void> rejectSurety() async {
-    final body = {"loan_request_id": details?.details?.id};
+    final body = {
+      "loan_request_id": details?.details?.id,
+      "reject_reason": reasonController.text,
+    };
     Response response = await parser.suretyReject(body);
     log('surety accept response ${response.body}');
     Get.back();
