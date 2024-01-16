@@ -91,78 +91,63 @@ class _BookPageState extends State<BookPage> {
       child: Column(
         children: [
           kSizedBoxH20,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Container(
-                  // width: 145.w,
-                  padding: const EdgeInsets.only(left: 5, right: 5).r,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: textFormBase),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<AllStatesModel>(
-                        // padding: EdgeInsets.only(left: 95.w),
-                        isExpanded: true,
-                        hint: Text(
-                          "Choose State",
-                          style: TextStyle(
-                              color: Colors.black.withOpacity(.55),
-                              fontSize: 15,
-                              letterSpacing: .1,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        icon: const Icon(Icons.keyboard_arrow_down_outlined),
-                        value: value.selectedState,
-                        items: value.dropdownServiceItems,
-                        onChanged: (valuee) {
-                          setState(() {
-                            value.selectedState = valuee;
-                            value.serviceStateName =
-                                value.selectedState!.stateName;
-                            value.searchServiceList('');
-                          });
-                        }),
+          Container(
+            // width: 145.w,
+            padding: const EdgeInsets.only(left: 5, right: 5).r,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20), color: textFormBase),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<AllStatesModel>(
+                  // padding: EdgeInsets.only(left: 95.w),
+                  isExpanded: true,
+                  hint: Text(
+                    "Choose State",
+                    style: TextStyle(
+                        color: Colors.black.withOpacity(.55),
+                        fontSize: 15,
+                        letterSpacing: .1,
+                        fontWeight: FontWeight.w600),
                   ),
-                ),
-              ),
-              SizedBox(
-                width: 10.w,
-              ),
-              Expanded(
-                child: Container(
-                  // width: 175.w,
-                  padding: const EdgeInsets.only(left: 5, right: 5).r,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: textFormBase),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<ServiceData>(
-                        isExpanded: true,
-                        hint: Text(
-                          "Choose Service ",
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              color: Colors.black.withOpacity(.55),
-                              fontSize: 15,
-                              letterSpacing: .1,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        icon: const Icon(Icons.keyboard_arrow_down_outlined),
-                        value: value.selectedService,
-                        items: value.serviceMenuItems,
-                        onChanged: (valuee) {
-                          setState(() {
-                            value.selectedService = valuee;
-                            value.serviceName = value.selectedService!.title;
-                            value.searchServiceList('');
-                          });
-                        }),
+                  icon: const Icon(Icons.keyboard_arrow_down_outlined),
+                  value: value.selectedState,
+                  items: value.dropdownServiceItems,
+                  onChanged: (valuee) {
+                    setState(() {
+                      value.selectedState = valuee;
+                      value.serviceStateName = value.selectedState!.stateName;
+                      value.searchServiceList('');
+                    });
+                  }),
+            ),
+          ),
+          kSizedBoxH,
+          Container(
+            padding: const EdgeInsets.only(left: 5, right: 5).r,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20), color: textFormBase),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<ServiceData>(
+                  isExpanded: true,
+                  hint: Text(
+                    "Choose Service ",
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                        color: Colors.black.withOpacity(.55),
+                        fontSize: 15,
+                        letterSpacing: .1,
+                        fontWeight: FontWeight.w600),
                   ),
-                ),
-              ),
-            ],
+                  icon: const Icon(Icons.keyboard_arrow_down_outlined),
+                  value: value.selectedService,
+                  items: value.serviceMenuItems,
+                  onChanged: (valuee) {
+                    setState(() {
+                      value.selectedService = valuee;
+                      value.serviceName = value.selectedService!.title;
+                      value.searchServiceList('');
+                    });
+                  }),
+            ),
           ),
           kSizedBoxH,
           searchField(
