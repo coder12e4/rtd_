@@ -7,6 +7,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 
 import '../backend/parser/splash_screen_parser.dart';
+import '../helper/router.dart';
 import 'notification/notification_controller.dart';
 
 class SplashScreenController extends GetxController {
@@ -19,7 +20,7 @@ class SplashScreenController extends GetxController {
         Get.put(NotificationController(parser: Get.find()));
     initNotifications();
     FirebaseMessaging.instance.getToken().then((value) {
-      log('fcm token from splash$value');
+      log('fcm token from splash $value');
       parser.saveDeviceToken(value.toString());
     });
 
@@ -32,7 +33,10 @@ class SplashScreenController extends GetxController {
   }
 
   void onLogin() {
-    parser.getPage();
+    Get.offNamed(AppRouter.getElectedMemberRoute(), arguments: [true]);
+    Future.delayed(const Duration(seconds: 3))
+        .then((value) => parser.getPage());
+    //
   }
 
   final _firebasemessageing = FirebaseMessaging.instance;
@@ -47,12 +51,18 @@ class SplashScreenController extends GetxController {
     debugPrint("Title:${message.notification?.title}");
     debugPrint("body:${message.notification?.body}");
     debugPrint("Payload:${message.data}");
+    Get.toNamed(
+      AppRouter.getNotificationPageRoute(),
+    );
   }
 
   Future initPushNotifications() async {
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
-            alert: true, badge: true, sound: true);
+      alert: true,
+      badge: true,
+      sound: true,
+    );
     FirebaseMessaging.instance
         .getInitialMessage()
         .then((value) => handleBackgroudMessage);
@@ -69,7 +79,7 @@ class SplashScreenController extends GetxController {
             android: AndroidNotificationDetails(
                 _androidChannel.id, _androidChannel.name,
                 channelDescription: _androidChannel.description,
-                icon: '@drawable/ic_launcher',
+                icon: '@drawable/app_logo',
                 playSound: true),
           ),
           payload: jsonEncode(event.toMap()));
@@ -78,7 +88,7 @@ class SplashScreenController extends GetxController {
   }
 
   Future initLocalNotifications() async {
-    const android = AndroidInitializationSettings("@drawable/ic_launcher");
+    const android = AndroidInitializationSettings("@drawable/app_logo");
     const settings = InitializationSettings(
       android: android,
     );
@@ -89,11 +99,7 @@ class SplashScreenController extends GetxController {
   }
 
   Future<void> initNotifications() async {
-    // final pref = await SharedPreferences.getInstance();
     await _firebasemessageing.requestPermission();
-    // final fcmToken = await _firebasemessageing.getToken();
-    // debugPrint("fcm token --  $fcmToken");
-    // await pref.setString('fcm_token', fcmToken!);
     initPushNotifications();
     initLocalNotifications();
   }

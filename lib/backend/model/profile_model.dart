@@ -38,6 +38,7 @@ class Profile {
 
 class Data {
   int id;
+  String memberId;
   String name;
   String email;
   String profileImage;
@@ -56,14 +57,16 @@ class Data {
   AState ksaState;
   String ksaPin;
   String documentProofKsa;
-  dynamic vehicleTypeId;
-  dynamic vehicleNumber;
+  int vehicleTypeId;
+  String vehicleNumber;
+  String fcmToken;
   DateTime createdAt;
   DateTime updatedAt;
   dynamic deletedAt;
 
   Data({
     required this.id,
+    required this.memberId,
     required this.name,
     required this.email,
     required this.profileImage,
@@ -84,6 +87,7 @@ class Data {
     required this.documentProofKsa,
     required this.vehicleTypeId,
     required this.vehicleNumber,
+    required this.fcmToken,
     required this.createdAt,
     required this.updatedAt,
     required this.deletedAt,
@@ -91,6 +95,7 @@ class Data {
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         id: json["id"],
+        memberId: json["member_id"],
         name: json["name"],
         email: json["email"],
         profileImage: json["profile_image"],
@@ -111,6 +116,7 @@ class Data {
         documentProofKsa: json["document_proof_ksa"],
         vehicleTypeId: json["vehicle_type_id"],
         vehicleNumber: json["vehicle_number"],
+        fcmToken: json["fcm_token"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
         deletedAt: json["deleted_at"],
@@ -118,6 +124,7 @@ class Data {
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "member_id": memberId,
         "name": name,
         "email": email,
         "profile_image": profileImage,
@@ -138,6 +145,7 @@ class Data {
         "document_proof_ksa": documentProofKsa,
         "vehicle_type_id": vehicleTypeId,
         "vehicle_number": vehicleNumber,
+        "fcm_token": fcmToken,
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
         "deleted_at": deletedAt,
@@ -148,8 +156,8 @@ class AState {
   int id;
   int countryId;
   String stateName;
-  dynamic createdAt;
-  dynamic updatedAt;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
   AState({
     required this.id,
@@ -163,15 +171,19 @@ class AState {
         id: json["id"],
         countryId: json["country_id"],
         stateName: json["state_name"],
-        createdAt: json["created_at"],
-        updatedAt: json["updated_at"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "country_id": countryId,
         "state_name": stateName,
-        "created_at": createdAt,
-        "updated_at": updatedAt,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
       };
 }

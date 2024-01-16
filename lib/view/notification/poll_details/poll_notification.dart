@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/util/theme.dart';
 
 import '../../../controller/notification/surety_view_controller.dart';
@@ -15,15 +16,13 @@ class VoteViewScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         backgroundColor: baseColor,
-        body: SingleChildScrollView(
-          child: GetBuilder<SuretyViewController>(builder: (value) {
-            final data = value.pollDetails?.data;
-            return Column(
-              children: [
-                appbar(context),
-                Container(
-                  height: 650.h,
-                  width: 390.w,
+        body: GetBuilder<SuretyViewController>(builder: (value) {
+          final data = value.pollDetails?.data;
+          return Column(
+            children: [
+              appbar(context),
+              Expanded(
+                child: Container(
                   decoration: const BoxDecoration(
                       color: whiteColor,
                       borderRadius: BorderRadiusDirectional.only(
@@ -32,7 +31,6 @@ class VoteViewScreen extends StatelessWidget {
                       )),
                   child: value.voteLoading != true
                       ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Expanded(
                               child: Column(
@@ -42,8 +40,6 @@ class VoteViewScreen extends StatelessWidget {
                                     padding: EdgeInsets.only(
                                         top: 10.h, left: 18.w, right: 18.w),
                                     child: Container(
-                                      height: 300.h,
-                                      width: 500.w,
                                       decoration: BoxDecoration(
                                           color: textFormBase,
                                           borderRadius: BorderRadius.all(
@@ -110,9 +106,7 @@ class VoteViewScreen extends StatelessWidget {
                                                 )
                                               ],
                                             ),
-                                            SizedBox(
-                                              height: 10.h,
-                                            ),
+                                            kSizedBoxH,
                                             Text(data.title,
                                                 style: const TextStyle(
                                                     color: Colors.black,
@@ -149,9 +143,7 @@ class VoteViewScreen extends StatelessWidget {
                                                   )
                                                   .toList(),
                                             ),
-                                            SizedBox(
-                                              height: 20.h,
-                                            ),
+                                            kSizedBoxH20,
                                             Align(
                                               alignment: Alignment.center,
                                               child: ButtonWidget(
@@ -178,6 +170,7 @@ class VoteViewScreen extends StatelessWidget {
                                                 },
                                               ),
                                             ),
+                                            kSizedBoxH20,
                                           ],
                                         ),
                                       ),
@@ -193,14 +186,15 @@ class VoteViewScreen extends StatelessWidget {
                         )
                       : const Center(
                           child: CircularProgressIndicator(
-                          strokeWidth: 6,
-                          color: ThemeProvider.blackColor,
-                        )),
-                )
-              ],
-            );
-          }),
-        ),
+                            strokeWidth: 6,
+                            color: ThemeProvider.blackColor,
+                          ),
+                        ),
+                ),
+              )
+            ],
+          );
+        }),
       ),
     );
   }

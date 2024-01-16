@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:rtd_project/controller/loan/loan_details_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
+import 'package:rtd_project/core/constraints/conatrints.dart';
 
 import '../../../backend/model/loan/active_loan_model.dart';
 import '../../../helper/router.dart';
@@ -16,164 +17,169 @@ class ProfileLoanScreen extends StatelessWidget {
     return SafeArea(
         child: Scaffold(
             backgroundColor: baseColor,
-            body: SingleChildScrollView(
-              child: DefaultTabController(
-                length: 2,
-                child: GetBuilder<LoanDetailsController>(builder: (value) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      wallTextWidget(context),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      tabBar(),
-                      tabBarView(value),
-                    ],
-                  );
-                }),
-              ),
+            body: DefaultTabController(
+              length: 2,
+              child: GetBuilder<LoanDetailsController>(builder: (value) {
+                return Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    wallTextWidget(context),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    tabBar(),
+                    tabBarView(value),
+                  ],
+                );
+              }),
             )));
   }
 
-  Container tabBarView(LoanDetailsController controller) {
-    return Container(
-      height: 1050.h,
-      //hallo
-      decoration: const BoxDecoration(
-        color: whiteColor,
-        borderRadius: BorderRadiusDirectional.only(
-          topEnd: Radius.circular(40),
-          topStart: Radius.circular(40),
+  Expanded tabBarView(LoanDetailsController controller) {
+    return Expanded(
+      child: Container(
+        decoration: const BoxDecoration(
+          color: whiteColor,
+          borderRadius: BorderRadiusDirectional.only(
+            topEnd: Radius.circular(40),
+            topStart: Radius.circular(40),
+          ),
+        ),
+        child: TabBarView(
+          children: [
+            activeLoan(controller),
+            closedLoan(controller),
+          ],
         ),
       ),
-      child: TabBarView(children: [
-        activeLoan(controller),
-        closedLoan(controller),
-      ]),
     );
   }
 
   Column closedLoan(LoanDetailsController controller) {
     return Column(
-        // physics: const NeverScrollableScrollPhysics(),
-        children: [
-          SizedBox(
-            height: 10.h,
-          ),
-          feedDate('19/10/2023'),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: controller.closedLoans?.data.data.length ?? 0,
-            itemBuilder: (context, index) => GestureDetector(
-                onTap: () => Get.toNamed(AppRouter.getProfileLoanDetailsRoute(),
-                        arguments: [
-                          controller.closedLoans?.data.data[index].userId
-                        ]),
-                child: activeAndClosedLoans(
-                    false, '418', controller, index, controller.closedLoans!)),
-          ),
-          SizedBox(
-            height: 10.h,
-          ),
-        ]);
-  }
-
-  Padding VoteData(bool isActive, String filenumber) {
-    return Padding(
-      padding: EdgeInsets.only(top: 10.h, left: 18.w, right: 18.w),
-      child: Container(
-        height: 300.h,
-        width: 500.w,
-        decoration: BoxDecoration(
-            color: textFormBase,
-            borderRadius: BorderRadius.all(Radius.circular(30.r))),
-        child: Padding(
-          padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 20.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                        color: whiteColor,
-                        borderRadius: BorderRadius.all(Radius.circular(30))),
-                    height: 40.h,
-                    width: 160.w,
-                    child: Center(
-                      child: Text(
-                        'Pole Number:$filenumber',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    height: 40.h,
-                    width: 100.w,
-                    decoration: const BoxDecoration(
-                        color: whiteColor,
-                        borderRadius: BorderRadius.all(Radius.circular(30))),
-                    child: Center(
-                      child: Text(
-                        isActive == true ? 'Active' : 'Closed',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 10.h,
-              ),
-              const Text("വോട്ടിന്റെ വിഷയം ഇവിടെ എഴുതുക",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16)),
-              Divider(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  optionButton(
-                      borderAvalable: false,
-                      buttonForegroundColor: Colors.white,
-                      buttonbackgroundColor: Colors.black,
-                      buttonText: 'Option one'),
-                  optionButton(
-                      borderAvalable: false,
-                      buttonForegroundColor: Colors.white,
-                      buttonbackgroundColor: Colors.black,
-                      buttonText: 'Option Two')
-                ],
-              ),
-              SizedBox(
-                height: 8.h,
-              ),
-              optionButton(
-                  borderAvalable: true,
-                  buttonForegroundColor: Colors.white,
-                  buttonbackgroundColor: Colors.black,
-                  buttonText: 'Option Three Hire'),
-              SizedBox(
-                height: 10.h,
-              ),
-              submitedButton(
-                  borderAvalable: true,
-                  buttonForegroundColor: whiteColor,
-                  buttonbackgroundColor: Colors.blue)
-            ],
-          ),
+      // physics: const NeverScrollableScrollPhysics(),
+      children: [
+        SizedBox(
+          height: 10.h,
         ),
-      ),
+        // feedDate('19/10/2023'),
+        controller.closedLoans?.data.data.length != 0
+            ? ListView.builder(
+                shrinkWrap: true,
+                itemCount: controller.closedLoans?.data.data.length ?? 0,
+                itemBuilder: (context, index) => GestureDetector(
+                  onTap: () => Get.toNamed(
+                    AppRouter.getProfileLoanDetailsRoute(),
+                    arguments: [controller.closedLoans?.data.data[index].id],
+                  ),
+                  child: activeAndClosedLoans(
+                      false, '418', controller, index, controller.closedLoans!),
+                ),
+              )
+            : const Expanded(
+                child: Center(
+                  child: Text('Closed loans is Empty'),
+                ),
+              ),
+        kSizedBoxH,
+      ],
     );
   }
+
+  // Padding VoteData(bool isActive, String filenumber) {
+  //   return Padding(
+  //     padding: EdgeInsets.only(top: 10.h, left: 18.w, right: 18.w),
+  //     child: Container(
+  //       height: 300.h,
+  //       width: 500.w,
+  //       decoration: BoxDecoration(
+  //           color: textFormBase,
+  //           borderRadius: BorderRadius.all(Radius.circular(30.r))),
+  //       child: Padding(
+  //         padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 20.h),
+  //         child: Column(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             Row(
+  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //               children: [
+  //                 Container(
+  //                   decoration: const BoxDecoration(
+  //                       color: whiteColor,
+  //                       borderRadius: BorderRadius.all(Radius.circular(30))),
+  //                   height: 40.h,
+  //                   width: 160.w,
+  //                   child: Center(
+  //                     child: Text(
+  //                       'Pole Number:$filenumber',
+  //                       textAlign: TextAlign.center,
+  //                       style: const TextStyle(
+  //                           color: Colors.black, fontWeight: FontWeight.bold),
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 Container(
+  //                   height: 40.h,
+  //                   width: 100.w,
+  //                   decoration: const BoxDecoration(
+  //                       color: whiteColor,
+  //                       borderRadius: BorderRadius.all(Radius.circular(30))),
+  //                   child: Center(
+  //                     child: Text(
+  //                       isActive == true ? 'Active' : 'Closed',
+  //                       textAlign: TextAlign.center,
+  //                       style: const TextStyle(
+  //                           color: Colors.black, fontWeight: FontWeight.bold),
+  //                     ),
+  //                   ),
+  //                 )
+  //               ],
+  //             ),
+  //             SizedBox(
+  //               height: 10.h,
+  //             ),
+  //             const Text("വോട്ടിന്റെ വിഷയം ഇവിടെ എഴുതുക",
+  //                 style: TextStyle(
+  //                     color: Colors.black,
+  //                     fontWeight: FontWeight.w500,
+  //                     fontSize: 16)),
+  //             Divider(),
+  //             Row(
+  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //               children: [
+  //                 optionButton(
+  //                     borderAvalable: false,
+  //                     buttonForegroundColor: Colors.white,
+  //                     buttonbackgroundColor: Colors.black,
+  //                     buttonText: 'Option one'),
+  //                 optionButton(
+  //                     borderAvalable: false,
+  //                     buttonForegroundColor: Colors.white,
+  //                     buttonbackgroundColor: Colors.black,
+  //                     buttonText: 'Option Two')
+  //               ],
+  //             ),
+  //             SizedBox(
+  //               height: 8.h,
+  //             ),
+  //             optionButton(
+  //                 borderAvalable: true,
+  //                 buttonForegroundColor: Colors.white,
+  //                 buttonbackgroundColor: Colors.black,
+  //                 buttonText: 'Option Three Hire'),
+  //             SizedBox(
+  //               height: 10.h,
+  //             ),
+  //             submitedButton(
+  //                 borderAvalable: true,
+  //                 buttonForegroundColor: whiteColor,
+  //                 buttonbackgroundColor: Colors.blue)
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   SizedBox submitedButton({
     bool? borderAvalable,
@@ -229,29 +235,31 @@ class ProfileLoanScreen extends StatelessWidget {
   Column activeLoan(LoanDetailsController controller) {
     final data = controller.activeLoans?.data.data;
     return Column(
-        // physics: const NeverScrollableScrollPhysics(),
-        children: [
-          SizedBox(
-            height: 10.h,
-          ),
-          feedDate('19/10/2023'),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: data?.length ?? 0,
-            itemBuilder: (context, index) => GestureDetector(
-              onTap: () {
-                Get.toNamed(AppRouter.getProfileLoanDetailsRoute(),
-                    arguments: [data![index].userId]);
-              },
-              child: activeAndClosedLoans(
-                  true, '418', controller, index, controller.activeLoans!),
-            ),
-          ),
-          SizedBox(
-            height: 10.h,
-          ),
-        ]);
+      // physics: const NeverScrollableScrollPhysics(),
+      children: [
+        kSizedBoxH,
+        // feedDate('19/10/2023'),
+        data?.length != 0
+            ? ListView.builder(
+                shrinkWrap: true,
+                itemCount: data?.length ?? 0,
+                itemBuilder: (context, index) => GestureDetector(
+                  onTap: () {
+                    Get.toNamed(AppRouter.getProfileLoanDetailsRoute(),
+                        arguments: [data![index].id]);
+                  },
+                  child: activeAndClosedLoans(
+                      true, '418', controller, index, controller.activeLoans!),
+                ),
+              )
+            : const Expanded(
+                child: Center(
+                  child: Text('Active loans is Empty'),
+                ),
+              ),
+        kSizedBoxH,
+      ],
+    );
   }
 
   Container feedDate(String date) {
@@ -322,9 +330,7 @@ class ProfileLoanScreen extends StatelessWidget {
                   )
                 ],
               ),
-              SizedBox(
-                height: 10.h,
-              ),
+              kSizedBoxH,
               Row(
                 children: [
                   ClipOval(
@@ -332,7 +338,7 @@ class ProfileLoanScreen extends StatelessWidget {
                       data.user.profileImage,
                       height: 40.h,
                       width: 40.w,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.contain,
                     ),
                   ),
                   SizedBox(

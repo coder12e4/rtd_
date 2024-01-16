@@ -52,4 +52,32 @@ class LoanEditParser {
 // temporary directory and image bytes from response is written to // that file.
     return file;
   }
+
+  Future<Response> getLoanPurpose(body) async {
+    final accessToken = sharedPreferencesManager.getString('access_token');
+    var response = await apiService.postPrivate(
+        Constants.baseUrl + Constants.getLonPurpose, body, accessToken!);
+    return response;
+  }
+
+  Future<Response> removeLoanDocument(body) async {
+    final accessToken = sharedPreferencesManager.getString('access_token');
+    var response = await apiService.postPrivate(
+        Constants.baseUrl + Constants.removeLoanDocument, body, accessToken!);
+    return response;
+  }
+
+  Future<Response> updateLoanRequest(body) async {
+    final accessToken = sharedPreferencesManager.getString('access_token');
+    var response = await apiService.postPrivate(
+        Constants.baseUrl + Constants.updateLoanRequest, body, accessToken!);
+    return response;
+  }
+
+  Future<Response> getLoanDocuments(body) async {
+    final accessToken = sharedPreferencesManager.getString('access_token');
+    var response = await apiService.postPrivate(
+        Constants.baseUrl + Constants.getLoanDocuments, body, accessToken!);
+    return response;
+  }
 }

@@ -3,10 +3,10 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:rtd_project/controller/loan/loan_edit_controller.dart';
-import 'package:rtd_project/controller/loan/loan_screen_controller.dart';
 
 import '../backend/model/loan/surties_model.dart';
 import '../backend/parser/search_parser.dart';
+import 'loan/loan_screen_controller.dart';
 
 class SearchScreenController extends GetxController {
   final SearchScreenParser parser;
@@ -31,10 +31,10 @@ class SearchScreenController extends GetxController {
   List<int> _addedSurties = <int>[];
   List<int> get addedSurties => _addedSurties;
   List<SuretiesData>? searchResult = [];
+
   Future<void> getSurties() async {
     Response response = await parser.getSurties();
     searchResult!.clear();
-
     if (response.statusCode == 200) {
       log(response.body.toString());
       try {
@@ -48,8 +48,8 @@ class SearchScreenController extends GetxController {
         searchResult = List<SuretiesData>.from(surties ?? []);
         loading = false;
         log(surties.toString());
-      } catch (e) {
-        log(e.toString());
+      } catch (e, stackTrace) {
+        log("get surety catch $e", error: e, stackTrace: stackTrace);
       }
     }
     // loading = false;
@@ -57,13 +57,14 @@ class SearchScreenController extends GetxController {
   }
 
   addSurties(SuretiesData surety) {
+    FocusManager.instance.primaryFocus?.unfocus();
     if (tappedScreen == true) {
       Get.find<LoanEditController>().addSurties(surety, tappedIndex!);
     } else {
       Get.find<LoanScreenController>().addSurties(surety, tappedIndex!);
     }
 
-    // update();
+    update();
   }
 
   searchSurties(String query) {

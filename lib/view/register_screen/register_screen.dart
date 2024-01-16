@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -12,6 +14,7 @@ import 'package:rtd_project/core/common_widget/imagepicker.dart';
 import 'package:rtd_project/core/common_widget/textformfield_widget.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/util/theme.dart';
+import 'package:rtd_project/view/terms_and_conditions/terms_and_conditions.dart';
 
 import '../../util/toast.dart';
 import '../../util/validators.dart';
@@ -26,14 +29,17 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   XFile? _selectedImage1;
   XFile? _selectedImage2;
+  XFile? _profileImage;
 
   bool selectProfileImage = false;
-  // void _updateProfileImage(XFile? profileImage) {
-  //   setState(() {
-  //     _profileImage = profileImage;
-  //     selectProfileImage = true;
-  //   });
-  // }
+  void _updateProfileImage(XFile? profileImage) {
+    setState(() {
+      _profileImage = profileImage;
+      selectProfileImage = true;
+    });
+  }
+
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   void _updateSelectedImage(XFile? newImage) async {
     _selectedImage1 = newImage;
@@ -74,141 +80,73 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Form textFieldContainer(BuildContext context, RegisterController value) {
-    final _formKey = GlobalKey<FormState>();
-
     return Form(
-      key: _formKey,
-      child: Container(
-          height: value.isSubmitted ? 400.h : 1650.h,
-          width: 390.w,
-          decoration: const BoxDecoration(
-            color: whiteColor,
-            borderRadius: BorderRadiusDirectional.only(
-              topEnd: Radius.circular(50),
-              topStart: Radius.circular(50),
-            ),
+      key: formKey,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 500),
+        height: value.isSubmitted ? 400.h : 1840.h,
+        // width: 390.w,
+        decoration: const BoxDecoration(
+          color: whiteColor,
+          borderRadius: BorderRadiusDirectional.only(
+            topEnd: Radius.circular(50),
+            topStart: Radius.circular(50),
           ),
-          child: ListView(
-            padding: const EdgeInsets.all(45).r,
-            physics: const NeverScrollableScrollPhysics(),
-            children: [
-              // profileImage(context),
-              Visibility(
-                visible: !value.isSubmitted,
-                child: Column(
-                  children: <Widget>[
-                    registerStepContainer('1'),
+        ),
+        child: ListView(
+          padding: EdgeInsets.symmetric(horizontal: 45.w, vertical: 20.h),
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            // profileImage(context),
+            Visibility(
+              visible: !value.isSubmitted,
+              child: Column(
+                children: <Widget>[
+                  // registerStepContainer('One'),
 
-                    textFieldHeight,
-                    TextFormFieldWidget(
-                        validator: Rtd_Validators.noneEmptyValidator,
-                        controller: value.nameRegController,
-                        textInputType: TextInputType.text,
-                        hitText: 'Name'),
-                    textFieldHeight,
+                  imageContainer(value),
+                  textFieldHeight,
+                  TextFormFieldWidget(
+                      validator: Rtd_Validators.noneEmptyValidator,
+                      controller: value.nameRegController,
+                      textInputType: TextInputType.text,
+                      hitText: 'Name'),
+                  textFieldHeight,
 
-                    TextFormFieldWidget(
-                        validator: Rtd_Validators.emailValidator,
-                        controller: value.emailRegController,
-                        textInputType: TextInputType.emailAddress,
-                        hitText: 'email'),
+                  TextFormFieldWidget(
+                      validator: Rtd_Validators.emailValidator,
+                      controller: value.emailRegController,
+                      textInputType: TextInputType.emailAddress,
+                      hitText: 'email'),
 
-                    textFieldHeight,
-                    SizedBox(
-                      width: 290.w,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextFormField(
-                          focusNode: FocusNode(),
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          validator: Rtd_Validators.passwordValidator,
-                          controller: value.passwordRegController,
-                          obscureText: value.passwordVisible,
-                          decoration: InputDecoration(
-                              border: InputBorder.none, // Removes the underline
-
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  // Based on passwordVisible state choose the icon
-                                  value.passwordVisible
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                  color: Theme.of(context).primaryColorDark,
-                                ),
-                                onPressed: () {
-                                  // Update the state i.e. toogle the state of passwordVisible variable
-                                  value.visibityPasswordChange();
-                                },
-                              ),
-                              hintText: " Password",
-                              fillColor: textFormBase,
-                              filled: true,
-                              focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    const BorderSide(color: textFormBase),
-                                borderRadius: BorderRadius.circular(20.0),
-                              ),
-                              focusedErrorBorder: UnderlineInputBorder(
-                                borderSide:
-                                    const BorderSide(color: textFormBase),
-                                borderRadius: BorderRadius.circular(20.0),
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide:
-                                    const BorderSide(color: textFormBase),
-                                borderRadius: BorderRadius.circular(20.0),
-                              ),
-                              errorBorder: UnderlineInputBorder(
-                                borderSide:
-                                    const BorderSide(color: textFormBase),
-                                borderRadius: BorderRadius.circular(20.0),
-                              ),
-                              hintStyle: const TextStyle(
-                                  color: Color.fromARGB(255, 112, 111, 111),
-                                  fontWeight: FontWeight.bold)),
-                          textAlign: TextAlign
-                              .center, // Centers the text inside the field
-                        ),
-                      ),
-                    ),
-
-                    textFieldHeight,
-                    Padding(
+                  textFieldHeight,
+                  SizedBox(
+                    width: 290.w,
+                    child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
                         focusNode: FocusNode(),
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (valuee) {
-                          if (valuee!.isEmpty) {
-                            return "Please Re-Enter New Password";
-                          } else if (valuee.length < 5) {
-                            return "Password must be atleast 5 characters long";
-                          } else if (valuee !=
-                              value.passwordRegController.text) {
-                            return "Password must be same as above";
-                          } else {
-                            return null;
-                          }
-                        },
-                        controller: value.confirmpasswordRegController,
-                        obscureText: value.confirmPasswordVisible,
+                        validator: Rtd_Validators.passwordValidator,
+                        controller: value.passwordRegController,
+                        obscureText: value.passwordVisible,
                         decoration: InputDecoration(
                             border: InputBorder.none, // Removes the underline
 
                             suffixIcon: IconButton(
                               icon: Icon(
                                 // Based on passwordVisible state choose the icon
-                                value.confirmPasswordVisible
+                                value.passwordVisible
                                     ? Icons.visibility
                                     : Icons.visibility_off,
                                 color: Theme.of(context).primaryColorDark,
                               ),
                               onPressed: () {
                                 // Update the state i.e. toogle the state of passwordVisible variable
-                                value.visibityConfirmPasswordChange();
+                                value.visibityPasswordChange();
                               },
                             ),
-                            hintText: "Confirm Password",
+                            hintText: " Password",
                             fillColor: textFormBase,
                             filled: true,
                             focusedBorder: OutlineInputBorder(
@@ -234,31 +172,93 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             .center, // Centers the text inside the field
                       ),
                     ),
-                    textFieldHeight,
-                    TextFormFieldWidget(
-                        validator: Rtd_Validators.mobileNumberValidator,
-                        controller: value.indianMobNumContoller,
-                        textInputType: TextInputType.phone,
-                        hitText: 'Indian Mobile Number'),
-                    textFieldHeight,
-                    TextFormFieldWidget(
-                        validator: Rtd_Validators.mobileNumberValidator,
-                        controller: value.ksaMobileNumRegController,
-                        textInputType: TextInputType.phone,
-                        hitText: 'KSA Mobile Number'),
+                  ),
 
-                    textFieldHeight,
+                  textFieldHeight,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      focusNode: FocusNode(),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (valuee) {
+                        if (valuee!.isEmpty) {
+                          return "Please Re-Enter New Password";
+                        } else if (valuee.length < 5) {
+                          return "Password must be atleast 5 characters long";
+                        } else if (valuee != value.passwordRegController.text) {
+                          return "Password must be same as above";
+                        } else {
+                          return null;
+                        }
+                      },
+                      controller: value.confirmpasswordRegController,
+                      obscureText: value.confirmPasswordVisible,
+                      decoration: InputDecoration(
+                          border: InputBorder.none, // Removes the underline
 
-                    Container(
-                      margin: const EdgeInsets.only(left: 5, right: 5),
-                      padding: const EdgeInsets.only(left: 10, right: 10),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: textFormBase),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              // Based on passwordVisible state choose the icon
+                              value.confirmPasswordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: Theme.of(context).primaryColorDark,
+                            ),
+                            onPressed: () {
+                              // Update the state i.e. toogle the state of passwordVisible variable
+                              value.visibityConfirmPasswordChange();
+                            },
+                          ),
+                          hintText: "Confirm Password",
+                          fillColor: textFormBase,
+                          filled: true,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: textFormBase),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          focusedErrorBorder: UnderlineInputBorder(
+                            borderSide: const BorderSide(color: textFormBase),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: const BorderSide(color: textFormBase),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          errorBorder: UnderlineInputBorder(
+                            borderSide: const BorderSide(color: textFormBase),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          hintStyle: const TextStyle(
+                              color: Color.fromARGB(255, 112, 111, 111),
+                              fontWeight: FontWeight.bold)),
+                      textAlign:
+                          TextAlign.center, // Centers the text inside the field
+                    ),
+                  ),
+                  textFieldHeight,
+                  TextFormFieldWidget(
+                      validator: Rtd_Validators.mobileNumberValidator,
+                      controller: value.indianMobNumContoller,
+                      textInputType: TextInputType.phone,
+                      hitText: 'Indian Mobile Number'),
+                  textFieldHeight,
+                  TextFormFieldWidget(
+                      validator: Rtd_Validators.mobileNumberValidator,
+                      controller: value.ksaMobileNumRegController,
+                      textInputType: TextInputType.phone,
+                      hitText: 'KSA Mobile Number'),
+
+                  textFieldHeight,
+
+                  Container(
+                    width: 268.w,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: textFormBase),
+                    child: Center(
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<BloodGroup>(
-                            isExpanded: true,
-                            alignment: AlignmentDirectional.centerEnd,
+                            alignment: AlignmentDirectional.center,
                             hint: Center(
                               child: Text(
                                 "Select Your blood group",
@@ -287,286 +287,344 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             }),
                       ),
                     ),
+                  ),
 
-                    textFieldHeight,
+                  textFieldHeight,
 
-                    //////////////////////////End of Fourth Section?///////////////////////////////////////////////////////////
-                    textFieldHeight,
-                    dividerAndHeadingWidget(
-                        heading: 'Indian Address', width: 140.w),
-                    textFieldHeight,
-                    TextFormFieldWidget(
-                        validator: Rtd_Validators.noneEmptyValidator,
-                        controller: value.indianAddressLine1Controller,
-                        hitText: 'Address Line 1'),
-                    textFieldHeight,
-                    TextFormFieldWidget(
-                        validator: Rtd_Validators.noneEmptyValidator,
-                        controller: value.indianAddressLine2Controller,
-                        hitText: 'Address Line 2'),
-                    textFieldHeight,
+                  //////////////////////////End of Fourth Section?///////////////////////////////////////////////////////////
+                  textFieldHeight,
+                  dividerAndHeadingWidget(
+                      heading: 'Indian Address', width: 140.w),
+                  textFieldHeight,
+                  TextFormFieldWidget(
+                      validator: Rtd_Validators.noneEmptyValidator,
+                      controller: value.indianAddressLine1Controller,
+                      hitText: 'Address Line 1'),
+                  textFieldHeight,
+                  TextFormFieldWidget(
+                      validator: Rtd_Validators.noneEmptyValidator,
+                      controller: value.indianAddressLine2Controller,
+                      hitText: 'Address Line 2'),
+                  textFieldHeight,
 
-                    Container(
-                      margin: const EdgeInsets.only(left: 5, right: 5),
-                      padding: const EdgeInsets.only(left: 10, right: 10),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: textFormBase),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<AllStatesModel>(
-                            isExpanded: true,
-                            hint: Center(
-                              child: Text(
-                                "Select States",
-                                style: TextStyle(
-                                    color: Colors.black.withOpacity(.55),
-                                    fontSize: 17,
-                                    letterSpacing: .1,
-                                    fontWeight: FontWeight.w600),
-                              ),
+                  Container(
+                    width: 268.w,
+                    padding: EdgeInsets.only(left: 60.w, right: 10.w),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: textFormBase),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<AllStatesModel>(
+                          alignment: AlignmentDirectional.center,
+                          // isExpanded: true,
+                          hint: Center(
+                            child: Text(
+                              "Select States",
+                              style: TextStyle(
+                                  color: Colors.black.withOpacity(.55),
+                                  fontSize: 17,
+                                  letterSpacing: .1,
+                                  fontWeight: FontWeight.w600),
                             ),
-                            icon:
-                                const Icon(Icons.keyboard_arrow_down_outlined),
-                            value: value.selectedItem,
-                            items: value.dropdownMenuItems,
-                            onChanged: (value) {
-                              setState(() {
-                                auth.selectedItem = value;
-                                auth.statesName = auth.selectedItem!.stateName;
-                              });
-                            }),
-                      ),
+                          ),
+                          icon: const Icon(Icons.keyboard_arrow_down_outlined),
+                          value: value.selectedItem,
+                          items: value.dropdownMenuItems,
+                          onChanged: (value) {
+                            setState(() {
+                              auth.selectedItem = value;
+                              auth.statesName = auth.selectedItem!.stateName;
+                            });
+                          }),
                     ),
+                  ),
 
-                    //////////////////////////End first Section?///////////////////////////////////////////////////////////
+                  //////////////////////////End first Section?///////////////////////////////////////////////////////////
 
-                    textFieldHeight,
-                    TextFormFieldWidget(
-                        validator: Rtd_Validators.pincodeValidator,
-                        controller: value.pinController1,
-                        textInputType: TextInputType.number,
-                        hitText: 'pin'),
+                  textFieldHeight,
+                  TextFormFieldWidget(
+                      validator: Rtd_Validators.pincodeValidator,
+                      controller: value.pinController1,
+                      textInputType: TextInputType.number,
+                      hitText: 'pin'),
 
-                    textFieldHeight,
+                  textFieldHeight,
 
-                    dividerAndHeadingWidget(
-                        heading: 'Residence Address in KSA', width: 80.w),
-                    textFieldHeight,
-                    TextFormFieldWidget(
-                        validator: Rtd_Validators.noneEmptyValidator,
-                        controller: value.resAddressLine1Controller,
-                        hitText: 'Address Line 1'),
-                    textFieldHeight,
-                    TextFormFieldWidget(
-                        validator: Rtd_Validators.noneEmptyValidator,
-                        controller: value.resAddressLine2Controller,
-                        hitText: 'Address Line 2'),
+                  dividerAndHeadingWidget(
+                      heading: 'Residence Address in KSA', width: 80.w),
+                  textFieldHeight,
+                  TextFormFieldWidget(
+                      validator: Rtd_Validators.noneEmptyValidator,
+                      controller: value.resAddressLine1Controller,
+                      hitText: 'Address Line 1'),
+                  textFieldHeight,
+                  TextFormFieldWidget(
+                      validator: Rtd_Validators.noneEmptyValidator,
+                      controller: value.resAddressLine2Controller,
+                      hitText: 'Address Line 2'),
 
-                    textFieldHeight,
-                    TextFormFieldWidget(
-                        validator: Rtd_Validators.pincodeValidator,
-                        controller: value.pinController2,
-                        textInputType: TextInputType.number,
-                        hitText: 'pin'),
-                    textFieldHeight,
+                  textFieldHeight,
+                  TextFormFieldWidget(
+                      validator: Rtd_Validators.pincodeValidator,
+                      controller: value.pinController2,
+                      textInputType: TextInputType.number,
+                      hitText: 'pin'),
+                  textFieldHeight,
 
-                    Container(
-                      margin: const EdgeInsets.only(left: 5, right: 5),
-                      padding: const EdgeInsets.only(left: 10, right: 10),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: textFormBase),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<AllStatesModel>(
-                            isExpanded: true,
-                            hint: Center(
-                              child: Text(
-                                "Select States",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.black.withOpacity(.55),
-                                    fontSize: 17,
-                                    letterSpacing: .1,
-                                    fontWeight: FontWeight.w600),
-                              ),
+                  Container(
+                    width: 268.w,
+                    padding: const EdgeInsets.only(left: 80, right: 10),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: textFormBase),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<AllStatesModel>(
+                          alignment: AlignmentDirectional.center,
+                          // isExpanded: true,
+                          hint: Center(
+                            child: Text(
+                              "Select States",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.black.withOpacity(.55),
+                                  fontSize: 17,
+                                  letterSpacing: .1,
+                                  fontWeight: FontWeight.w600),
                             ),
-                            icon:
-                                const Icon(Icons.keyboard_arrow_down_outlined),
-                            value: value.stateKsa,
-                            items: value.dropdownKsaItems,
-                            onChanged: (value) {
-                              setState(() {
-                                auth.stateKsa = value;
-                                auth.statesName = auth.stateKsa!.stateName;
-                              });
-                            }),
-                      ),
+                          ),
+                          icon: const Icon(Icons.keyboard_arrow_down_outlined),
+                          value: value.stateKsa,
+                          items: value.dropdownKsaItems,
+                          onChanged: (value) {
+                            setState(() {
+                              auth.stateKsa = value;
+                              auth.statesName = auth.stateKsa!.stateName;
+                            });
+                          }),
                     ),
-                    textFieldHeight,
-                    TextFormFieldWidget(
-                        validator: Rtd_Validators.noneEmptyValidator,
-                        controller: value.vehicleNumContoller,
-                        hitText: 'Vehicle Number'),
-                    textFieldHeight,
+                  ),
+                  textFieldHeight,
+                  TextFormFieldWidget(
+                      validator: Rtd_Validators.noneEmptyValidator,
+                      controller: value.vehicleNumContoller,
+                      hitText: 'Vehicle Number'),
+                  textFieldHeight,
 
-                    Container(
-                      margin: const EdgeInsets.only(left: 5, right: 5),
-                      padding: const EdgeInsets.only(left: 10, right: 10),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: textFormBase),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<VehicleData>(
-                            isExpanded: true,
-                            hint: Center(
-                              child: Text(
-                                "Select Your Vehicle Model ",
-                                style: TextStyle(
-                                    color: Colors.black.withOpacity(.55),
-                                    fontSize: 17,
-                                    letterSpacing: .1,
-                                    fontWeight: FontWeight.w600),
-                              ),
+                  Container(
+                    width: 268.w,
+                    // margin: const EdgeInsets.only(left: 5, right: 5),
+                    padding: EdgeInsets.only(left: 17.w, right: 10.w),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: textFormBase),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<VehicleData>(
+                          alignment: AlignmentDirectional.center,
+                          // isExpanded: true,
+                          hint: Center(
+                            child: Text(
+                              "Select Your Vehicle Model ",
+                              style: TextStyle(
+                                  color: Colors.black.withOpacity(.55),
+                                  fontSize: 17,
+                                  letterSpacing: .1,
+                                  fontWeight: FontWeight.w600),
                             ),
-                            icon:
-                                const Icon(Icons.keyboard_arrow_down_outlined),
-                            value: value.vehicleType,
-                            items: value.dropdownMenuItemsVehicleModel,
-                            onChanged: (value) {
-                              setState(() {
-                                auth.vehicleType = value;
+                          ),
+                          icon: const Icon(Icons.keyboard_arrow_down_outlined),
+                          value: value.vehicleType,
+                          items: value.dropdownMenuItemsVehicleModel,
+                          onChanged: (value) {
+                            setState(() {
+                              auth.vehicleType = value;
 
-                                auth.vehicleTypeName = value!.name.toString();
-
-                                //   newStateList.clear();
-                                //  newStateList=[];
-                                //_dropdownMenuItemsStates.clear();
-                              });
-                            }),
-                      ),
+                              auth.vehicleTypeName = value!.name.toString();
+                            });
+                          }),
                     ),
+                  ),
 
-                    textFieldHeight,
-                    const RadioButtonWidget(),
-                    textFieldHeight,
-                  ],
-                ),
+                  textFieldHeight,
+                  const RadioButtonWidget(),
+                  textFieldHeight,
+                ],
               ),
-              value.isSubmitted != true
-                  ? ButtonWidget(
-                      buttonBackgroundColor: buttenBlue,
-                      buttonForegroundColor: whiteColor,
-                      buttonText: 'Submit',
-                      borderAvalable: false,
-                      press: () {
-                        if (auth.isSelected.value) {
-                          if (_formKey.currentState!.validate()) {
-                            value.onRegister();
-                          }
-                        } else {
-                          showToast('Please Agree the Terms and Conditions');
+            ),
+            value.isSubmitted != true
+                ? ButtonWidget(
+                    buttonBackgroundColor: buttenBlue,
+                    buttonForegroundColor: whiteColor,
+                    buttonText: 'Submit',
+                    borderAvalable: false,
+                    press: () {
+                      if (auth.isSelected.value) {
+                        if (formKey.currentState!.validate()) {
+                          value.onRegister(_profileImage);
                         }
-                      })
-                  : registerStepContainer('2'),
-              // textFieldHeight,
-              // textFieldHeight,
+                      } else {
+                        showToast('Please Agree the Terms and Conditions');
+                      }
+                    })
+                : const SizedBox(),
+            // registerStepContainer('2'),
+            // textFieldHeight,
+            // textFieldHeight,
 
-              Visibility(
-                visible: value.isSubmitted,
-                child: Column(
-                  children: [
-                    textFieldHeight,
-                    Center(
-                      child: Text(
-                        !value.indianDocSubmitted
-                            ? 'No Documents attached'
-                            : 'Document is selected',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: !value.indianDocSubmitted
-                                ? Colors.red
-                                : Colors.green),
-                      ),
+            Visibility(
+              visible: value.isSubmitted,
+              child: Column(
+                children: [
+                  textFieldHeight,
+                  Center(
+                    child: Text(
+                      !value.indianDocSubmitted
+                          ? 'No Documents attached'
+                          : 'Document is selected',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: !value.indianDocSubmitted
+                              ? Colors.red
+                              : Colors.green),
                     ),
-                    textFieldHeight,
-                    ButtonWidget(
-                        press: () {
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (context) => Imagepiker(
-                              onImageSelected: _updateSelectedImage,
+                  ),
+                  textFieldHeight,
+                  ButtonWidget(
+                      press: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) => Imagepiker(
+                            onImageSelected: _updateSelectedImage,
+                            press: () {
+                              Get.back();
+
+                              value.uploadIndianDoc(_selectedImage1!.path);
+                            },
+                          ),
+                        );
+                      },
+                      buttonBackgroundColor: whiteColor,
+                      buttonForegroundColor: Colors.blue,
+                      buttonText: 'Attach Indian Proof',
+                      borderAvalable: true),
+                  textFieldHeight,
+                  Center(
+                    child: Text(
+                      !value.ksaDocSubmitted
+                          ? 'No Documents attached'
+                          : 'Document is selected',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: !value.ksaDocSubmitted
+                              ? Colors.red
+                              : Colors.green),
+                    ),
+                  ),
+                  textFieldHeight,
+                  ButtonWidget(
+                      press: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) => Imagepiker(
+                              onImageSelected: _updateSelectedImage1,
                               press: () {
                                 Get.back();
-
-                                value.uploadIndianDoc(_selectedImage1!.path);
-                              },
-                            ),
-                          );
-                        },
-                        buttonBackgroundColor: whiteColor,
-                        buttonForegroundColor: Colors.blue,
-                        buttonText: 'Attach Indian Proof',
-                        borderAvalable: true),
-                    textFieldHeight,
-                    Center(
-                      child: Text(
-                        !value.ksaDocSubmitted!
-                            ? 'No Documents attached'
-                            : 'Document is selected',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: !value.ksaDocSubmitted!
-                                ? Colors.red
-                                : Colors.green),
-                      ),
-                    ),
-                    textFieldHeight,
-                    ButtonWidget(
-                        press: () {
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (context) => Imagepiker(
-                                onImageSelected: _updateSelectedImage1,
-                                press: () {
-                                  Get.back();
-                                  value.uploadKsaDoc(_selectedImage2!.path);
-                                }),
-                          );
-                        },
-                        buttonBackgroundColor: whiteColor,
-                        buttonForegroundColor: Colors.blue,
-                        buttonText: 'Attach Ksa Proof',
-                        borderAvalable: true),
-                  ],
-                ),
+                                value.uploadKsaDoc(_selectedImage2!.path);
+                              }),
+                        );
+                      },
+                      buttonBackgroundColor: whiteColor,
+                      buttonForegroundColor: Colors.blue,
+                      buttonText: 'Attach Ksa Proof',
+                      borderAvalable: true),
+                  kSizedBoxH20,
+                  kSizedBoxH,
+                  value.indianDocSubmitted == true &&
+                          value.ksaDocSubmitted == true
+                      ? ButtonWidget(
+                          press: () {
+                            value.registerSuccess(2);
+                          },
+                          buttonBackgroundColor: Colors.blue,
+                          buttonForegroundColor: Colors.white,
+                          buttonText: 'Continue',
+                          borderAvalable: true)
+                      : const SizedBox(),
+                ],
               ),
-            ],
-          )),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  imageContainer(RegisterController value) {
+    return Stack(
+      alignment: AlignmentDirectional.topCenter,
+      children: [
+        Container(
+          height: 100.h,
+          width: 100.w,
+          decoration: BoxDecoration(
+            // border: Border.all(width: .3),
+            shape: BoxShape.circle,
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: selectProfileImage == false
+                  ? const AssetImage('assets/images/defaultpic.webp')
+                      as ImageProvider
+                  : FileImage(File(_profileImage!.path)),
+            ),
+          ),
+        ),
+        Positioned(
+            right: 5.w,
+            bottom: 10.h,
+            // top: 80.h,
+            child: CircleAvatar(
+              maxRadius: 15.r,
+              backgroundColor: ThemeProvider.blackColor,
+              child: IconButton(
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) => Imagepiker(
+                          onImageSelected: _updateProfileImage,
+                          press: () => Get.back()),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.camera_alt_outlined,
+                    color: whiteColor,
+                    size: 15,
+                  )),
+            ))
+      ],
     );
   }
 
   Row registerStepContainer(String stepCount) {
     return Row(
       children: [
-        const Text(
-          'Registration Step',
-          style: TextStyle(color: ThemeProvider.blackColor),
+        Text(
+          'Registration Step $stepCount ',
+          style: const TextStyle(color: ThemeProvider.blackColor),
         ),
         const SizedBox(
           width: 10,
         ),
-        Container(
-          height: 20,
-          width: 20,
-          decoration: const BoxDecoration(
-              shape: BoxShape.circle, color: ThemeProvider.blackColor),
-          child: Center(
-              child: Text(
-            stepCount,
-            style: const TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold),
-          )),
-        ),
+        // Container(
+        //   height: 20,
+        //   width: 20,
+        //   decoration: const BoxDecoration(
+        //       shape: BoxShape.circle, color: ThemeProvider.blackColor),
+        //   child: Center(
+        //       child: Text(
+        //     stepCount,
+        //     style: const TextStyle(
+        //         color: Colors.white, fontWeight: FontWeight.bold),
+        //   )),
+        // ),
       ],
     );
   }
@@ -775,42 +833,45 @@ class _RadioButtonWidgetState extends State<RadioButtonWidget> {
   final RegisterController auth = Get.find();
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        auth.toggleSelection();
-      },
-      child: Row(
-        children: [
-          Obx(
-            () => Radio<String>(
-              value: 'accepted',
-              groupValue: auth.isSelected.value ? 'accepted' : '',
-              onChanged: (String? newValue) {
-                auth.toggleSelection();
-              },
-            ),
+    return Row(
+      children: [
+        Obx(
+          () => Radio<String>(
+            toggleable: true,
+            value: 'accepted',
+            groupValue: auth.isSelected.value ? 'accepted' : '',
+            onChanged: (String? newValue) {
+              auth.toggleSelection();
+            },
           ),
-          SizedBox(width: 2.w),
-          const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'I have read and agreed to the',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-                // Adjust the text styling as needed
+        ),
+        SizedBox(width: 2.w),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'I have read and agreed to the',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
               ),
-              Text(
+              // Adjust the text styling as needed
+            ),
+            InkWell(
+              onTap: () {
+                Get.to(
+                  const TermsAndConditions(),
+                );
+              },
+              child: const Text(
                 'Terms and Conditions.',
                 style:
                     TextStyle(fontWeight: FontWeight.bold, color: buttenBlue),
                 // Adjust the text styling as needed
               ),
-            ],
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

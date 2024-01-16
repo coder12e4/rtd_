@@ -179,7 +179,7 @@ class RegisterController extends GetxController implements GetxService {
     update();
   }
 
-  Future<void> onRegister() async {
+  Future<void> onRegister(XFile? profileImage) async {
     try {
       /*if (emailRegController.text == '' ||
           emailRegController.text.isEmpty ||
@@ -237,6 +237,7 @@ class RegisterController extends GetxController implements GetxService {
       );
 
       await upload(
+        profileImage,
         nameRegController.text,
         emailRegController.text,
         passwordRegController.text,
@@ -430,15 +431,15 @@ class RegisterController extends GetxController implements GetxService {
       return;
     }
 
-    if (registerToken != null) {
-      isSubmitted = !isSubmitted;
-      //   double offset = 1500.0;
-      //   _scrollController.animateTo(
-      //     offset,
-      //     duration: const Duration(milliseconds: 500),
-      //     curve: Curves.easeInOut,
-      //   );
-    }
+    // if (registerToken != null) {
+    //   // isSubmitted = !isSubmitted;
+    //   //   double offset = 1500.0;
+    //   //   _scrollController.animateTo(
+    //   //     offset,
+    //   //     duration: const Duration(milliseconds: 500),
+    //   //     curve: Curves.easeInOut,
+    //   //   );
+    // }
     update();
   }
 
@@ -453,7 +454,7 @@ class RegisterController extends GetxController implements GetxService {
     } else {
       showToast('Select Document to Upload');
     }
-    registerSuccess();
+    registerSuccess(1);
     update();
   }
 
@@ -469,7 +470,7 @@ class RegisterController extends GetxController implements GetxService {
     } else {
       showToast('Select Document to Upload');
     }
-    registerSuccess();
+    registerSuccess(1);
     update();
   }
 
@@ -543,6 +544,7 @@ class RegisterController extends GetxController implements GetxService {
 // Example usage:
 
   Future<void> upload(
+    XFile? data,
     name,
     email,
     password,
@@ -567,7 +569,10 @@ class RegisterController extends GetxController implements GetxService {
     var uri = Uri.parse("http://rtd.canisostudio.com/api/register");
 
     var request = http.MultipartRequest("POST", uri);
-
+    if (data != null) {
+      var file = await http.MultipartFile.fromPath('profile_image', data.path);
+      request.files.add(file);
+    }
     request.fields['name'] = name;
     request.fields['email'] = email;
     request.fields['password'] = password;
@@ -620,13 +625,13 @@ class RegisterController extends GetxController implements GetxService {
     update();
   }
 
-  Future<void> registerSuccess() async {
+  Future<void> registerSuccess(int status) async {
     if (indianDocSubmitted == true && ksaDocSubmitted == true) {
-      await Future.delayed(const Duration(seconds: 2));
+      status == 1 ? await Future.delayed(const Duration(seconds: 2)) : null;
       final pref = await SharedPreferences.getInstance();
       await pref.remove('indianDocSubmitted');
       await pref.remove('ksaDocSubmitted');
-      await pref.remove('register_token');
+
       Get.bottomSheet(const RegisterComplited(text: 'Continue'),
           isDismissible: false);
     }

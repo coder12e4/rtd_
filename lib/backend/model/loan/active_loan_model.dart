@@ -45,7 +45,7 @@ class ALoanData {
   int currentPage;
   List<Datum> data;
   String firstPageUrl;
-  int from;
+  int? from;
   int lastPage;
   String lastPageUrl;
   List<Link> links;
@@ -53,7 +53,7 @@ class ALoanData {
   String path;
   int perPage;
   dynamic prevPageUrl;
-  int to;
+  int? to;
   int total;
 
   ALoanData({
@@ -106,6 +106,7 @@ class ALoanData {
 }
 
 class Datum {
+  int id;
   String fileNumber;
   int userId;
   String loanAmount;
@@ -116,6 +117,7 @@ class Datum {
   String statusText;
 
   Datum({
+    required this.id,
     required this.fileNumber,
     required this.userId,
     required this.loanAmount,
@@ -127,6 +129,7 @@ class Datum {
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+        id: json["id"],
         fileNumber: json["file_number"],
         userId: json["user_id"],
         loanAmount: json["loan_amount"],
@@ -138,6 +141,7 @@ class Datum {
       );
 
   Map<String, dynamic> toJson() => {
+        "id": id,
         "file_number": fileNumber,
         "user_id": userId,
         "loan_amount": loanAmount,
@@ -158,6 +162,7 @@ class User {
   String profileImage;
   dynamic emailVerifiedAt;
   int verificationStatus;
+  int status;
   String indiaMobileNumber;
   String ksaMobileNumber;
   int bloodGroup;
@@ -173,7 +178,7 @@ class User {
   String documentProofKsa;
   int vehicleTypeId;
   String vehicleNumber;
-  String? fcmToken;
+  String fcmToken;
   DateTime createdAt;
   DateTime updatedAt;
   dynamic deletedAt;
@@ -186,6 +191,7 @@ class User {
     required this.profileImage,
     required this.emailVerifiedAt,
     required this.verificationStatus,
+    required this.status,
     required this.indiaMobileNumber,
     required this.ksaMobileNumber,
     required this.bloodGroup,
@@ -215,6 +221,7 @@ class User {
         profileImage: json["profile_image"],
         emailVerifiedAt: json["email_verified_at"],
         verificationStatus: json["verification_status"],
+        status: json["status"],
         indiaMobileNumber: json["india_mobile_number"],
         ksaMobileNumber: json["ksa_mobile_number"],
         bloodGroup: json["blood_group"],
@@ -244,6 +251,7 @@ class User {
         "profile_image": profileImage,
         "email_verified_at": emailVerifiedAt,
         "verification_status": verificationStatus,
+        "status": status,
         "india_mobile_number": indiaMobileNumber,
         "ksa_mobile_number": ksaMobileNumber,
         "blood_group": bloodGroup,

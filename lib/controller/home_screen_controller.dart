@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:get/get.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:rtd_project/backend/model/home_data_model.dart';
 import 'package:rtd_project/controller/notification/notification_controller.dart';
 
@@ -13,7 +12,6 @@ class HomeController extends GetxController implements GetxService {
   HomeController({required this.parser});
   @override
   void onInit() {
-    InternetConnectionChecker();
     controllerN = Get.put(NotificationController(parser: Get.find()));
 
     getHomeDatas();
@@ -27,20 +25,22 @@ class HomeController extends GetxController implements GetxService {
 
   Future<void> getHomeDatas() async {
     Response response = await parser.getHomeData();
+    log("home data responce ${response.body}");
     try {
       if (response.statusCode == 200) {
         homeData = HomeData.fromJson(response.body);
 
-        log(homeData!.activeLoan.toString());
+        loading = false;
       }
     } catch (e, stackTrace) {
       log("home data catch error :$e,", error: e, stackTrace: stackTrace);
     }
-    loading = false;
+
     update();
   }
 
   Future<void> getNotificaion() async {
+    // Get.find<NotificationController>().getNotification();
     await controllerN!.getNotification();
     update();
   }

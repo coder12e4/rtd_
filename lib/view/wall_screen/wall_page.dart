@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -17,70 +18,71 @@ class WallPage extends StatelessWidget {
             backgroundColor: baseColor,
             body: DefaultTabController(
               length: 2,
-              child: SingleChildScrollView(
-                physics: const NeverScrollableScrollPhysics(),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    wallTextWidget(context),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    tabBar(),
-                    tabBarView(context),
-                  ],
-                ),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  kSizedBoxH,
+                  wallTextWidget(context),
+                  kSizedBoxH,
+                  tabBar(),
+                  tabBarView(context),
+                ],
               ),
             )));
   }
 
-  Container tabBarView(BuildContext context) {
-    return Container(
-      // margin: const EdgeInsets.only(bottom: 10),
-      height: 550.h,
-      //hallo
-      padding: EdgeInsets.only(bottom: 6.h),
-      decoration: const BoxDecoration(
-        color: whiteColor,
-        borderRadius: BorderRadiusDirectional.only(
-          topEnd: Radius.circular(40),
-          topStart: Radius.circular(40),
+  Expanded tabBarView(BuildContext context) {
+    return Expanded(
+      child: Container(
+        decoration: const BoxDecoration(
+          color: whiteColor,
+          borderRadius: BorderRadiusDirectional.only(
+            topEnd: Radius.circular(40),
+            topStart: Radius.circular(40),
+          ),
         ),
+        child: GetBuilder<WallScreenController>(builder: (value) {
+          return Padding(
+            padding: EdgeInsets.only(top: 5.h),
+            child: TabBarView(children: [
+              feedView(value),
+              votesView(value),
+            ]),
+          );
+        }),
       ),
-      child: GetBuilder<WallScreenController>(builder: (value) {
-        return Padding(
-          padding: EdgeInsets.only(top: 5.h),
-          child: TabBarView(children: [
-            feedView(value),
-            votesView(value),
-          ]),
-        );
-      }),
     );
   }
 
-  ListView votesView(WallScreenController controller) {
-    return ListView.builder(
-      physics: const BouncingScrollPhysics(),
-      itemCount: controller.votesData.length,
-      itemBuilder: (context, index) {
-        return Column(
-          children: [
-            kSizedBoxH,
-            feedDate(controller.votesData[index].createdAt.toString()),
-            VoteData(index, controller)
-          ],
-        );
-      },
-    );
+  Widget votesView(WallScreenController controller) {
+    return controller.votesData.isNotEmpty
+        ? ListView.builder(
+            padding: EdgeInsets.only(bottom: 10.h),
+            physics: const BouncingScrollPhysics(),
+            itemCount: controller.votesData.length,
+            itemBuilder: (context, index) => Column(
+              children: [
+                kSizedBoxH,
+                feedDate(
+                  controller.votesData[index].createdAt.toString(),
+                ),
+                VoteData(index, controller)
+              ],
+            ),
+          )
+        : const Center(
+            child: Text(
+            "Votes is empty",
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ));
   }
 
   Padding VoteData(int index, WallScreenController controller) {
     return Padding(
       padding: EdgeInsets.only(top: 10.h, left: 18.w, right: 18.w),
       child: Container(
-        height: 300.h,
-        width: 500.w,
+        // height: 300.h,
+        // width: 500.w,
         decoration: BoxDecoration(
             color: textFormBase,
             borderRadius: BorderRadius.all(Radius.circular(30.r))),
@@ -126,9 +128,7 @@ class WallPage extends StatelessWidget {
                   )
                 ],
               ),
-              SizedBox(
-                height: 10.h,
-              ),
+              kSizedBoxH,
               Text(controller.votesData[index].title,
                   style: const TextStyle(
                       color: Colors.black,
@@ -160,9 +160,7 @@ class WallPage extends StatelessWidget {
                     )
                     .toList(),
               ),
-              SizedBox(
-                height: 20.h,
-              ),
+              kSizedBoxH20,
               Align(
                 alignment: Alignment.center,
                 child: submitedButton(
@@ -178,7 +176,8 @@ class WallPage extends StatelessWidget {
                         .then((value) => controller.optionId = null);
                   },
                 ),
-              )
+              ),
+              kSizedBoxH20,
             ],
           ),
         ),
@@ -241,44 +240,37 @@ class WallPage extends StatelessWidget {
     return controller.loading == true
         ? const Center(
             child: CircularProgressIndicator(
-            strokeWidth: 6,
-            color: ThemeProvider.blackColor,
-          ))
-        : Column(mainAxisSize: MainAxisSize.max, children: [
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(top: 5.h),
+              strokeWidth: 6,
+              color: ThemeProvider.blackColor,
+            ),
+          )
+        : Column(
+            children: [
+              Expanded(
                 child: controller.data?.data.length != 0 ||
                         controller.data?.data == null
                     ? ListView.builder(
                         physics: const BouncingScrollPhysics(),
-                        // shrinkWrap: true,
+                        shrinkWrap: true,
                         itemCount: controller.data?.data.length ?? 0,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: [
-                              feedDate(controller
-                                  .data!.data[index].user.createdAt
-                                  .toString()),
-                              feedActiveData(controller, index),
-                              SizedBox(
-                                height: 10.h,
-                              ),
-                            ],
-                          );
-                        })
-                    : Center(child: const Text("Feed is empty")),
+                        itemBuilder: (context, index) => Column(
+                          children: [
+                            feedDate(controller.data!.data[index].user.createdAt
+                                .toString()),
+                            feedActiveData(controller, index),
+                            kSizedBoxH,
+                          ],
+                        ),
+                      )
+                    : const Center(
+                        child: Text(
+                          "Feed is empty",
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                      ),
               ),
-            ),
-
-            // feedDate('19/10/2023'),
-            // ListView.builder(
-            //   shrinkWrap: true,
-            //   physics: const NeverScrollableScrollPhysics(),
-            //   itemCount: 1,
-            //   itemBuilder: (context, index) => feedActiveData(false, "481"),
-            // ),
-          ]);
+            ],
+          );
   }
 
   Container feedDate(String date) {
@@ -300,8 +292,6 @@ class WallPage extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(top: 10.h, left: 18.w, right: 18.w),
       child: Container(
-        height: 230.h,
-        width: 500.w,
         decoration: BoxDecoration(
             color: textFormBase,
             borderRadius: BorderRadius.all(Radius.circular(30.r))),
@@ -347,15 +337,17 @@ class WallPage extends StatelessWidget {
                   )
                 ],
               ),
-              SizedBox(
-                height: 10.h,
-              ),
+              // SizedBox(
+              //   height: 10.h,
+              // ),
+              kSizedBoxH,
               Row(
                 children: [
                   CircleAvatar(
                     radius: 25.r,
-                    backgroundImage: NetworkImage(
-                        controller.data!.data[index].user.profileImage),
+                    backgroundImage: CachedNetworkImageProvider(
+                      controller.data!.data[index].user.profileImage,
+                    ),
                   ),
                   SizedBox(
                     width: 10.w,
@@ -375,8 +367,10 @@ class WallPage extends StatelessWidget {
                 height: 10.h,
               ),
               reternDate(
-                  title: 'തിരിച്ചടവ്:',
-                  date: controller.data!.data[index].dueDate.toString())
+                title: 'തിരിച്ചടവ്:',
+                date: controller.data!.data[index].dueDate.toString(),
+              ),
+              kSizedBoxH20,
             ],
           ),
         ),
@@ -469,16 +463,11 @@ class WallPage extends StatelessWidget {
     );
   }
 
-  Container wallTextWidget(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(
-        top: 10.h,
-      ),
-      child: Text(
-        'Wall',
-        style: Theme.of(context).textTheme.displaySmall!.copyWith(
-            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
-      ),
+  Text wallTextWidget(BuildContext context) {
+    return Text(
+      'Wall',
+      style: Theme.of(context).textTheme.displaySmall!.copyWith(
+          color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
     );
   }
 }

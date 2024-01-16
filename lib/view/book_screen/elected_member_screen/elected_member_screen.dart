@@ -4,8 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rtd_project/controller/elected_member_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
-import 'package:rtd_project/view/book_screen/book_edit_screen/book_edit_screen.dart';
 import 'package:rtd_project/view/book_screen/widgets/electedmembers_list_tile.dart';
+
+import '../../../controller/book/board_member_details_controller.dart';
+import '../../../helper/router.dart';
 
 class ElectedMemberScreen extends StatelessWidget {
   const ElectedMemberScreen({super.key});
@@ -15,92 +17,90 @@ class ElectedMemberScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         backgroundColor: baseColor,
-        body: SingleChildScrollView(
-          child: GetBuilder<ElectedMemberController>(builder: (value) {
-            return Column(
-              children: [
-                appbar(context),
-                Container(
-                  // height: 700.h,
-                  width: 390.w,
+        body: GetBuilder<ElectedMemberController>(builder: (value) {
+          return Column(
+            children: [
+              appbar(context),
+              Expanded(
+                child: Container(
                   decoration: const BoxDecoration(
                       color: whiteColor,
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(30),
                           topRight: Radius.circular(30))),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 700.h,
-                        child: FutureBuilder(
-                            future: value.getElectedMembers(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Center(
-                                  child: CupertinoActivityIndicator(radius: 20),
-                                );
-                              }
-                              if (snapshot.hasData) {
-                                final electedMembers = snapshot.data!;
-                                return GridView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: electedMembers.length,
-                                  padding: EdgeInsets.only(top: 30.h),
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    mainAxisSpacing: 10,
-                                  ),
-                                  itemBuilder: (context, index) {
-                                    return GestureDetector(
-                                      onTap: () => Get.to(BookProfilePage(
-                                        data: electedMembers[index],
-                                      )),
-                                      child: ElectedMemberListTileWidget(
-                                        data: electedMembers[index],
-                                      ),
-                                    );
-                                  },
-                                );
-                              }
-                              return const Center(
-                                child: CircularProgressIndicator(),
+                  child: FutureBuilder(
+                      future: value.getElectedMembers(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CupertinoActivityIndicator(radius: 20),
+                          );
+                        }
+                        if (snapshot.hasData) {
+                          final electedMembers = snapshot.data!;
+                          return GridView.builder(
+                            shrinkWrap: true,
+                            itemCount: electedMembers.length,
+                            padding: EdgeInsets.only(top: 30.h),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 10,
+                            ),
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  if (value.isStart != null ||
+                                      value.isStart == false) {
+                                    Get.delete<BoardMemberDetailsController>(
+                                        force: true);
+                                    Get.toNamed(
+                                        AppRouter
+                                            .getBoardMemberDetailsRoutesRoute(),
+                                        arguments: [electedMembers[index].id]);
+                                  }
+                                },
+                                child: ElectedMemberListTileWidget(
+                                  data: electedMembers[index],
+                                ),
                               );
-                            }),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            );
-          }),
-        ),
+                            },
+                          );
+                        }
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }),
+                ),
+              )
+            ],
+          );
+        }),
       ),
     );
   }
 
   Container appbar(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 10.h),
+      margin: EdgeInsets.only(top: 10.h, bottom: 10.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    color: whiteColor,
-                  )),
-              SizedBox(
-                width: 90.w,
-              ),
+              // IconButton(
+              //     onPressed: () {
+              //       Navigator.pop(context);
+              //     },
+              //     icon: const Icon(
+              //       Icons.arrow_back,
+              //       color: whiteColor,
+              //     )),
+              // SizedBox(
+              //   width: 90.w,
+              // ),
               Text(
                 'Elected Members',
                 style: Theme.of(context).textTheme.displaySmall!.copyWith(

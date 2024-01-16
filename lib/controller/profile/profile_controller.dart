@@ -15,6 +15,7 @@ class ProfileController extends GetxController implements GetxService {
   @override
   void onInit() {
     controllerN = Get.put(NotificationController(parser: Get.find()));
+    getNotificaion();
     getUserDatas();
     super.onInit();
   }
@@ -63,6 +64,12 @@ class ProfileController extends GetxController implements GetxService {
     } else {
       log(response.body.toString());
     }
+    update();
+  }
+
+  Future<void> getNotificaion() async {
+    // Get.find<NotificationController>().getNotification();
+    await controllerN!.getNotification();
     update();
   }
 

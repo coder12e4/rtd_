@@ -80,14 +80,14 @@ class LoanData {
 }
 
 class Surety {
-  int userId;
+  int id;
   Name? name;
   String profileImage;
   int status;
-  StatusText statusText;
+  StatusText? statusText;
 
   Surety({
-    required this.userId,
+    required this.id,
     required this.name,
     required this.profileImage,
     required this.status,
@@ -95,15 +95,15 @@ class Surety {
   });
 
   factory Surety.fromJson(Map<String, dynamic> json) => Surety(
-        userId: json["user_id"],
+        id: json["id"],
         name: nameValues.map[json["name"]],
         profileImage: json["profile_image"],
         status: json["status"],
-        statusText: statusTextValues.map[json["status_text"]]!,
+        statusText: statusTextValues.map[json["status_text"]],
       );
 
   Map<String, dynamic> toJson() => {
-        "user_id": userId,
+        "id": id,
         "name": nameValues.reverse[name],
         "profile_image": profileImage,
         "status": status,

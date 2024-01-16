@@ -26,9 +26,10 @@ class BookScreenParser {
         accessToken!);
   }
 
-  Future<Response> searchBookMember(body) async {
+  Future<Response> searchBookMember(id, String? query) async {
     final accessToken = sharedPreferencesManager.getString('access_token');
-    return await apiService.postPrivate(
-        Constants.baseUrl + Constants.searchBookMember, body, accessToken!);
+    return await apiService.getPrivate(
+        "${Constants.baseUrl + Constants.searchBookMember}state_id=$id&search=$query",
+        accessToken!);
   }
 }

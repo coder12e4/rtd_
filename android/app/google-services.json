@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "942046873397",
-    "project_id": "rtd-project-e8770",
-    "storage_bucket": "rtd-project-e8770.appspot.com"
+    "project_number": "181858766407",
+    "project_id": "renttruckdrivers",
+    "storage_bucket": "renttruckdrivers.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:942046873397:android:0f76e53e5e7ee99edb2e7c",
+        "mobilesdk_app_id": "1:181858766407:android:28c6816909ae0d3966ab62",
         "android_client_info": {
           "package_name": "rtd.canisostudio.com"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBO9F-phNYVob2X5Dwc5SsuLY7atU2lh2Q"
+          "current_key": "AIzaSyDf22m_eTWu_et5g2GaobyjR8UslgPVRGc"
         }
       ],
       "services": {

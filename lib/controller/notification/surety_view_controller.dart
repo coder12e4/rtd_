@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rtd_project/util/toast.dart';
 
+import '../../backend/model/notification_model/notification_model.dart';
 import '../../backend/model/poll_details_model.dart';
 import '../../backend/parser/notification/notification_parser.dart';
+import 'notification_controller.dart';
 
 class SuretyViewController extends GetxController implements GetxService {
   final NotificationParser parser;
@@ -13,7 +15,9 @@ class SuretyViewController extends GetxController implements GetxService {
   @override
   void onInit() {
     voteId = Get.arguments[0].toString();
-    if (voteId != null) {
+    details = Get.arguments[1];
+    isPoll = Get.arguments[2];
+    if (isPoll != null && isPoll == true) {
       getPollDetails();
     }
     super.onInit();
@@ -25,13 +29,16 @@ class SuretyViewController extends GetxController implements GetxService {
   int? optionId;
   PollDetails? pollDetails;
   int? groupValue = 0;
+
+  NotificationDetails? details;
+  bool? isPoll;
   bool? isSelected = false;
   final TextEditingController reasonController = TextEditingController();
 
   void onChanged(int? newValue) {
     groupValue = newValue;
     isSelected = !isSelected!;
-    print(groupValue);
+    log(groupValue.toString());
     update();
   }
 
@@ -41,15 +48,17 @@ class SuretyViewController extends GetxController implements GetxService {
       return;
     }
     if (groupValue == 1) {
-      // parser.suretyAccept(body);
+      acceptSurety();
     } else if (groupValue == 2) {
-      // parser.suretyReject(body);
+      rejectSurety();
     }
+    Get.find<NotificationController>().getNotification();
   }
 
   Future<void> getPollDetails() async {
     final body = {"question_id": voteId};
     Response response = await parser.getPollDetails(body);
+    log('poll details response ${response.body}');
     if (response.statusCode == 200) {
       try {
         log(response.body.toString());
@@ -57,6 +66,36 @@ class SuretyViewController extends GetxController implements GetxService {
         voteLoading = false;
       } catch (e, stackTrace) {
         log('poll details catch $e', error: e, stackTrace: stackTrace);
+      }
+    }
+    update();
+  }
+
+  Future<void> acceptSurety() async {
+    final body = {"loan_request_id": details?.details?.id};
+    Response response = await parser.suretyAccept(body);
+    log('surety accept response ${response.body}');
+    Get.back();
+    if (response.statusCode == 200) {
+      try {
+        successToast(response.body["message"]);
+      } catch (e, stackTrace) {
+        log('surety accept catch $e', error: e, stackTrace: stackTrace);
+      }
+    }
+    update();
+  }
+
+  Future<void> rejectSurety() async {
+    final body = {"loan_request_id": details?.details?.id};
+    Response response = await parser.suretyReject(body);
+    log('surety accept response ${response.body}');
+    Get.back();
+    if (response.statusCode == 200) {
+      try {
+        successToast(response.body["message"]);
+      } catch (e, stackTrace) {
+        log('surety accept catch $e', error: e, stackTrace: stackTrace);
       }
     }
     update();

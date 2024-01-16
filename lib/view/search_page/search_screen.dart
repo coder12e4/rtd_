@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rtd_project/controller/searh_screen_controller.dart';
+import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/util/theme.dart';
 
 import '../../core/color/colors.dart';
@@ -12,52 +13,53 @@ class SearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get.put<LoanScreenController>(LoanScreenController(parser: Get.find()));
     return Scaffold(
-        backgroundColor: baseColor,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: 40.h, bottom: 15.h),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment
-                      .start, // Align items to the start (left)
-                  children: [
-                    IconButton(
-                      onPressed: () => Get.back(),
-                      icon: const Icon(
-                        Icons.arrow_back,
-                        color: whiteColor,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 105.w,
-                    ),
-                    Text(
-                      'Sureties',
-                      style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
-                          ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                height: MediaQuery.sizeOf(context).height,
-                decoration: const BoxDecoration(
-                  color: whiteColor,
-                  borderRadius: BorderRadiusDirectional.only(
-                    topEnd: Radius.circular(40),
-                    topStart: Radius.circular(40),
+      backgroundColor: baseColor,
+      body: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(top: 40.h, bottom: 10.h),
+            child: Row(
+              mainAxisAlignment:
+                  MainAxisAlignment.start, // Align items to the start (left)
+              children: [
+                IconButton(
+                  onPressed: () => Get.back(),
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: whiteColor,
                   ),
                 ),
-                child: Padding(
-                  padding: EdgeInsets.only(top: 35.h, left: 25.w, right: 25.w),
-                  child: GetBuilder<SearchScreenController>(builder: (value) {
-                    return value.loading == false
-                        ? Column(children: [
+                SizedBox(
+                  width: 105.w,
+                ),
+                Text(
+                  'Sureties',
+                  style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                      ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Container(
+              decoration: const BoxDecoration(
+                color: whiteColor,
+                borderRadius: BorderRadiusDirectional.only(
+                  topEnd: Radius.circular(40),
+                  topStart: Radius.circular(40),
+                ),
+              ),
+              child: Padding(
+                padding: EdgeInsets.only(top: 20.h, left: 25.w, right: 25.w),
+                child: GetBuilder<SearchScreenController>(builder: (value) {
+                  return value.loading == false
+                      ? Column(
+                          children: [
                             SearchBar(
                               controller: value.serchController,
                               backgroundColor:
@@ -69,11 +71,13 @@ class SearchScreen extends StatelessWidget {
                               hintText: 'Search',
                               onChanged: value.searchSurties,
                             ),
+                            kSizedBoxH,
                             value.searchResult!.isNotEmpty
-                                ? Expanded(
+                                ? Flexible(
                                     child: ListView.separated(
+                                      padding: EdgeInsets.only(bottom: 10.h),
                                       physics:
-                                          const NeverScrollableScrollPhysics(),
+                                          const AlwaysScrollableScrollPhysics(),
                                       shrinkWrap: true,
                                       itemBuilder: (context, index) =>
                                           GestureDetector(
@@ -86,8 +90,9 @@ class SearchScreen extends StatelessWidget {
                                                 value.searchResult![index].name,
                                             image: value.searchResult![index]
                                                 .profileImage,
-                                            memberid: value
-                                                .searchResult![index].memberId),
+                                            memberid: value.searchResult![index]
+                                                    .memberId ??
+                                                "Not Available"),
                                       ),
                                       separatorBuilder: (context, index) =>
                                           const Divider(
@@ -98,24 +103,25 @@ class SearchScreen extends StatelessWidget {
                                           value.searchResult?.length ?? 0,
                                     ),
                                   )
-                                : SizedBox(
-                                    height: 500.h,
-                                    child: const Center(
+                                : const Expanded(
+                                    child: Center(
                                       child: Text('No result Found'),
                                     ),
                                   ),
-                          ])
-                        : const Center(
-                            child: CircularProgressIndicator(
-                              color: ThemeProvider.blackColor,
-                              strokeWidth: 6,
-                            ),
-                          );
-                  }),
-                ),
+                          ],
+                        )
+                      : const Center(
+                          child: CircularProgressIndicator(
+                            color: ThemeProvider.blackColor,
+                            strokeWidth: 6,
+                          ),
+                        );
+                }),
               ),
-            ],
+            ),
           ),
-        ));
+        ],
+      ),
+    );
   }
 }

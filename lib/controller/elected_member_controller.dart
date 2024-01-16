@@ -9,6 +9,13 @@ class ElectedMemberController extends GetxController implements GetxService {
   final ElectedMemberParser parser;
 
   ElectedMemberController({required this.parser});
+  @override
+  void onInit() {
+    isStart = Get.arguments[0];
+    super.onInit();
+  }
+
+  bool? isStart;
 
   List<ElectedMemberData> _allElectedMembers = <ElectedMemberData>[];
   List<ElectedMemberData> get allElectedMembers => _allElectedMembers;

@@ -5,11 +5,11 @@ import 'package:get/get.dart';
 import 'package:rtd_project/backend/parser/authentication/login_parser.dart';
 import 'package:rtd_project/controller/authentication/regitration.dart';
 import 'package:rtd_project/helper/router.dart';
+import 'package:rtd_project/util/loading_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../backend/api/handler.dart';
 import '../../backend/model/user_data_model.dart';
-import '../../util/theme.dart';
 import '../../util/toast.dart';
 import '../../view/login_screen/widgets/document_not_attached.dart';
 import '../../view/register_screen/widgets/register_success.dart';
@@ -20,7 +20,8 @@ class LoginController extends GetxController implements GetxService {
 
   @override
   void onInit() {
-    log("getting fcm token from shared pref ${fcmToken = parser.getFcmToken()}");
+    fcmToken = parser.getFcmToken();
+    log("getting fcm token from shared pref $fcmToken");
     super.onInit();
   }
 
@@ -51,32 +52,7 @@ class LoginController extends GetxController implements GetxService {
       "password": passwordController.text,
       "fcm_token": fcmToken
     };
-
-    Get.dialog(
-      SimpleDialog(
-        children: [
-          Row(
-            children: [
-              const SizedBox(
-                width: 30,
-              ),
-              const CircularProgressIndicator(
-                color: ThemeProvider.appColor,
-              ),
-              const SizedBox(
-                width: 30,
-              ),
-              SizedBox(
-                  child: Text(
-                "Please wait".tr,
-                style: const TextStyle(fontFamily: 'bold'),
-              )),
-            ],
-          )
-        ],
-      ),
-      barrierDismissible: false,
-    );
+    loadingWidget();
 
     var response = await parser.login(body);
     Get.back();

@@ -16,6 +16,13 @@ class LoanScreenParser {
     return response;
   }
 
+  // Future<Response> getLoanPurpose(body) async {
+  //   final accessToken = sharedPreferencesManager.getString('access_token');
+  //   var response = await apiService.postPrivate(
+  //       Constants.baseUrl + Constants.getLonPurpose, body, accessToken!);
+  //   return response;
+  // }
+
   Future<Response> getSurties() async {
     final accessToken = sharedPreferencesManager.getString('access_token');
     var response = await apiService.getPrivate(
@@ -30,10 +37,31 @@ class LoanScreenParser {
     return response;
   }
 
+  Future<Response> loanRequestComplete(body) async {
+    final accessToken = sharedPreferencesManager.getString('access_token');
+    var response = await apiService.postPrivate(
+        Constants.baseUrl + Constants.loanRequestComplete, body, accessToken!);
+    return response;
+  }
+
+  Future<Response> uploadLoneDocument(body) async {
+    final accessToken = sharedPreferencesManager.getString('access_token');
+    var response = await apiService.postPrivate(
+        Constants.baseUrl + Constants.uploadLoanDocument, body, accessToken!);
+    return response;
+  }
+
   Future<Response> getLoanRequestData() async {
     final accessToken = sharedPreferencesManager.getString('access_token');
     var response = await apiService.getPrivate(
         Constants.baseUrl + Constants.getLoanRequest, accessToken!);
+    return response;
+  }
+
+  Future<Response> getLoanPurpose(body) async {
+    final accessToken = sharedPreferencesManager.getString('access_token');
+    var response = await apiService.postPrivate(
+        Constants.baseUrl + Constants.getLonPurpose, body, accessToken!);
     return response;
   }
 }

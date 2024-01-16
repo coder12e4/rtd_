@@ -2,9 +2,11 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:get/get.dart';
+import 'package:rtd_project/controller/home_screen_controller.dart';
 
 import '../../backend/model/notification_model/notification_model.dart';
 import '../../backend/parser/notification/notification_parser.dart';
+import '../profile/profile_controller.dart';
 
 class NotificationController extends GetxController implements GetxService {
   final NotificationParser parser;
@@ -24,10 +26,13 @@ class NotificationController extends GetxController implements GetxService {
   Future<void> getNotification() async {
     try {
       Response response = await parser.getNotification();
+      log('notification responce ${response.body}');
       if (response.statusCode == 200) {
-        notification = Notification.fromJson(response.body);
-        notificationCount =
-            notification!.data.where((element) => element.seen == 0).length;
+        if (response.body != null) {
+          notification = Notification.fromJson(response.body);
+          notificationCount =
+              notification!.data!.where((element) => element.seen == 0).length;
+        }
 
         log('Notification count $notificationCount');
         log('Notification data ${response.body}');
@@ -46,7 +51,9 @@ class NotificationController extends GetxController implements GetxService {
       Response response = await parser.markNotificationSeen(body);
       if (response.statusCode == 200) {
         getNotification();
-        log('success ${response.body}');
+
+        await Get.find<HomeController>().getNotificaion();
+        await Get.find<ProfileController>().getNotificaion();
       } else {
         log('failed seen notification statusCode: ${response.statusCode}');
       }

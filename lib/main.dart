@@ -39,6 +39,7 @@ class MyApp extends StatelessWidget {
       builder: (_, child) {
         return GetMaterialApp(
           title: 'RTD',
+          
           color: ThemeProvider.appColor,
           debugShowCheckedModeBanner: false,
           navigatorKey: Get.key,

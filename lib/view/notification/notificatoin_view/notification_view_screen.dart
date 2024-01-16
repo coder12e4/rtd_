@@ -5,6 +5,7 @@ import 'package:rtd_project/controller/notification/surety_view_controller.dart'
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
 import 'package:rtd_project/core/common_widget/textformfield_widget.dart';
+import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/util/validators.dart';
 
 class NotificationViewScreen extends StatelessWidget {
@@ -15,14 +16,16 @@ class NotificationViewScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         backgroundColor: baseColor,
-        body: SingleChildScrollView(
-          child: GetBuilder<SuretyViewController>(builder: (value) {
-            return Column(
-              children: [
-                appbar(context),
-                Container(
-                  height: 920.h,
-                  width: 390.w,
+        body: GetBuilder<SuretyViewController>(builder: (value) {
+          return Column(
+            children: [
+              appbar(context),
+              Expanded(
+                child: Container(
+                  padding:
+                      EdgeInsets.only(left: 30.0.w, right: 30.w, top: 25.h),
+                  // height: 614.h,
+
                   decoration: const BoxDecoration(
                       color: whiteColor,
                       borderRadius: BorderRadiusDirectional.only(
@@ -30,91 +33,66 @@ class NotificationViewScreen extends StatelessWidget {
                         topEnd: Radius.circular(50),
                       )),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text(
+                        "${value.details?.message}",
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 17),
+                      ),
                       SizedBox(
-                        height: 30.h,
+                        height: 40.h,
                       ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left: 30.0.w, right: 30.w, top: 25.h),
-                              child: const Text(
-                                "You were choosen as Jacob's surety. Respond as soon as possible .",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 17),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 40.h,
-                            ),
-
-                            radioButton(
-                              controller: value,
-                              text: 'Accept Request',
-                              value: 1,
-                            ),
-                            Divider(
-                              indent: 35.w,
-                              endIndent: 35.w,
-                            ),
-                            // RadioButtonWidgetNotification(
-                            //   text: 'Reject Request',
-                            //   controller: value,
-                            //   value: 2,
-                            // ),
-                            radioButton(
-                              controller: value,
-                              text: 'Reject Request',
-                              value: 2,
-                            ),
-                            Divider(
-                              indent: 35.w,
-                              endIndent: 35.w,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 38.0.w),
-                              child: const Text(
-                                'Share Reasons for rejection',
-                                style: TextStyle(
-                                    color: Color.fromARGB(255, 117, 113, 113)),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 38.0.w, vertical: 9.h),
-                              child: TextFormFieldWidget(
-                                validator: Rtd_Validators.noneEmptyValidator,
-                                controller: value.reasonController,
-                                hitText: "Type your reason here",
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 9.h, left: 48.w),
-                              child: ButtonWidget(
-                                  buttonBackgroundColor:
-                                      const Color.fromARGB(255, 4, 78, 139),
-                                  buttonForegroundColor: whiteColor,
-                                  buttonText: 'Submit',
-                                  borderAvalable: true,
-                                  press: () {}),
+                      radioButton(
+                        controller: value,
+                        text: 'Accept Request',
+                        value: 1,
+                      ),
+                      Divider(
+                        indent: 35.w,
+                        endIndent: 35.w,
+                      ),
+                      radioButton(
+                        controller: value,
+                        text: 'Reject Request',
+                        value: 2,
+                      ),
+                      Divider(
+                        indent: 35.w,
+                        endIndent: 35.w,
+                      ),
+                      kSizedBoxH,
+                      value.groupValue == 2
+                          ? const Text(
+                              'Share Reasons for rejection',
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 117, 113, 113)),
                             )
-                          ],
-                        ),
-                      ),
-                      // SizedBox(
-                      //   height: 50.h,
-                      // ),
+                          : const Offstage(),
+                      kSizedBoxH,
+                      value.groupValue == 2
+                          ? TextFormFieldWidget(
+                              validator: Rtd_Validators.noneEmptyValidator,
+                              controller: value.reasonController,
+                              hitText: "Type your reason here",
+                            )
+                          : const Offstage(),
+                      kSizedBoxH,
+                      ButtonWidget(
+                          buttonBackgroundColor:
+                              const Color.fromARGB(255, 4, 78, 139),
+                          buttonForegroundColor: whiteColor,
+                          buttonText: 'Submit',
+                          borderAvalable: true,
+                          press: () {
+                            value.onSubmit();
+                          })
                     ],
                   ),
-                )
-              ],
-            );
-          }),
-        ),
+                ),
+              )
+            ],
+          );
+        }),
       ),
     );
   }

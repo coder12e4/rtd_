@@ -1,3 +1,7 @@
+// To parse this JSON data, do
+//
+//     final loanData = loanDataFromJson(jsonString);
+
 import 'dart:convert';
 
 LoanData loanDataFromJson(String str) => LoanData.fromJson(json.decode(str));
@@ -42,7 +46,7 @@ class EditData {
   int loanTypeId;
   int loanPurposeId;
   String loanAmount;
-  String loanDocument;
+  List<LoanDocument> loanDocument;
   dynamic rejectReason;
   int status;
   DateTime createdAt;
@@ -73,7 +77,8 @@ class EditData {
         loanTypeId: json["loan_type_id"],
         loanPurposeId: json["loan_purpose_id"],
         loanAmount: json["loan_amount"],
-        loanDocument: json["loan_document"],
+        loanDocument: List<LoanDocument>.from(
+            json["loan_document"].map((x) => LoanDocument.fromJson(x))),
         rejectReason: json["reject_reason"],
         status: json["status"],
         createdAt: DateTime.parse(json["created_at"]),
@@ -90,7 +95,8 @@ class EditData {
         "loan_type_id": loanTypeId,
         "loan_purpose_id": loanPurposeId,
         "loan_amount": loanAmount,
-        "loan_document": loanDocument,
+        "loan_document":
+            List<dynamic>.from(loanDocument.map((x) => x.toJson())),
         "reject_reason": rejectReason,
         "status": status,
         "created_at": createdAt.toIso8601String(),
@@ -98,6 +104,58 @@ class EditData {
         "loan_type": loanType.toJson(),
         "loan_purpose": loanPurpose.toJson(),
         "sureties": List<dynamic>.from(sureties.map((x) => x.toJson())),
+      };
+}
+
+class LoanDocument {
+  int? id;
+  int? loanRequestId;
+  String? filename;
+  String? ogFileName;
+  String? type;
+  String? size;
+  int? status;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  String? file;
+
+  LoanDocument({
+    required this.id,
+    required this.loanRequestId,
+    required this.filename,
+    required this.ogFileName,
+    required this.type,
+    required this.size,
+    required this.status,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.file,
+  });
+
+  factory LoanDocument.fromJson(Map<String, dynamic> json) => LoanDocument(
+        id: json["id"],
+        loanRequestId: json["loan_request_id"],
+        filename: json["filename"],
+        ogFileName: json["og_file_name"],
+        type: json["type"],
+        size: json["size"],
+        status: json["status"],
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
+        file: json["file"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "loan_request_id": loanRequestId,
+        "filename": filename,
+        "og_file_name": ogFileName,
+        "type": type,
+        "size": size,
+        "status": status,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
+        "file": file,
       };
 }
 
@@ -170,14 +228,14 @@ class LoanType {
 }
 
 class Surety {
-  int userId;
+  int id;
   String name;
   String profileImage;
   int status;
   String statusText;
 
   Surety({
-    required this.userId,
+    required this.id,
     required this.name,
     required this.profileImage,
     required this.status,
@@ -185,7 +243,7 @@ class Surety {
   });
 
   factory Surety.fromJson(Map<String, dynamic> json) => Surety(
-        userId: json["user_id"],
+        id: json["id"],
         name: json["name"],
         profileImage: json["profile_image"],
         status: json["status"],
@@ -193,7 +251,7 @@ class Surety {
       );
 
   Map<String, dynamic> toJson() => {
-        "user_id": userId,
+        "id": id,
         "name": name,
         "profile_image": profileImage,
         "status": status,
