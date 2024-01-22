@@ -368,12 +368,10 @@ class _LoanPageState extends State<LoanPage> {
       LoanScreenController controller, int index, int imageIndex) {
     return Stack(
       children: [
-        Positioned(
-          child: CircleAvatar(
-            minRadius: 30.r,
-            backgroundImage: CachedNetworkImageProvider(
-                controller.loanData[index].sureties[imageIndex].profileImage),
-          ),
+        CircleAvatar(
+          minRadius: 30.r,
+          backgroundImage: CachedNetworkImageProvider(
+              controller.loanData[index].sureties[imageIndex].profileImage),
         ),
         Positioned(
           bottom: 4.h,

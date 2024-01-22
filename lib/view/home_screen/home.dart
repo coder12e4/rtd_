@@ -36,7 +36,8 @@ class _HomePageState extends State<HomePage> {
                 homeTextWidget(context, value),
                 Expanded(
                   child: Container(
-                     height: 550.h,
+                    padding: EdgeInsets.only(top: 5.h),
+                    // height: 550.h,
                     decoration: const BoxDecoration(
                       color: whiteColor,
                       borderRadius: BorderRadiusDirectional.only(
@@ -52,8 +53,7 @@ class _HomePageState extends State<HomePage> {
                               Padding(
                                 padding: const EdgeInsets.all(18.0),
                                 child: Container(
-                                  height: 530.h,
-                                  // width: 100.w,
+                                  height: 520.h,
                                   decoration: BoxDecoration(
                                     color: textFormBase,
                                     borderRadius: BorderRadius.circular(30),

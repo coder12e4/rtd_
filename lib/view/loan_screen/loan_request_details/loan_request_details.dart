@@ -102,7 +102,25 @@ class LoanRequestDetailsScreen extends StatelessWidget {
                                         Icons.money,
                                         value.loanRequestDetails?.data
                                             .loanAmount),
-                                    kSizedBoxH20,
+                                    kSizedBoxH,
+                                    value.loanRequestDetails?.data
+                                                .rejectReason !=
+                                            null
+                                        ? const Text(
+                                            'Reason For Rejection :',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          )
+                                        : const Offstage(),
+                                    kSizedBoxH,
+                                    value.loanRequestDetails?.data
+                                                .rejectReason !=
+                                            null
+                                        ? Text(value.loanRequestDetails!.data
+                                            .rejectReason
+                                            .toString())
+                                        : const Offstage(),
+                                    kSizedBoxH,
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -257,23 +275,55 @@ class LoanRequestDetailsScreen extends StatelessWidget {
           ),
         ),
         Positioned(
-            bottom: 0,
-            right: 0,
-            child: markAvalable == true
-                ? Container(
-                    width: 20.w,
-                    height: 18.h,
-                    decoration: BoxDecoration(
-                        color: checkmark == true ? Colors.green : Colors.red,
-                        borderRadius: BorderRadius.all(Radius.circular(50.r))),
-                    child: Icon(
-                      checkmark == true ? Icons.check : Icons.close,
-                      color: Colors.white,
-                      size: 16,
-                    ),
-                  )
-                : const Offstage())
+          bottom: 0,
+          right: 0,
+          child: suretyStatus(controller, index),
+        )
       ],
+    );
+  }
+
+  Container suretyStatus(LoanRequestDetailsController controller, int index) {
+    if (controller.loanRequestDetails?.data.sureties[index].status == 0) {
+      return Container(
+        width: 20.w,
+        height: 18.h,
+        decoration: BoxDecoration(
+            color: Colors.grey,
+            borderRadius: BorderRadius.all(Radius.circular(50.r))),
+        child: const Icon(
+          Icons.pending_actions,
+          color: Colors.white,
+          size: 16,
+        ),
+      );
+    }
+    if (controller.loanRequestDetails?.data.sureties[index].status == 1) {
+      return Container(
+        width: 20.w,
+        height: 18.h,
+        decoration: BoxDecoration(
+            color: Colors.green,
+            borderRadius: BorderRadius.all(Radius.circular(50.r))),
+        child: const Icon(
+          Icons.check,
+          color: Colors.white,
+          size: 16,
+        ),
+      );
+    }
+
+    return Container(
+      width: 20.w,
+      height: 18.h,
+      decoration: BoxDecoration(
+          color: Colors.red,
+          borderRadius: BorderRadius.all(Radius.circular(50.r))),
+      child: const Icon(
+        Icons.close,
+        color: Colors.white,
+        size: 16,
+      ),
     );
   }
 

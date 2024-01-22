@@ -7,6 +7,7 @@ import 'package:rtd_project/controller/wall_screen_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/util/theme.dart';
+import 'package:rtd_project/util/toast.dart';
 
 class WallPage extends StatelessWidget {
   const WallPage({super.key});
@@ -145,8 +146,12 @@ class WallPage extends StatelessWidget {
                         onTap: () {
                           // controller.selectedOption = i.option;
                           // controller.update();
-                          controller.selectOption(i.option, index);
-                          controller.optionId = i.id;
+                          if (controller.votesData[index].activeStatus) {
+                            controller.selectOption(i.option, index);
+                            controller.optionId = i.id;
+                          } else {
+                            showToast("Time Expired");
+                          }
                         },
                         child: optionButton(
                             borderAvalable:
@@ -163,19 +168,28 @@ class WallPage extends StatelessWidget {
               kSizedBoxH20,
               Align(
                 alignment: Alignment.center,
-                child: submitedButton(
-                  submitStatus: controller.votesData[index].isVoted,
-                  buttonForegroundColor: whiteColor,
-                  buttonbackgroundColor: Colors.blue,
-                  press: () {
-                    controller
-                        .submitVote(
-                            controller
-                                .votesData[index].options[0].voteQuestionId,
-                            controller.optionId!)
-                        .then((value) => controller.optionId = null);
-                  },
-                ),
+                child: controller.votesData[index].activeStatus == true
+                    ? submitedButton(
+                        submitStatus: controller.votesData[index].isVoted,
+                        activeStatus: controller.votesData[index].activeStatus,
+                        buttonForegroundColor: whiteColor,
+                        buttonbackgroundColor: Colors.blue,
+                        press: () {
+                          controller
+                              .submitVote(
+                                  controller.votesData[index].options[0]
+                                      .voteQuestionId,
+                                  controller.optionId!)
+                              .then((value) => controller.optionId = null);
+                        },
+                      )
+                    : submitedButton(
+                        // submitStatus: controller.votesData[index].isVoted,
+                        activeStatus: controller.votesData[index].activeStatus,
+                        buttonForegroundColor: whiteColor,
+                        buttonbackgroundColor: Colors.black,
+                        press: () {},
+                      ),
               ),
               kSizedBoxH20,
             ],
@@ -187,25 +201,31 @@ class WallPage extends StatelessWidget {
 
   SizedBox submitedButton({
     bool? submitStatus,
+    required bool activeStatus,
     Color? buttonForegroundColor,
     Color? buttonbackgroundColor,
     Function()? press,
   }) {
     return SizedBox(
-        height: 30.h,
-        width: 260.w,
-        child: ElevatedButton(
-            style: ButtonStyle(
-                foregroundColor:
-                    MaterialStatePropertyAll(buttonForegroundColor),
-                backgroundColor: MaterialStatePropertyAll(submitStatus != true
-                    ? buttonbackgroundColor
-                    : Colors.grey)),
-            onPressed: submitStatus != true ? press : null,
-            child: Text(
-              submitStatus != true ? 'Submit' : "submited",
-              style: const TextStyle(fontWeight: FontWeight.w700),
-            )));
+      height: 30.h,
+      width: 260.w,
+      child: ElevatedButton(
+        style: ButtonStyle(
+            foregroundColor: MaterialStatePropertyAll(buttonForegroundColor),
+            backgroundColor: MaterialStatePropertyAll(
+                submitStatus != true ? buttonbackgroundColor : Colors.grey)),
+        onPressed: submitStatus != true ? press : null,
+        child: activeStatus
+            ? Text(
+                submitStatus != true ? 'Submit' : "submited",
+                style: const TextStyle(fontWeight: FontWeight.w700),
+              )
+            : const Text(
+                "Time Expired",
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
+      ),
+    );
   }
 
   SizedBox optionButton(
