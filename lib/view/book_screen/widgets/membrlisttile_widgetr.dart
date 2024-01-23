@@ -16,16 +16,12 @@ class MemberistTileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Hero(
-          tag: memberid.toString(),
-          child: Container(
-            height: 40.h,
-            width: 40.w,
-            decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                image:
-                    DecorationImage(image: CachedNetworkImageProvider(image))),
-          ),
+        Container(
+          height: 40.h,
+          width: 40.w,
+          decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(image: CachedNetworkImageProvider(image))),
         ),
         Padding(
           padding: EdgeInsets.only(left: 12.0.w),

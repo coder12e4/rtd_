@@ -40,6 +40,7 @@ class LoanRequestDetailsScreen extends StatelessWidget {
                                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                                 child: ListView(
                                   physics: const BouncingScrollPhysics(),
+                                  shrinkWrap: true,
                                   children: [
                                     kSizedBoxH20,
                                     filenumAndActiveloan(
@@ -69,24 +70,34 @@ class LoanRequestDetailsScreen extends StatelessWidget {
                                                   "Not available",
                                               style: const TextStyle(
                                                   fontWeight: FontWeight.bold),
+                                              overflow: TextOverflow.ellipsis,
                                             ),
                                           ],
                                         ),
-                                        Column(
-                                          children: [
-                                            Text(
-                                              'Purpose :',
-                                              style: TextStyle(
-                                                  color: Colors.grey.shade500),
-                                            ),
-                                            Text(
-                                              value.loanRequestDetails?.data
-                                                      .loanPurpose?.purpose ??
-                                                  "Not available",
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ],
+                                        SizedBox(
+                                          width: 150.w,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              Text(
+                                                'Purpose :',
+                                                style: TextStyle(
+                                                    color:
+                                                        Colors.grey.shade500),
+                                              ),
+                                              Text(
+                                                value.loanRequestDetails?.data
+                                                        .loanPurpose?.purpose ??
+                                                    "Not available",
+                                                style: const TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 3,
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     ),

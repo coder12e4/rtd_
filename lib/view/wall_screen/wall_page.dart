@@ -1,13 +1,13 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:rtd_project/controller/wall_screen_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
+import 'package:rtd_project/core/common_widget/appbar.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
-import 'package:rtd_project/util/theme.dart';
-import 'package:rtd_project/util/toast.dart';
+
+import 'widgets/feed_view.dart';
+import 'widgets/vote_view.dart';
 
 class WallPage extends StatelessWidget {
   const WallPage({super.key});
@@ -15,21 +15,23 @@ class WallPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-            backgroundColor: baseColor,
-            body: DefaultTabController(
-              length: 2,
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  kSizedBoxH,
-                  wallTextWidget(context),
-                  kSizedBoxH,
-                  tabBar(),
-                  tabBarView(context),
-                ],
-              ),
-            )));
+      child: Scaffold(
+        backgroundColor: baseColor,
+        body: DefaultTabController(
+          length: 2,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              kSizedBoxH,
+              const CustomAppBar(title: "Wall"),
+              kSizedBoxH,
+              tabBar(),
+              tabBarView(context),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Expanded tabBarView(BuildContext context) {
@@ -42,420 +44,17 @@ class WallPage extends StatelessWidget {
             topStart: Radius.circular(40),
           ),
         ),
-        child: GetBuilder<WallScreenController>(builder: (value) {
-          return Padding(
-            padding: EdgeInsets.only(top: 5.h),
-            child: TabBarView(children: [
-              feedView(value),
-              votesView(value),
-            ]),
-          );
-        }),
-      ),
-    );
-  }
-
-  Widget votesView(WallScreenController controller) {
-    return controller.votesData.isNotEmpty
-        ? ListView.builder(
-            padding: EdgeInsets.only(bottom: 10.h),
-            physics: const BouncingScrollPhysics(),
-            itemCount: controller.votesData.length,
-            itemBuilder: (context, index) => Column(
-              children: [
-                kSizedBoxH,
-                feedDate(
-                  controller.votesData[index].createdAt.toString(),
-                ),
-                VoteData(index, controller)
-              ],
-            ),
-          )
-        : const Center(
-            child: Text(
-            "Votes is empty",
-            style: TextStyle(fontWeight: FontWeight.w600),
-          ));
-  }
-
-  Padding VoteData(int index, WallScreenController controller) {
-    return Padding(
-      padding: EdgeInsets.only(top: 10.h, left: 18.w, right: 18.w),
-      child: Container(
-        // height: 300.h,
-        // width: 500.w,
-        decoration: BoxDecoration(
-            color: textFormBase,
-            borderRadius: BorderRadius.all(Radius.circular(30.r))),
-        child: Padding(
-          padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 20.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                        color: whiteColor,
-                        borderRadius: BorderRadius.all(Radius.circular(30))),
-                    height: 40.h,
-                    width: 160.w,
-                    child: Center(
-                      child: Text(
-                        'Pole Number: ${controller.votesData[index].id}',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    height: 40.h,
-                    width: 100.w,
-                    decoration: const BoxDecoration(
-                        color: whiteColor,
-                        borderRadius: BorderRadius.all(Radius.circular(30))),
-                    child: Center(
-                      child: Text(
-                        controller.votesData[index].activeStatus == true
-                            ? 'Active'
-                            : 'Closed',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              kSizedBoxH,
-              Text(controller.votesData[index].title,
-                  style: const TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16)),
-              Divider(),
-              Wrap(
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                spacing: 15.w,
-                runSpacing: 15.h,
-                children: controller.votesData[index].options
-                    .map(
-                      (i) => GestureDetector(
-                        onTap: () {
-                          // controller.selectedOption = i.option;
-                          // controller.update();
-                          if (controller.votesData[index].activeStatus) {
-                            controller.selectOption(i.option, index);
-                            controller.optionId = i.id;
-                          } else {
-                            showToast("Time Expired");
-                          }
-                        },
-                        child: optionButton(
-                            borderAvalable:
-                                controller.selectedOption[index] == i.option
-                                    ? true
-                                    : false,
-                            buttonForegroundColor: Colors.white,
-                            buttonbackgroundColor: Colors.black,
-                            buttonText: i.option),
-                      ),
-                    )
-                    .toList(),
-              ),
-              kSizedBoxH20,
-              Align(
-                alignment: Alignment.center,
-                child: controller.votesData[index].activeStatus == true
-                    ? submitedButton(
-                        submitStatus: controller.votesData[index].isVoted,
-                        activeStatus: controller.votesData[index].activeStatus,
-                        buttonForegroundColor: whiteColor,
-                        buttonbackgroundColor: Colors.blue,
-                        press: () {
-                          controller
-                              .submitVote(
-                                  controller.votesData[index].options[0]
-                                      .voteQuestionId,
-                                  controller.optionId!)
-                              .then((value) => controller.optionId = null);
-                        },
-                      )
-                    : submitedButton(
-                        // submitStatus: controller.votesData[index].isVoted,
-                        activeStatus: controller.votesData[index].activeStatus,
-                        buttonForegroundColor: whiteColor,
-                        buttonbackgroundColor: Colors.black,
-                        press: () {},
-                      ),
-              ),
-              kSizedBoxH20,
-            ],
-          ),
+        child: GetBuilder<WallScreenController>(
+          builder: (value) {
+            return Padding(
+              padding: EdgeInsets.only(top: 5.h),
+              child: TabBarView(children: [
+                FeedView(controller: value),
+                VoteView(controller: value),
+              ]),
+            );
+          },
         ),
-      ),
-    );
-  }
-
-  SizedBox submitedButton({
-    bool? submitStatus,
-    required bool activeStatus,
-    Color? buttonForegroundColor,
-    Color? buttonbackgroundColor,
-    Function()? press,
-  }) {
-    return SizedBox(
-      height: 30.h,
-      width: 260.w,
-      child: ElevatedButton(
-        style: ButtonStyle(
-            foregroundColor: MaterialStatePropertyAll(buttonForegroundColor),
-            backgroundColor: MaterialStatePropertyAll(
-                submitStatus != true ? buttonbackgroundColor : Colors.grey)),
-        onPressed: submitStatus != true ? press : null,
-        child: activeStatus
-            ? Text(
-                submitStatus != true ? 'Submit' : "submited",
-                style: const TextStyle(fontWeight: FontWeight.w700),
-              )
-            : const Text(
-                "Time Expired",
-                style: TextStyle(fontWeight: FontWeight.w700),
-              ),
-      ),
-    );
-  }
-
-  SizedBox optionButton(
-      {bool? borderAvalable,
-      Color? buttonForegroundColor,
-      Color? buttonbackgroundColor,
-      Function()? press,
-      String? buttonText}) {
-    return SizedBox(
-        height: 40.h,
-        // width: 260.w,
-        child: ElevatedButton(
-            style: ButtonStyle(
-                side: borderAvalable == false
-                    ? const MaterialStatePropertyAll(
-                        BorderSide(color: Colors.black))
-                    : null,
-                foregroundColor: MaterialStatePropertyAll(borderAvalable == true
-                    ? buttonForegroundColor
-                    : buttonbackgroundColor),
-                backgroundColor: MaterialStatePropertyAll(borderAvalable == true
-                    ? buttonbackgroundColor
-                    : buttonForegroundColor)),
-            onPressed: press,
-            child: Text(
-              buttonText!,
-              style: const TextStyle(fontWeight: FontWeight.w700),
-            )));
-  }
-
-  Widget feedView(WallScreenController controller) {
-    return controller.loading == true
-        ? const Center(
-            child: CircularProgressIndicator(
-              strokeWidth: 6,
-              color: ThemeProvider.blackColor,
-            ),
-          )
-        : Column(
-            children: [
-              Expanded(
-                child: controller.data?.data.length != 0 ||
-                        controller.data?.data == null
-                    ? ListView.builder(
-                        physics: const BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: controller.data?.data.length ?? 0,
-                        itemBuilder: (context, index) => Column(
-                          children: [
-                            feedDate(controller.data!.data[index].user.createdAt
-                                .toString()),
-                            feedActiveData(controller, index),
-                            kSizedBoxH,
-                          ],
-                        ),
-                      )
-                    : const Center(
-                        child: Text(
-                          "Feed is empty",
-                          style: TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                      ),
-              ),
-            ],
-          );
-  }
-
-  Container feedDate(String date) {
-    String formattedDate =
-        DateFormat('dd/MM/yyyy').format(DateTime.parse(date));
-    return Container(
-      height: 30.h,
-      width: 120.w,
-      decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(30)),
-          color: textFormBase),
-      child: Center(
-        child: Text(formattedDate, textAlign: TextAlign.center),
-      ),
-    );
-  }
-
-  Padding feedActiveData(WallScreenController controller, int index) {
-    return Padding(
-      padding: EdgeInsets.only(top: 10.h, left: 18.w, right: 18.w),
-      child: Container(
-        decoration: BoxDecoration(
-            color: textFormBase,
-            borderRadius: BorderRadius.all(Radius.circular(30.r))),
-        child: Padding(
-          padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 20.h),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                        color: whiteColor,
-                        borderRadius: BorderRadius.all(Radius.circular(30))),
-                    height: 40.h,
-                    width: 160.w,
-                    child: Center(
-                      child: Text(
-                        'File Number: ${controller.data!.data[index].fileNumber}',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    height: 40.h,
-                    width: 100.w,
-                    decoration: BoxDecoration(
-                        color: controller.data!.data[index].status == 1
-                            ? const Color.fromARGB(255, 91, 207, 95)
-                            : Colors.red,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(30))),
-                    child: Center(
-                      child: Text(
-                        'FB: ${controller.data!.data[index].statusText}',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            color: whiteColor, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              // SizedBox(
-              //   height: 10.h,
-              // ),
-              kSizedBoxH,
-              Row(
-                children: [
-                  CircleAvatar(
-                    radius: 25.r,
-                    backgroundImage: CachedNetworkImageProvider(
-                      controller.data!.data[index].user.profileImage,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10.w,
-                  ),
-                  Text(controller.data!.data[index].user.name,
-                      style: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 18))
-                ],
-              ),
-              Divider(),
-              loanAmount(
-                  title: 'കൊടുത്തത്:',
-                  price: '${controller.data!.data[index].loanAmount} INR'),
-              SizedBox(
-                height: 10.h,
-              ),
-              reternDate(
-                title: 'തിരിച്ചടവ്:',
-                date: controller.data!.data[index].dueDate.toString(),
-              ),
-              kSizedBoxH20,
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Padding loanAmount({String? title, String? price}) {
-    return Padding(
-      padding: EdgeInsets.only(top: 5.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              const Icon(Icons.money),
-              Text(
-                title!,
-                style:
-                    const TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
-              ),
-            ],
-          ),
-          Text(
-            price!,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          )
-        ],
-      ),
-    );
-  }
-
-  Padding reternDate({String? title, String? date}) {
-    String formattedDate =
-        DateFormat('dd/MM/yyyy').format(DateTime.parse(date!));
-    return Padding(
-      padding: EdgeInsets.only(top: 5.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              const Icon(Icons.date_range),
-              Text(
-                title!,
-                style:
-                    const TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
-              ),
-            ],
-          ),
-          Text(
-            formattedDate,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          )
-        ],
-      ),
-    );
-  }
-
-  SizedBox Divider() {
-    return SizedBox(
-      width: 270.w,
-      child: const Text(
-        '-------------------',
-        style: TextStyle(fontSize: 30),
       ),
     );
   }

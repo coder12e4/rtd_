@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:rtd_project/controller/book/book_screen_controller.dart';
 import 'package:rtd_project/controller/elected_member_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
+import 'package:rtd_project/core/common_widget/appbar.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/helper/router.dart';
 import 'package:rtd_project/view/book_screen/widgets/membrlisttile_widgetr.dart';
@@ -31,7 +32,20 @@ class _BookPageState extends State<BookPage> {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              appbar(context),
+              CustomAppBar(
+                title: 'Member & Service Book',
+                trailing: IconButton(
+                  onPressed: () {
+                    Get.delete<ElectedMemberController>(force: true);
+                    Get.toNamed(AppRouter.getElectedMemberRoute(),
+                        arguments: [false]);
+                  },
+                  icon: const Icon(
+                    Icons.people_alt_rounded,
+                  ),
+                  color: whiteColor,
+                ),
+              ),
               tabBar(),
               tabBarView(context, value),
             ],
@@ -291,9 +305,8 @@ class _BookPageState extends State<BookPage> {
                             )
                           : const Offstage(),
                 )
-              : SizedBox(
-                  height: 400.h,
-                  child: const Center(
+              : const Expanded(
+                  child: Center(
                     child: SizedBox(
                       child: CircularProgressIndicator(
                         strokeWidth: 6,
@@ -322,43 +335,6 @@ class _BookPageState extends State<BookPage> {
         trailing: const [Icon(Icons.search)],
         hintText: 'Search',
         onChanged: onChanged,
-      ),
-    );
-  }
-
-  Container appbar(
-    BuildContext context,
-  ) {
-    return Container(
-      margin: EdgeInsets.only(top: 10.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(width: 60.w),
-              Text(
-                'Member & Service Book',
-                style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18),
-              ),
-              IconButton(
-                onPressed: () {
-                  Get.delete<ElectedMemberController>(force: true);
-                  Get.toNamed(AppRouter.getElectedMemberRoute(),
-                      arguments: [false]);
-                },
-                icon: const Icon(
-                  Icons.people_alt_rounded,
-                ),
-                color: whiteColor,
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }

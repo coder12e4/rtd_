@@ -9,6 +9,7 @@ import 'package:rtd_project/controller/loan/loan_edit_controller.dart';
 import 'package:rtd_project/controller/loan/loan_request_detail_controller.dart';
 import 'package:rtd_project/controller/loan/loan_screen_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
+import 'package:rtd_project/core/common_widget/appbar.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/util/theme.dart';
@@ -48,7 +49,7 @@ class _LoanPageState extends State<LoanPage> {
               // mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 kSizedBoxH,
-                wallTextWidget(context),
+                const CustomAppBar(title: "Loan Request"),
                 kSizedBoxH,
                 tabBar(),
                 tabBarView(context, value),
@@ -555,14 +556,11 @@ class _LoanPageState extends State<LoanPage> {
                           )
                         : Stack(
                             children: [
-                              Hero(
-                                tag: value.surties[index]!.id.toString(),
-                                child: CircleAvatar(
-                                  minRadius: 35.r,
-                                  backgroundColor: textFormBase,
-                                  backgroundImage: CachedNetworkImageProvider(
-                                      value.surties[index]!.profileImage),
-                                ),
+                              CircleAvatar(
+                                minRadius: 35.r,
+                                backgroundColor: textFormBase,
+                                backgroundImage: CachedNetworkImageProvider(
+                                    value.surties[index]!.profileImage),
                               ),
                               Positioned(
                                 bottom: 9.h,
@@ -669,14 +667,6 @@ class _LoanPageState extends State<LoanPage> {
               text: 'Request',
             )
           ]),
-    );
-  }
-
-  Text wallTextWidget(BuildContext context) {
-    return Text(
-      'Loan Request',
-      style: Theme.of(context).textTheme.displaySmall!.copyWith(
-          color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
     );
   }
 }

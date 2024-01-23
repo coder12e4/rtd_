@@ -7,6 +7,7 @@ import 'package:rtd_project/controller/loan/loan_screen_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
 import 'package:rtd_project/core/common_widget/imagepicker.dart';
+import 'package:rtd_project/core/constraints/conatrints.dart';
 
 class LoanDocumentsBottomSheet extends StatefulWidget {
   const LoanDocumentsBottomSheet({
@@ -28,8 +29,7 @@ class _LoanDocumentsBottomSheetState extends State<LoanDocumentsBottomSheet> {
   Widget build(BuildContext context) {
     return GetBuilder<LoanScreenController>(builder: (value) {
       return Container(
-        height: 240.h,
-        width: 390.w,
+        height: 210.h,
         decoration: const BoxDecoration(
           color: whiteColor,
           borderRadius: BorderRadiusDirectional.only(
@@ -49,9 +49,7 @@ class _LoanDocumentsBottomSheetState extends State<LoanDocumentsBottomSheet> {
                 fontWeight: FontWeight.w400,
               ),
             ),
-            SizedBox(
-              height: 20.h,
-            ),
+            kSizedBoxH20,
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 30.w),
               child: Row(
@@ -102,9 +100,7 @@ class _LoanDocumentsBottomSheetState extends State<LoanDocumentsBottomSheet> {
                 ],
               ),
             ),
-            SizedBox(
-              height: 20.h,
-            ),
+            kSizedBoxH20,
             value.selectedImage1 != null &&
                     value.selectedImage2 != null &&
                     value.selectedImage3 != null
