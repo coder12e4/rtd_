@@ -47,13 +47,13 @@ class LoanEditController extends GetxController implements GetxService {
   String? purpose;
   List<bool> isSelected = [];
   List<dynamic> surties = <dynamic>[];
-  List<int> _addedSurties = <int>[];
+  final List<int> _addedSurties = <int>[];
   List<int> get addedSurties => _addedSurties;
   List<DropdownMenuItem<Data>> _dropdownMenuLoanType =
       <DropdownMenuItem<Data>>[];
   List<DropdownMenuItem<Data>> get dropdownMenuLoanType =>
       _dropdownMenuLoanType;
-  List<PurposeData> _getPurposeType = <PurposeData>[];
+  final List<PurposeData> _getPurposeType = <PurposeData>[];
   List<PurposeData> get getPurposeType => _getPurposeType;
 
   List<DropdownMenuItem<PurposeData>> _dropdownMenuPurpose =
@@ -61,7 +61,7 @@ class LoanEditController extends GetxController implements GetxService {
   List<DropdownMenuItem<PurposeData>> get dropdownMenuPurpose =>
       _dropdownMenuPurpose;
 
-  List<Data> _getLoanTypes = <Data>[];
+  final List<Data> _getLoanTypes = <Data>[];
   List<Data> get getLoanTypes => _getLoanTypes;
   bool loading = true;
   LoanData? loanData;
@@ -192,7 +192,7 @@ class LoanEditController extends GetxController implements GetxService {
 
         update();
         log(_getPurposeType.toString());
-        log('loan purpose surety : ${noOfSurties}');
+        log('loan purpose surety : $noOfSurties');
       } catch (e, stackTrace) {
         log('loanPurpose catch $e', error: e, stackTrace: stackTrace);
       }
@@ -402,7 +402,7 @@ class LoanEditController extends GetxController implements GetxService {
     final responceData = await response.stream.bytesToString();
     parsedData = json.decode(responceData);
     Get.back();
-    log('loan update response ${parsedData}');
+    log('loan update response $parsedData');
     if (parsedData['status'] == true) {
       log(parsedData.toString());
       getLoanDocuments();

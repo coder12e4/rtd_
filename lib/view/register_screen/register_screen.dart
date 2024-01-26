@@ -822,7 +822,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
 class RadioButtonWidget extends StatefulWidget {
   const RadioButtonWidget({
-    Key? key,
+    super.key,
+    Key? key1,
   });
 
   @override

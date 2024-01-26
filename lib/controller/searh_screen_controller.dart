@@ -28,7 +28,7 @@ class SearchScreenController extends GetxController {
   //     LoanScreenController(parser: Get.find());
   TextEditingController serchController = TextEditingController();
   List<SuretiesData>? surties;
-  List<int> _addedSurties = <int>[];
+  final List<int> _addedSurties = <int>[];
   List<int> get addedSurties => _addedSurties;
   List<SuretiesData>? searchResult = [];
 

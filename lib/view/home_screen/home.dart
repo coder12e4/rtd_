@@ -8,7 +8,6 @@ import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/dotted_text.dart';
 import 'package:rtd_project/util/theme.dart';
 import 'package:rtd_project/view/home_screen/widgets/chart_items.dart';
-
 import '../../controller/notification/notification_controller.dart';
 import '../../core/constraints/conatrints.dart';
 import '../../helper/router.dart';
