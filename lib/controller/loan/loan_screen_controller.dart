@@ -362,7 +362,7 @@ class LoanScreenController extends GetxController {
     // var file1 =
     //     await http.MultipartFile.fromPath('loan_document', data1?.path ?? '');
     // request.files.add(file1);
-
+    log('loan amount@@@@@@@@@@ $loanAmount');
     String? accessToken =
         parser.sharedPreferencesManager.getString('access_token');
 
