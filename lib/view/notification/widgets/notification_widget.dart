@@ -40,18 +40,20 @@ class NotificationContainer extends StatelessWidget {
             borderRadius: BorderRadiusDirectional.circular(20)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Row(
               children: [
                 Expanded(
-                    child: Padding(
-                  padding:
-                      EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h),
-                  child: Text(
-                    title ?? "Not Available",
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  child: Padding(
+                    padding:
+                        EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h),
+                    child: Text(
+                      title ?? "Not Available",
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
-                )),
+                ),
                 Container(
                   margin: EdgeInsets.only(right: 20.w),
                   height: 7.h,

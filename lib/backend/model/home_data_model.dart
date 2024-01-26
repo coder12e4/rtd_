@@ -269,8 +269,8 @@ class Income {
   });
 
   factory Income.fromJson(Map<String, dynamic> json) => Income(
-        rent: json["rent"],
-        membership: json["membership"],
+        rent: json["rent"].toString(),
+        membership: json["membership"].toString(),
       );
 
   Map<String, dynamic> toJson() => {
