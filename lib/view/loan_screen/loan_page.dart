@@ -353,15 +353,22 @@ class _LoanPageState extends State<LoanPage> {
   Widget imageRow(LoanScreenController controller, int index) {
     return SizedBox(
       height: 60.h,
-      child: ListView.separated(
-          shrinkWrap: true,
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (context, imageIndex) =>
-              checkMarkImage(controller, index, imageIndex),
-          separatorBuilder: (context, index) => SizedBox(
-                width: 15.w,
+      child: controller.loanData[index].sureties.isNotEmpty
+          ? ListView.separated(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, imageIndex) =>
+                  checkMarkImage(controller, index, imageIndex),
+              separatorBuilder: (context, index) => SizedBox(
+                    width: 15.w,
+                  ),
+              itemCount: controller.loanData[index].sureties.length)
+          : const Center(
+              child: Text(
+                'Sureties not added',
+                style: TextStyle(fontWeight: FontWeight.w600),
               ),
-          itemCount: controller.loanData[index].sureties.length),
+            ),
     );
   }
 
@@ -609,9 +616,7 @@ class _LoanPageState extends State<LoanPage> {
               ),
             ),
           ),
-          SizedBox(
-            height: 10.h,
-          ),
+          kSizedBoxH,
           LoanRulesButton(controller: value),
           kSizedBoxH,
           ButtonWidget(

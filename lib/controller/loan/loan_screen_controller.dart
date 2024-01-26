@@ -167,6 +167,7 @@ class LoanScreenController extends GetxController {
         update();
         log(_getPurposeType.toString());
         log('loan purpose surety : $noOfSurties');
+        log('loan amount : $loanAmount');
       } catch (e, stackTrace) {
         log('loanPurpose catch $e', error: e, stackTrace: stackTrace);
       }
@@ -351,10 +352,7 @@ class LoanScreenController extends GetxController {
       return;
     }
     log('added sureties$addedSurties');
-    if (suretyCount < 1) {
-      showToast('Add atleast one  surety to continue');
-      return;
-    }
+
     loadingWidget();
     var uri =
         Uri.parse("http://rtd.canisostudio.com/api/user/loan/request/create");

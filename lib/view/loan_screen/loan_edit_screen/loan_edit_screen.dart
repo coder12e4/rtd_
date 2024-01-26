@@ -151,8 +151,6 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
                                       ),
                                       value: Get.find<LoanEditController>()
                                           .purposeData,
-
-                                      // Set the initial value (hint text)
                                       onChanged: (newValue) {
                                         setState(() {});
                                         value.purposeData = newValue;
@@ -173,9 +171,7 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
                               const Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text('Sureties')),
-                              SizedBox(
-                                height: 10.h,
-                              ),
+                              kSizedBoxH,
                               SizedBox(
                                 height: 80.h,
                                 child: ListView.separated(
@@ -231,9 +227,7 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
                                   ),
                                 ),
                               ),
-                              SizedBox(
-                                height: 10.h,
-                              ),
+                              kSizedBoxH,
                               Container(
                                 height: 50.h,
                                 width: 290.w,

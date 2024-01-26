@@ -316,10 +316,6 @@ class LoanEditController extends GetxController implements GetxService {
   }
 
   Future<void> upload() async {
-    if (loanSuretyCount < 1) {
-      showToast('Select atleast one  Surety to continue');
-      return;
-    }
     if (purpose == null) {
       showToast('Select Loan  Purpose');
       return;
