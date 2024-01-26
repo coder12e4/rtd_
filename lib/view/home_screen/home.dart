@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:rtd_project/backend/model/home_data_model.dart';
 import 'package:rtd_project/controller/home_screen_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
+import 'package:rtd_project/core/common_widget/dotted_text.dart';
 import 'package:rtd_project/util/theme.dart';
 import 'package:rtd_project/view/home_screen/widgets/chart_items.dart';
 
@@ -36,7 +37,7 @@ class _HomePageState extends State<HomePage> {
                 homeTextWidget(context, value),
                 Expanded(
                   child: Container(
-                     height: 550.h,
+                    padding: EdgeInsets.only(top: 5.h),
                     decoration: const BoxDecoration(
                       color: whiteColor,
                       borderRadius: BorderRadiusDirectional.only(
@@ -52,13 +53,13 @@ class _HomePageState extends State<HomePage> {
                               Padding(
                                 padding: const EdgeInsets.all(18.0),
                                 child: Container(
-                                  height: 530.h,
-                                  // width: 100.w,
+                                  height: 520.h,
                                   decoration: BoxDecoration(
                                     color: textFormBase,
                                     borderRadius: BorderRadius.circular(30),
                                   ),
                                   child: Column(
+                                    mainAxisSize: MainAxisSize.min,
                                     children: [
                                       kSizedBoxH,
                                       CarouselSlider(
@@ -69,7 +70,7 @@ class _HomePageState extends State<HomePage> {
                                             .toList(),
                                         options: CarouselOptions(
                                           pauseAutoPlayOnTouch: true,
-                                          height: 290.h,
+                                          height: 280.h,
                                           autoPlayInterval:
                                               const Duration(seconds: 3),
                                           aspectRatio: 16 / 17,
@@ -150,40 +151,34 @@ class _HomePageState extends State<HomePage> {
 
   Expanded incomBreakdown(HomeData? homeData) {
     return Expanded(
-        child: SizedBox(
-      height: 400.h,
-      child: Padding(
-        padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 20.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Income Breakdown',
-              style: TextStyle(fontWeight: FontWeight.w600),
-            ),
-            SizedBox(
-              height: 10.h,
-            ),
-            IncomRow(title: 'Rent', price: '${homeData?.income.rent} INR'),
-            const Divider(),
-            IncomRow(
-                title: 'Membership',
-                price: '${homeData?.income.membership} INR'),
-            SizedBox(
-              height: 30.h,
-            ),
-            const Text(
-              'Total Loan',
-              style: TextStyle(fontWeight: FontWeight.w600),
-            ),
-            SizedBox(
-              height: 10.h,
-            ),
-            IncomRow(title: 'Active', price: '${homeData?.loans.active}'),
-            const Divider(),
-            IncomRow(title: 'Closed', price: '${homeData?.loans.closed}'),
-          ],
-        ),
+        child: Padding(
+      padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 20.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Income Breakdown',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+          kSizedBoxH,
+          IncomRow(title: 'Rent', price: '${homeData?.income.rent} INR'),
+          kSizedBoxH,
+          const DashText(),
+          kSizedBoxH,
+          IncomRow(
+              title: 'Membership', price: '${homeData?.income.membership} INR'),
+          kSizedBoxH20,
+          const Text(
+            'Total Loan',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+          kSizedBoxH,
+          IncomRow(title: 'Active', price: '${homeData?.loans.active}'),
+          kSizedBoxH,
+          const DashText(),
+          kSizedBoxH,
+          IncomRow(title: 'Closed', price: '${homeData?.loans.closed}'),
+        ],
       ),
     ));
   }

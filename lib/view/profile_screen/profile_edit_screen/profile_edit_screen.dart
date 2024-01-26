@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rtd_project/core/color/colors.dart';
+import 'package:rtd_project/core/common_widget/appbar.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/util/theme.dart';
 
@@ -40,8 +41,17 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
         body: GetBuilder<EditProfileController>(builder: (value) {
           return Column(
             children: [
-              appbar(context),
-              kSizedBoxH,
+              CustomAppBar(
+                leading: IconButton(
+                  onPressed: Get.back,
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: whiteColor,
+                    size: 30,
+                  ),
+                ),
+                title: 'Edit Profile',
+              ),
               value.loading == true
                   ? Expanded(
                       child: Container(
@@ -575,30 +585,6 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       _docProf2 = newImage;
       // image1 = true;
     });
-  }
-
-  Row appbar(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        IconButton(
-          onPressed: Get.back,
-          icon: const Icon(
-            Icons.arrow_back,
-            color: whiteColor,
-            size: 30,
-          ),
-        ),
-        Text(
-          'Edit Profile',
-          style: Theme.of(context).textTheme.displaySmall!.copyWith(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
-        ),
-        SizedBox(
-          width: 20.w,
-        ),
-      ],
-    );
   }
 }
 

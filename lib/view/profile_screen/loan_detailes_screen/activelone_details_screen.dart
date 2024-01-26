@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:rtd_project/controller/loan/profile_loan_data_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
+import 'package:rtd_project/core/common_widget/appbar.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 
 import '../../../core/common_widget/dotted_text.dart';
@@ -25,8 +26,17 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
         body: GetBuilder<ProfileLoanDataController>(builder: (value) {
           return Column(
             children: [
-              appbar(context),
-              kSizedBoxH,
+              CustomAppBar(
+                leading: IconButton(
+                  onPressed: Get.back,
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: whiteColor,
+                    size: 30,
+                  ),
+                ),
+                title: 'Loan Details',
+              ),
               value.error != true
                   ? Expanded(
                       child: Container(
@@ -39,11 +49,13 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
                         ),
                         child: value.loading != true
                             ? Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                                padding: EdgeInsets.only(
+                                    left: 20.w, right: 20.w, top: 5.h),
                                 child: ListView(
+                                  padding: EdgeInsets.only(bottom: 10.h),
                                   physics: const BouncingScrollPhysics(),
                                   children: [
-                                    kSizedBoxH20,
+                                    kSizedBoxH,
                                     filenumAndActiveloan(
                                         value.loanData?.data?.fileNumber,
                                         value.loanData?.data?.statusText
@@ -97,14 +109,19 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
                                     kSizedBoxH,
                                     malayalamTextWidget('തുക :', Icons.money,
                                         value.loanData?.data?.loanAmount),
-                                    kSizedBoxH20,
+                                    kSizedBoxH,
+                                    malayalamTextWidget(
+                                        'തിരിച്ചു അടച്ച തുക  :',
+                                        Icons.money,
+                                        value.loanData?.data?.paidAmount),
+                                    kSizedBoxH,
                                     malayalamTextWidget(
                                       'തുടങ്ങിയത് :',
                                       Icons.calendar_month,
                                       value.loanData!.data?.startDate
                                           .toString(),
                                     ),
-                                    kSizedBoxH20,
+                                    kSizedBoxH,
                                     malayalamTextWidget(
                                       'തിരിച്ചടവ്  :',
                                       Icons.calendar_month,
@@ -315,32 +332,6 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
             ),
           ),
         )
-      ],
-    );
-  }
-
-  Row appbar(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        IconButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          icon: const Icon(
-            Icons.arrow_back,
-            color: whiteColor,
-            size: 30,
-          ),
-        ),
-        Text(
-          'Loan Details',
-          style: Theme.of(context).textTheme.displaySmall!.copyWith(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
-        ),
-        SizedBox(
-          width: 30.w,
-        ),
       ],
     );
   }

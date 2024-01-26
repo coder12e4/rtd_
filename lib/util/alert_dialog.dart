@@ -83,6 +83,6 @@ logOut() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.remove('profile_data');
   prefs.remove('access_token');
-  prefs.clear();
+  // prefs.clear();
   Get.offAllNamed(AppRouter.getInitialRoute());
 }

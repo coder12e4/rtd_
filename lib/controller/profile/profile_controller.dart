@@ -13,10 +13,13 @@ class ProfileController extends GetxController implements GetxService {
   Profile? userData;
   bool loading = true;
   @override
-  void onInit() {
+  void onInit() async {
     controllerN = Get.put(NotificationController(parser: Get.find()));
-    getNotificaion();
-    getUserDatas();
+    await Future.wait([
+      getNotificaion(),
+      getUserDatas(),
+    ]);
+
     super.onInit();
   }
 

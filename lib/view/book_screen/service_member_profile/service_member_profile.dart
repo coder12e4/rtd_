@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rtd_project/controller/book/service_member_details_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
+import 'package:rtd_project/core/common_widget/appbar.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -17,7 +18,16 @@ class ServiceMemberProfile extends StatelessWidget {
       backgroundColor: baseColor,
       body: Column(
         children: [
-          appbar(context),
+          CustomAppBar(
+              leading: IconButton(
+                onPressed: Get.back,
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: whiteColor,
+                  size: 30,
+                ),
+              ),
+              title: 'Service Member Book'),
           Expanded(
             child: Container(
               decoration: const BoxDecoration(

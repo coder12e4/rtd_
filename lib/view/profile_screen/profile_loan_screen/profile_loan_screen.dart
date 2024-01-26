@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:rtd_project/controller/loan/loan_details_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
+import 'package:rtd_project/core/common_widget/appbar.dart';
+import 'package:rtd_project/core/common_widget/dotted_text.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 
 import '../../../backend/model/loan/active_loan_model.dart';
@@ -23,10 +25,15 @@ class ProfileLoanScreen extends StatelessWidget {
                 return Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    wallTextWidget(context),
-                    SizedBox(
-                      height: 10.h,
-                    ),
+                    CustomAppBar(
+                        leading: IconButton(
+                          onPressed: Get.back,
+                          icon: const Icon(
+                            Icons.arrow_back,
+                            color: whiteColor,
+                          ),
+                        ),
+                        title: 'Loans'),
                     tabBar(),
                     tabBarView(value),
                   ],
@@ -181,57 +188,6 @@ class ProfileLoanScreen extends StatelessWidget {
   //   );
   // }
 
-  SizedBox submitedButton({
-    bool? borderAvalable,
-    Color? buttonForegroundColor,
-    Color? buttonbackgroundColor,
-    Function()? press,
-  }) {
-    return SizedBox(
-        height: 30.h,
-        width: 260.w,
-        child: ElevatedButton(
-            style: ButtonStyle(
-                foregroundColor:
-                    MaterialStatePropertyAll(buttonForegroundColor),
-                backgroundColor: MaterialStatePropertyAll(borderAvalable == true
-                    ? buttonbackgroundColor
-                    : Colors.grey)),
-            onPressed: press,
-            child: Text(
-              borderAvalable == true ? 'Submit' : "submited",
-              style: const TextStyle(fontWeight: FontWeight.w700),
-            )));
-  }
-
-  SizedBox optionButton(
-      {bool? borderAvalable,
-      Color? buttonForegroundColor,
-      Color? buttonbackgroundColor,
-      Function()? press,
-      String? buttonText}) {
-    return SizedBox(
-        height: 40.h,
-        // width: 260.w,
-        child: ElevatedButton(
-            style: ButtonStyle(
-                side: borderAvalable == false
-                    ? const MaterialStatePropertyAll(
-                        BorderSide(color: Colors.black))
-                    : null,
-                foregroundColor: MaterialStatePropertyAll(borderAvalable == true
-                    ? buttonForegroundColor
-                    : buttonbackgroundColor),
-                backgroundColor: MaterialStatePropertyAll(borderAvalable == true
-                    ? buttonbackgroundColor
-                    : buttonForegroundColor)),
-            onPressed: press,
-            child: Text(
-              buttonText!,
-              style: const TextStyle(fontWeight: FontWeight.w700),
-            )));
-  }
-
   Column activeLoan(LoanDetailsController controller) {
     final data = controller.activeLoans?.data.data;
     return Column(
@@ -259,19 +215,6 @@ class ProfileLoanScreen extends StatelessWidget {
               ),
         kSizedBoxH,
       ],
-    );
-  }
-
-  Container feedDate(String date) {
-    return Container(
-      height: 30.h,
-      width: 120.w,
-      decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(30)),
-          color: textFormBase),
-      child: Center(
-        child: Text(date, textAlign: TextAlign.center),
-      ),
     );
   }
 
@@ -351,7 +294,9 @@ class ProfileLoanScreen extends StatelessWidget {
                           fontSize: 16))
                 ],
               ),
-              Divider(),
+              kSizedBoxH,
+              const DashText(),
+              kSizedBoxH,
               loanAmount(title: 'കിട്ടിയത്:', price: data.loanAmount),
               loanAmount(title: 'കൊടുത്തത്:', price: data.paidAmount),
               // SizedBox(
@@ -415,16 +360,6 @@ class ProfileLoanScreen extends StatelessWidget {
     );
   }
 
-  Container Divider() {
-    return Container(
-      width: 270.w,
-      child: const Text(
-        '-------------------',
-        style: TextStyle(fontSize: 30),
-      ),
-    );
-  }
-
   Padding tabBar() {
     return const Padding(
       padding: EdgeInsets.symmetric(horizontal: 80),
@@ -445,38 +380,6 @@ class ProfileLoanScreen extends StatelessWidget {
               text: 'Closed',
             )
           ]),
-    );
-  }
-
-  Container wallTextWidget(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(
-        top: 10.h,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(
-                Icons.arrow_back,
-                color: whiteColor,
-              )),
-          SizedBox(
-            width: 70.w,
-          ),
-          Text(
-            'Loans',
-            style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
-          ),
-          SizedBox(
-            width: 105.w,
-          )
-        ],
-      ),
     );
   }
 }

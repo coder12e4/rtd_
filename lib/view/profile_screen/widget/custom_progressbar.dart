@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rtd_project/core/color/colors.dart';
 
 import '../../../controller/loan/profile_loan_data_controller.dart';
 
@@ -25,7 +26,8 @@ class CustomProgressBar extends StatelessWidget {
         ),
         Text(
           'Due in ${value.remainingDays} days',
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+          style: const TextStyle(
+              fontSize: 18, fontWeight: FontWeight.w600, color: whiteColor),
         )
       ],
     );

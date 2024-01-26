@@ -88,15 +88,20 @@ class Details {
   String? paidAmount;
   String? dueDate;
   String? purpose;
-  int? status;
+  int? loanRequestStatus;
+  String? suretyRejectReason;
+  String? adminRejectReason;
 
-  Details(
-      {this.id,
-      this.amount,
-      this.paidAmount,
-      this.dueDate,
-      this.purpose,
-      this.status});
+  Details({
+    this.id,
+    this.amount,
+    this.paidAmount,
+    this.dueDate,
+    this.purpose,
+    this.loanRequestStatus,
+    this.suretyRejectReason,
+    this.adminRejectReason,
+  });
 
   Details.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -104,7 +109,9 @@ class Details {
     paidAmount = json['paid_amount'];
     dueDate = json['due_date'];
     purpose = json['purpose'];
-    status = json['status'];
+    loanRequestStatus = json['loan_request_status'];
+    suretyRejectReason = json['surety_reject_reason'];
+    adminRejectReason = json['admin_reject_reason'];
   }
 
   Map<String, dynamic> toJson() {
@@ -114,7 +121,10 @@ class Details {
     data['paid_amount'] = paidAmount;
     data['due_date'] = dueDate;
     data['purpose'] = purpose;
-    data['status'] = status;
+    data['loan_request_status'] = loanRequestStatus;
+    data['surety_reject_reason'] = suretyRejectReason;
+    data['admin_reject_reason'] = adminRejectReason;
+
     return data;
   }
 }

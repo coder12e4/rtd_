@@ -5,9 +5,14 @@ import 'package:lottie/lottie.dart';
 import 'package:rtd_project/controller/loan/loan_request_detail_controller.dart';
 import 'package:rtd_project/controller/notification/notification_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
+import 'package:rtd_project/core/common_widget/appbar.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/util/theme.dart';
+import 'package:rtd_project/util/toast.dart';
+import 'package:rtd_project/view/notification/widgets/notification_widget.dart';
 
+import '../../backend/model/notification_model/notification_model.dart';
+import '../../controller/loan/profile_loan_data_controller.dart';
 import '../../controller/notification/surety_view_controller.dart';
 import '../../helper/router.dart';
 import 'notification_details_screen/notification_details.dart';
@@ -20,317 +25,261 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
-  bool clikable = false;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         backgroundColor: baseColor,
-        body: GetBuilder<NotificationController>(builder: (controller) {
-          return controller.loading != true
-              ? Column(
-                  children: [
-                    appbar(context, controller),
-                    Expanded(
-                      child: Container(
-                        padding:
-                            EdgeInsets.only(top: 7.h, left: 20.w, right: 20.w),
-                        decoration: const BoxDecoration(
-                          color: whiteColor,
-                          borderRadius: BorderRadiusDirectional.only(
-                            topStart: Radius.circular(50),
-                            topEnd: Radius.circular(50),
+        body: GetBuilder<NotificationController>(
+          builder: (controller) {
+            List<NotificationDetails>? notificationList =
+                controller.notification?.data;
+            return controller.loading != true
+                ? Column(
+                    children: [
+                      CustomAppBar(
+                        leading: IconButton(
+                          onPressed: Get.back,
+                          icon: const Icon(
+                            Icons.arrow_back,
+                            color: whiteColor,
+                            size: 30,
                           ),
                         ),
-                        child: controller.notification?.data?.length != 0
-                            ? ListView.separated(
-                                padding: EdgeInsets.only(bottom: 10.h),
-                                shrinkWrap: true,
-                                itemCount:
-                                    controller.notification!.data!.length,
-                                physics: const BouncingScrollPhysics(),
-                                separatorBuilder: (context, index) =>
-                                    kSizedBoxH,
-                                itemBuilder: (context, index) {
-                                  final type = controller
-                                      .notification?.data?[index].type;
-                                  if (type == 4) {
-                                    return containerWithClickable(
-                                      onTap: () {
-                                        controller.markNotificationSeen(
-                                          controller
-                                              .notification!.data![index].id!,
-                                        );
-
-                                        Get.delete<SuretyViewController>(
-                                            force: true);
-                                        Get.toNamed(
-                                            AppRouter
-                                                .getSuretyRequestDetailsRoute(),
-                                            arguments: [
-                                              controller.notification!
-                                                  .data![index].details?.id,
-                                              controller
-                                                  .notification!.data![index],
-                                              false
-                                            ]);
-                                      },
-                                      100.h,
-                                      controller
-                                          .notification?.data?[index].message,
-                                      clikable: 'View Details',
-                                      index: index,
-                                      controller: controller,
-                                    );
-                                  } else if (type == 2) {
-                                    return textContainer(
-                                      onTap: () {
-                                        controller.markNotificationSeen(
-                                          controller
-                                              .notification!.data![index].id!,
-                                        );
-                                        Get.toNamed(
-                                            AppRouter
-                                                .getProfileLoanDetailsRoute(),
-                                            arguments: [
-                                              controller.notification!
-                                                  .data![index].details!.id!
-                                            ]);
-                                      },
-                                      110.h,
-                                      controller
-                                          .notification?.data?[index].message,
-                                      // text1: 'Loan Number : 0123',
-                                      text2:
-                                          'Loan Amount :  ${controller.notification?.data?[index].details!.amount}',
-                                      text3:
-                                          'Purpose : ${controller.notification?.data?[index].details!.purpose}',
-
-                                      // text4: 'Repayment Date : 20/12/2023',
-                                      controller: controller,
-                                      index: index,
-                                    );
-                                  } else if (type == 1) {
-                                    return textContainer(
-                                      onTap: () {
-                                        controller.markNotificationSeen(
-                                          controller
-                                              .notification!.data![index].id!,
-                                        );
-                                        Get.delete<
-                                                LoanRequestDetailsController>(
-                                            force: true);
-                                        Get.toNamed(
-                                            AppRouter
-                                                .getLoanRequestDetailsRoutes(),
-                                            arguments: [
-                                              controller.notification!
-                                                  .data![index].details!.id,
-                                              true
-                                            ]);
-                                      },
-                                      110.h,
-                                      controller
-                                          .notification?.data?[index].message,
-                                      // text1: 'Loan Number : 0123',
-                                      text2:
-                                          'Loan Amount : ${controller.notification?.data?[index].details!.amount}',
-                                      text3:
-                                          'Purpose :  ${controller.notification?.data?[index].details!.purpose}',
-                                      controller: controller,
-                                      index: index,
-                                    );
-                                  } else if (type == 3) {
-                                    final inputFormat = controller
-                                        .notification!.data?[index].date
-                                        .toString();
-
-                                    return GestureDetector(
-                                      onTap: () {
-                                        controller.markNotificationSeen(
-                                            controller.notification!
-                                                .data![index].id!);
-                                        Get.delete<SuretyViewController>(
-                                            force: true);
-                                        Get.toNamed(
-                                            AppRouter
-                                                .getNotificationPollRoute(),
-                                            arguments: [
-                                              controller.notification!
-                                                  .data?[index].details!.id,
-                                              null,
-                                              true
-                                            ]);
-                                      },
-                                      child: textContainer(
-                                          110.h,
-                                          controller.notification?.data?[index]
-                                              .message,
-                                          controller: controller,
-                                          index: index,
-                                          endDate: inputFormat,
-                                          clickable: 'View Details'),
-                                    );
-                                  } else if (type == 6) {
-                                    return textContainer(
-                                      70.h,
-                                      controller
-                                          .notification?.data?[index].message,
-                                      onTap: () => controller
-                                          .markNotificationSeen(controller
-                                              .notification!.data![index].id!),
-                                      controller: controller,
-                                      index: index,
-                                      text1:
-                                          "Date : ${controller.notification?.data?[index].date}",
-                                    );
-                                  }
-                                  return containerWithClickable(onTap: () {
-                                    controller.markNotificationSeen(
-                                      controller.notification!.data![index].id!,
-                                    );
-                                    Get.to(const NotificationDetailsScreen(),
-                                        arguments: [
-                                          controller.notification!.data![index]
-                                        ]);
-                                  },
-                                      40.h,
-                                      controller
-                                          .notification?.data?[index].message,
-                                      controller: controller,
-                                      index: index);
-                                },
-                              )
-                            : Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  SizedBox(
-                                    height: 180.h,
-                                    width: double.infinity,
-                                  ),
-                                  Lottie.asset(
-                                      'assets/images/no_notification.json',
-                                      height: 200.h),
-                                  const Text(
-                                    'Notifications is empty',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                ],
+                        title: 'Notification',
+                        trailing: Stack(
+                          alignment: AlignmentDirectional.center,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                // Get.toNamed(AppRouter.getSuretyRequestDetailsRoute());
+                              },
+                              icon: const Icon(
+                                Icons.notifications_none,
+                                color: whiteColor,
+                                size: 35,
                               ),
+                            ),
+                            controller.notificationCount != 0
+                                ? Positioned(
+                                    top: 3.h,
+                                    right: 4.w,
+                                    child: Container(
+                                      height: 20.h,
+                                      width: 20.w,
+                                      decoration: const BoxDecoration(
+                                          color: Colors.red,
+                                          shape: BoxShape.circle),
+                                      child: Center(
+                                          child: Text(
+                                        '${controller.notificationCount ?? 0}',
+                                        style: const TextStyle(
+                                            color: whiteColor,
+                                            fontWeight: FontWeight.bold),
+                                      )),
+                                    ),
+                                  )
+                                : const Offstage(),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.only(
+                              top: 7.h, left: 20.w, right: 20.w),
+                          decoration: const BoxDecoration(
+                            color: whiteColor,
+                            borderRadius: BorderRadiusDirectional.only(
+                              topStart: Radius.circular(50),
+                              topEnd: Radius.circular(50),
+                            ),
+                          ),
+                          child: notificationList?.length != 0
+                              ? ListView.separated(
+                                  padding: EdgeInsets.only(bottom: 10.h),
+                                  shrinkWrap: true,
+                                  itemCount: notificationList!.length,
+                                  physics: const BouncingScrollPhysics(),
+                                  separatorBuilder: (context, index) =>
+                                      kSizedBoxH,
+                                  itemBuilder: (context, index) {
+                                    final type = notificationList[index].type;
+                                    if (type == 4) {
+                                      return containerWithClickable(
+                                        onTap: () {
+                                          controller.markNotificationSeen(
+                                            notificationList[index].id!,
+                                          );
+
+                                          Get.delete<SuretyViewController>(
+                                              force: true);
+                                          Get.toNamed(
+                                              AppRouter
+                                                  .getSuretyRequestDetailsRoute(),
+                                              arguments: [
+                                                notificationList[index]
+                                                    .details
+                                                    ?.id,
+                                                notificationList[index],
+                                                false
+                                              ]);
+                                        },
+                                        110.h,
+                                        notificationList[index].message,
+                                        clikable: 'View Details',
+                                        index: index,
+                                        controller: controller,
+                                      );
+                                    } else if (type == 2) {
+                                      return NotificationContainer(
+                                        onTap: () {
+                                          controller.markNotificationSeen(
+                                            notificationList[index].id!,
+                                          );
+                                          Get.delete<ProfileLoanDataController>(
+                                              force: true);
+                                          Get.toNamed(
+                                              AppRouter
+                                                  .getProfileLoanDetailsRoute(),
+                                              arguments: [
+                                                notificationList[index]
+                                                    .details!
+                                                    .id!
+                                              ]);
+                                        },
+                                        height: 110.h,
+                                        title: notificationList[index].message,
+                                        controller: controller,
+                                        index: index,
+                                        text2:
+                                            'Loan Amount :  ${notificationList[index].details!.amount}',
+                                        text3:
+                                            'Purpose : ${notificationList[index].details!.purpose}',
+                                        text4:
+                                            'Repayment Date :${notificationList[index].details!.dueDate}',
+                                      );
+                                    } else if (type == 1) {
+                                      return NotificationContainer(
+                                        onTap: () {
+                                          controller.markNotificationSeen(
+                                            notificationList[index].id!,
+                                          );
+                                          Get.delete<
+                                                  LoanRequestDetailsController>(
+                                              force: true);
+                                          Get.toNamed(
+                                              AppRouter
+                                                  .getLoanRequestDetailsRoutes(),
+                                              arguments: [
+                                                notificationList[index]
+                                                    .details!
+                                                    .id,
+                                                true
+                                              ]);
+                                        },
+                                        height: 110.h,
+                                        title: notificationList[index].message,
+                                        controller: controller,
+                                        index: index,
+                                        text2:
+                                            'Loan Amount : ${notificationList[index].details?.amount ?? "NA"}',
+                                        text3:
+                                            'Purpose :  ${notificationList[index].details?.purpose ?? "NA"}',
+                                      );
+                                    } else if (type == 3) {
+                                      final inputFormat =
+                                          notificationList[index]
+                                              .date
+                                              .toString();
+                                      return NotificationContainer(
+                                        onTap: () {
+                                          controller.markNotificationSeen(
+                                              notificationList[index].id!);
+                                          Get.delete<SuretyViewController>(
+                                              force: true);
+                                          Get.toNamed(
+                                              AppRouter
+                                                  .getNotificationPollRoute(),
+                                              arguments: [
+                                                notificationList[index]
+                                                    .details!
+                                                    .id,
+                                                null,
+                                                true
+                                              ]);
+                                        },
+                                        height: 110.h,
+                                        index: index,
+                                        controller: controller,
+                                        title: notificationList[index].message,
+                                        endDate: inputFormat,
+                                        clickable: 'View Details',
+                                      );
+                                    } else if (type == 6) {
+                                      return NotificationContainer(
+                                        onTap: () {
+                                          controller.markNotificationSeen(
+                                              notificationList[index].id!);
+                                          Get.delete<ProfileLoanDataController>(
+                                              force: true);
+                                          Get.toNamed(
+                                              AppRouter
+                                                  .getProfileLoanDetailsRoute(),
+                                              arguments: [
+                                                notificationList[index]
+                                                    .details!
+                                                    .id!
+                                              ]);
+                                        },
+                                        height: 70.h,
+                                        title: notificationList[index].message,
+                                        text1:
+                                            "Date : ${notificationList[index].date}",
+                                        controller: controller,
+                                        index: index,
+                                      );
+                                    }
+                                    return containerWithClickable(onTap: () {
+                                      controller.markNotificationSeen(
+                                        notificationList[index].id!,
+                                      );
+                                      Get.to(const NotificationDetailsScreen(),
+                                          arguments: [notificationList[index]]);
+                                    }, 110.h, notificationList[index].message,
+                                        controller: controller, index: index);
+                                  },
+                                )
+                              : Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SizedBox(
+                                      height: 180.h,
+                                      width: double.infinity,
+                                    ),
+                                    Lottie.asset(
+                                        'assets/images/no_notification.json',
+                                        height: 200.h),
+                                    const Text(
+                                      'Notifications is empty',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                        ),
+                      ),
+                    ],
+                  )
+                : Container(
+                    color: ThemeProvider.whiteColor,
+                    child: const Center(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 6,
+                        color: ThemeProvider.blackColor,
                       ),
                     ),
-                  ],
-                )
-              : Container(
-                  height: MediaQuery.sizeOf(context).height,
-                  width: MediaQuery.sizeOf(context).height,
-                  decoration: const BoxDecoration(
-                    color: whiteColor,
-                  ),
-                  child: const Center(
-                    child: CircularProgressIndicator(
-                      strokeWidth: 6,
-                      color: ThemeProvider.blackColor,
-                    ),
-                  ),
-                );
-        }),
-      ),
-    );
-  }
-
-  GestureDetector textContainer(
-    height,
-    title, {
-    String? text1,
-    String? text2,
-    String? text3,
-    String? text4,
-    String? clickable,
-    String? endDate,
-    Function()? onTap,
-    required NotificationController controller,
-    required int index,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: height+12.h,
-        decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 223, 220, 220),
-            borderRadius: BorderRadiusDirectional.circular(20)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                    child: Padding(
-                  padding:
-                      EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h),
-                  child: Text(
-                    title,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                )),
-                Container(
-                  margin: EdgeInsets.only(right: 20.w),
-                  height: 7.h,
-                  width: 7.w,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: controller.notification?.data?[index].seen == 1
-                        ? Colors.grey
-                        : Colors.red,
-                  ),
-                )
-              ],
-            ),
-            kSizedBoxH,
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 28.0.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  endDate != null
-                      ? Text("End Date: $endDate")
-                      : const SizedBox(),
-                  clickable != null
-                      ? const SizedBox(
-                          height: 20,
-                        )
-                      : const SizedBox(),
-                  clickable != null
-                      ? Text(
-                          clickable,
-                          style: const TextStyle(color: Colors.blue),
-                        )
-                      : const SizedBox(),
-                  text1 != null
-                      ? Text(
-                          text1,
-                        )
-                      : const SizedBox(),
-                  text2 != null
-                      ? Text(
-                          text2,
-                        )
-                      : const SizedBox(),
-                  text3 != null
-                      ? Text(
-                          text3,
-                        )
-                      : const SizedBox(),
-                  text4 != null
-                      ? Text(
-                          text4,
-                        )
-                      : const SizedBox(),
-                ],
-              ),
-            )
-          ],
+                  );
+          },
         ),
       ),
     );
@@ -348,7 +297,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     required int index,
     Function()? onTap,
   }) {
-    if (controller.notification!.data?[index].details?.status == 0) {
+    if (controller.notification!.data?[index].details?.loanRequestStatus == 0) {
       return Container(
         height: height,
         width: 300.w,
@@ -401,7 +350,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
           ],
         ),
       );
-    } else if (controller.notification!.data?[index].details?.status == 2) {
+    } else if (controller
+            .notification!.data?[index].details?.loanRequestStatus ==
+        2) {
       return Container(
         height: height + 50,
         width: 300.w,
@@ -414,14 +365,15 @@ class _NotificationScreenState extends State<NotificationScreen> {
             Row(
               children: [
                 Expanded(
-                    child: Padding(
-                  padding:
-                      EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h),
-                  child: Text(
-                    title,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  child: Padding(
+                    padding:
+                        EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h),
+                    child: Text(
+                      title,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
-                )),
+                ),
                 Container(
                   margin: EdgeInsets.only(right: 20.w),
                   height: 7.h,
@@ -450,14 +402,19 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     'Reason for rejection',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  const Text('NA'),
+                  Text(controller
+                          .notification!.data?[index].details?.adminRejectReason
+                          .toString() ??
+                      "Not Available"),
                 ],
               ),
             )
           ],
         ),
       );
-    } else if (controller.notification!.data?[index].details?.status == 1) {
+    } else if (controller
+            .notification!.data?[index].details?.loanRequestStatus ==
+        1) {
       return GestureDetector(
         onTap: () {
           if (controller.notification?.data?[index].type == 4) {
@@ -519,60 +476,66 @@ class _NotificationScreenState extends State<NotificationScreen> {
         ),
       );
     }
-  }
-
-  Container appbar(BuildContext context, NotificationController controller) {
-    return Container(
-      margin: EdgeInsets.only(top: 10.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-              onPressed: () => Get.back(),
-              icon: const Icon(
-                Icons.arrow_back,
-                color: whiteColor,
-                size: 30,
-              )),
-          Text(
-            'Notification',
-            style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
-          ),
-          Stack(
-            alignment: AlignmentDirectional.center,
-            children: [
-              IconButton(
-                onPressed: () {
-                  // Get.toNamed(AppRouter.getSuretyRequestDetailsRoute());
-                },
-                icon: const Icon(
-                  Icons.notifications_none,
-                  color: whiteColor,
-                  size: 35,
-                ),
+    return GestureDetector(
+      onTap: () {
+        if (controller.notification!.data![index].details == null) {
+          showToast('Loan details not available from the server');
+        } else {
+          Get.delete<LoanRequestDetailsController>(force: true);
+          Get.toNamed(AppRouter.getLoanRequestDetailsRoutes(), arguments: [
+            controller.notification!.data![index].details!.id,
+            false
+          ]);
+        }
+      },
+      child: Container(
+        height: height,
+        width: 300.w,
+        decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 223, 220, 220),
+            borderRadius: BorderRadiusDirectional.circular(20)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                    child: Padding(
+                  padding:
+                      EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h),
+                  child: Text(
+                    title,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                )),
+                Container(
+                  margin: EdgeInsets.only(right: 20.w),
+                  height: 7.h,
+                  width: 7.w,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: controller.notification?.data?[index].seen == 1
+                        ? Colors.grey
+                        : Colors.red,
+                  ),
+                )
+              ],
+            ),
+            kSizedBoxH,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 28.0.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                      'Loan Amount: ${controller.notification!.data?[index].details?.amount ?? "Not Available"}'),
+                  Text(
+                      'Purpose: ${controller.notification!.data?[index].details?.purpose ?? "Not Available"}')
+                ],
               ),
-              controller.notificationCount != 0
-                  ? Positioned(
-                      top: 3.h,
-                      right: 4.w,
-                      child: Container(
-                        height: 20.h,
-                        width: 20.w,
-                        decoration: const BoxDecoration(
-                            color: Colors.red, shape: BoxShape.circle),
-                        child: Center(
-                            child: Text(
-                          '${controller.notificationCount ?? 0}',
-                          style: const TextStyle(
-                              color: whiteColor, fontWeight: FontWeight.bold),
-                        )),
-                      ),
-                    )
-                  : const SizedBox(),
-            ],
-          ),
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

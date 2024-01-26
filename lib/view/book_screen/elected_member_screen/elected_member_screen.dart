@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rtd_project/controller/elected_member_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
+import 'package:rtd_project/core/common_widget/appbar.dart';
+import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/view/book_screen/widgets/electedmembers_list_tile.dart';
 
 import '../../../controller/book/board_member_details_controller.dart';
@@ -20,7 +22,8 @@ class ElectedMemberScreen extends StatelessWidget {
         body: GetBuilder<ElectedMemberController>(builder: (value) {
           return Column(
             children: [
-              appbar(context),
+              const CustomAppBar(title: 'Elected Members'),
+              kSizedBoxH,
               Expanded(
                 child: Container(
                   decoration: const BoxDecoration(
@@ -77,57 +80,6 @@ class ElectedMemberScreen extends StatelessWidget {
             ],
           );
         }),
-      ),
-    );
-  }
-
-  Container appbar(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: 10.h, bottom: 10.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // IconButton(
-              //     onPressed: () {
-              //       Navigator.pop(context);
-              //     },
-              //     icon: const Icon(
-              //       Icons.arrow_back,
-              //       color: whiteColor,
-              //     )),
-              // SizedBox(
-              //   width: 90.w,
-              // ),
-              Text(
-                'Elected Members',
-                style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18),
-              ),
-
-              // IconButton(
-              //   onPressed: () {
-              //     Get.toNamed(AppRouter.getElectedMemberRoute());
-              //   },
-              //   icon: const Icon(
-              //     Icons.people_alt_rounded,
-              //   ),
-              //   color: whiteColor,
-              // ),
-              // IconButton(
-              //     onPressed: () {},
-              //     icon: const Icon(
-              //       Icons.notifications_none,
-              //       color: whiteColor,
-              //       size: 28,
-              //     ))
-            ],
-          ),
-        ],
       ),
     );
   }
