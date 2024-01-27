@@ -75,12 +75,8 @@ class NotificationContainer extends StatelessWidget {
                 children: [
                   endDate != null
                       ? Text("End Date: $endDate")
-                      : const SizedBox(),
-                  clickable != null
-                      ? const SizedBox(
-                          height: 20,
-                        )
-                      : const SizedBox(),
+                      : const Offstage(),
+                  clickable != null ? kSizedBoxH : const Offstage(),
                   clickable != null
                       ? Text(
                           clickable!,

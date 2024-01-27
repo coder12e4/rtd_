@@ -481,6 +481,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
         if (controller.notification!.data![index].details == null) {
           showToast('Loan details not available from the server');
         } else {
+          controller.markNotificationSeen(
+            controller.notification!.data![index].details!.id!,
+          );
+
           Get.delete<LoanRequestDetailsController>(force: true);
           Get.toNamed(AppRouter.getLoanRequestDetailsRoutes(), arguments: [
             controller.notification!.data![index].details!.id,
