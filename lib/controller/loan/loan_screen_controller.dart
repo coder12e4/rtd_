@@ -238,7 +238,7 @@ class LoanScreenController extends GetxController {
             listItem.title!,
             style: const TextStyle(
                 color: Colors.black,
-                fontSize: 16,
+                fontSize: 15,
                 letterSpacing: .1,
                 fontWeight: FontWeight.w500),
           ),
@@ -261,7 +261,7 @@ class LoanScreenController extends GetxController {
             listItem.purpose,
             style: const TextStyle(
                 color: Colors.black,
-                fontSize: 16,
+                fontSize: 15,
                 letterSpacing: .1,
                 fontWeight: FontWeight.w500),
           ),
@@ -346,10 +346,15 @@ class LoanScreenController extends GetxController {
     update();
   }
 
-  Future<void> upload(loanTypeId, sureties, BuildContext context) async {
+  Future<void> upload() async {
     if (loan == null) {
       showToast('Select loan type');
       return;
+    }
+    if (!isAccepted) {
+      showToast('Please Agree the Rules and Instructions to continue.');
+      return;
+      // value.getLoanRequestData();
     }
     log('added sureties$addedSurties');
 
@@ -364,10 +369,10 @@ class LoanScreenController extends GetxController {
     String? accessToken =
         parser.sharedPreferencesManager.getString('access_token');
 
-    request.fields['sureties'] = sureties.toString();
+    request.fields['sureties'] = addedSurties.toString();
     request.fields['loan_purpose'] = loanPurpose!.data[0].id.toString();
     request.fields['loan_amount'] = loanAmount!;
-    request.fields['loan_type'] = loanTypeId.toString();
+    request.fields['loan_type'] = loan!.id.toString();
 
     request.headers.addAll({
       "Accept": "application/json",
@@ -408,8 +413,13 @@ class LoanScreenController extends GetxController {
       //     loanId: parsedData['data']['id'],
       //   ),
       // );
-      isCompleted = true;
-      getLoanRequestData();
+      if (loan!.id == 1) {
+        loanRequestComplete();
+      } else {
+        isCompleted = true;
+      }
+      update();
+      // getLoanRequestData();
     } else {
       Get.back();
       // String errorMessage = '';
@@ -439,6 +449,7 @@ class LoanScreenController extends GetxController {
           selectedImage3 = null;
 
           Get.offAllNamed(AppRouter.getBottomNavRoute(), arguments: [2]);
+          getLoanRequestData();
         } else {
           showToast(response.body["message"].toString());
         }

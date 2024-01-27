@@ -174,58 +174,71 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
                               kSizedBoxH,
                               SizedBox(
                                 height: 80.h,
-                                child: ListView.separated(
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: value.surties.length,
-                                  itemBuilder: (context, index) => value
-                                              .isSelected[index] ==
-                                          false
-                                      ? GestureDetector(
-                                          onTap: () => Get.toNamed(
-                                              AppRouter.getSearchScreenRoute(),
-                                              arguments: [index, true]),
-                                          child: CircleAvatar(
-                                            minRadius: 35.r,
-                                            backgroundColor: textFormBase,
-                                            child: const Icon(Icons.add),
-                                          ),
-                                        )
-                                      : Stack(
-                                          children: [
-                                            CircleAvatar(
-                                              minRadius: 35.r,
-                                              backgroundColor: textFormBase,
-                                              backgroundImage: NetworkImage(
-                                                  value.surties[index]!
-                                                      .profileImage),
-                                            ),
-                                            Positioned(
-                                              bottom: 9.h,
-                                              right: 0,
-                                              child: GestureDetector(
-                                                onTap: () => value.deleteSurety(
-                                                    index,
-                                                    value.surties[index]),
+                                child: value.surties.isNotEmpty
+                                    ? ListView.separated(
+                                        shrinkWrap: true,
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: value.surties.length,
+                                        itemBuilder: (context, index) => value
+                                                    .isSelected[index] ==
+                                                false
+                                            ? GestureDetector(
+                                                onTap: () => Get.toNamed(
+                                                    AppRouter
+                                                        .getSearchScreenRoute(),
+                                                    arguments: [index, true]),
                                                 child: CircleAvatar(
-                                                  minRadius: 15.r,
-                                                  backgroundColor:
-                                                      ThemeProvider.blackColor,
-                                                  child: const Icon(
-                                                    Icons.delete_outline,
-                                                    color: Colors.white,
-                                                    size: 20,
-                                                  ),
+                                                  minRadius: 35.r,
+                                                  backgroundColor: textFormBase,
+                                                  child: const Icon(Icons.add),
                                                 ),
+                                              )
+                                            : Stack(
+                                                children: [
+                                                  CircleAvatar(
+                                                    minRadius: 35.r,
+                                                    backgroundColor:
+                                                        textFormBase,
+                                                    backgroundImage:
+                                                        NetworkImage(value
+                                                            .surties[index]!
+                                                            .profileImage),
+                                                  ),
+                                                  Positioned(
+                                                    bottom: 9.h,
+                                                    right: 0,
+                                                    child: GestureDetector(
+                                                      onTap: () =>
+                                                          value.deleteSurety(
+                                                              index,
+                                                              value.surties[
+                                                                  index]),
+                                                      child: CircleAvatar(
+                                                        minRadius: 15.r,
+                                                        backgroundColor:
+                                                            ThemeProvider
+                                                                .blackColor,
+                                                        child: const Icon(
+                                                          Icons.delete_outline,
+                                                          color: Colors.white,
+                                                          size: 20,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
                                               ),
-                                            )
-                                          ],
+                                        separatorBuilder: (context, index) =>
+                                            const SizedBox(
+                                          width: 15,
                                         ),
-                                  separatorBuilder: (context, index) =>
-                                      const SizedBox(
-                                    width: 15,
-                                  ),
-                                ),
+                                      )
+                                    : const Center(
+                                        child: Text(
+                                        "Sureties not added for this loan",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600),
+                                      )),
                               ),
                               kSizedBoxH,
                               Container(

@@ -140,7 +140,7 @@ class LoginController extends GetxController implements GetxService {
       prefs.remove('register_token');
     } else {
       await parser.saveToken('access_token', myMap['access_token']);
-      Get.offAllNamed(AppRouter.getBottomNavRoute());
+      Get.offAllNamed(AppRouter.getBottomNavRoute(), arguments: [0]);
     }
   }
 }

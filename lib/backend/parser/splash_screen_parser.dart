@@ -10,7 +10,7 @@ class SplashScreenParser {
   getPage() {
     final String? token = sharedPreferencesManager.getString('access_token');
     if (token != null) {
-      Get.offNamed(AppRouter.getBottomNavRoute());
+      Get.offNamed(AppRouter.getBottomNavRoute(), arguments: [0]);
     } else {
       Get.offNamed(AppRouter.getInitialRoute());
     }

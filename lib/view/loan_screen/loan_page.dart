@@ -20,7 +20,6 @@ import '../../backend/model/loan/loan_type_model.dart';
 import '../../controller/loan/loan_rules.dart';
 import '../../core/common_widget/loane_documents.dart';
 import '../../helper/router.dart';
-import '../../util/toast.dart';
 
 class LoanPage extends StatefulWidget {
   const LoanPage({super.key});
@@ -508,17 +507,22 @@ class _LoanPageState extends State<LoanPage> {
               child: Padding(
                 padding: const EdgeInsets.only(right: 20, left: 20).r,
                 child: DropdownButton<Data>(
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 17,
+                    letterSpacing: .1,
+                  ),
                   isExpanded: true,
-                  underline: Container(),
-                  hint: Center(
+                  underline: const Offstage(),
+                  hint: const Center(
                     child: Text(
                       "Select Loan Type",
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: Colors.black.withOpacity(.55),
-                          fontSize: 17,
-                          letterSpacing: .1,
-                          fontWeight: FontWeight.w600),
+                      // style: TextStyle(
+                      //     color: Colors.black.withOpacity(.55),
+                      //     fontSize: 17,
+                      //     letterSpacing: .1,
+                      //     fontWeight: FontWeight.w600),
                     ),
                   ),
                   value: value.loan,
@@ -625,13 +629,7 @@ class _LoanPageState extends State<LoanPage> {
             buttonText: 'submit',
             borderAvalable: false,
             press: () {
-              if (value.isAccepted) {
-                value.upload(value.loan?.id ?? '', value.addedSurties, context);
-                value.getLoanRequestData();
-              } else {
-                showToast(
-                    'Please Agree the Rules and Instructions to continue.');
-              }
+              value.upload();
             },
           )
         ],

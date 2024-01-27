@@ -324,10 +324,10 @@ class LoanEditController extends GetxController implements GetxService {
       showToast('Select Loan Type');
       return;
     }
-    if (loanDocumentCount < 3) {
-      showToast("Loan request must need three documents");
-      return;
-    }
+    // if (loanDocumentCount < 3) {
+    //   showToast("Loan request must need three documents");
+    //   return;
+    // }
     loadingWidget();
     var uri =
         Uri.parse("http://rtd.canisostudio.com/api/user/loan/request/update");

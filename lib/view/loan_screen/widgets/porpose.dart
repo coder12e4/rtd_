@@ -28,17 +28,22 @@ class _PorposeWidgetState extends State<PorposeWidget> {
         child: Padding(
           padding: const EdgeInsets.only(right: 20, left: 20).r,
           child: DropdownButton<PurposeData>(
+            style: const TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 17,
+              letterSpacing: .1,
+            ),
             isExpanded: true,
-            underline: Container(),
-            hint: Center(
+            underline: const Offstage(),
+            hint: const Center(
               child: Text(
                 "Select Purpose",
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Colors.black.withOpacity(.55),
-                    fontSize: 17,
-                    letterSpacing: .1,
-                    fontWeight: FontWeight.w600),
+                // style: TextStyle(
+                //     color: Colors.black.withOpacity(.55),
+                //     fontSize: 17,
+                //     letterSpacing: .1,
+                //     fontWeight: FontWeight.w600),
               ),
             ),
             value: widget.value.purposeData,
