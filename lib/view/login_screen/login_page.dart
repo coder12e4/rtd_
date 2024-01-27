@@ -15,7 +15,7 @@ class LOginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     FocusNode node = FocusNode();
 
     return SafeArea(
@@ -36,7 +36,7 @@ class LOginPage extends StatelessWidget {
                   height: 5.h,
                 ),
                 Form(
-                  key: _formKey,
+                  key: formKey,
                   child: Container(
                     height: 350.h,
                     width: 390.w,
@@ -126,7 +126,7 @@ class LOginPage extends StatelessWidget {
                         ),
                         ButtonWidget(
                           press: () {
-                            if (_formKey.currentState!.validate()) {
+                            if (formKey.currentState!.validate()) {
                               value.onLogin();
                             }
                           },

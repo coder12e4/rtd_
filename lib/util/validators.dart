@@ -21,13 +21,13 @@ class Rtd_Validators {
     return value!.length > 4 ? null : "Try one with minimum 5 characters";
   }
 
-  static String? confirmPasswordValidator(String ?value,String? password) {
+  static String? confirmPasswordValidator(String? value, String? password) {
     return password == value ? null : "Please enter the same password";
   }
 
   static String? pincodeValidator(String? value) {
     String pattern = r'^[1-9][0-9]{5}$';
-    RegExp regExp = new RegExp(pattern);
+    RegExp regExp = RegExp(pattern);
     return regExp.hasMatch(value!) ? null : "Please enter a valid Pincode";
   }
 

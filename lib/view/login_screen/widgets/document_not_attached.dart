@@ -31,7 +31,7 @@ class RegisterDocPending extends StatelessWidget {
             size: 50,
           ),
           kSizedBoxH20,
-          Container(
+          SizedBox(
               width: 290.w,
               child: const Text(
                 'Your membership registration is not completed.',

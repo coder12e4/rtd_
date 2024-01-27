@@ -43,16 +43,16 @@ class LoanScreenController extends GetxController {
   bool isCompleted = false;
   List<int> noOfSurties = [];
   TextEditingController loanAmountController = TextEditingController();
-  List<LoanData> _loanData = <LoanData>[];
+  final List<LoanData> _loanData = <LoanData>[];
   List<LoanData> get loanData => _loanData;
   List<SuretiesData?> surties = <SuretiesData?>[];
-  List<int> _addedSurties = <int>[];
+  final List<int> _addedSurties = <int>[];
   List<int> get addedSurties => _addedSurties;
   List<Data> _getLoanTypes = <Data>[];
   List<Data> get getLoanTypes => _getLoanTypes;
-  List<PurposeData> _getPurposeType = <PurposeData>[];
+  final List<PurposeData> _getPurposeType = <PurposeData>[];
   List<PurposeData> get getPurposeType => _getPurposeType;
-  List<PurposeData> _getPurpose = <PurposeData>[];
+  final List<PurposeData> _getPurpose = <PurposeData>[];
   List<PurposeData> get getPurpose => _getPurpose;
   List<DropdownMenuItem<Data>> _dropdownMenuLoanType =
       <DropdownMenuItem<Data>>[];
@@ -318,7 +318,7 @@ class LoanScreenController extends GetxController {
 
     if (data != null) {
       var file =
-          await http.MultipartFile.fromPath('loan_document', data?.path ?? '');
+          await http.MultipartFile.fromPath('loan_document', data.path ?? '');
       request.files.add(file);
     } else {
       showToast('Select a image to upload');

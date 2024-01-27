@@ -24,9 +24,9 @@ class LoginComplited extends StatelessWidget {
             'assets/images/Happy 1.png',
             height: 150.h,
           ),
-          Container(
+          SizedBox(
               width: 290.w,
-              child: Text(
+              child: const Text(
                 'Your membership registration is currently being processed.',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
@@ -34,7 +34,7 @@ class LoginComplited extends StatelessWidget {
           SizedBox(
             height: 10.h,
           ),
-          Text(
+          const Text(
             'We\'ll get back to you soon.',
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
           ),
