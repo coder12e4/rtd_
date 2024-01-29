@@ -1,9 +1,10 @@
-import 'dart:convert';
 import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rtd_project/backend/model/books/service_member_details.dart';
 import 'package:rtd_project/backend/model/books/services_model.dart';
+
 import '../../backend/model/books/books_member_model.dart';
 import '../../backend/model/books/service_member_list.dart';
 import '../../backend/model/states_model.dart';
@@ -152,15 +153,15 @@ class BookScreenController extends GetxController {
     log('selected service id ${selectedService!.id}');
 
     try {
-      var response = await parser.getServiceMemberList(
+      final Response response = await parser.getServiceMemberList(
         stateId: selectedState!.id,
         serviceId: selectedService!.id,
         query: query ?? '',
       );
       if (response.statusCode == 200) {
         //Map<String, dynamic> myMap = Map<String, dynamic>.from(response.body);
-        var k = jsonDecode(response.body);
-        servicesMemberList = ServicesMemberList.fromJson(k);
+        // var k = jsonDecode(response.body);
+        servicesMemberList = ServicesMemberList.fromJson(response.body);
         serviceLoading = !serviceLoading;
         initial = false;
         log("${response.body}");

@@ -23,7 +23,7 @@ class LoanRequestDetailsScreen extends StatelessWidget {
         body: GetBuilder<LoanRequestDetailsController>(builder: (value) {
           return Column(
             children: [
-              appbar(context),
+              appbar(context, value),
               kSizedBoxH,
               value.error != true
                   ? Expanded(
@@ -144,24 +144,39 @@ class LoanRequestDetailsScreen extends StatelessWidget {
                                         kSizedBoxH,
                                         SizedBox(
                                           height: 140.h,
-                                          child: ListView.separated(
-                                            shrinkWrap: true,
-                                            physics:
-                                                const NeverScrollableScrollPhysics(),
-                                            scrollDirection: Axis.horizontal,
-                                            itemBuilder: (context, index) =>
-                                                documentContainer(value, index),
-                                            separatorBuilder:
-                                                (context, index) => SizedBox(
-                                              width: 2.w,
-                                            ),
-                                            itemCount: value
-                                                    .loanRequestDetails
-                                                    ?.data
-                                                    .loanDocument
-                                                    .length ??
-                                                0,
-                                          ),
+                                          child: value.loanRequestDetails?.data
+                                                      .loanDocument.length !=
+                                                  0
+                                              ? ListView.separated(
+                                                  shrinkWrap: true,
+                                                  physics:
+                                                      const NeverScrollableScrollPhysics(),
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  itemBuilder:
+                                                      (context, index) =>
+                                                          documentContainer(
+                                                              value, index),
+                                                  separatorBuilder:
+                                                      (context, index) =>
+                                                          SizedBox(
+                                                    width: 2.w,
+                                                  ),
+                                                  itemCount: value
+                                                          .loanRequestDetails
+                                                          ?.data
+                                                          .loanDocument
+                                                          .length ??
+                                                      0,
+                                                )
+                                              : const Center(
+                                                  child: Text(
+                                                    "Documents not attached with this loan",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                ),
                                         ),
                                       ],
                                     ),
@@ -257,15 +272,22 @@ class LoanRequestDetailsScreen extends StatelessWidget {
         kSizedBoxH,
         SizedBox(
           height: 60,
-          child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) =>
-                  chechmarkimage(true, true, controller, index),
-              separatorBuilder: (context, index) => const SizedBox(
-                    width: 10,
+          child: controller.loanRequestDetails?.data.sureties.length != 0
+              ? ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) =>
+                      chechmarkimage(true, true, controller, index),
+                  separatorBuilder: (context, index) => const SizedBox(
+                        width: 10,
+                      ),
+                  itemCount:
+                      controller.loanRequestDetails?.data.sureties.length ?? 0)
+              : const Center(
+                  child: Text(
+                    "Sureties not added",
+                    style: TextStyle(fontWeight: FontWeight.w600),
                   ),
-              itemCount:
-                  controller.loanRequestDetails?.data.sureties.length ?? 0),
+                ),
         ),
       ],
     );
@@ -376,14 +398,12 @@ class LoanRequestDetailsScreen extends StatelessWidget {
     );
   }
 
-  Row appbar(BuildContext context) {
+  Row appbar(BuildContext context, LoanRequestDetailsController value) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+          onPressed: value.backRout,
           icon: const Icon(
             Icons.arrow_back,
             color: whiteColor,

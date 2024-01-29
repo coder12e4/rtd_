@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+
 import '../backend/model/notification_model/notification_model.dart';
 import '../backend/parser/splash_screen_parser.dart';
 import '../helper/router.dart';
@@ -50,12 +51,10 @@ class SplashScreenController extends GetxController {
     // Check if the app is in the foreground
     if (Get.isOverlaysOpen) {
       // If the app is in the foreground, navigate to the notification details screen
-      Get.offAndToNamed(AppRouter.loanRequestDetailsRoutes,
-          arguments: [data.id, false]);
+      handleRoute(data);
     } else {
       // If the app is in the background or terminated, open the app and then navigate
-      Get.offAndToNamed(AppRouter.loanRequestDetailsRoutes,
-          arguments: [data.id, false]);
+      handleRoute(data);
     }
   }
 
@@ -104,7 +103,7 @@ class SplashScreenController extends GetxController {
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
-      handleBackgroudMessage(event);
+      handleBackgroundMessage(event);
     });
 
     FirebaseMessaging.onMessage.listen((event) {
@@ -145,5 +144,26 @@ class SplashScreenController extends GetxController {
     await _firebasemessageing.requestPermission();
     initPushNotifications();
     initLocalNotifications();
+  }
+
+  void handleRoute(notificationDetails data) {
+    if (data.type == 1) {
+      Get.toNamed(AppRouter.getLoanRequestDetailsRoutes(),
+          arguments: [data.details!.id, true, 2]);
+    } else if (data.type == 2) {
+      Get.toNamed(AppRouter.getProfileLoanDetailsRoute(),
+          arguments: [data.details!.id!]);
+    } else if (data.type == 3) {
+      Get.toNamed(AppRouter.getNotificationPollRoute(),
+          arguments: [data.details!.id, null, true]);
+    } else if (data.type == 4) {
+      Get.offAndToNamed(AppRouter.loanRequestDetailsRoutes,
+          arguments: [data.details!.id, false, 1]);
+    } else if (data.type == 5) {
+      Get.to(const NotificationDetailsScreen(), arguments: [data]);
+    } else {
+      Get.toNamed(AppRouter.getProfileLoanDetailsRoute(),
+          arguments: [data.details!.id!]);
+    }
   }
 }

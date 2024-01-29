@@ -39,7 +39,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     children: [
                       CustomAppBar(
                         leading: IconButton(
-                          onPressed: Get.back,
+                          onPressed: () {
+                            Get.offAllNamed(AppRouter.getBottomNavRoute(),
+                                arguments: [0]);
+                          },
                           icon: const Icon(
                             Icons.arrow_back,
                             color: whiteColor,
@@ -174,7 +177,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                 notificationList[index]
                                                     .details!
                                                     .id,
-                                                true
+                                                true,
+                                                2
                                               ]);
                                         },
                                         height: 110.h,
@@ -239,14 +243,22 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                         index: index,
                                       );
                                     }
-                                    return containerWithClickable(onTap: () {
-                                      controller.markNotificationSeen(
-                                        notificationList[index].id!,
-                                      );
-                                      Get.to(const NotificationDetailsScreen(),
-                                          arguments: [notificationList[index]]);
-                                    }, 110.h, notificationList[index].message,
-                                        controller: controller, index: index);
+                                    return containerWithClickable(
+                                      onTap: () {
+                                        controller.markNotificationSeen(
+                                          notificationList[index].id!,
+                                        );
+                                        Get.to(
+                                            const NotificationDetailsScreen(),
+                                            arguments: [
+                                              notificationList[index]
+                                            ]);
+                                      },
+                                      110.h,
+                                      notificationList[index].message,
+                                      controller: controller,
+                                      index: index,
+                                    );
                                   },
                                 )
                               : Column(
@@ -409,7 +421,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
             Get.delete<LoanRequestDetailsController>(force: true);
             Get.toNamed(AppRouter.getLoanRequestDetailsRoutes(), arguments: [
               controller.notification!.data![index].details!.id,
-              false
+              false,
+              2
             ]);
           }
         },
@@ -455,11 +468,69 @@ class _NotificationScreenState extends State<NotificationScreen> {
           ),
         ),
       );
+    } else if (controller
+            .notification!.data?[index].details?.loanRequestStatus ==
+        3) {
+      return GestureDetector(
+        onTap: () {
+          controller.markNotificationSeen(
+            controller.notification!.data![index].details!.id!,
+          );
+
+          Get.delete<LoanRequestDetailsController>(force: true);
+          Get.toNamed(AppRouter.getLoanRequestDetailsRoutes(), arguments: [
+            controller.notification!.data![index].details!.id,
+            false,
+            2
+          ]);
+        },
+        child: Container(
+          padding: EdgeInsets.only(
+              left: 28.0.w, right: 15.w, top: 10.h, bottom: 10.h),
+          width: 300.w,
+          decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 223, 220, 220),
+              borderRadius: BorderRadiusDirectional.circular(20)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Text(
+                      title,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Container(
+                    height: 7.h,
+                    width: 7.w,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: controller.notification?.data?[index].seen == 1
+                          ? Colors.grey
+                          : Colors.red,
+                    ),
+                  )
+                ],
+              ),
+              kSizedBoxH,
+              Text(
+                  'Loan Amount: ${controller.notification!.data?[index].details!.amount}'),
+              Text(
+                  'Purpose: ${controller.notification!.data?[index].details!.purpose}')
+            ],
+          ),
+        ),
+      );
     }
     return GestureDetector(
       onTap: () {
         if (controller.notification!.data![index].details == null) {
           showToast('Loan details not available from the server');
+          return;
         } else {
           controller.markNotificationSeen(
             controller.notification!.data![index].details!.id!,
@@ -468,7 +539,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
           Get.delete<LoanRequestDetailsController>(force: true);
           Get.toNamed(AppRouter.getLoanRequestDetailsRoutes(), arguments: [
             controller.notification!.data![index].details!.id,
-            false
+            false,
+            2
           ]);
         }
       },

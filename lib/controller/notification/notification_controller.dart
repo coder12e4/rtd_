@@ -50,7 +50,8 @@ class NotificationController extends GetxController implements GetxService {
     try {
       Response response = await parser.markNotificationSeen(body);
       if (response.statusCode == 200) {
-        getNotification();
+        log('notification seen api response ${response.body}');
+        await getNotification();
 
         await Get.find<HomeController>().getNotificaion();
         await Get.find<ProfileController>().getNotificaion();
