@@ -5,9 +5,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
-
+import '../backend/model/notification_model/notification_model.dart';
 import '../backend/parser/splash_screen_parser.dart';
 import '../helper/router.dart';
+import '../view/notification/notification_details_screen/notification_details.dart';
 import 'notification/notification_controller.dart';
 
 class SplashScreenController extends GetxController {
@@ -19,12 +20,43 @@ class SplashScreenController extends GetxController {
     notificationController =
         Get.put(NotificationController(parser: Get.find()));
     initNotifications();
+
     FirebaseMessaging.instance.getToken().then((value) {
       log('fcm token from splash $value');
       parser.saveDeviceToken(value.toString());
     });
 
-    splashDelay();
+    FirebaseMessaging.instance
+        .getInitialMessage()
+        .then((RemoteMessage? message) {
+      if (message != null) {
+        // App is opened by clicking on a notification
+        handleBackgroundMessage(message);
+      } else {
+        // App is opened normally
+        splashDelay();
+      }
+    });
+  }
+
+  Future<void> handleBackgroundMessage(RemoteMessage message) async {
+    debugPrint("Title: ${message.notification?.title}");
+    dynamic k = json.decode(message.notification!.body!);
+    debugPrint("Body: ${message.notification?.body}");
+    debugPrint("Payload: ${message.data}");
+
+    notificationDetails data = notificationDetails.fromJson(k);
+
+    // Check if the app is in the foreground
+    if (Get.isOverlaysOpen) {
+      // If the app is in the foreground, navigate to the notification details screen
+      Get.offAndToNamed(AppRouter.loanRequestDetailsRoutes,
+          arguments: [data.id, false]);
+    } else {
+      // If the app is in the background or terminated, open the app and then navigate
+      Get.offAndToNamed(AppRouter.loanRequestDetailsRoutes,
+          arguments: [data.id, false]);
+    }
   }
 
   NotificationController? notificationController;
@@ -47,13 +79,17 @@ class SplashScreenController extends GetxController {
     importance: Importance.defaultImportance,
   );
   final _localNotications = FlutterLocalNotificationsPlugin();
+
   Future<void> handleBackgroudMessage(RemoteMessage message) async {
     debugPrint("Title:${message.notification?.title}");
+    dynamic k = json.decode(message.notification!.body!);
     debugPrint("body:${message.notification?.body}");
     debugPrint("Payload:${message.data}");
-    Get.toNamed(
-      AppRouter.getNotificationPageRoute(),
-    );
+    notificationDetails data = notificationDetails.fromJson(k);
+    Get.off(const NotificationDetailsScreen(), arguments: data);
+    /*  Get.toNamed(
+      AppRouter.getNotificationPollRoute(),
+    );*/
   }
 
   Future initPushNotifications() async {
@@ -63,27 +99,34 @@ class SplashScreenController extends GetxController {
       badge: true,
       sound: true,
     );
-    FirebaseMessaging.instance
-        .getInitialMessage()
-        .then((value) => handleBackgroudMessage);
-    FirebaseMessaging.onMessageOpenedApp
-        .listen((event) => handleBackgroudMessage);
+    FirebaseMessaging.instance.getInitialMessage().then((value) {
+      return handleBackgroudMessage(value!);
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      handleBackgroudMessage(event);
+    });
+
     FirebaseMessaging.onMessage.listen((event) {
       final notification = event.notification;
-      if (notification == null) return;
-      _localNotications.show(
-          notification.hashCode,
-          notification.title,
-          notification.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-                _androidChannel.id, _androidChannel.name,
-                channelDescription: _androidChannel.description,
-                icon: '@drawable/app_logo',
-                playSound: true),
-          ),
-          payload: jsonEncode(event.toMap()));
+      if (notification == null) {
+        return;
+      } else {
+        _localNotications.show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                  _androidChannel.id, _androidChannel.name,
+                  channelDescription: _androidChannel.description,
+                  icon: '@drawable/app_logo',
+                  playSound: true),
+            ),
+            payload: jsonEncode(event.toMap()));
+      }
     });
+
     notificationController!.getNotification();
   }
 

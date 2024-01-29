@@ -30,7 +30,7 @@ class SuretyViewController extends GetxController implements GetxService {
   PollDetails? pollDetails;
   int? groupValue = 0;
 
-  NotificationDetails? details;
+  notificationDetails? details;
   bool? isPoll;
   bool? isSelected = false;
   final TextEditingController reasonController = TextEditingController();

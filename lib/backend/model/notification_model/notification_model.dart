@@ -1,6 +1,6 @@
 class Notification {
   bool? status;
-  List<NotificationDetails>? data;
+  List<notificationDetails>? data;
   String? message;
   String? accessToken;
   String? tokenType;
@@ -11,9 +11,9 @@ class Notification {
   Notification.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     if (json['data'] != null) {
-      data = <NotificationDetails>[];
+      data = <notificationDetails>[];
       json['data'].forEach((v) {
-        data!.add(NotificationDetails.fromJson(v));
+        data!.add(notificationDetails.fromJson(v));
       });
     }
     message = json['message'];
@@ -34,7 +34,7 @@ class Notification {
   }
 }
 
-class NotificationDetails {
+class notificationDetails {
   int? id;
   String? date;
   String? message;
@@ -44,7 +44,7 @@ class NotificationDetails {
   Details? details;
   int? seen;
 
-  NotificationDetails(
+  notificationDetails(
       {this.id,
       this.date,
       this.message,
@@ -54,7 +54,7 @@ class NotificationDetails {
       this.details,
       this.seen});
 
-  NotificationDetails.fromJson(Map<String, dynamic> json) {
+  notificationDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     date = json['date'];
     message = json['message'];

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
+import 'package:rtd_project/backend/parser/splash_screen_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../backend/model/profile_model.dart';
@@ -9,6 +10,7 @@ import '../notification/notification_controller.dart';
 
 class ProfileController extends GetxController implements GetxService {
   final ProfileParser parser;
+
   ProfileController({required this.parser});
   Profile? userData;
   bool loading = true;

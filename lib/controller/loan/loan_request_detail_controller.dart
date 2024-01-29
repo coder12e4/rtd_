@@ -51,6 +51,7 @@ class LoanRequestDetailsController extends GetxController
 
   Future<void> getLoanRequestDetailsForSurety() async {
     final body = {"loan_request_id": id};
+    print(id);
     Response response = await parser.getLoanRequestDetailsForSurety(body);
     log("loan request for surety details response ${response.body} ");
     try {

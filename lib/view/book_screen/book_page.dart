@@ -8,7 +8,6 @@ import 'package:rtd_project/core/common_widget/appbar.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/helper/router.dart';
 import 'package:rtd_project/view/book_screen/widgets/membrlisttile_widgetr.dart';
-
 import '../../backend/model/books/services_model.dart';
 import '../../backend/model/states_model.dart';
 import '../../controller/book/board_member_details_controller.dart';

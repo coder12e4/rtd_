@@ -32,7 +32,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         backgroundColor: baseColor,
         body: GetBuilder<NotificationController>(
           builder: (controller) {
-            List<NotificationDetails>? notificationList =
+            List<notificationDetails>? notificationList =
                 controller.notification?.data;
             return controller.loading != true
                 ? Column(

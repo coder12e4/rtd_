@@ -19,7 +19,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  // await FirebaseApi().initNotifications();
+  //await FirebaseApi().initNotifications();
   await MainBinding().dependencies();
   HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());

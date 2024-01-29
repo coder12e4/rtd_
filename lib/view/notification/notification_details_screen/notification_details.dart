@@ -11,7 +11,7 @@ class NotificationDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    NotificationDetails data = Get.arguments[0];
+    notificationDetails data = Get.arguments[0];
     return SafeArea(
       child: Scaffold(
         backgroundColor: baseColor,
