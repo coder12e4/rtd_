@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,15 +17,13 @@ class BottomNavController extends GetxController
   void onInit() {
     try {
       tabId = int.parse(Get.arguments[0].toString());
-    } catch (e) {
-      debugPrint("Exception from tabs");
-      debugPrint(e.toString());
+    } catch (e, stacktrace) {
+      log("Exception from tabs $e", error: e, stackTrace: stacktrace);
     }
     tabController = TabController(length: 5, vsync: this, initialIndex: tabId);
     super.onInit();
 
-    debugPrint("tabid");
-    debugPrint(tabId.toString());
+    log("tab id $tabId ");
   }
 
   // @override
@@ -34,9 +34,9 @@ class BottomNavController extends GetxController
   //   super.onInit();
   // }
 
-  void updateTabId(int index) {
-    pageIndex = index;
-    tabController.animateTo(pageIndex!);
-    update();
-  }
+  // void updateTabId(int index) {
+  //   pageIndex = index;
+  //   tabController.animateTo(pageIndex!);
+  //   update();
+  // }
 }

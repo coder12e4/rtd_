@@ -299,7 +299,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }) {
     if (controller.notification!.data?[index].details?.loanRequestStatus == 0) {
       return Container(
-        height: height,
+        padding:
+            EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h, bottom: 10.h),
         width: 300.w,
         decoration: BoxDecoration(
             color: const Color.fromARGB(255, 223, 220, 220),
@@ -308,18 +309,18 @@ class _NotificationScreenState extends State<NotificationScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
-                    child: Padding(
-                  padding:
-                      EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h),
+                Flexible(
                   child: Text(
                     title,
+                    maxLines: 3,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                )),
+                ),
                 Container(
-                  margin: EdgeInsets.only(right: 20.w),
+                  // margin: EdgeInsets.only(right: 20.w),
                   height: 7.h,
                   width: 7.w,
                   decoration: BoxDecoration(
@@ -332,19 +333,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
               ],
             ),
             kSizedBoxH,
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 28.0.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  InkWell(
-                    onTap: onTap,
-                    child: Text(
-                      clikable ?? '',
-                      style: const TextStyle(color: Colors.blue),
-                    ),
-                  ),
-                ],
+            InkWell(
+              onTap: onTap,
+              child: Text(
+                clikable ?? '',
+                style: const TextStyle(color: Colors.blue),
               ),
             )
           ],
@@ -354,7 +347,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
             .notification!.data?[index].details?.loanRequestStatus ==
         2) {
       return Container(
-        height: height + 50,
+        padding:
+            EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h, bottom: 10.h),
         width: 300.w,
         decoration: BoxDecoration(
             color: const Color.fromARGB(255, 223, 220, 220),
@@ -363,19 +357,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
-                  child: Padding(
-                    padding:
-                        EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h),
-                    child: Text(
-                      title,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
+                Flexible(
+                  child: Text(
+                    title,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    maxLines: 3,
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(right: 20.w),
                   height: 7.h,
                   width: 7.w,
                   decoration: BoxDecoration(
@@ -388,27 +380,19 @@ class _NotificationScreenState extends State<NotificationScreen> {
               ],
             ),
             kSizedBoxH,
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 28.0.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                      'Loan Amount: ${controller.notification!.data?[index].details!.amount}'),
-                  Text(
-                      'Purpose: ${controller.notification!.data?[index].details!.purpose}'),
-                  kSizedBoxH,
-                  const Text(
-                    'Reason for rejection',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text(controller
-                          .notification!.data?[index].details?.adminRejectReason
-                          .toString() ??
-                      "Not Available"),
-                ],
-              ),
-            )
+            Text(
+                'Loan Amount: ${controller.notification!.data?[index].details!.amount}'),
+            Text(
+                'Purpose: ${controller.notification!.data?[index].details!.purpose}'),
+            kSizedBoxH,
+            const Text(
+              'Reason for rejection',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            Text(controller
+                    .notification!.data?[index].details?.adminRejectReason
+                    .toString() ??
+                "Not Available")
           ],
         ),
       );
@@ -418,6 +402,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
       return GestureDetector(
         onTap: () {
           if (controller.notification?.data?[index].type == 4) {
+            controller.markNotificationSeen(
+              controller.notification!.data![index].details!.id!,
+            );
+
             Get.delete<LoanRequestDetailsController>(force: true);
             Get.toNamed(AppRouter.getLoanRequestDetailsRoutes(), arguments: [
               controller.notification!.data![index].details!.id,
@@ -426,6 +414,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
           }
         },
         child: Container(
+          padding: EdgeInsets.only(
+              left: 28.0.w, right: 15.w, top: 10.h, bottom: 10.h),
           height: height,
           width: 300.w,
           decoration: BoxDecoration(
@@ -435,18 +425,16 @@ class _NotificationScreenState extends State<NotificationScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                      child: Padding(
-                    padding:
-                        EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h),
+                  Flexible(
                     child: Text(
                       title,
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
-                  )),
+                  ),
                   Container(
-                    margin: EdgeInsets.only(right: 20.w),
                     height: 7.h,
                     width: 7.w,
                     decoration: BoxDecoration(
@@ -459,18 +447,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 ],
               ),
               kSizedBoxH,
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 28.0.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                        'Loan Amount: ${controller.notification!.data?[index].details!.amount}'),
-                    Text(
-                        'Purpose: ${controller.notification!.data?[index].details!.purpose}')
-                  ],
-                ),
-              )
+              Text(
+                  'Loan Amount: ${controller.notification!.data?[index].details!.amount}'),
+              Text(
+                  'Purpose: ${controller.notification!.data?[index].details!.purpose}')
             ],
           ),
         ),
@@ -481,6 +461,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
         if (controller.notification!.data![index].details == null) {
           showToast('Loan details not available from the server');
         } else {
+          controller.markNotificationSeen(
+            controller.notification!.data![index].details!.id!,
+          );
+
           Get.delete<LoanRequestDetailsController>(force: true);
           Get.toNamed(AppRouter.getLoanRequestDetailsRoutes(), arguments: [
             controller.notification!.data![index].details!.id,
@@ -489,7 +473,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
         }
       },
       child: Container(
-        height: height,
+        padding:
+            EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h, bottom: 10.h),
         width: 300.w,
         decoration: BoxDecoration(
             color: const Color.fromARGB(255, 223, 220, 220),
@@ -498,18 +483,16 @@ class _NotificationScreenState extends State<NotificationScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
-                    child: Padding(
-                  padding:
-                      EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h),
+                Flexible(
                   child: Text(
                     title,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                )),
+                ),
                 Container(
-                  margin: EdgeInsets.only(right: 20.w),
                   height: 7.h,
                   width: 7.w,
                   decoration: BoxDecoration(
@@ -522,18 +505,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
               ],
             ),
             kSizedBoxH,
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 28.0.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                      'Loan Amount: ${controller.notification!.data?[index].details?.amount ?? "Not Available"}'),
-                  Text(
-                      'Purpose: ${controller.notification!.data?[index].details?.purpose ?? "Not Available"}')
-                ],
-              ),
-            )
+            Text(
+                'Loan Amount: ${controller.notification!.data?[index].details?.amount ?? "Not Available"}'),
+            Text(
+                'Purpose: ${controller.notification!.data?[index].details?.purpose ?? "Not Available"}')
           ],
         ),
       ),

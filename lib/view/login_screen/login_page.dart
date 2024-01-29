@@ -5,6 +5,7 @@ import 'package:rtd_project/controller/authentication/login_contoller.dart';
 import 'package:rtd_project/controller/authentication/regitration.dart';
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/commen_botten.dart';
+import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/util/validators.dart';
 
 import '../../core/common_widget/textformfield_widget.dart';
@@ -121,9 +122,7 @@ class LOginPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: 20.h,
-                        ),
+                        kSizedBoxH20,
                         ButtonWidget(
                           press: () {
                             if (formKey.currentState!.validate()) {

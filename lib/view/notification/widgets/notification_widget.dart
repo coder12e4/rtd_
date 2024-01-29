@@ -34,7 +34,8 @@ class NotificationContainer extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: height! + 12.h,
+        padding:
+            EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h, bottom: 10.h),
         decoration: BoxDecoration(
             color: const Color.fromARGB(255, 223, 220, 220),
             borderRadius: BorderRadiusDirectional.circular(20)),
@@ -43,19 +44,17 @@ class NotificationContainer extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
-                  child: Padding(
-                    padding:
-                        EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h),
-                    child: Text(
-                      title ?? "Not Available",
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
+                Flexible(
+                  child: Text(
+                    title ?? "Not Available",
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    maxLines: 3,
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(right: 20.w),
                   height: 7.h,
                   width: 7.w,
                   decoration: BoxDecoration(
@@ -68,48 +67,34 @@ class NotificationContainer extends StatelessWidget {
               ],
             ),
             kSizedBoxH,
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 28.0.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  endDate != null
-                      ? Text("End Date: $endDate")
-                      : const SizedBox(),
-                  clickable != null
-                      ? const SizedBox(
-                          height: 20,
-                        )
-                      : const SizedBox(),
-                  clickable != null
-                      ? Text(
-                          clickable!,
-                          style: const TextStyle(color: Colors.blue),
-                        )
-                      : const Offstage(),
-                  text1 != null
-                      ? Text(
-                          text1!,
-                        )
-                      : const Offstage(),
-                  text2 != null
-                      ? Text(
-                          text2!,
-                        )
-                      : const Offstage(),
-                  text3 != null
-                      ? Text(
-                          text3!,
-                        )
-                      : const Offstage(),
-                  text4 != null
-                      ? Text(
-                          text4!,
-                        )
-                      : const Offstage(),
-                ],
-              ),
-            )
+            endDate != null ? Text("End Date: $endDate") : const Offstage(),
+            clickable != null ? kSizedBoxH : const Offstage(),
+            clickable != null
+                ? Text(
+                    clickable!,
+                    style: const TextStyle(color: Colors.blue),
+                  )
+                : const Offstage(),
+            text1 != null
+                ? Text(
+                    text1!,
+                  )
+                : const Offstage(),
+            text2 != null
+                ? Text(
+                    text2!,
+                  )
+                : const Offstage(),
+            text3 != null
+                ? Text(
+                    text3!,
+                  )
+                : const Offstage(),
+            text4 != null
+                ? Text(
+                    text4!,
+                  )
+                : const Offstage()
           ],
         ),
       ),

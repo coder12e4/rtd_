@@ -47,11 +47,12 @@ class ProfilePage extends StatelessWidget {
                     : Expanded(
                         child: Container(
                           decoration: const BoxDecoration(
-                              color: whiteColor,
-                              borderRadius: BorderRadiusDirectional.only(
-                                topStart: Radius.circular(50),
-                                topEnd: Radius.circular(50),
-                              )),
+                            color: whiteColor,
+                            borderRadius: BorderRadiusDirectional.only(
+                              topStart: Radius.circular(50),
+                              topEnd: Radius.circular(50),
+                            ),
+                          ),
                           child: ListView(
                             children: [
                               imageContainer(value),

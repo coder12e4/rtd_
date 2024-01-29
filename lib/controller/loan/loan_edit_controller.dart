@@ -316,10 +316,6 @@ class LoanEditController extends GetxController implements GetxService {
   }
 
   Future<void> upload() async {
-    if (loanSuretyCount < 1) {
-      showToast('Select atleast one  Surety to continue');
-      return;
-    }
     if (purpose == null) {
       showToast('Select Loan  Purpose');
       return;
@@ -328,10 +324,10 @@ class LoanEditController extends GetxController implements GetxService {
       showToast('Select Loan Type');
       return;
     }
-    if (loanDocumentCount < 3) {
-      showToast("Loan request must need three documents");
-      return;
-    }
+    // if (loanDocumentCount < 3) {
+    //   showToast("Loan request must need three documents");
+    //   return;
+    // }
     loadingWidget();
     var uri =
         Uri.parse("http://rtd.canisostudio.com/api/user/loan/request/update");
