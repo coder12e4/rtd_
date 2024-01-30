@@ -5,6 +5,7 @@ import 'package:rtd_project/util/toast.dart';
 
 import '../../backend/model/loan/loan_request_details.dart';
 import '../../backend/parser/loan/loan_request_details_parser.dart';
+import '../../helper/router.dart';
 
 class LoanRequestDetailsController extends GetxController
     implements GetxService {
@@ -13,6 +14,7 @@ class LoanRequestDetailsController extends GetxController
   @override
   void onInit() {
     id = Get.arguments[0].toString();
+    backNavigation = Get.arguments[2];
     if (Get.arguments[1] == true) {
       getLoanRequestDetails();
     } else {
@@ -22,6 +24,7 @@ class LoanRequestDetailsController extends GetxController
     super.onInit();
   }
 
+  int? backNavigation;
   String? id;
   bool error = false;
   bool loading = true;
@@ -49,9 +52,19 @@ class LoanRequestDetailsController extends GetxController
     update();
   }
 
+  void backRout() {
+    log('navigation num $backNavigation');
+    if (backNavigation == 1) {
+      Get.offAllNamed(AppRouter.getNotificationPageRoute());
+    }
+    if (backNavigation == 2) {
+      Get.back();
+    }
+  }
+
   Future<void> getLoanRequestDetailsForSurety() async {
     final body = {"loan_request_id": id};
-    print(id);
+
     Response response = await parser.getLoanRequestDetailsForSurety(body);
     log("loan request for surety details response ${response.body} ");
     try {

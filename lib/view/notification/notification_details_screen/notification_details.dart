@@ -60,17 +60,6 @@ class NotificationDetailsScreen extends StatelessWidget {
                     title: "Purpose",
                     content: data.details?.purpose,
                   ),
-                  // SizedBox(
-                  //   height: 40.h,
-                  // ),
-
-                  // Divider(
-                  //   indent: 35.w,
-                  //   endIndent: 35.w,
-                  // ),
-                  // SizedBox(
-                  //   height: 50.h,
-                  // ),
                 ],
               ),
             )

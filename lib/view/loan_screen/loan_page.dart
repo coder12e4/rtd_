@@ -154,7 +154,7 @@ class _LoanPageState extends State<LoanPage> {
         onTap: () {
           Get.delete<LoanRequestDetailsController>(force: true);
           Get.toNamed(AppRouter.getLoanRequestDetailsRoutes(),
-              arguments: [value.loanData[index].id, true]);
+              arguments: [value.loanData[index].id, true, 2]);
         },
         child: Container(
           // height: prossesing == true ? 300.h : 360.h,
@@ -457,34 +457,6 @@ class _LoanPageState extends State<LoanPage> {
         ],
       ),
     );
-  }
-
-  SizedBox optionButton(
-      {bool? borderAvalable,
-      Color? buttonForegroundColor,
-      Color? buttonbackgroundColor,
-      Function()? press,
-      String? buttonText}) {
-    return SizedBox(
-        height: 40.h,
-        // width: 260.w,
-        child: ElevatedButton(
-            style: ButtonStyle(
-                side: borderAvalable == false
-                    ? const MaterialStatePropertyAll(
-                        BorderSide(color: Colors.black))
-                    : null,
-                foregroundColor: MaterialStatePropertyAll(borderAvalable == true
-                    ? buttonForegroundColor
-                    : buttonbackgroundColor),
-                backgroundColor: MaterialStatePropertyAll(borderAvalable == true
-                    ? buttonbackgroundColor
-                    : buttonForegroundColor)),
-            onPressed: press,
-            child: Text(
-              buttonText!,
-              style: const TextStyle(fontWeight: FontWeight.w700),
-            )));
   }
 
   Padding newRequestView(BuildContext context, LoanScreenController value) {
