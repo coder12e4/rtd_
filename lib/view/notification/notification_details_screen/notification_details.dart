@@ -94,7 +94,9 @@ class NotificationDetailsScreen extends StatelessWidget {
         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
-              onPressed: () => Get.back(),
+              onPressed: () {
+                Get.back();
+              },
               icon: const Icon(
                 Icons.arrow_back,
                 color: whiteColor,

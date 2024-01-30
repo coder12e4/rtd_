@@ -50,6 +50,8 @@ class SplashScreenController extends GetxController {
     if (Get.isOverlaysOpen) {
       // If the app is in the foreground, navigate to the notification details screen
       handleRoute(data);
+    } else if (Get.isOverlaysClosed) {
+      handleRoute(data);
     } else {
       // If the app is in the background or terminated, open the app and then navigate
       handleRoute(data);
@@ -109,8 +111,8 @@ class SplashScreenController extends GetxController {
       if (notification == null) {
         return;
       } else {
-        dynamic k = json.decode(notification.body!);
-        notificationDetails data = notificationDetails.fromJson(k);
+        notificationDetails data =
+            notificationDetails.fromJson(json.decode(notification.body!));
 
         _localNotications.show(
             notification.hashCode,
