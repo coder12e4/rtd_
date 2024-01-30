@@ -54,6 +54,9 @@ class NotificationContainer extends StatelessWidget {
                     maxLines: 3,
                   ),
                 ),
+                SizedBox(
+                  width: 10.w,
+                ),
                 Container(
                   height: 7.h,
                   width: 7.w,
@@ -70,9 +73,12 @@ class NotificationContainer extends StatelessWidget {
             endDate != null ? Text("End Date: $endDate") : const Offstage(),
             clickable != null ? kSizedBoxH : const Offstage(),
             clickable != null
-                ? Text(
-                    clickable!,
-                    style: const TextStyle(color: Colors.blue),
+                ? InkWell(
+                    onTap: onTap,
+                    child: Text(
+                      clickable!,
+                      style: const TextStyle(color: Colors.blue),
+                    ),
                   )
                 : const Offstage(),
             text1 != null

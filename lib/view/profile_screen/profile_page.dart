@@ -326,70 +326,77 @@ class ProfilePage extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(bottom: 10.h),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(
-            width: 160.w,
-          ),
+          const Spacer(),
           Text(
             'Profile',
             style: Theme.of(context).textTheme.displaySmall!.copyWith(
                 color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
           ),
           SizedBox(
-            width: 10.w,
+            width: 30.w,
           ),
-          TextButton(
-            style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateColor.resolveWith((states) => whiteColor)),
-            onPressed: () => logOutDialog(),
-            child: const Text(
-              'Log Out',
-              style: TextStyle(color: baseColor),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Get.delete<NotificationController>(force: true);
-              Get.toNamed(AppRouter.getNotificationPageRoute());
-            },
-            child: Stack(
-              alignment: AlignmentDirectional.center,
-              children: [
-                const IconButton(
-                  onPressed: null,
-                  icon: Icon(
-                    Icons.notifications_none,
-                    color: whiteColor,
-                    size: 35,
-                  ),
-                ),
-                proController.controllerN?.notificationCount != 0
-                    ? Positioned(
-                        top: 3.h,
-                        right: 4.w,
-                        child: Container(
-                          height: 20.h,
-                          width: 20.w,
-                          decoration: const BoxDecoration(
-                              color: Colors.red, shape: BoxShape.circle),
-                          child: Center(
-                            child: Text(
-                              '${proController.controllerN?.notificationCount ?? 0}',
-                              style: const TextStyle(
-                                  color: whiteColor,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                      )
-                    : const Offstage(),
-              ],
-            ),
-          ),
+          buttonRow(proController)
         ],
       ),
+    );
+  }
+
+  Row buttonRow(ProfileController proController) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        TextButton(
+          style: ButtonStyle(
+              backgroundColor:
+                  MaterialStateColor.resolveWith((states) => whiteColor)),
+          onPressed: () => logOutDialog(),
+          child: const Text(
+            'Log Out',
+            style: TextStyle(color: baseColor),
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            Get.delete<NotificationController>(force: true);
+            Get.toNamed(AppRouter.getNotificationPageRoute());
+          },
+          child: Stack(
+            alignment: AlignmentDirectional.center,
+            children: [
+              IconButton(
+                onPressed: null,
+                icon: Icon(
+                  Icons.notifications_none,
+                  color: whiteColor,
+                  size: 35.r,
+                ),
+              ),
+              proController.controllerN?.notificationCount != 0
+                  ? Positioned(
+                      top: 3.h,
+                      right: 4.w,
+                      child: Container(
+                        height: 20.h,
+                        width: 20.w,
+                        decoration: const BoxDecoration(
+                            color: Colors.red, shape: BoxShape.circle),
+                        child: Center(
+                          child: Text(
+                            '${proController.controllerN?.notificationCount ?? 0}',
+                            style: const TextStyle(
+                                color: whiteColor, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    )
+                  : const Offstage(),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

@@ -60,8 +60,8 @@ class WallPage extends StatelessWidget {
   }
 
   Padding tabBar() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 80),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 80.w),
       child: TabBar(
           unselectedLabelColor: Colors.grey,
           labelColor: Colors.white,
@@ -71,11 +71,11 @@ class WallPage extends StatelessWidget {
           indicatorSize: TabBarIndicatorSize.tab,
           tabs: [
             Tab(
-              height: 20,
+              height: 20.h,
               text: 'feed',
             ),
             Tab(
-              height: 20,
+              height: 20.h,
               text: 'Votes',
             )
           ]),

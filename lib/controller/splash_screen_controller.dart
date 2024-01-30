@@ -77,7 +77,7 @@ class SplashScreenController extends GetxController {
     description: "Booking done",
     importance: Importance.defaultImportance,
   );
-  final _localNotications = FlutterLocalNotificationsPlugin();
+  final _localNotifications = FlutterLocalNotificationsPlugin();
 
   Future<void> handleBackgroudMessage(RemoteMessage message) async {
     debugPrint("Title:${message.notification?.title}");
@@ -111,7 +111,7 @@ class SplashScreenController extends GetxController {
       if (notification == null) {
         return;
       } else {
-        _localNotications.show(
+        _localNotifications.show(
             notification.hashCode,
             notification.title,
             notification.body,
@@ -119,7 +119,7 @@ class SplashScreenController extends GetxController {
               android: AndroidNotificationDetails(
                   _androidChannel.id, _androidChannel.name,
                   channelDescription: _androidChannel.description,
-                  icon: '@drawable/app_logo',
+                  icon: '@drawable/notification_icon',
                   playSound: true),
             ),
             payload: jsonEncode(event.toMap()));
@@ -130,12 +130,13 @@ class SplashScreenController extends GetxController {
   }
 
   Future initLocalNotifications() async {
-    const android = AndroidInitializationSettings("@drawable/app_logo");
+    const android =
+        AndroidInitializationSettings("@drawable/notification_icon");
     const settings = InitializationSettings(
       android: android,
     );
-    await _localNotications.initialize(settings);
-    final platform = _localNotications.resolvePlatformSpecificImplementation<
+    await _localNotifications.initialize(settings);
+    final platform = _localNotifications.resolvePlatformSpecificImplementation<
         AndroidFlutterLocalNotificationsPlugin>();
     await platform?.createNotificationChannel(_androidChannel);
   }
