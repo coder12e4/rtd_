@@ -1,11 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
-
 import '../backend/model/notification_model/notification_model.dart';
 import '../backend/parser/splash_screen_parser.dart';
 import '../helper/router.dart';
@@ -51,6 +49,8 @@ class SplashScreenController extends GetxController {
     // Check if the app is in the foreground
     if (Get.isOverlaysOpen) {
       // If the app is in the foreground, navigate to the notification details screen
+      handleRoute(data);
+    } else if (Get.isOverlaysClosed) {
       handleRoute(data);
     } else {
       // If the app is in the background or terminated, open the app and then navigate
@@ -111,10 +111,16 @@ class SplashScreenController extends GetxController {
       if (notification == null) {
         return;
       } else {
-        _localNotifications.show(
+        
+         notificationDetails data =
+            notificationDetails.fromJson(json.decode(notification.body!));
+
+        
+        _localNotications.show(
+
             notification.hashCode,
             notification.title,
-            notification.body,
+            data.message,
             NotificationDetails(
               android: AndroidNotificationDetails(
                   _androidChannel.id, _androidChannel.name,
@@ -122,7 +128,7 @@ class SplashScreenController extends GetxController {
                   icon: '@drawable/notification_icon',
                   playSound: true),
             ),
-            payload: jsonEncode(event.toMap()));
+            payload: data.message);
       }
     });
 
