@@ -10,38 +10,40 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: GetBuilder<SplashScreenController>(
-      builder: (controller) => Scaffold(
-        body: SingleChildScrollView(
-          physics: const NeverScrollableScrollPhysics(),
-          child: background(context),
+      child: GetBuilder<SplashScreenController>(
+        builder: (controller) => Scaffold(
+          body: background(context),
         ),
       ),
-    ));
+    );
   }
 
   Widget background(BuildContext context) {
     ScreenUtil.init(context);
     return Column(
-      mainAxisSize: MainAxisSize.max,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          decoration: const BoxDecoration(
+        Expanded(
+          child: Container(
+            decoration: const BoxDecoration(
               image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage(
-                    'assets/images/rectangle2.jpg',
-                  ))),
-          height: 660.h,
-          width: 400.w,
-          child: Stack(
-            alignment: Alignment.topCenter,
-            children: <Widget>[
-              logoAndText(),
-              greenContaner(),
-              roadWidget(),
-              version()
-            ],
+                fit: BoxFit.cover,
+                image: AssetImage(
+                  'assets/images/rectangle2.jpg',
+                ),
+              ),
+            ),
+            // // height: 630.h,
+            // width: 400.w,
+            child: Stack(
+              alignment: Alignment.topCenter,
+              children: <Widget>[
+                logoAndText(),
+                greenContaner(),
+                roadWidget(),
+                version()
+              ],
+            ),
           ),
         )
       ],
@@ -51,7 +53,7 @@ class SplashScreen extends StatelessWidget {
   Positioned version() => Positioned(
         bottom: 60.h,
         child: const Text(
-          'Version: 1.0.14',
+          'Version: 1.0.15',
           style: TextStyle(
             fontSize: 17,
             color: Colors.grey,
@@ -62,21 +64,24 @@ class SplashScreen extends StatelessWidget {
 
   Positioned roadWidget() {
     return Positioned(
-        top: 280.h,
-        child: Image.asset(
-          'assets/images/road.png',
-          height: 400.h,
-        ));
+      top: 280.h,
+      child: Image.asset(
+        'assets/images/road.png',
+        height: 400.h,
+      ),
+    );
   }
 
   Positioned greenContaner() {
     return Positioned(
-        top: 280.h,
-        child: Container(
-          height: 166.h,
-          width: 360.w,
-          color: const Color(0xff599354),
-        ));
+      top: 280.h,
+      child: Container(
+        height: 166.h,
+        width: 360.w,
+        // width: double.minPositive,
+        color: const Color(0xff599354),
+      ),
+    );
   }
 
   Positioned logoAndText() {

@@ -8,7 +8,7 @@ import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/appbar.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/util/theme.dart';
-import 'package:rtd_project/util/toast.dart';
+import 'package:rtd_project/view/notification/widgets/clickable_container.dart';
 import 'package:rtd_project/view/notification/widgets/notification_widget.dart';
 
 import '../../backend/model/notification_model/notification_model.dart';
@@ -108,7 +108,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                   itemBuilder: (context, index) {
                                     final type = notificationList[index].type;
                                     if (type == 4) {
-                                      return containerWithClickable(
+                                      return ContainerWithClickable(
                                         onTap: () {
                                           controller.markNotificationSeen(
                                             notificationList[index].id!,
@@ -127,11 +127,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                 false
                                               ]);
                                         },
-                                        110.h,
-                                        notificationList[index].message,
-                                        clikable: 'View Details',
-                                        index: index,
                                         controller: controller,
+                                        index: index,
+                                        title: notificationList[index].message,
+                                        clikable: 'View Details',
                                       );
                                     } else if (type == 2) {
                                       return NotificationContainer(
@@ -243,7 +242,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                         index: index,
                                       );
                                     }
-                                    return containerWithClickable(
+                                    return ContainerWithClickable(
                                       onTap: () {
                                         controller.markNotificationSeen(
                                           notificationList[index].id!,
@@ -254,8 +253,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                               notificationList[index]
                                             ]);
                                       },
-                                      110.h,
-                                      notificationList[index].message,
+                                      title: notificationList[index].message,
                                       controller: controller,
                                       index: index,
                                     );
@@ -292,296 +290,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     ),
                   );
           },
-        ),
-      ),
-    );
-  }
-
-  containerWithClickable(
-    height,
-    title, {
-    text1,
-    text2,
-    text3,
-    text4,
-    clikable,
-    required NotificationController controller,
-    required int index,
-    Function()? onTap,
-  }) {
-    if (controller.notification!.data?[index].details?.loanRequestStatus == 0) {
-      return Container(
-        padding:
-            EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h, bottom: 10.h),
-        width: 300.w,
-        decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 223, 220, 220),
-            borderRadius: BorderRadiusDirectional.circular(20)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  child: Text(
-                    title,
-                    maxLines: 3,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Container(
-                  // margin: EdgeInsets.only(right: 20.w),
-                  height: 7.h,
-                  width: 7.w,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: controller.notification?.data?[index].seen == 1
-                        ? Colors.grey
-                        : Colors.red,
-                  ),
-                )
-              ],
-            ),
-            kSizedBoxH,
-            InkWell(
-              onTap: onTap,
-              child: Text(
-                clikable ?? '',
-                style: const TextStyle(color: Colors.blue),
-              ),
-            )
-          ],
-        ),
-      );
-    } else if (controller
-            .notification!.data?[index].details?.loanRequestStatus ==
-        2) {
-      return Container(
-        padding:
-            EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h, bottom: 10.h),
-        width: 300.w,
-        decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 223, 220, 220),
-            borderRadius: BorderRadiusDirectional.circular(20)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  child: Text(
-                    title,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                    maxLines: 3,
-                  ),
-                ),
-                Container(
-                  height: 7.h,
-                  width: 7.w,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: controller.notification?.data?[index].seen == 1
-                        ? Colors.grey
-                        : Colors.red,
-                  ),
-                )
-              ],
-            ),
-            kSizedBoxH,
-            Text(
-                'Loan Amount: ${controller.notification!.data?[index].details!.amount}'),
-            Text(
-                'Purpose: ${controller.notification!.data?[index].details!.purpose}'),
-            kSizedBoxH,
-            const Text(
-              'Reason for rejection',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            Text(controller
-                    .notification!.data?[index].details?.adminRejectReason
-                    .toString() ??
-                "Not Available")
-          ],
-        ),
-      );
-    } else if (controller
-            .notification!.data?[index].details?.loanRequestStatus ==
-        1) {
-      return GestureDetector(
-        onTap: () {
-          if (controller.notification?.data?[index].type == 4) {
-            controller.markNotificationSeen(
-              controller.notification!.data![index].details!.id!,
-            );
-
-            Get.delete<LoanRequestDetailsController>(force: true);
-            Get.toNamed(AppRouter.getLoanRequestDetailsRoutes(), arguments: [
-              controller.notification!.data![index].details!.id,
-              false,
-              2
-            ]);
-          }
-        },
-        child: Container(
-          padding: EdgeInsets.only(
-              left: 28.0.w, right: 15.w, top: 10.h, bottom: 10.h),
-          height: height,
-          width: 300.w,
-          decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 223, 220, 220),
-              borderRadius: BorderRadiusDirectional.circular(20)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    child: Text(
-                      title,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Container(
-                    height: 7.h,
-                    width: 7.w,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: controller.notification?.data?[index].seen == 1
-                          ? Colors.grey
-                          : Colors.red,
-                    ),
-                  )
-                ],
-              ),
-              kSizedBoxH,
-              Text(
-                  'Loan Amount: ${controller.notification!.data?[index].details!.amount}'),
-              Text(
-                  'Purpose: ${controller.notification!.data?[index].details!.purpose}')
-            ],
-          ),
-        ),
-      );
-    } else if (controller
-            .notification!.data?[index].details?.loanRequestStatus ==
-        3) {
-      return GestureDetector(
-        onTap: () {
-          controller.markNotificationSeen(
-            controller.notification!.data![index].details!.id!,
-          );
-
-          Get.delete<LoanRequestDetailsController>(force: true);
-          Get.toNamed(AppRouter.getLoanRequestDetailsRoutes(), arguments: [
-            controller.notification!.data![index].details!.id,
-            false,
-            2
-          ]);
-        },
-        child: Container(
-          padding: EdgeInsets.only(
-              left: 28.0.w, right: 15.w, top: 10.h, bottom: 10.h),
-          width: 300.w,
-          decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 223, 220, 220),
-              borderRadius: BorderRadiusDirectional.circular(20)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    child: Text(
-                      title,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Container(
-                    height: 7.h,
-                    width: 7.w,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: controller.notification?.data?[index].seen == 1
-                          ? Colors.grey
-                          : Colors.red,
-                    ),
-                  )
-                ],
-              ),
-              kSizedBoxH,
-              Text(
-                  'Loan Amount: ${controller.notification!.data?[index].details!.amount}'),
-              Text(
-                  'Purpose: ${controller.notification!.data?[index].details!.purpose}')
-            ],
-          ),
-        ),
-      );
-    }
-    return GestureDetector(
-      onTap: () {
-        if (controller.notification!.data![index].details == null) {
-          showToast('Loan details not available from the server');
-          return;
-        } else {
-          controller.markNotificationSeen(
-            controller.notification!.data![index].details!.id!,
-          );
-
-          Get.delete<LoanRequestDetailsController>(force: true);
-          Get.toNamed(AppRouter.getLoanRequestDetailsRoutes(), arguments: [
-            controller.notification!.data![index].details!.id,
-            false,
-            2
-          ]);
-        }
-      },
-      child: Container(
-        padding:
-            EdgeInsets.only(left: 28.0.w, right: 15.w, top: 10.h, bottom: 10.h),
-        width: 300.w,
-        decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 223, 220, 220),
-            borderRadius: BorderRadiusDirectional.circular(20)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  child: Text(
-                    title,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Container(
-                  height: 7.h,
-                  width: 7.w,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: controller.notification?.data?[index].seen == 1
-                        ? Colors.grey
-                        : Colors.red,
-                  ),
-                )
-              ],
-            ),
-            kSizedBoxH,
-            Text(
-                'Loan Amount: ${controller.notification!.data?[index].details?.amount ?? "Not Available"}'),
-            Text(
-                'Purpose: ${controller.notification!.data?[index].details?.purpose ?? "Not Available"}')
-          ],
         ),
       ),
     );
