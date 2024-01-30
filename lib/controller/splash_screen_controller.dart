@@ -1,11 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
-
 import '../backend/model/notification_model/notification_model.dart';
 import '../backend/parser/splash_screen_parser.dart';
 import '../helper/router.dart';
@@ -111,10 +109,13 @@ class SplashScreenController extends GetxController {
       if (notification == null) {
         return;
       } else {
+        dynamic k = json.decode(notification.body!);
+        notificationDetails data = notificationDetails.fromJson(k);
+
         _localNotications.show(
             notification.hashCode,
             notification.title,
-            notification.body,
+            data.message,
             NotificationDetails(
               android: AndroidNotificationDetails(
                   _androidChannel.id, _androidChannel.name,
@@ -122,7 +123,7 @@ class SplashScreenController extends GetxController {
                   icon: '@drawable/app_logo',
                   playSound: true),
             ),
-            payload: jsonEncode(event.toMap()));
+            payload: data.message);
       }
     });
 
