@@ -9,7 +9,7 @@ import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/helper/router.dart';
 
-import '../../controller/notification/notification_controller.dart';
+import '../../core/common_widget/notification_icon.dart';
 import '../../util/alert_dialog.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -358,44 +358,45 @@ class ProfilePage extends StatelessWidget {
             style: TextStyle(color: baseColor),
           ),
         ),
-        GestureDetector(
-          onTap: () {
-            Get.delete<NotificationController>(force: true);
-            Get.toNamed(AppRouter.getNotificationPageRoute());
-          },
-          child: Stack(
-            alignment: AlignmentDirectional.center,
-            children: [
-              IconButton(
-                onPressed: null,
-                icon: Icon(
-                  Icons.notifications_none,
-                  color: whiteColor,
-                  size: 35.r,
-                ),
-              ),
-              proController.controllerN?.notificationCount != 0
-                  ? Positioned(
-                      top: 3.h,
-                      right: 4.w,
-                      child: Container(
-                        height: 20.h,
-                        width: 20.w,
-                        decoration: const BoxDecoration(
-                            color: Colors.red, shape: BoxShape.circle),
-                        child: Center(
-                          child: Text(
-                            '${proController.controllerN?.notificationCount ?? 0}',
-                            style: const TextStyle(
-                                color: whiteColor, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                    )
-                  : const Offstage(),
-            ],
-          ),
-        ),
+        const NotificationIcon()
+        // GestureDetector(
+        //   onTap: () {
+        //     Get.delete<NotificationController>(force: true);
+        //     Get.toNamed(AppRouter.getNotificationPageRoute());
+        //   },
+        //   child: Stack(
+        //     alignment: AlignmentDirectional.center,
+        //     children: [
+        //       IconButton(
+        //         onPressed: null,
+        //         icon: Icon(
+        //           Icons.notifications_none,
+        //           color: whiteColor,
+        //           size: 35.r,
+        //         ),
+        //       ),
+        //       proController.controllerN?.notificationCount != 0
+        //           ? Positioned(
+        //               top: 3.h,
+        //               right: 4.w,
+        //               child: Container(
+        //                 height: 20.h,
+        //                 width: 20.w,
+        //                 decoration: const BoxDecoration(
+        //                     color: Colors.red, shape: BoxShape.circle),
+        //                 child: Center(
+        //                   child: Text(
+        //                     '${proController.controllerN?.notificationCount ?? 0}',
+        //                     style: const TextStyle(
+        //                         color: whiteColor, fontWeight: FontWeight.bold),
+        //                   ),
+        //                 ),
+        //               ),
+        //             )
+        //           : const Offstage(),
+        //     ],
+        //   ),
+        // ),
       ],
     );
   }

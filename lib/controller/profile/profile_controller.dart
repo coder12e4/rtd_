@@ -1,31 +1,25 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
-import 'package:rtd_project/backend/parser/splash_screen_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../backend/model/profile_model.dart';
 import '../../backend/parser/profile/profile_parser.dart';
-import '../notification/notification_controller.dart';
 
 class ProfileController extends GetxController implements GetxService {
   final ProfileParser parser;
 
   ProfileController({required this.parser});
-  Profile? userData;
-  bool loading = true;
   @override
   void onInit() async {
-    controllerN = Get.put(NotificationController(parser: Get.find()));
-    await Future.wait([
-      getNotificaion(),
-      getUserDatas(),
-    ]);
+    await getUserDatas();
 
     super.onInit();
   }
 
-  NotificationController? controllerN;
+  Profile? userData;
+  bool loading = true;
+
   Future<void> getUserDatas() async {
     final response = await parser.getUserData();
 
@@ -69,12 +63,6 @@ class ProfileController extends GetxController implements GetxService {
     } else {
       log(response.body.toString());
     }
-    update();
-  }
-
-  Future<void> getNotificaion() async {
-    // Get.find<NotificationController>().getNotification();
-    await controllerN!.getNotification();
     update();
   }
 

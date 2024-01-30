@@ -8,9 +8,10 @@ import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/common_widget/dotted_text.dart';
 import 'package:rtd_project/util/theme.dart';
 import 'package:rtd_project/view/home_screen/widgets/chart_items.dart';
+
 import '../../controller/notification/notification_controller.dart';
+import '../../core/common_widget/notification_icon.dart';
 import '../../core/constraints/conatrints.dart';
-import '../../helper/router.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -227,67 +228,20 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Container homeTextWidget(BuildContext context, HomeController controller) {
-    return Container(
-      margin: EdgeInsets.only(
-        top: 10.h,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: 146.w,
-          ),
-          Text(
-            'Home',
-            style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
-          ),
-          SizedBox(
-            width: 90.w,
-          ),
-          GestureDetector(
-            onTap: () {
-              Get.delete<NotificationController>(force: true);
-              Get.toNamed(AppRouter.getNotificationPageRoute());
-            },
-            child: GetBuilder<NotificationController>(builder: (notController) {
-              return Stack(
-                alignment: AlignmentDirectional.center,
-                children: [
-                  const IconButton(
-                    onPressed: null,
-                    icon: Icon(
-                      Icons.notifications_none,
-                      color: whiteColor,
-                      size: 35,
-                    ),
-                  ),
-                  notiController.notificationCount != 0
-                      ? Positioned(
-                          top: 3.h,
-                          right: 4.w,
-                          child: Container(
-                            height: 20.h,
-                            width: 20.w,
-                            decoration: const BoxDecoration(
-                                color: Colors.red, shape: BoxShape.circle),
-                            child: Center(
-                                child: Text(
-                              '${notiController.notificationCount ?? 0}',
-                              style: const TextStyle(
-                                  color: whiteColor,
-                                  fontWeight: FontWeight.bold),
-                            )),
-                          ),
-                        )
-                      : const SizedBox(),
-                ],
-              );
-            }),
-          ),
-        ],
-      ),
+  Row homeTextWidget(BuildContext context, HomeController controller) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        SizedBox(
+          width: 60.w,
+        ),
+        Text(
+          'Home',
+          style: Theme.of(context).textTheme.displaySmall!.copyWith(
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
+        ),
+        const NotificationIcon(),
+      ],
     );
   }
 }
