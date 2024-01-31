@@ -232,7 +232,7 @@ class ApiService extends GetxService {
       statusCode: res.statusCode,
       statusText: res.reasonPhrase,
     );
-    log('response body');
+
     if (response.statusCode != 200 &&
         response.body != null &&
         response.body is! String) {

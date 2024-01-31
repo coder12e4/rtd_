@@ -1,6 +1,13 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../backend/api/api.dart';
+import '../../core/constraints/api_urls.dart';
 
 class NetworkController extends GetxController {
   final Connectivity _connectivity = Connectivity();
@@ -9,8 +16,13 @@ class NetworkController extends GetxController {
   void onInit() {
     super.onInit();
     _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+    Timer.periodic(const Duration(seconds: 3), (timer) {
+      getNotification();
+    });
   }
 
+  int? notificationCount;
+  Notification? notification;
   void _updateConnectionStatus(ConnectivityResult connectivityResult) {
     if (connectivityResult == ConnectivityResult.none) {
       Get.rawSnackbar(
@@ -44,5 +56,32 @@ class NetworkController extends GetxController {
             snackStyle: SnackStyle.GROUNDED);
       }
     }
+  }
+
+  Future<void> getNotification() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final accessToken = prefs.getString('access_token') ?? 'NA';
+    ApiService apiService =
+        ApiService(appBaseUrl: "http://rtd.canisostudio.com/");
+
+    try {
+      Response response = await apiService.getPrivate(
+          Constants.baseUrl + Constants.getNotification, accessToken);
+      // log('notification responce ${response.body}');
+      if (response.statusCode == 200) {
+        if (response.body != null) {
+          notificationCount = response.body['data']
+              .where((element) => element["seen"] == 0)
+              .length;
+        }
+
+        log('Notification count $notificationCount');
+        // log('Notification data ${response.body}');
+      }
+    } catch (e, stackTrace) {
+      log('Notification Catch $e', error: e, stackTrace: stackTrace);
+    }
+
+    update();
   }
 }

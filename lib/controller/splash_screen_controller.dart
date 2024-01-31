@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:developer';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+
 import '../backend/model/notification_model/notification_model.dart';
 import '../backend/parser/splash_screen_parser.dart';
 import '../helper/router.dart';
@@ -111,13 +113,10 @@ class SplashScreenController extends GetxController {
       if (notification == null) {
         return;
       } else {
-        
-         notificationDetails data =
+        notificationDetails data =
             notificationDetails.fromJson(json.decode(notification.body!));
 
-        
-        _localNotications.show(
-
+        _localNotifications.show(
             notification.hashCode,
             notification.title,
             data.message,
