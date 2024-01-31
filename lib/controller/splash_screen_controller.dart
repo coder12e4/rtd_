@@ -48,15 +48,14 @@ class SplashScreenController extends GetxController {
 
     notificationDetails data = notificationDetails.fromJson(k);
 
-    // Check if the app is in the foreground
-    if (Get.isOverlaysOpen) {
-      // If the app is in the foreground, navigate to the notification details screen
-      handleRoute(data);
-    } else if (Get.isOverlaysClosed) {
-      handleRoute(data);
-    } else {
-      // If the app is in the background or terminated, open the app and then navigate
-      handleRoute(data);
+    if (data.message != "") {
+      if (Get.isOverlaysOpen) {
+        handleRoute(data);
+      } else if (Get.isOverlaysClosed) {
+        handleRoute(data);
+      } else {
+        handleRoute(data);
+      }
     }
   }
 
@@ -87,7 +86,7 @@ class SplashScreenController extends GetxController {
     debugPrint("body:${message.notification?.body}");
     debugPrint("Payload:${message.data}");
     notificationDetails data = notificationDetails.fromJson(k);
-    Get.off(const NotificationDetailsScreen(), arguments: data);
+    // Get.off(const NotificationDetailsScreen(), arguments: data);
     /*  Get.toNamed(
       AppRouter.getNotificationPollRoute(),
     );*/
