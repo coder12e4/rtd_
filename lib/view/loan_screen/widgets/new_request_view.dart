@@ -56,11 +56,6 @@ class _NewRequestViewState extends State<NewRequestView> {
                     child: Text(
                       "Select Loan Type",
                       textAlign: TextAlign.center,
-                      // style: TextStyle(
-                      //     color: Colors.black.withOpacity(.55),
-                      //     fontSize: 17,
-                      //     letterSpacing: .1,
-                      //     fontWeight: FontWeight.w600),
                     ),
                   ),
                   value: widget.value.loan,
@@ -68,9 +63,9 @@ class _NewRequestViewState extends State<NewRequestView> {
                   onChanged: (newValue) {
                     setState(() {});
                     widget.value.loan = newValue;
-                    widget.value.purpose = newValue!.title;
+                    widget.value.purpose = newValue?.title ?? "";
 
-                    widget.value.getLoanPurpose(newValue.id);
+                    widget.value.getLoanPurpose(newValue?.id);
                     log(widget.value.loan!.id.toString());
                   },
                   items: widget.value.dropdownMenuLoanType,

@@ -109,9 +109,6 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
                                         value.noOfSurties.clear();
                                         value.loanSuretyCount = 0;
                                         value.loan = newValue;
-                                        value.purpose = newValue.title;
-
-                                        log(value.loan!.id.toString());
                                       },
                                       items: value.dropdownMenuLoanType,
                                     ),

@@ -27,7 +27,6 @@ class LoanEditController extends GetxController implements GetxService {
   void onInit() async {
     loanId = Get.arguments[0].toString();
     await getLoanDetails(loanId);
-
     await getLoanType();
     super.onInit();
   }
@@ -82,11 +81,17 @@ class LoanEditController extends GetxController implements GetxService {
 
         _dropdownMenuLoanType = buildDropDownMenuItemsLoanType(_getLoanTypes);
 
-        int index = _dropdownMenuLoanType.indexWhere(
-            (element) => element.value?.id == loanData?.data.loanType.id);
-
-        loan = index != -1 ? _dropdownMenuLoanType[index].value : null;
-        log('loan type index $index');
+        // int index = _dropdownMenuLoanType.indexWhere(
+        //     (element) => element.value?.id == loanData?.data.loanType.id);
+        //
+        // loan = index != -1 ? _dropdownMenuLoanType[index].value : null;
+        loan = _dropdownMenuLoanType
+            .firstWhere(
+              (element) => element.value?.id == loanData?.data.loanType.id,
+            )
+            .value;
+        log('loan type  ${loan?.title}');
+        log('loan id ${loan?.id}');
         if (loan != null) {
           await getLoanPurpose(loan?.id, 1);
         }
@@ -142,6 +147,9 @@ class LoanEditController extends GetxController implements GetxService {
   }
 
   Future<void> getLoanPurpose(id, int value) async {
+    loadingWidget();
+    purpose = null;
+    purposeData = null;
     final body = {"loan_type": id};
     Response response = await parser.getLoanPurpose(body);
     if (response.statusCode == 200) {
@@ -176,20 +184,25 @@ class LoanEditController extends GetxController implements GetxService {
         _dropdownMenuPurpose = buildDropDownMenuItemsPurpose(_getPurposeType);
 
         if (value == 1) {
-          int purposeIndex = _dropdownMenuPurpose.indexWhere(
-              (element) => element.value?.id == loanData?.data.loanPurposeId);
-          purposeData = purposeIndex != -1
-              ? _dropdownMenuPurpose[purposeIndex].value
-              : null;
-          loanAmount = _getPurposeType[purposeIndex].maxLimit;
-          log('loan purpose index $purposeIndex');
+          // int purposeIndex = _dropdownMenuPurpose.indexWhere(
+          //     (element) => element.value?.id == loanData?.data.loanPurposeId);
+          // purposeData = purposeIndex != -1
+          //     ? _dropdownMenuPurpose[purposeIndex].value
+          //     : null;
+          purposeData = _dropdownMenuPurpose
+              .firstWhere((element) =>
+                  element.value?.id == loanData?.data.loanPurposeId)
+              .value;
+          loanAmount = purposeData?.maxLimit;
+          log('loan purpose  ${purposeData?.purpose}');
         }
         if (value == 2) {
-          purposeData = _getPurposeType[0];
-          loanAmount = _getPurposeType[0].maxLimit;
+          purposeData = dropdownMenuPurpose[0].value;
+
+          loanAmount = purposeData?.maxLimit;
           purpose != null ? _dropdownMenuPurpose[0].value : null;
         }
-
+        Get.back();
         update();
         log(_getPurposeType.toString());
         log('loan purpose surety : $noOfSurties');
@@ -224,7 +237,6 @@ class LoanEditController extends GetxController implements GetxService {
 
   Future<void> getLoanDetails(id) async {
     addedSurties.clear();
-
     surties.clear();
     isSelected.clear();
     final body = {"loan_request_id": id};
@@ -235,7 +247,7 @@ class LoanEditController extends GetxController implements GetxService {
         Map<String, dynamic> jsonData =
             Map<String, dynamic>.from(response.body);
         loanData = LoanData.fromJson(jsonData);
-        purpose = loanData?.data.loanType.title;
+        purpose = loanData?.data.loanPurpose.purpose;
         // loanPurpose=loanData?.data.loanType;
         for (Surety element in loanData!.data.sureties) {
           addedSurties.add(element.id);

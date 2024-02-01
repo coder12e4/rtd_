@@ -125,10 +125,9 @@ class LoanScreenController extends GetxController {
   }
 
   Future<void> getLoanPurpose(id) async {
-    // _getPurpose.clear();
-    // _getPurposeType.clear();
-    // purpose = '';
-    // purpose != null ? _dropdownMenuPurpose[0].value : null;
+    loadingWidget();
+    purpose = null;
+    purposeData = null;
     final body = {"loan_type": id};
     Response response = await parser.getLoanPurpose(body);
     if (response.statusCode == 200) {
@@ -164,10 +163,11 @@ class LoanScreenController extends GetxController {
         loanAmount = _getPurposeType[0].maxLimit;
 
         purpose != null ? _dropdownMenuPurpose[0].value : null;
+        Get.back();
         update();
-        log(_getPurposeType.toString());
-        log('loan purpose surety : $noOfSurties');
-        log('loan amount : $loanAmount');
+        // log(_getPurposeType.toString());
+        // log('loan purpose surety : $noOfSurties');
+        // log('loan amount : $loanAmount');
       } catch (e, stackTrace) {
         log('loanPurpose catch $e', error: e, stackTrace: stackTrace);
       }
@@ -317,8 +317,7 @@ class LoanScreenController extends GetxController {
         parser.sharedPreferencesManager.getString('access_token');
 
     if (data != null) {
-      var file =
-          await http.MultipartFile.fromPath('loan_document', data.path ?? '');
+      var file = await http.MultipartFile.fromPath('loan_document', data.path);
       request.files.add(file);
     } else {
       showToast('Select a image to upload');
@@ -349,6 +348,10 @@ class LoanScreenController extends GetxController {
   Future<void> upload() async {
     if (loan == null) {
       showToast('Select loan type');
+      return;
+    }
+    if (purposeData == null) {
+      showToast('Loan purpose not selected');
       return;
     }
     if (!isAccepted) {
