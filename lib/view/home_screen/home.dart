@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:rtd_project/backend/model/home_data_model.dart';
 import 'package:rtd_project/controller/home_screen_controller.dart';
 import 'package:rtd_project/core/color/colors.dart';
+import 'package:rtd_project/core/common_widget/appbar.dart';
 import 'package:rtd_project/core/common_widget/dotted_text.dart';
 import 'package:rtd_project/util/theme.dart';
 import 'package:rtd_project/view/home_screen/widgets/chart_items.dart';
@@ -34,7 +35,12 @@ class _HomePageState extends State<HomePage> {
             body: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                homeTextWidget(context, value),
+                const CustomAppBar(
+                  title: "Home",
+                  trailing: NotificationIcon(),
+                ),
+
+                // homeTextWidget(context, value),
                 Expanded(
                   child: Container(
                     padding: EdgeInsets.only(top: 5.h),
@@ -79,7 +85,7 @@ class _HomePageState extends State<HomePage> {
                                           // enlargeCenterPage: true,
                                         ),
                                       ),
-                                      incomBreakdown(value.homeData),
+                                      incomeBreakdown(value.homeData),
                                     ],
                                   ),
                                 ),
@@ -126,30 +132,35 @@ class _HomePageState extends State<HomePage> {
 
   Container activeLoanData(HomeData data) {
     return Container(
-      height: 140.h,
       decoration: BoxDecoration(
           color: textFormBase,
           borderRadius: BorderRadius.all(Radius.circular(30.r))),
       child: Padding(
-        padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 20.h),
+        padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 20.h),
         child: Column(
           children: [
-            IncomRow(
-                price: '${data.activeLoan?.loanAmount} INR',
+            incomeRow(
+                price: '${data.activeLoan?.loanAmount ?? "0.00"} INR',
                 title: 'Loan Amount'),
-            const Divider(),
-            activeLoanRow(title: 'Loan Type', date: data.activeLoan?.loanType),
+            kSizedBoxH,
+            const DashText(),
+            kSizedBoxH,
             activeLoanRow(
-                title: 'Start Date', date: data.activeLoan?.startDate),
+                title: 'Loan Type',
+                date: data.activeLoan?.loanType ?? 'Not Available'),
             activeLoanRow(
-                title: 'Due Date', date: '${data.activeLoan?.dueDate}'),
+                title: 'Start Date',
+                date: data.activeLoan?.startDate.toString() ?? 'Not Available'),
+            activeLoanRow(
+                title: 'Due Date',
+                date: data.activeLoan?.dueDate.toString() ?? 'Not Available'),
           ],
         ),
       ),
     );
   }
 
-  Expanded incomBreakdown(HomeData? homeData) {
+  Expanded incomeBreakdown(HomeData? homeData) {
     return Expanded(
         child: Padding(
       padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 20.h),
@@ -161,11 +172,11 @@ class _HomePageState extends State<HomePage> {
             style: TextStyle(fontWeight: FontWeight.w600),
           ),
           kSizedBoxH,
-          IncomRow(title: 'Rent', price: '${homeData?.income.rent} INR'),
+          incomeRow(title: 'Rent', price: '${homeData?.income.rent} INR'),
           kSizedBoxH,
           const DashText(),
           kSizedBoxH,
-          IncomRow(
+          incomeRow(
               title: 'Membership', price: '${homeData?.income.membership} INR'),
           kSizedBoxH20,
           const Text(
@@ -173,27 +184,17 @@ class _HomePageState extends State<HomePage> {
             style: TextStyle(fontWeight: FontWeight.w600),
           ),
           kSizedBoxH,
-          IncomRow(title: 'Active', price: '${homeData?.loans.active}'),
+          incomeRow(title: 'Active', price: '${homeData?.loans.active}'),
           kSizedBoxH,
           const DashText(),
           kSizedBoxH,
-          IncomRow(title: 'Closed', price: '${homeData?.loans.closed}'),
+          incomeRow(title: 'Closed', price: '${homeData?.loans.closed}'),
         ],
       ),
     ));
   }
 
-  // Container divider() {
-  //   return Container(
-  //     width: 270.w,
-  //     child: const Text(
-  //       '-------------------',
-  //       style: TextStyle(fontSize: 30),
-  //     ),
-  //   );
-  // }
-
-  Row IncomRow({String? title, String? price}) {
+  Row incomeRow({String? title, String? price}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -228,20 +229,20 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Row homeTextWidget(BuildContext context, HomeController controller) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        SizedBox(
-          width: 60.w,
-        ),
-        Text(
-          'Home',
-          style: Theme.of(context).textTheme.displaySmall!.copyWith(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
-        ),
-        const NotificationIcon(),
-      ],
-    );
-  }
+  // Row homeTextWidget(BuildContext context, HomeController controller) {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //     children: [
+  //       SizedBox(
+  //         width: 60.w,
+  //       ),
+  //       Text(
+  //         'Home',
+  //         style: Theme.of(context).textTheme.displaySmall!.copyWith(
+  //             color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
+  //       ),
+  //       const NotificationIcon(),
+  //     ],
+  //   );
+  // }
 }
