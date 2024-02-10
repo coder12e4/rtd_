@@ -32,7 +32,7 @@ class SignUpParser {
     kPin,
   ) async {
     return await apiService.uploadFiles(
-      "http://rtd.canisostudio.com/api/register",
+      "http://rtdkerala.com/api/register",
       [
         MultipartBody('document_proof_india', data1),
         MultipartBody('document_proof_ksa', data2)

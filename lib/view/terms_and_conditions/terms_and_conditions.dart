@@ -30,8 +30,7 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
         },
       ),
     )
-    ..loadRequest(
-        Uri.parse('https://rtd.canisostudio.com/terms-and-conditions'));
+    ..loadRequest(Uri.parse('https://rtdkerala.com/terms-and-conditions'));
 
   @override
   Widget build(BuildContext context) {

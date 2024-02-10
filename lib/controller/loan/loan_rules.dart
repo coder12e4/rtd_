@@ -30,7 +30,7 @@ class _LoanRulesState extends State<LoanRules> {
         },
       ),
     )
-    ..loadRequest(Uri.parse('https://rtd.canisostudio.com/loan-rules'));
+    ..loadRequest(Uri.parse('https://rtdkerala.com/loan-rules'));
 
   @override
   Widget build(BuildContext context) {

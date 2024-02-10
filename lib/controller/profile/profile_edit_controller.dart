@@ -353,7 +353,7 @@ class EditProfileController extends GetxController implements GetxService {
     String? accessToken =
         parser.sharedPreferencesManager.getString('access_token');
 
-    var uri = Uri.parse("http://rtd.canisostudio.com/api/user/update");
+    var uri = Uri.parse("http://rtdkerala.com/api/user/update");
     var request = http.MultipartRequest("POST", uri);
     if (data1 != null) {
       var image1 =

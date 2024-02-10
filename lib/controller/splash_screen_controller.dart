@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -41,11 +40,7 @@ class SplashScreenController extends GetxController {
   }
 
   Future<void> handleBackgroundMessage(RemoteMessage message) async {
-    debugPrint("Title: ${message.notification?.title}");
     dynamic k = json.decode(message.notification!.body!);
-    debugPrint("Body: ${message.notification?.body}");
-    debugPrint("Payload: ${message.data}");
-
     notificationDetails data = notificationDetails.fromJson(k);
 
     if (data.message != "") {
@@ -81,15 +76,8 @@ class SplashScreenController extends GetxController {
   final _localNotifications = FlutterLocalNotificationsPlugin();
 
   Future<void> handleBackgroudMessage(RemoteMessage message) async {
-    debugPrint("Title:${message.notification?.title}");
     dynamic k = json.decode(message.notification!.body!);
-    debugPrint("body:${message.notification?.body}");
-    debugPrint("Payload:${message.data}");
     notificationDetails data = notificationDetails.fromJson(k);
-    // Get.off(const NotificationDetailsScreen(), arguments: data);
-    /*  Get.toNamed(
-      AppRouter.getNotificationPollRoute(),
-    );*/
   }
 
   Future initPushNotifications() async {
@@ -104,6 +92,26 @@ class SplashScreenController extends GetxController {
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      final notification = event.notification;
+      if (notification == null) {
+        return;
+      } else {
+        notificationDetails data =
+            notificationDetails.fromJson(json.decode(notification.body!));
+
+        _localNotifications.show(
+            notification.hashCode,
+            notification.title,
+            data.message,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                  _androidChannel.id, _androidChannel.name,
+                  channelDescription: _androidChannel.description,
+                  icon: '@drawable/notification_icon',
+                  playSound: true),
+            ),
+            payload: data.message);
+      }
       handleBackgroundMessage(event);
     });
 
@@ -129,6 +137,9 @@ class SplashScreenController extends GetxController {
             payload: data.message);
       }
     });
+
+    FirebaseMessaging.onBackgroundMessage(
+        (message) => handleBackgroundMessage(message));
 
     notificationController!.getNotification();
   }

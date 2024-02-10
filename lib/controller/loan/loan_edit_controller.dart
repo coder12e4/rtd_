@@ -341,8 +341,7 @@ class LoanEditController extends GetxController implements GetxService {
     //   return;
     // }
     loadingWidget();
-    var uri =
-        Uri.parse("http://rtd.canisostudio.com/api/user/loan/request/update");
+    var uri = Uri.parse("http://rtdkerala.com/api/user/loan/request/update");
 
     var request = http.MultipartRequest("POST", uri);
 

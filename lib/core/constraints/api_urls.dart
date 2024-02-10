@@ -1,5 +1,5 @@
 class Constants {
-  static const String baseUrl = 'http://rtd.canisostudio.com/';
+  static const String baseUrl = 'http://rtdkerala.com/';
   static const String register = 'api/register';
   static const String login = 'api/user/login';
   static const String getStates = 'api/get_states?country_id=';

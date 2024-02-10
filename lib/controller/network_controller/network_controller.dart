@@ -61,8 +61,7 @@ class NetworkController extends GetxController {
   Future<void> getNotification() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final accessToken = prefs.getString('access_token') ?? 'NA';
-    ApiService apiService =
-        ApiService(appBaseUrl: "http://rtd.canisostudio.com/");
+    ApiService apiService = ApiService(appBaseUrl: "https://rtdkerala.com/");
 
     try {
       Response response = await apiService.getPrivate(

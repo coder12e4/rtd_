@@ -1,4 +1,4 @@
-package rtd.canisostudio.com
+package rtdkerala.com
 
 import io.flutter.embedding.android.FlutterActivity
 
