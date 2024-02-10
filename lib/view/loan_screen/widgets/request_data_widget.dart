@@ -78,7 +78,9 @@ class RequestData extends StatelessWidget {
                     price: value.loanData[index].loanAmount,
                     title: 'ആവശ്യപ്പെട്ടത്:'),
                 const DashText(),
+
                 imageRow(value, index),
+
                 SizedBox(
                   height: 8.h,
                 ),
@@ -246,7 +248,7 @@ Padding loanAmount({String? title, String? price}) {
 
 Widget imageRow(LoanScreenController controller, int index) {
   return SizedBox(
-    height: 60.h,
+    height: 80.h,
     child: controller.loanData[index].sureties.isNotEmpty
         ? ListView.separated(
             shrinkWrap: true,
@@ -254,7 +256,7 @@ Widget imageRow(LoanScreenController controller, int index) {
             itemBuilder: (context, imageIndex) =>
                 checkMarkImage(controller, index, imageIndex),
             separatorBuilder: (context, index) => SizedBox(
-                  width: 15.w,
+                  width: 18.w,
                 ),
             itemCount: controller.loanData[index].sureties.length)
         : const Center(
@@ -266,22 +268,34 @@ Widget imageRow(LoanScreenController controller, int index) {
   );
 }
 
-Stack checkMarkImage(
+Widget checkMarkImage(
     LoanScreenController controller, int index, int imageIndex) {
-  return Stack(
-    children: [
-      CircleAvatar(
-        minRadius: 30.r,
-        backgroundImage: CachedNetworkImageProvider(
-            controller.loanData[index].sureties[imageIndex].profileImage),
-      ),
-      Positioned(
-        bottom: 4.h,
-        right: 0,
-        child: surtieStatus(controller, index, imageIndex),
-      )
-    ],
-  );
+  return Container(
+      height: 60.h,
+      width: 60.h,
+      child: Column(children: [
+        Stack(
+          children: [
+            CircleAvatar(
+              minRadius: 30.r,
+              backgroundImage: CachedNetworkImageProvider(
+                  controller.loanData[index].sureties[imageIndex].profileImage),
+            ),
+            Positioned(
+              bottom: 0.h,
+              right: 0,
+              child: surtieStatus(controller, index, imageIndex),
+            )
+          ],
+        ),
+        Text(
+          "${controller.loanData[index].sureties[imageIndex].name}",
+          style: TextStyle(
+            fontSize: 12,
+          ),
+          overflow: TextOverflow.ellipsis,
+        ),
+      ]));
 }
 
 Container surtieStatus(

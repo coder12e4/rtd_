@@ -265,36 +265,48 @@ class ActiveLoanDetailsScreen extends StatelessWidget {
     );
   }
 
-  Stack chechmarkimage(bool checkmark, bool markAvalable,
+  Widget chechmarkimage(bool checkmark, bool markAvalable,
       ProfileLoanDataController controller, int index) {
-    return Stack(
-      children: [
-        Positioned(
-          child: CircleAvatar(
-            minRadius: 30.r,
-            backgroundImage: CachedNetworkImageProvider(
-              controller.loanData!.data?.sureties[index].profileImage ?? "",
-            ),
+    return Container(
+      height: 70.h,
+      width: 70.h,
+      child: Column(
+        children: [
+          Stack(
+            children: [
+              Positioned(
+                child: CircleAvatar(
+                  minRadius: 30.r,
+                  backgroundImage: CachedNetworkImageProvider(
+                    controller.loanData!.data?.sureties[index].profileImage ??
+                        "",
+                  ),
+                ),
+              ),
+              Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: markAvalable == true
+                      ? Container(
+                          width: 20.w,
+                          height: 18.h,
+                          decoration: BoxDecoration(
+                              color:
+                                  checkmark == true ? Colors.green : Colors.red,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(50.r))),
+                          child: Icon(
+                            checkmark == true ? Icons.check : Icons.close,
+                            color: Colors.white,
+                            size: 16,
+                          ),
+                        )
+                      : const Offstage())
+            ],
           ),
-        ),
-        Positioned(
-            bottom: 0,
-            right: 0,
-            child: markAvalable == true
-                ? Container(
-                    width: 20.w,
-                    height: 18.h,
-                    decoration: BoxDecoration(
-                        color: checkmark == true ? Colors.green : Colors.red,
-                        borderRadius: BorderRadius.all(Radius.circular(50.r))),
-                    child: Icon(
-                      checkmark == true ? Icons.check : Icons.close,
-                      color: Colors.white,
-                      size: 16,
-                    ),
-                  )
-                : const Offstage())
-      ],
+          Text("${controller.loanData!.data?.sureties[index].name ?? ""}")
+        ],
+      ),
     );
   }
 
