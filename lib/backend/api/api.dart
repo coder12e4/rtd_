@@ -2,7 +2,6 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -261,7 +260,7 @@ class ApiService extends GetxService {
     };
     final String requestBodyJson = jsonEncode(body);
     try {
-      var url = Uri.https('rtd.canisostudio.com', '/api/user/login');
+      var url = Uri.https('rtdkerala.com', '/api/user/login');
       log(url.toString());
 
       // log(encodedBody.toString());

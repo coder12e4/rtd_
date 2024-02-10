@@ -566,7 +566,7 @@ class RegisterController extends GetxController implements GetxService {
     log('Vehicle data  ${vehicleType?.id}');
     log('$inum: $ksanum');
 
-    var uri = Uri.parse("http://rtd.canisostudio.com/api/register");
+    var uri = Uri.parse("http://rtdkerala.com/api/register");
 
     var request = http.MultipartRequest("POST", uri);
     if (data != null) {

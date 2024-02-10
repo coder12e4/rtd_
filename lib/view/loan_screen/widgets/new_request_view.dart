@@ -99,32 +99,47 @@ class _NewRequestViewState extends State<NewRequestView> {
                               child: const Icon(Icons.add),
                             ),
                           )
-                        : Stack(
-                            children: [
-                              CircleAvatar(
-                                minRadius: 35.r,
-                                backgroundColor: textFormBase,
-                                backgroundImage: CachedNetworkImageProvider(
-                                    widget.value.surties[index]!.profileImage),
-                              ),
-                              Positioned(
-                                bottom: 9.h,
-                                right: 0,
-                                child: GestureDetector(
-                                  onTap: () => widget.value.deleteSurety(
-                                      index, widget.value.surties[index]!.id),
-                                  child: CircleAvatar(
-                                    minRadius: 15.r,
-                                    backgroundColor: ThemeProvider.blackColor,
-                                    child: const Icon(
-                                      Icons.delete_outline,
-                                      color: Colors.white,
-                                      size: 20,
+                        : Container(
+                            width: 80.h,
+                            height: 80.h,
+                            child: Column(
+                              children: [
+                                Stack(
+                                  children: [
+                                    CircleAvatar(
+                                      minRadius: 35.r,
+                                      backgroundColor: textFormBase,
+                                      backgroundImage:
+                                          CachedNetworkImageProvider(widget
+                                              .value
+                                              .surties[index]!
+                                              .profileImage),
                                     ),
-                                  ),
+                                    Positioned(
+                                      bottom: 9.h,
+                                      right: 0,
+                                      child: GestureDetector(
+                                        onTap: () => widget.value.deleteSurety(
+                                            index,
+                                            widget.value.surties[index]!.id),
+                                        child: CircleAvatar(
+                                          minRadius: 15.r,
+                                          backgroundColor:
+                                              ThemeProvider.blackColor,
+                                          child: const Icon(
+                                            Icons.delete_outline,
+                                            color: Colors.white,
+                                            size: 20,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
                                 ),
-                              )
-                            ],
+                                Text("${widget.value.surties[index]!.name}" ??
+                                    "")
+                              ],
+                            ),
                           ),
                     separatorBuilder: (context, index) => const SizedBox(
                       width: 15,

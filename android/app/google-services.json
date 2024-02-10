@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "181858766407",
-    "project_id": "renttruckdrivers",
-    "storage_bucket": "renttruckdrivers.appspot.com"
+    "project_number": "87594844692",
+    "project_id": "rtdmidleest",
+    "storage_bucket": "rtdmidleest.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:181858766407:android:28c6816909ae0d3966ab62",
+        "mobilesdk_app_id": "1:87594844692:android:37ac1a3b3efe6e568a5d01",
         "android_client_info": {
-          "package_name": "rtd.canisostudio.com"
+          "package_name": "rtdkerala.com"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDf22m_eTWu_et5g2GaobyjR8UslgPVRGc"
+          "current_key": "AIzaSyAepXJ1PQmPzlS7oDmAlaxBeEqFsz5lAvo"
         }
       ],
       "services": {

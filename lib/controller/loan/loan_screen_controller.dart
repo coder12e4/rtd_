@@ -364,8 +364,7 @@ class LoanScreenController extends GetxController {
     log('added sureties$addedSurties');
 
     loadingWidget();
-    var uri =
-        Uri.parse("http://rtd.canisostudio.com/api/user/loan/request/create");
+    var uri = Uri.parse("http://rtdkerala.com/api/user/loan/request/create");
     var request = http.MultipartRequest("POST", uri);
     // var file1 =
     //     await http.MultipartFile.fromPath('loan_document', data1?.path ?? '');
