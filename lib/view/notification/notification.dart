@@ -44,8 +44,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
           backgroundColor: baseColor,
           body: GetBuilder<NotificationController>(
             builder: (controller) {
-              List<notificationDetails>? notificationList =
-                  controller.notification?.data;
+              List<notificationDetails> notificationList =
+                  controller.notification?.data ?? [];
               return controller.loading != true
                   ? Column(
                       children: [
@@ -110,7 +110,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 topEnd: Radius.circular(50),
                               ),
                             ),
-                            child: notificationList?.length != 0
+                            child: notificationList.isNotEmpty
                                 ? ListView.separated(
                                     padding: EdgeInsets.only(bottom: 10.h),
                                     shrinkWrap: true,

@@ -17,6 +17,7 @@ class SuretyViewController extends GetxController implements GetxService {
     voteId = Get.arguments[0].toString();
     details = Get.arguments[1];
     isPoll = Get.arguments[2];
+    // Get.find<NotificationController>().markNotificationSeen(details!.id!);
     if (isPoll != null && isPoll == true) {
       getPollDetails();
     }

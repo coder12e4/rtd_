@@ -43,7 +43,20 @@ class ContainerWithClickable extends StatelessWidget {
             .notification!.data?[index].details?.loanRequestStatus ==
         2) {
       return NotificationContainer(
-        onTap: () {},
+        onTap: () {
+          controller.markNotificationSeen(
+            controller.notification!.data![index].id!,
+          );
+          Get.delete<LoanRequestDetailsController>(force: true);
+          Get.toNamed(
+            AppRouter.getLoanRequestDetailsRoutes(),
+            arguments: [
+              controller.notification!.data![index].details!.id,
+              false,
+              2
+            ],
+          );
+        },
         controller: controller,
         index: index,
         title: title,
