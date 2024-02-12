@@ -81,7 +81,7 @@ class LoanData {
 
 class Surety {
   int id;
-  Name? name;
+  String? name;
   String profileImage;
   int status;
   StatusText? statusText;
@@ -96,7 +96,7 @@ class Surety {
 
   factory Surety.fromJson(Map<String, dynamic> json) => Surety(
         id: json["id"],
-        name: nameValues.map[json["name"]],
+        name: json["name"],
         profileImage: json["profile_image"],
         status: json["status"],
         statusText: statusTextValues.map[json["status_text"]],
@@ -104,21 +104,12 @@ class Surety {
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "name": nameValues.reverse[name],
+        "name": name,
         "profile_image": profileImage,
         "status": status,
         "status_text": statusTextValues.reverse[statusText],
       };
 }
-
-enum Name { BOBY, JAMSHEER, TEST, TEST_USER_10 }
-
-final nameValues = EnumValues({
-  "Boby": Name.BOBY,
-  "jamsheer": Name.JAMSHEER,
-  "test": Name.TEST,
-  "test user 10": Name.TEST_USER_10
-});
 
 enum StatusText { PENDING }
 

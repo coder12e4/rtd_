@@ -12,6 +12,7 @@ import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 import 'package:rtd_project/util/theme.dart';
 
+import '../../../core/common_widget/appbar.dart';
 import '../../../core/common_widget/commen_botten.dart';
 import '../../../core/common_widget/imagepicker.dart';
 import '../../../helper/router.dart';
@@ -31,40 +32,34 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
     return Scaffold(
       backgroundColor: baseColor,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              appBarWidget(context),
-              GetBuilder<LoanEditController>(builder: (value) {
-                return value.loading == true
-                    ? Container(
-                        height: 590.h,
-                        decoration: const BoxDecoration(
-                          color: whiteColor,
-                          borderRadius: BorderRadiusDirectional.only(
-                            topEnd: Radius.circular(40),
-                            topStart: Radius.circular(40),
-                          ),
-                        ),
-                        child: const Center(
-                          child: CircularProgressIndicator(
-                            strokeWidth: 6,
-                            color: ThemeProvider.blackColor,
-                          ),
-                        ),
-                      )
-                    : Container(
-                        height: 590.h,
-                        decoration: const BoxDecoration(
-                          color: whiteColor,
-                          borderRadius: BorderRadiusDirectional.only(
-                            topEnd: Radius.circular(40),
-                            topStart: Radius.circular(40),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 40.h),
-                          child: Column(
+        child: Column(
+          children: <Widget>[
+            CustomAppBar(
+              leading: IconButton(
+                onPressed: Get.back,
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: whiteColor,
+                  size: 30,
+                ),
+              ),
+              title: "Edit Loan Request",
+            ),
+            // appBarWidget(context),
+            GetBuilder<LoanEditController>(builder: (value) {
+              return Expanded(
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: whiteColor,
+                    borderRadius: BorderRadiusDirectional.only(
+                      topEnd: Radius.circular(40),
+                      topStart: Radius.circular(40),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 40.h),
+                    child: value.loading != true
+                        ? Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               SizedBox(
@@ -190,7 +185,7 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
                                                   child: const Icon(Icons.add),
                                                 ),
                                               )
-                                            : Container(
+                                            : SizedBox(
                                                 height: 80.h,
                                                 width: 80.h,
                                                 child: Column(
@@ -208,8 +203,8 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
                                                                   .profileImage),
                                                         ),
                                                         Positioned(
-                                                          bottom: 0,
-                                                          right: 0,
+                                                          top: 0,
+                                                          right: 5,
                                                           child:
                                                               GestureDetector(
                                                             onTap: () => value
@@ -287,12 +282,18 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
                                 },
                               )
                             ],
+                          )
+                        : const Center(
+                            child: CircularProgressIndicator(
+                              strokeWidth: 6,
+                              color: ThemeProvider.blackColor,
+                            ),
                           ),
-                        ),
-                      );
-              }),
-            ],
-          ),
+                  ),
+                ),
+              );
+            }),
+          ],
         ),
       ),
     );
@@ -516,35 +517,6 @@ class _LoanEditScreenState extends State<LoanEditScreen> {
           ),
         )
       ],
-    );
-  }
-
-  Container appBarWidget(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: 20.h, bottom: 10.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            onPressed: Get.back,
-            icon: const Icon(
-              Icons.arrow_back,
-              color: whiteColor,
-              size: 30,
-            ),
-          ),
-          Text(
-            'Edit Loan Request',
-            style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 24.r),
-          ),
-          SizedBox(
-            width: 20.w,
-          ),
-        ],
-      ),
     );
   }
 

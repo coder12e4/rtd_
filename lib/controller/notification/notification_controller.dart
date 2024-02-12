@@ -10,9 +10,9 @@ class NotificationController extends GetxController implements GetxService {
   final NotificationParser parser;
   NotificationController({required this.parser});
   @override
-  void onInit() {
+  Future<void> onInit() async {
     // Timer.periodic(const Duration(seconds: 6), (Timer timer) {
-    getNotification();
+    await getNotification();
     // });
 
     super.onInit();

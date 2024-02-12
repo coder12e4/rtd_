@@ -6,7 +6,9 @@ import 'package:rtd_project/controller/loan/loan_request_detail_controller.dart'
 import 'package:rtd_project/core/color/colors.dart';
 import 'package:rtd_project/core/constraints/conatrints.dart';
 
+import '../../../core/common_widget/appbar.dart';
 import '../../../core/common_widget/dotted_text.dart';
+import '../../../core/common_widget/surety_widget.dart';
 // import 'package:flutter_rounded_progress_bar/flutter_rounded_progress_bar.dart';
 // import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
 
@@ -23,7 +25,16 @@ class LoanRequestDetailsScreen extends StatelessWidget {
         body: GetBuilder<LoanRequestDetailsController>(builder: (value) {
           return Column(
             children: [
-              appbar(context, value),
+              CustomAppBar(
+                  leading: IconButton(
+                    onPressed: value.backRout,
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: whiteColor,
+                      size: 30,
+                    ),
+                  ),
+                  title: "Loan Details"),
               kSizedBoxH,
               value.error != true
                   ? Expanded(
@@ -271,12 +282,18 @@ class LoanRequestDetailsScreen extends StatelessWidget {
         ),
         kSizedBoxH,
         SizedBox(
-          height: 60,
+          height: 85,
           child: controller.loanRequestDetails?.data.sureties.length != 0
               ? ListView.separated(
                   scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) =>
-                      chechmarkimage(true, true, controller, index),
+                  itemBuilder: (context, index) => SuretyWidget(
+                        url: controller.loanRequestDetails!.data.sureties[index]
+                            .profileImage,
+                        name: controller
+                            .loanRequestDetails!.data.sureties[index].name,
+                        suretyStatus: controller
+                            .loanRequestDetails!.data.sureties[index].status,
+                      ),
                   separatorBuilder: (context, index) => const SizedBox(
                         width: 10,
                       ),
@@ -290,73 +307,6 @@ class LoanRequestDetailsScreen extends StatelessWidget {
                 ),
         ),
       ],
-    );
-  }
-
-  Stack chechmarkimage(bool checkmark, bool markAvalable,
-      LoanRequestDetailsController controller, int index) {
-    return Stack(
-      children: [
-        Positioned(
-          child: CircleAvatar(
-            minRadius: 30.r,
-            backgroundImage: CachedNetworkImageProvider(
-              controller
-                      .loanRequestDetails?.data.sureties[index].profileImage ??
-                  "",
-            ),
-          ),
-        ),
-        Positioned(
-          bottom: 0,
-          right: 0,
-          child: suretyStatus(controller, index),
-        )
-      ],
-    );
-  }
-
-  Container suretyStatus(LoanRequestDetailsController controller, int index) {
-    if (controller.loanRequestDetails?.data.sureties[index].status == 0) {
-      return Container(
-        width: 20.w,
-        height: 18.h,
-        decoration: BoxDecoration(
-            color: Colors.grey,
-            borderRadius: BorderRadius.all(Radius.circular(50.r))),
-        child: const Icon(
-          Icons.pending_actions,
-          color: Colors.white,
-          size: 16,
-        ),
-      );
-    }
-    if (controller.loanRequestDetails?.data.sureties[index].status == 1) {
-      return Container(
-        width: 20.w,
-        height: 18.h,
-        decoration: BoxDecoration(
-            color: Colors.green,
-            borderRadius: BorderRadius.all(Radius.circular(50.r))),
-        child: const Icon(
-          Icons.check,
-          color: Colors.white,
-          size: 16,
-        ),
-      );
-    }
-
-    return Container(
-      width: 20.w,
-      height: 18.h,
-      decoration: BoxDecoration(
-          color: Colors.red,
-          borderRadius: BorderRadius.all(Radius.circular(50.r))),
-      child: const Icon(
-        Icons.close,
-        color: Colors.white,
-        size: 16,
-      ),
     );
   }
 
@@ -394,30 +344,6 @@ class LoanRequestDetailsScreen extends StatelessWidget {
             ),
           ),
         )
-      ],
-    );
-  }
-
-  Row appbar(BuildContext context, LoanRequestDetailsController value) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        IconButton(
-          onPressed: value.backRout,
-          icon: const Icon(
-            Icons.arrow_back,
-            color: whiteColor,
-            size: 30,
-          ),
-        ),
-        Text(
-          'Loan Details',
-          style: Theme.of(context).textTheme.displaySmall!.copyWith(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
-        ),
-        SizedBox(
-          width: 30.w,
-        ),
       ],
     );
   }

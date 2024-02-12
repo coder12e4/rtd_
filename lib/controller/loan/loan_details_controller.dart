@@ -9,9 +9,12 @@ class LoanDetailsController extends GetxController {
   final LoanDetailsParser parser;
   LoanDetailsController({required this.parser});
   @override
-  void onInit() {
-    getActiveLoan();
-    getClosedLoan();
+  Future<void> onInit() async {
+    Future.wait([
+      getActiveLoan(),
+      getClosedLoan(),
+    ]);
+
     super.onInit();
   }
 

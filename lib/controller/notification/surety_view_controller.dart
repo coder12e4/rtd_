@@ -7,6 +7,7 @@ import 'package:rtd_project/util/toast.dart';
 import '../../backend/model/notification_model/notification_model.dart';
 import '../../backend/model/poll_details_model.dart';
 import '../../backend/parser/notification/notification_parser.dart';
+import '../../helper/router.dart';
 import 'notification_controller.dart';
 
 class SuretyViewController extends GetxController implements GetxService {
@@ -17,6 +18,7 @@ class SuretyViewController extends GetxController implements GetxService {
     voteId = Get.arguments[0].toString();
     details = Get.arguments[1];
     isPoll = Get.arguments[2];
+    backNavigation = Get.arguments[3];
     // Get.find<NotificationController>().markNotificationSeen(details!.id!);
     if (isPoll != null && isPoll == true) {
       getPollDetails();
@@ -25,6 +27,7 @@ class SuretyViewController extends GetxController implements GetxService {
   }
 
   bool voteLoading = true;
+  int? backNavigation;
   String selectedOption = '';
   var voteId;
   int? optionId;
@@ -41,6 +44,16 @@ class SuretyViewController extends GetxController implements GetxService {
     isSelected = !isSelected!;
     log(groupValue.toString());
     update();
+  }
+
+  void backRout() {
+    log('navigation num $backNavigation');
+    if (backNavigation == 1) {
+      Get.offAllNamed(AppRouter.getNotificationPageRoute());
+    }
+    if (backNavigation == 2) {
+      Get.back();
+    }
   }
 
   void onSubmit() {

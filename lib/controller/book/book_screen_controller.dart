@@ -16,8 +16,11 @@ class BookScreenController extends GetxController {
   BookScreenController({required this.parser});
   @override
   void onInit() {
-    getStates();
-    getServices();
+    Future.wait([
+      getStates(),
+      getServices(),
+    ]);
+
     super.onInit();
   }
 
