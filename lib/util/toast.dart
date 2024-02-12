@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:rtd_project/core/color/colors.dart';
 
 void showToast(String message, {bool isError = true}) {
-  Get.closeAllSnackbars();
+  Get.closeCurrentSnackbar();
   HapticFeedback.lightImpact();
   Get.showSnackbar(GetSnackBar(
     backgroundColor: isError ? Colors.red : Colors.black,
@@ -19,7 +19,7 @@ void showToast(String message, {bool isError = true}) {
 }
 
 void longToast(String message, {bool isError = true}) {
-  Get.closeAllSnackbars();
+  Get.closeCurrentSnackbar();
   HapticFeedback.lightImpact();
   Get.showSnackbar(GetSnackBar(
     backgroundColor: isError ? Colors.red : Colors.black,
@@ -42,7 +42,7 @@ void longToast(String message, {bool isError = true}) {
 }
 
 void successToast(String message) {
-  Get.closeAllSnackbars();
+  Get.closeCurrentSnackbar();
   HapticFeedback.lightImpact();
   Get.showSnackbar(GetSnackBar(
     backgroundColor: Colors.green,

@@ -137,7 +137,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                       .details
                                                       ?.id,
                                                   notificationList[index],
-                                                  false
+                                                  false,
+                                                  2
                                                 ]);
                                           },
                                           controller: controller,
@@ -225,7 +226,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                       .details!
                                                       .id,
                                                   null,
-                                                  true
+                                                  true,
+                                                  2,
                                                 ]);
                                           },
                                           height: 110.h,

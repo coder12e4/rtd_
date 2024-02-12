@@ -86,61 +86,63 @@ class _NewRequestViewState extends State<NewRequestView> {
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
                     itemCount: widget.value.noOfSurties.length,
-                    itemBuilder: (context, index) => widget
-                                .value.isSelected[index] ==
-                            false
-                        ? GestureDetector(
-                            onTap: () => Get.toNamed(
-                                AppRouter.getSearchScreenRoute(),
-                                arguments: [index, false]),
-                            child: CircleAvatar(
-                              minRadius: 35.r,
-                              backgroundColor: textFormBase,
-                              child: const Icon(Icons.add),
-                            ),
-                          )
-                        : Container(
-                            width: 80.h,
-                            height: 80.h,
-                            child: Column(
-                              children: [
-                                Stack(
+                    itemBuilder: (context, index) =>
+                        widget.value.isSelected[index] == false
+                            ? GestureDetector(
+                                onTap: () => Get.toNamed(
+                                    AppRouter.getSearchScreenRoute(),
+                                    arguments: [index, false]),
+                                child: CircleAvatar(
+                                  minRadius: 35.r,
+                                  backgroundColor: textFormBase,
+                                  child: const Icon(Icons.add),
+                                ),
+                              )
+                            : SizedBox(
+                                width: 80.h,
+                                height: 80.h,
+                                child: Column(
                                   children: [
-                                    CircleAvatar(
-                                      minRadius: 35.r,
-                                      backgroundColor: textFormBase,
-                                      backgroundImage:
-                                          CachedNetworkImageProvider(widget
-                                              .value
-                                              .surties[index]!
-                                              .profileImage),
-                                    ),
-                                    Positioned(
-                                      bottom: 9.h,
-                                      right: 0,
-                                      child: GestureDetector(
-                                        onTap: () => widget.value.deleteSurety(
-                                            index,
-                                            widget.value.surties[index]!.id),
-                                        child: CircleAvatar(
-                                          minRadius: 15.r,
-                                          backgroundColor:
-                                              ThemeProvider.blackColor,
-                                          child: const Icon(
-                                            Icons.delete_outline,
-                                            color: Colors.white,
-                                            size: 20,
-                                          ),
+                                    Stack(
+                                      children: [
+                                        CircleAvatar(
+                                          minRadius: 35.r,
+                                          backgroundColor: textFormBase,
+                                          backgroundImage:
+                                              CachedNetworkImageProvider(widget
+                                                  .value
+                                                  .surties[index]!
+                                                  .profileImage),
                                         ),
-                                      ),
+                                        Positioned(
+                                          top: 0,
+                                          right: 5,
+                                          child: GestureDetector(
+                                            onTap: () => widget.value
+                                                .deleteSurety(
+                                                    index,
+                                                    widget.value.surties[index]!
+                                                        .id),
+                                            child: CircleAvatar(
+                                              minRadius: 15.r,
+                                              backgroundColor:
+                                                  ThemeProvider.blackColor,
+                                              child: const Icon(
+                                                Icons.delete_outline,
+                                                color: Colors.white,
+                                                size: 20,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    Text(
+                                      widget.value.surties[index]!.name,
                                     )
                                   ],
                                 ),
-                                Text("${widget.value.surties[index]!.name}" ??
-                                    "")
-                              ],
-                            ),
-                          ),
+                              ),
                     separatorBuilder: (context, index) => const SizedBox(
                       width: 15,
                     ),

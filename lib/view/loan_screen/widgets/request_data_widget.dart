@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -9,6 +8,7 @@ import '../../../controller/loan/loan_screen_controller.dart';
 import '../../../core/color/colors.dart';
 import '../../../core/common_widget/commen_botten.dart';
 import '../../../core/common_widget/dotted_text.dart';
+import '../../../core/common_widget/surety_widget.dart';
 import '../../../helper/router.dart';
 import '../../../util/theme.dart';
 import 'cancel_popup.dart';
@@ -81,9 +81,6 @@ class RequestData extends StatelessWidget {
 
                 imageRow(value, index),
 
-                // SizedBox(
-                //   height: 8.h,
-                // ),
                 value.loanData[index].status != 1 &&
                         value.loanData[index].status != 2
                     ? ButtonWidget(
@@ -253,8 +250,14 @@ Widget imageRow(LoanScreenController controller, int index) {
         ? ListView.separated(
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
-            itemBuilder: (context, imageIndex) =>
-                checkMarkImage(controller, index, imageIndex),
+            itemBuilder: (context, imageIndex) => SuretyWidget(
+                  url: controller
+                      .loanData[index].sureties[imageIndex].profileImage,
+                  name: controller.loanData[index].sureties[imageIndex].name ??
+                      "NA",
+                  suretyStatus:
+                      controller.loanData[index].sureties[imageIndex].status,
+                ),
             separatorBuilder: (context, index) => SizedBox(
                   width: 18.w,
                 ),
@@ -265,84 +268,5 @@ Widget imageRow(LoanScreenController controller, int index) {
               style: TextStyle(fontWeight: FontWeight.w600),
             ),
           ),
-  );
-}
-
-Widget checkMarkImage(
-    LoanScreenController controller, int index, int imageIndex) {
-  return SizedBox(
-    height: 60.h,
-    width: 60.h,
-    child: Column(
-      children: [
-        Stack(
-          children: [
-            CircleAvatar(
-              minRadius: 30.r,
-              backgroundImage: CachedNetworkImageProvider(
-                  controller.loanData[index].sureties[imageIndex].profileImage),
-            ),
-            Positioned(
-              bottom: 0.h,
-              right: 0,
-              child: surtieStatus(controller, index, imageIndex),
-            )
-          ],
-        ),
-        Text(
-          "${controller.loanData[index].sureties[imageIndex].name}",
-          style: const TextStyle(
-            fontSize: 12,
-          ),
-          overflow: TextOverflow.ellipsis,
-          maxLines: 2,
-        ),
-      ],
-    ),
-  );
-}
-
-Container surtieStatus(
-    LoanScreenController controller, int index, int imageIndex) {
-  if (controller.loanData[index].sureties[imageIndex].status == 0) {
-    return Container(
-      width: 20.w,
-      height: 18.h,
-      decoration: BoxDecoration(
-          color: Colors.grey,
-          borderRadius: BorderRadius.all(Radius.circular(50.r))),
-      child: const Icon(
-        Icons.pending_actions,
-        color: Colors.white,
-        size: 16,
-      ),
-    );
-  }
-  if (controller.loanData[index].sureties[imageIndex].status == 1) {
-    return Container(
-      width: 20.w,
-      height: 18.h,
-      decoration: BoxDecoration(
-          color: Colors.green,
-          borderRadius: BorderRadius.all(Radius.circular(50.r))),
-      child: const Icon(
-        Icons.check,
-        color: Colors.white,
-        size: 16,
-      ),
-    );
-  }
-
-  return Container(
-    width: 20.w,
-    height: 18.h,
-    decoration: BoxDecoration(
-        color: Colors.red,
-        borderRadius: BorderRadius.all(Radius.circular(50.r))),
-    child: const Icon(
-      Icons.close,
-      color: Colors.white,
-      size: 16,
-    ),
   );
 }

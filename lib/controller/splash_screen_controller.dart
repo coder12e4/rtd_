@@ -99,7 +99,7 @@ class SplashScreenController extends GetxController {
       } else {
         notificationDetails data =
             notificationDetails.fromJson(json.decode(notification.body!));
-        print("notification data @@@@@@@@@@@@@@ $data");
+
         _localNotifications.show(
             notification.hashCode,
             notification.title,
@@ -175,11 +175,17 @@ class SplashScreenController extends GetxController {
     } else if (data.type == 3) {
       notificationController?.markNotificationSeen(data.id!);
       Get.toNamed(AppRouter.getNotificationPollRoute(),
-          arguments: [data.details!.id, null, true]);
+          arguments: [data.details!.id, null, true, 1]);
     } else if (data.type == 4) {
-      notificationController?.markNotificationSeen(data.id!);
-      Get.offAndToNamed(AppRouter.loanRequestDetailsRoutes,
-          arguments: [data.details!.id, false, 1]);
+      if (data.details?.loanRequestStatus == 0) {
+        notificationController?.markNotificationSeen(data.id!);
+        Get.toNamed(AppRouter.getSuretyRequestDetailsRoute(),
+            arguments: [data.details?.id, data, false, 1]);
+      } else {
+        notificationController?.markNotificationSeen(data.id!);
+        Get.offAndToNamed(AppRouter.loanRequestDetailsRoutes,
+            arguments: [data.details!.id, false, 1]);
+      }
     } else if (data.type == 5) {
       notificationController?.markNotificationSeen(data.id!);
       Get.to(const NotificationDetailsScreen(), arguments: [data]);
