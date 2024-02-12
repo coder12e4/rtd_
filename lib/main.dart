@@ -10,12 +10,12 @@ import 'package:rtd_project/helper/router.dart';
 import 'package:rtd_project/util/theme.dart';
 
 Future<void> main() async {
-  // Get.put(Athentication())
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: ThemeProvider.appColor, // status bar color
   ));
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp();
 
   //await FirebaseApi().initNotifications();

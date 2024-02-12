@@ -20,10 +20,12 @@ class LoanScreenController extends GetxController {
   final LoanScreenParser parser;
   LoanScreenController({required this.parser});
   @override
-  void onInit() {
-    log("Loan Init called");
-    getLoanType();
-    getLoanRequestData();
+  Future<void> onInit() async {
+    Future.wait([
+      getLoanType(),
+      getLoanRequestData(),
+    ]);
+
     super.onInit();
   }
 

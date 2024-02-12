@@ -24,7 +24,7 @@ class NetworkController extends GetxController {
   int? notificationCount;
   Notification? notification;
   void _updateConnectionStatus(ConnectivityResult connectivityResult) {
-    if (connectivityResult == ConnectivityResult.none) {
+    if (connectivityResult == ConnectivityResult.mobile) {
       Get.rawSnackbar(
           messageText: const Text('PLEASE CONNECT TO THE INTERNET',
               style: TextStyle(color: Colors.white, fontSize: 14)),

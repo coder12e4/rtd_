@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 
@@ -78,6 +78,7 @@ class SplashScreenController extends GetxController {
   Future<void> handleBackgroudMessage(RemoteMessage message) async {
     dynamic k = json.decode(message.notification!.body!);
     notificationDetails data = notificationDetails.fromJson(k);
+    print('background notification data $data');
   }
 
   Future initPushNotifications() async {
@@ -98,7 +99,7 @@ class SplashScreenController extends GetxController {
       } else {
         notificationDetails data =
             notificationDetails.fromJson(json.decode(notification.body!));
-
+        print("notification data @@@@@@@@@@@@@@ $data");
         _localNotifications.show(
             notification.hashCode,
             notification.title,
@@ -164,20 +165,26 @@ class SplashScreenController extends GetxController {
 
   void handleRoute(notificationDetails data) {
     if (data.type == 1) {
+      notificationController?.markNotificationSeen(data.id!);
       Get.toNamed(AppRouter.getLoanRequestDetailsRoutes(),
           arguments: [data.details!.id, true, 2]);
     } else if (data.type == 2) {
+      notificationController?.markNotificationSeen(data.id!);
       Get.toNamed(AppRouter.getProfileLoanDetailsRoute(),
           arguments: [data.details!.id!]);
     } else if (data.type == 3) {
+      notificationController?.markNotificationSeen(data.id!);
       Get.toNamed(AppRouter.getNotificationPollRoute(),
           arguments: [data.details!.id, null, true]);
     } else if (data.type == 4) {
+      notificationController?.markNotificationSeen(data.id!);
       Get.offAndToNamed(AppRouter.loanRequestDetailsRoutes,
           arguments: [data.details!.id, false, 1]);
     } else if (data.type == 5) {
+      notificationController?.markNotificationSeen(data.id!);
       Get.to(const NotificationDetailsScreen(), arguments: [data]);
     } else {
+      notificationController?.markNotificationSeen(data.id!);
       Get.toNamed(AppRouter.getProfileLoanDetailsRoute(),
           arguments: [data.details!.id!]);
     }

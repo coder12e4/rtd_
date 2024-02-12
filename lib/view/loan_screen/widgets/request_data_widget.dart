@@ -81,9 +81,9 @@ class RequestData extends StatelessWidget {
 
                 imageRow(value, index),
 
-                SizedBox(
-                  height: 8.h,
-                ),
+                // SizedBox(
+                //   height: 8.h,
+                // ),
                 value.loanData[index].status != 1 &&
                         value.loanData[index].status != 2
                     ? ButtonWidget(
@@ -270,10 +270,11 @@ Widget imageRow(LoanScreenController controller, int index) {
 
 Widget checkMarkImage(
     LoanScreenController controller, int index, int imageIndex) {
-  return Container(
-      height: 60.h,
-      width: 60.h,
-      child: Column(children: [
+  return SizedBox(
+    height: 60.h,
+    width: 60.h,
+    child: Column(
+      children: [
         Stack(
           children: [
             CircleAvatar(
@@ -290,12 +291,15 @@ Widget checkMarkImage(
         ),
         Text(
           "${controller.loanData[index].sureties[imageIndex].name}",
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 12,
           ),
           overflow: TextOverflow.ellipsis,
+          maxLines: 2,
         ),
-      ]));
+      ],
+    ),
+  );
 }
 
 Container surtieStatus(

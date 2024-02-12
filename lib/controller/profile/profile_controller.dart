@@ -13,7 +13,6 @@ class ProfileController extends GetxController implements GetxService {
   @override
   void onInit() async {
     await getUserDatas();
-
     super.onInit();
   }
 
