@@ -20,9 +20,7 @@ class SplashScreenController extends GetxController {
     notificationController =
         Get.put(NotificationController(parser: Get.find()));
     initNotifications();
-
     FirebaseMessaging.instance.getToken().then((value) {
-      log('fcm token from splash $value');
       parser.saveDeviceToken(value.toString());
     });
 
@@ -42,6 +40,19 @@ class SplashScreenController extends GetxController {
   Future<void> handleBackgroundMessage(RemoteMessage message) async {
     dynamic k = json.decode(message.notification!.body!);
     notificationDetails data = notificationDetails.fromJson(k);
+
+    _localNotifications.show(
+        message.hashCode,
+        data.message,
+        data.message,
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+              _androidChannel.id, _androidChannel.name,
+              channelDescription: _androidChannel.description,
+              icon: '@drawable/notification_icon',
+              playSound: true),
+        ),
+        payload: data.message);
 
     if (data.message != "") {
       if (Get.isOverlaysOpen) {
@@ -99,7 +110,6 @@ class SplashScreenController extends GetxController {
       } else {
         notificationDetails data =
             notificationDetails.fromJson(json.decode(notification.body!));
-
         _localNotifications.show(
             notification.hashCode,
             notification.title,
@@ -118,25 +128,22 @@ class SplashScreenController extends GetxController {
 
     FirebaseMessaging.onMessage.listen((event) {
       final notification = event.notification;
-      if (notification == null) {
-        return;
-      } else {
-        notificationDetails data =
-            notificationDetails.fromJson(json.decode(notification.body!));
+      AndroidNotification? android = event.notification?.android;
 
-        _localNotifications.show(
-            notification.hashCode,
-            notification.title,
-            data.message,
-            NotificationDetails(
-              android: AndroidNotificationDetails(
-                  _androidChannel.id, _androidChannel.name,
-                  channelDescription: _androidChannel.description,
-                  icon: '@drawable/notification_icon',
-                  playSound: true),
-            ),
-            payload: data.message);
-      }
+      notificationDetails data =
+          notificationDetails.fromJson(json.decode(event.notification!.body!));
+      _localNotifications.show(
+          notification.hashCode,
+          notification!.title,
+          data.message,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+                _androidChannel.id, _androidChannel.name,
+                channelDescription: _androidChannel.description,
+                icon: '@drawable/notification_icon',
+                playSound: true),
+          ),
+          payload: data.message);
     });
 
     FirebaseMessaging.onBackgroundMessage(
