@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -8,7 +7,6 @@ import 'package:get/get.dart';
 import '../backend/model/notification_model/notification_model.dart';
 import '../backend/parser/splash_screen_parser.dart';
 import '../helper/router.dart';
-import '../view/notification/notification_details_screen/notification_details.dart';
 import 'notification/notification_controller.dart';
 
 class SplashScreenController extends GetxController {
@@ -20,9 +18,7 @@ class SplashScreenController extends GetxController {
     notificationController =
         Get.put(NotificationController(parser: Get.find()));
     initNotifications();
-
     FirebaseMessaging.instance.getToken().then((value) {
-      log('fcm token from splash $value');
       parser.saveDeviceToken(value.toString());
     });
 
@@ -40,32 +36,26 @@ class SplashScreenController extends GetxController {
   }
 
   Future<void> handleBackgroundMessage(RemoteMessage message) async {
-    final notification = message.notification;
-    notificationDetails data =
-        notificationDetails.fromJson(json.decode(notification!.body!));
-    // dynamic k = json.decode(message.notification!.body!);
-    // notificationDetails data = notificationDetails.fromJson(k);
     _localNotifications.show(
-      notification.hashCode,
-      notification.title,
-      data.message,
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-            _androidChannel.id, _androidChannel.name,
-            channelDescription: _androidChannel.description,
-            icon: '@drawable/notification_icon',
-            playSound: true),
-      ),
-      payload: data.message,
-    );
+        message.hashCode,
+        message.notification!.title,
+        message.notification!.body,
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+              _androidChannel.id, _androidChannel.name,
+              channelDescription: _androidChannel.description,
+              icon: '@drawable/notification_icon',
+              playSound: true),
+        ),
+        payload: message.notification!.body);
 
-    if (data.message != "") {
+    if (message.notification!.body != "") {
       if (Get.isOverlaysOpen) {
-        handleRoute(data);
+        handleRoute();
       } else if (Get.isOverlaysClosed) {
-        handleRoute(data);
+        handleRoute();
       } else {
-        handleRoute(data);
+        handleRoute();
       }
     }
   }
@@ -94,19 +84,7 @@ class SplashScreenController extends GetxController {
   Future<void> handleBackgroudMessage(RemoteMessage message) async {
     dynamic k = json.decode(message.notification!.body!);
     notificationDetails data = notificationDetails.fromJson(k);
-
-    _localNotifications.show(
-        data.hashCode,
-        k.title,
-        data.message,
-        NotificationDetails(
-          android: AndroidNotificationDetails(
-              _androidChannel.id, _androidChannel.name,
-              channelDescription: _androidChannel.description,
-              icon: '@drawable/notification_icon',
-              playSound: true),
-        ),
-        payload: data.message);
+    print('background notification data $data');
   }
 
   Future initPushNotifications() async {
@@ -125,13 +103,11 @@ class SplashScreenController extends GetxController {
       if (notification == null) {
         return;
       } else {
-        notificationDetails data =
-            notificationDetails.fromJson(json.decode(notification.body!));
-
+        //   notificationDetails data = notificationDetails.fromJson(json.decode(notification.body!));
         _localNotifications.show(
             notification.hashCode,
             notification.title,
-            data.message,
+            notification.body,
             NotificationDetails(
               android: AndroidNotificationDetails(
                   _androidChannel.id, _androidChannel.name,
@@ -139,38 +115,34 @@ class SplashScreenController extends GetxController {
                   icon: '@drawable/notification_icon',
                   playSound: true),
             ),
-            payload: data.message);
+            payload: notification.body);
       }
       handleBackgroundMessage(event);
     });
 
     FirebaseMessaging.onMessage.listen((event) {
       final notification = event.notification;
-      if (notification == null) {
-        return;
-      } else {
-        notificationDetails data =
-            notificationDetails.fromJson(json.decode(notification.body!));
+      AndroidNotification? android = event.notification?.android;
 
-        _localNotifications.show(
-            notification.hashCode,
-            notification.title,
-            data.message,
-            NotificationDetails(
-              android: AndroidNotificationDetails(
-                  _androidChannel.id, _androidChannel.name,
-                  channelDescription: _androidChannel.description,
-                  icon: '@drawable/notification_icon',
-                  playSound: true),
-            ),
-            payload: data.message);
-      }
+      //  notificationDetails data = notificationDetails.fromJson(json.decode(event.notification!.body!));
+      _localNotifications.show(
+          notification.hashCode,
+          notification!.title,
+          notification.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+                _androidChannel.id, _androidChannel.name,
+                channelDescription: _androidChannel.description,
+                icon: '@drawable/notification_icon',
+                playSound: true),
+          ),
+          payload: notification.title);
     });
 
     FirebaseMessaging.onBackgroundMessage(
         (message) => handleBackgroundMessage(message));
 
-    // notificationController!.getNotification();
+    notificationController!.getNotification();
   }
 
   Future initLocalNotifications() async {
@@ -191,7 +163,11 @@ class SplashScreenController extends GetxController {
     initLocalNotifications();
   }
 
-  void handleRoute(notificationDetails data) {
+  void handleRoute(/*notificationDetails data*/) {
+    Get.delete<NotificationController>(force: true);
+    Get.toNamed(AppRouter.getNotificationPageRoute());
+
+/*
     if (data.type == 1) {
       notificationController?.markNotificationSeen(data.id!);
       Get.toNamed(AppRouter.getLoanRequestDetailsRoutes(),
@@ -222,5 +198,6 @@ class SplashScreenController extends GetxController {
       Get.toNamed(AppRouter.getProfileLoanDetailsRoute(),
           arguments: [data.details!.id!]);
     }
+*/
   }
 }
