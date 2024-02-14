@@ -100,204 +100,210 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             // ),
                             ),
                         Expanded(
-                          child: Container(
-                            padding: EdgeInsets.only(
-                                top: 7.h, left: 20.w, right: 20.w),
-                            decoration: const BoxDecoration(
-                              color: whiteColor,
-                              borderRadius: BorderRadiusDirectional.only(
-                                topStart: Radius.circular(50),
-                                topEnd: Radius.circular(50),
+                          child: RefreshIndicator(
+                            color: Colors.black,
+                            onRefresh: controller.getNotification,
+                            child: Container(
+                              padding: EdgeInsets.only(
+                                  top: 7.h, left: 20.w, right: 20.w),
+                              decoration: const BoxDecoration(
+                                color: whiteColor,
+                                borderRadius: BorderRadiusDirectional.only(
+                                  topStart: Radius.circular(50),
+                                  topEnd: Radius.circular(50),
+                                ),
                               ),
-                            ),
-                            child: notificationList.isNotEmpty
-                                ? ListView.separated(
-                                    padding: EdgeInsets.only(bottom: 10.h),
-                                    shrinkWrap: true,
-                                    itemCount: notificationList!.length,
-                                    physics: const BouncingScrollPhysics(),
-                                    separatorBuilder: (context, index) =>
-                                        kSizedBoxH,
-                                    itemBuilder: (context, index) {
-                                      final type = notificationList[index].type;
-                                      if (type == 4) {
+                              child: notificationList.isNotEmpty
+                                  ? ListView.separated(
+                                      padding: EdgeInsets.only(bottom: 10.h),
+                                      shrinkWrap: true,
+                                      itemCount: notificationList.length,
+                                      physics: const BouncingScrollPhysics(),
+                                      separatorBuilder: (context, index) =>
+                                          kSizedBoxH,
+                                      itemBuilder: (context, index) {
+                                        final type =
+                                            notificationList[index].type;
+                                        if (type == 4) {
+                                          return ContainerWithClickable(
+                                            onTap: () {
+                                              controller.markNotificationSeen(
+                                                notificationList[index].id!,
+                                              );
+
+                                              Get.delete<SuretyViewController>(
+                                                  force: true);
+                                              Get.toNamed(
+                                                  AppRouter
+                                                      .getSuretyRequestDetailsRoute(),
+                                                  arguments: [
+                                                    notificationList[index]
+                                                        .details
+                                                        ?.id,
+                                                    notificationList[index],
+                                                    false,
+                                                    2
+                                                  ]);
+                                            },
+                                            controller: controller,
+                                            index: index,
+                                            title:
+                                                notificationList[index].message,
+                                            clikable: 'View Details',
+                                          );
+                                        } else if (type == 2) {
+                                          return NotificationContainer(
+                                            onTap: () {
+                                              controller.markNotificationSeen(
+                                                notificationList[index].id!,
+                                              );
+                                              Get.delete<
+                                                      ProfileLoanDataController>(
+                                                  force: true);
+                                              Get.toNamed(
+                                                  AppRouter
+                                                      .getProfileLoanDetailsRoute(),
+                                                  arguments: [
+                                                    notificationList[index]
+                                                        .details!
+                                                        .id!
+                                                  ]);
+                                            },
+                                            height: 110.h,
+                                            title:
+                                                notificationList[index].message,
+                                            controller: controller,
+                                            index: index,
+                                            text2:
+                                                'Loan Amount :  ${notificationList[index].details!.amount}',
+                                            text3:
+                                                'Purpose : ${notificationList[index].details!.purpose}',
+                                            text4:
+                                                'Repayment Date :${notificationList[index].details!.dueDate}',
+                                          );
+                                        } else if (type == 1) {
+                                          return NotificationContainer(
+                                            onTap: () {
+                                              controller.markNotificationSeen(
+                                                notificationList[index].id!,
+                                              );
+                                              Get.delete<
+                                                      LoanRequestDetailsController>(
+                                                  force: true);
+                                              Get.toNamed(
+                                                  AppRouter
+                                                      .getLoanRequestDetailsRoutes(),
+                                                  arguments: [
+                                                    notificationList[index]
+                                                        .details!
+                                                        .id,
+                                                    true,
+                                                    2
+                                                  ]);
+                                            },
+                                            height: 110.h,
+                                            title:
+                                                notificationList[index].message,
+                                            controller: controller,
+                                            index: index,
+                                            text2:
+                                                'Loan Amount : ${notificationList[index].details?.amount ?? "NA"}',
+                                            text3:
+                                                'Purpose :  ${notificationList[index].details?.purpose ?? "NA"}',
+                                          );
+                                        } else if (type == 3) {
+                                          final inputFormat =
+                                              notificationList[index]
+                                                  .date
+                                                  .toString();
+                                          return NotificationContainer(
+                                            onTap: () {
+                                              controller.markNotificationSeen(
+                                                  notificationList[index].id!);
+                                              Get.delete<SuretyViewController>(
+                                                  force: true);
+                                              Get.toNamed(
+                                                  AppRouter
+                                                      .getNotificationPollRoute(),
+                                                  arguments: [
+                                                    notificationList[index]
+                                                        .details!
+                                                        .id,
+                                                    null,
+                                                    true,
+                                                    2,
+                                                  ]);
+                                            },
+                                            height: 110.h,
+                                            index: index,
+                                            controller: controller,
+                                            title:
+                                                notificationList[index].message,
+                                            endDate: inputFormat,
+                                            clickable: 'View Details',
+                                          );
+                                        } else if (type == 6) {
+                                          return NotificationContainer(
+                                            onTap: () {
+                                              controller.markNotificationSeen(
+                                                  notificationList[index].id!);
+                                              Get.delete<
+                                                      ProfileLoanDataController>(
+                                                  force: true);
+                                              Get.toNamed(
+                                                  AppRouter
+                                                      .getProfileLoanDetailsRoute(),
+                                                  arguments: [
+                                                    notificationList[index]
+                                                        .details!
+                                                        .id!
+                                                  ]);
+                                            },
+                                            height: 70.h,
+                                            title:
+                                                notificationList[index].message,
+                                            text1:
+                                                "Date : ${notificationList[index].date}",
+                                            controller: controller,
+                                            index: index,
+                                          );
+                                        }
                                         return ContainerWithClickable(
                                           onTap: () {
                                             controller.markNotificationSeen(
                                               notificationList[index].id!,
                                             );
-
-                                            Get.delete<SuretyViewController>(
-                                                force: true);
-                                            Get.toNamed(
-                                                AppRouter
-                                                    .getSuretyRequestDetailsRoute(),
+                                            Get.to(
+                                                const NotificationDetailsScreen(),
                                                 arguments: [
                                                   notificationList[index]
-                                                      .details
-                                                      ?.id,
-                                                  notificationList[index],
-                                                  false,
-                                                  2
                                                 ]);
                                           },
-                                          controller: controller,
-                                          index: index,
-                                          title:
-                                              notificationList[index].message,
-                                          clikable: 'View Details',
-                                        );
-                                      } else if (type == 2) {
-                                        return NotificationContainer(
-                                          onTap: () {
-                                            controller.markNotificationSeen(
-                                              notificationList[index].id!,
-                                            );
-                                            Get.delete<
-                                                    ProfileLoanDataController>(
-                                                force: true);
-                                            Get.toNamed(
-                                                AppRouter
-                                                    .getProfileLoanDetailsRoute(),
-                                                arguments: [
-                                                  notificationList[index]
-                                                      .details!
-                                                      .id!
-                                                ]);
-                                          },
-                                          height: 110.h,
                                           title:
                                               notificationList[index].message,
                                           controller: controller,
                                           index: index,
-                                          text2:
-                                              'Loan Amount :  ${notificationList[index].details!.amount}',
-                                          text3:
-                                              'Purpose : ${notificationList[index].details!.purpose}',
-                                          text4:
-                                              'Repayment Date :${notificationList[index].details!.dueDate}',
                                         );
-                                      } else if (type == 1) {
-                                        return NotificationContainer(
-                                          onTap: () {
-                                            controller.markNotificationSeen(
-                                              notificationList[index].id!,
-                                            );
-                                            Get.delete<
-                                                    LoanRequestDetailsController>(
-                                                force: true);
-                                            Get.toNamed(
-                                                AppRouter
-                                                    .getLoanRequestDetailsRoutes(),
-                                                arguments: [
-                                                  notificationList[index]
-                                                      .details!
-                                                      .id,
-                                                  true,
-                                                  2
-                                                ]);
-                                          },
-                                          height: 110.h,
-                                          title:
-                                              notificationList[index].message,
-                                          controller: controller,
-                                          index: index,
-                                          text2:
-                                              'Loan Amount : ${notificationList[index].details?.amount ?? "NA"}',
-                                          text3:
-                                              'Purpose :  ${notificationList[index].details?.purpose ?? "NA"}',
-                                        );
-                                      } else if (type == 3) {
-                                        final inputFormat =
-                                            notificationList[index]
-                                                .date
-                                                .toString();
-                                        return NotificationContainer(
-                                          onTap: () {
-                                            controller.markNotificationSeen(
-                                                notificationList[index].id!);
-                                            Get.delete<SuretyViewController>(
-                                                force: true);
-                                            Get.toNamed(
-                                                AppRouter
-                                                    .getNotificationPollRoute(),
-                                                arguments: [
-                                                  notificationList[index]
-                                                      .details!
-                                                      .id,
-                                                  null,
-                                                  true,
-                                                  2,
-                                                ]);
-                                          },
-                                          height: 110.h,
-                                          index: index,
-                                          controller: controller,
-                                          title:
-                                              notificationList[index].message,
-                                          endDate: inputFormat,
-                                          clickable: 'View Details',
-                                        );
-                                      } else if (type == 6) {
-                                        return NotificationContainer(
-                                          onTap: () {
-                                            controller.markNotificationSeen(
-                                                notificationList[index].id!);
-                                            Get.delete<
-                                                    ProfileLoanDataController>(
-                                                force: true);
-                                            Get.toNamed(
-                                                AppRouter
-                                                    .getProfileLoanDetailsRoute(),
-                                                arguments: [
-                                                  notificationList[index]
-                                                      .details!
-                                                      .id!
-                                                ]);
-                                          },
-                                          height: 70.h,
-                                          title:
-                                              notificationList[index].message,
-                                          text1:
-                                              "Date : ${notificationList[index].date}",
-                                          controller: controller,
-                                          index: index,
-                                        );
-                                      }
-                                      return ContainerWithClickable(
-                                        onTap: () {
-                                          controller.markNotificationSeen(
-                                            notificationList[index].id!,
-                                          );
-                                          Get.to(
-                                              const NotificationDetailsScreen(),
-                                              arguments: [
-                                                notificationList[index]
-                                              ]);
-                                        },
-                                        title: notificationList[index].message,
-                                        controller: controller,
-                                        index: index,
-                                      );
-                                    },
-                                  )
-                                : Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SizedBox(
-                                        height: 180.h,
-                                        width: double.infinity,
-                                      ),
-                                      Lottie.asset(
-                                          'assets/images/no_notification.json',
-                                          height: 200.h),
-                                      const Text(
-                                        'Notifications is empty',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
+                                      },
+                                    )
+                                  : Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        SizedBox(
+                                          height: 180.h,
+                                          width: double.infinity,
+                                        ),
+                                        Lottie.asset(
+                                            'assets/images/no_notification.json',
+                                            height: 200.h),
+                                        const Text(
+                                          'Notifications is empty',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                            ),
                           ),
                         ),
                       ],
