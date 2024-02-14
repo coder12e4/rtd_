@@ -40,8 +40,24 @@ class SplashScreenController extends GetxController {
   }
 
   Future<void> handleBackgroundMessage(RemoteMessage message) async {
-    dynamic k = json.decode(message.notification!.body!);
-    notificationDetails data = notificationDetails.fromJson(k);
+    final notification = message.notification;
+    notificationDetails data =
+        notificationDetails.fromJson(json.decode(notification!.body!));
+    // dynamic k = json.decode(message.notification!.body!);
+    // notificationDetails data = notificationDetails.fromJson(k);
+    _localNotifications.show(
+      notification.hashCode,
+      notification.title,
+      data.message,
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+            _androidChannel.id, _androidChannel.name,
+            channelDescription: _androidChannel.description,
+            icon: '@drawable/notification_icon',
+            playSound: true),
+      ),
+      payload: data.message,
+    );
 
     if (data.message != "") {
       if (Get.isOverlaysOpen) {
@@ -78,7 +94,19 @@ class SplashScreenController extends GetxController {
   Future<void> handleBackgroudMessage(RemoteMessage message) async {
     dynamic k = json.decode(message.notification!.body!);
     notificationDetails data = notificationDetails.fromJson(k);
-    print('background notification data $data');
+
+    _localNotifications.show(
+        data.hashCode,
+        k.title,
+        data.message,
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+              _androidChannel.id, _androidChannel.name,
+              channelDescription: _androidChannel.description,
+              icon: '@drawable/notification_icon',
+              playSound: true),
+        ),
+        payload: data.message);
   }
 
   Future initPushNotifications() async {
@@ -142,7 +170,7 @@ class SplashScreenController extends GetxController {
     FirebaseMessaging.onBackgroundMessage(
         (message) => handleBackgroundMessage(message));
 
-    notificationController!.getNotification();
+    // notificationController!.getNotification();
   }
 
   Future initLocalNotifications() async {
