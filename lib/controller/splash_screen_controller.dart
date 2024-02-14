@@ -54,7 +54,7 @@ class SplashScreenController extends GetxController {
         ),
         payload: data.message);
 
-    if (data.message != "") {
+    /*   if (data.message != "") {
       if (Get.isOverlaysOpen) {
         handleRoute(data);
       } else if (Get.isOverlaysClosed) {
@@ -62,7 +62,7 @@ class SplashScreenController extends GetxController {
       } else {
         handleRoute(data);
       }
-    }
+    }*/
   }
 
   NotificationController? notificationController;

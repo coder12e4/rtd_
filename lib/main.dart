@@ -23,7 +23,7 @@ Future<void> main() async {
   //await FirebaseApi().initNotifications();
   await MainBinding().dependencies();
   await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
 }
