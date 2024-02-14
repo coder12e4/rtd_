@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -8,7 +7,6 @@ import 'package:get/get.dart';
 import '../backend/model/notification_model/notification_model.dart';
 import '../backend/parser/splash_screen_parser.dart';
 import '../helper/router.dart';
-import '../view/notification/notification_details_screen/notification_details.dart';
 import 'notification/notification_controller.dart';
 
 class SplashScreenController extends GetxController {
@@ -38,9 +36,6 @@ class SplashScreenController extends GetxController {
   }
 
   Future<void> handleBackgroundMessage(RemoteMessage message) async {
-    //   dynamic k = json.decode(message.notification!.body!);
-    // notificationDetails data = notificationDetails.fromJson(k);
-
     _localNotifications.show(
         message.hashCode,
         message.notification!.title,

@@ -32,13 +32,37 @@ class ContainerWithClickable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (controller.notification!.data?[index].details?.loanRequestStatus == 0) {
-      return NotificationContainer(
-        onTap: onTap,
-        controller: controller,
-        index: index,
-        title: title,
-        clickable: clikable,
-      );
+      if (controller.notification!.data?[index].details?.suretyStatus == 0) {
+        return NotificationContainer(
+          onTap: onTap,
+          controller: controller,
+          index: index,
+          title: title,
+          clickable: clikable,
+        );
+      } else {
+        return NotificationContainer(
+          onTap: () {
+            controller.markNotificationSeen(
+              controller.notification!.data![index].id!,
+            );
+
+            Get.delete<LoanRequestDetailsController>(force: true);
+            Get.toNamed(AppRouter.getLoanRequestDetailsRoutes(), arguments: [
+              controller.notification!.data![index].details!.id,
+              false,
+              2
+            ]);
+          },
+          controller: controller,
+          index: index,
+          title: title,
+          text1:
+              'Loan Amount: ${controller.notification!.data?[index].details!.amount}',
+          text2:
+              'Purpose: ${controller.notification!.data?[index].details!.purpose}',
+        );
+      }
     } else if (controller
             .notification!.data?[index].details?.loanRequestStatus ==
         2) {

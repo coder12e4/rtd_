@@ -89,6 +89,7 @@ class Details {
   String? dueDate;
   String? purpose;
   int? loanRequestStatus;
+  int? suretyStatus;
   String? suretyRejectReason;
   String? adminRejectReason;
 
@@ -99,6 +100,7 @@ class Details {
     this.dueDate,
     this.purpose,
     this.loanRequestStatus,
+    this.suretyStatus,
     this.suretyRejectReason,
     this.adminRejectReason,
   });
@@ -110,6 +112,7 @@ class Details {
     dueDate = json['due_date'];
     purpose = json['purpose'];
     loanRequestStatus = json['loan_request_status'];
+    suretyStatus = json['surety_status'];
     suretyRejectReason = json['surety_reject_reason'];
     adminRejectReason = json['admin_reject_reason'];
   }
@@ -122,6 +125,7 @@ class Details {
     data['due_date'] = dueDate;
     data['purpose'] = purpose;
     data['loan_request_status'] = loanRequestStatus;
+    data['surety_status'] = suretyStatus;
     data['surety_reject_reason'] = suretyRejectReason;
     data['admin_reject_reason'] = adminRejectReason;
 
